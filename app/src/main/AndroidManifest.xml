@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+
+    <application
+        android:name=".application.AppController"
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+
+        android:icon="@drawable/friendfin"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@drawable/friendfin"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Friendfin"
+        android:usesCleartextTraffic="true"
+        tools:replace="android:theme">
+        <activity
+            android:name=".ui.videoplay.VideoViewPlayActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FriendfinNoActionBar"/>
+        <activity
+            android:name=".ui.TestActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".ui.settingspersonal.PersonalSettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".cropper.CropImageActivity"
+            android:theme="@style/AppThemeCrop" />
+        <activity
+            android:name=".ui.profileImageViewer.ProfileImageViewer"
+            android:exported="false"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".ui.individualsearch.IndividualSearchResult"
+            android:exported="false"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".ui.chatsearch.ChatSearchActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".ui.reportanabuse.ReportAnAbuse"
+            android:exported="false"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".ui.individualsearch.IndividualSearchActivity"
+            android:exported="false"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".ui.chatroom.ChatRoomActivity"
+            android:exported="false"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.FriendfinNoActionBar">
+            <intent-filter>
+                <action android:name="ChatRoomActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.privacypolicy.PrivacyPolicyActivity"
+            android:exported="false"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".ui.othersprofile.OthersUsersProfileActivity"
+            android:exported="false"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".ui.uploadphoto.UploadPhotoActivity"
+            android:exported="false"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".alphotos.PhotosActivity"
+            android:exported="false"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:exported="false"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".ui.help.HelpActivity"
+            android:exported="false"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".ui.vipactivity.VipPremiumActivity"
+            android:exported="false"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".ui.profileactivity.ProfileActivity"
+            android:exported="false"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+
+        <activity android:name=".ForwardMessaging.MessageForward"
+           android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".ui.saveprofile.SaveProfileActivity"
+            android:exported="false"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".ui.landingpage.LandingActivity"
+            android:exported="false"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".ui.forgetpassword.ForgetPasswordActivity"
+            android:exported="false"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".ui.signup.SignUpActivity"
+            android:exported="false"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".ui.signin.SignInActivity"
+            android:exported="false"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".ui.intro.IntroActivity"
+            android:exported="false"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.FriendfinNoActionBar" />
+        <activity
+            android:name=".ui.splash.SplashActivity"
+            android:exported="true"
+            android:screenOrientation="nosensor"
+            android:theme="@style/Theme.FriendfinNoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" /> <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/AdmobAppId" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/friendfin_n" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/toolbar_color" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/CHANNEL_ID" />
+
+        <service
+            android:name=".notification.ReceivedNotifications"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.android.c2dm.permission.RECEIVE" />
+            </intent-filter>
+        </service>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.friendfinapp.dating.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+
+    </application>
+
+</manifest>

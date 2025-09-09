@@ -1,0 +1,184 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+}
+android {
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.friendfinapp.dating"
+        minSdk 24
+        targetSdk 34
+        versionCode 143
+        versionName '1.0.143'
+        multiDexEnabled true
+        vectorDrawables {
+            useSupportLibrary = true
+        }
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file("friendfinjks")
+            storePassword = "friendfinapp"
+            keyAlias = "key0"
+            keyPassword = "friendfinapp"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig = signingConfigs.getByName("release")
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+        preDexLibraries true
+        dexInProcess = true
+    }
+
+    android.defaultConfig.vectorDrawables.useSupportLibrary = true
+    android.buildFeatures.viewBinding = true
+    android.buildFeatures.dataBinding = true
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    namespace 'com.friendfinapp.dating'
+    lint {
+        checkReleaseBuilds false
+    }
+}
+
+dependencies {
+
+
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    implementation libs.androidx.activity
+    implementation libs.androidx.constraintlayout
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
+
+    // implementation 'androidx.core:core-ktx:1.9.0'
+    // implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.9.0'
+    //  implementation 'androidx.appcompat:appcompat:1.6.1'
+    //implementation 'com.google.android.material:material:1.8.0'
+    // implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    //  testImplementation 'junit:junit:4.13.2'
+    // androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    // androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+
+//    implementation project(':cropper')
+
+    //multi dex
+    implementation libs.androidx.multidex
+
+    //ssp sdp
+    implementation libs.sdp.android
+    implementation 'com.intuit.ssp:ssp-android:1.0.6'
+
+    //lottie
+    implementation 'com.airbnb.android:lottie:4.0.0'
+
+
+    //google g-son
+    implementation 'com.google.code.gson:gson:2.8.8'
+    //spin kit view
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+
+    //retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation'com.squareup.retrofit2:converter-scalars:2.6.2'
+
+
+    // ok http
+    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
+
+
+    //view model
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    implementation 'android.arch.lifecycle:viewmodel:1.1.1'
+    //glide
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
+
+    //country state city
+    //implementation 'com.vikktorn.picker:picker:1.0.0'
+    implementation 'com.beastwall:localisation:1.0.5'
+
+    //permission
+    implementation 'com.karumi:dexter:6.2.1'
+
+    //billing
+    implementation 'com.android.billingclient:billing:7.1.1'
+
+    //admob
+    implementation 'com.google.android.gms:play-services-ads:21.3.0'
+
+    //google
+    implementation 'com.google.android.gms:play-services-auth:20.3.0'
+
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:30.3.0')
+
+    // Declare the dependencies for the Firebase Cloud Messaging and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation 'com.google.firebase:firebase-crashlytics'
+
+
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+
+    implementation 'com.google.android.gms:play-services-safetynet:18.0.1'
+
+    implementation 'com.google.android.gms:play-services-recaptcha:17.0.1'
+
+    //crop image
+    //  api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+    implementation("com.vanniktech:android-image-cropper:4.6.0")
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+
+
+    implementation 'com.google.android.exoplayer:exoplayer:2.18.7'
+    //for core support in exoplayer.
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.18.7'
+    //for adding dash support in our exoplayer.
+    implementation 'com.google.android.exoplayer:exoplayer-dash:2.18.7'
+    //for adding hls support in exoplayer.
+    implementation 'com.google.android.exoplayer:exoplayer-hls:2.18.7'
+    //for smooth streaming of video in our exoplayer.
+    implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:2.18.7'
+    //for generating default ui of exoplayer
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.18.7'
+    implementation 'com.android.volley:volley:1.2.1'
+
+
+    implementation "com.airbnb.android:lottie:4.0.0"
+
+    implementation "androidx.work:work-runtime:2.7.0" // Use the latest version
+
+}

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/AppBar"
+        android:layout_width="match_parent"
+        app:elevation="0dp"
+        android:layout_height="@dimen/_60sdp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_home"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            app:contentInsetStart="0dp"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="@dimen/_4sdp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:src="@drawable/ic_navbar_icon"
+                    android:id="@+id/home_drawer_menu"
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:padding="@dimen/_10sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:contentDescription="@string/todo"
+                    />
+
+                <ImageView
+                    android:visibility="gone"
+                    android:id="@+id/imageBack"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:layout_marginHorizontal="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:contentDescription="@string/todo"
+                    android:src="@drawable/ic_round_arrow_back_ios_24"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/black" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    app:layout_constraintStart_toEndOf="@+id/home_drawer_menu"
+                    app:layout_constraintEnd_toStartOf="@+id/vip"
+                    android:layout_width="0dp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:id="@+id/address"
+                        android:fontFamily="@font/poppins"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_14ssp"
+                        android:gravity="center_horizontal"
+                        android:text="Search"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                    </TextView>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ImageView
+                    android:visibility="visible"
+                    android:elevation="@dimen/_2sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:src="@drawable/vip"
+                    android:id="@+id/vip"
+                    android:layout_width="@dimen/_42sdp"
+                    android:layout_height="@dimen/_42sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_20sdp"
+                    android:contentDescription="@string/todo"
+                    />
+
+                <ImageView
+                    android:elevation="@dimen/_2sdp"
+                    app:layout_constraintEnd_toStartOf="@+id/vip"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:src="@drawable/baseline_search_24"
+                    android:id="@+id/searchIndividual"
+                    android:layout_width="@dimen/_56sdp"
+                    android:layout_height="@dimen/_56sdp"
+                    android:padding="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:contentDescription="@string/todo"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+</layout>

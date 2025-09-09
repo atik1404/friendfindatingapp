@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/lin"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/backheader"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_100sdp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/userProfileImage"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_60sdp"
+                android:layout_marginHorizontal="@dimen/_20sdp"
+                android:layout_marginVertical="@dimen/_20sdp"
+                android:src="@drawable/ic_user"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="1dp" />
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_toEndOf="@+id/userProfileImage"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="@string/userName"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14ssp">
+
+            </TextView>
+
+
+        </RelativeLayout>
+
+
+
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/searchLayout"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@+id/lin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/search"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/baseline_search_24"
+            android:layout_width="@dimen/_26sdp"
+            android:layout_height="@dimen/_26sdp">
+
+        </ImageView>
+
+        <TextView
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:text="Search"
+            app:layout_constraintTop_toTopOf="@+id/search"
+            app:layout_constraintBottom_toBottomOf="@+id/search"
+            app:layout_constraintStart_toEndOf="@+id/search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/messageLayout"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@+id/searchLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:layout_marginStart="@dimen/_2sdp"
+            android:id="@+id/message"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_pesan"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp">
+
+        </ImageView>
+
+        <TextView
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:text="Chat"
+            app:layout_constraintTop_toTopOf="@+id/message"
+            app:layout_constraintBottom_toBottomOf="@+id/message"
+            app:layout_constraintStart_toEndOf="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/profileLayout"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@+id/messageLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:layout_marginStart="@dimen/_2sdp"
+            android:id="@+id/profile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_profil"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp">
+
+        </ImageView>
+
+        <TextView
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:text="Profile"
+            app:layout_constraintTop_toTopOf="@+id/profile"
+            app:layout_constraintBottom_toBottomOf="@+id/profile"
+            app:layout_constraintStart_toEndOf="@+id/profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_marginVertical="@dimen/_15sdp"
+        android:background="@color/Gray_DarkGray"
+        android:id="@+id/view1"
+        app:layout_constraintTop_toBottomOf="@+id/profileLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp">
+
+    </View>
+
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/photosLayout"-->
+<!--        android:layout_marginTop="@dimen/_15sdp"-->
+<!--        android:layout_marginHorizontal="@dimen/_10sdp"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/view1"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
+
+
+<!--        <ImageView-->
+<!--            android:layout_marginStart="@dimen/_2sdp"-->
+<!--            android:id="@+id/photos"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:src="@drawable/photos"-->
+<!--            android:layout_width="@dimen/_20sdp"-->
+<!--            android:layout_height="@dimen/_20sdp">-->
+
+<!--        </ImageView>-->
+
+<!--        <TextView-->
+<!--            android:fontFamily="@font/poppins_semibold"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="@dimen/_12ssp"-->
+<!--            android:layout_marginStart="@dimen/_14sdp"-->
+<!--            android:text="Photos"-->
+<!--            app:layout_constraintTop_toTopOf="@+id/photos"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/photos"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/photos"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content">-->
+
+<!--        </TextView>-->
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/settingsLayout"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:layout_marginStart="@dimen/_2sdp"
+            android:id="@+id/settings"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/settings"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp">
+
+        </ImageView>
+
+        <TextView
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:text="Settings"
+            app:layout_constraintTop_toTopOf="@+id/settings"
+            app:layout_constraintBottom_toBottomOf="@+id/settings"
+            app:layout_constraintStart_toEndOf="@+id/settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:visibility="gone"
+        android:id="@+id/helpLayout"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@+id/settingsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:layout_marginStart="@dimen/_2sdp"
+            android:id="@+id/help"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/help"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp">
+
+        </ImageView>
+
+        <TextView
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:text="Help"
+            app:layout_constraintTop_toTopOf="@+id/help"
+            app:layout_constraintBottom_toBottomOf="@+id/help"
+            app:layout_constraintStart_toEndOf="@+id/help"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/privacyLayout"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@+id/helpLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:layout_marginStart="@dimen/_2sdp"
+            android:id="@+id/privcy"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_baseline_privacy_tip_24"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            app:tint="@color/black">
+
+        </ImageView>
+
+        <TextView
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:text="Privacy Policy"
+            app:layout_constraintTop_toTopOf="@+id/privcy"
+            app:layout_constraintBottom_toBottomOf="@+id/privcy"
+            app:layout_constraintStart_toEndOf="@+id/privcy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/logoutLayout"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@+id/privacyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:layout_marginStart="@dimen/_2sdp"
+            android:id="@+id/logout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/logout"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp">
+
+        </ImageView>
+
+        <TextView
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:text="Log out"
+            app:layout_constraintTop_toTopOf="@+id/logout"
+            app:layout_constraintBottom_toBottomOf="@+id/logout"
+            app:layout_constraintStart_toEndOf="@+id/logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/exitLayout"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@+id/logoutLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:layout_marginStart="@dimen/_2sdp"
+            android:id="@+id/exit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_baseline_exit_to_app_24"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            app:tint="@color/black">
+
+        </ImageView>
+
+        <TextView
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12ssp"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:text="Exit"
+            app:layout_constraintTop_toTopOf="@+id/exit"
+            app:layout_constraintBottom_toBottomOf="@+id/exit"
+            app:layout_constraintStart_toEndOf="@+id/exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/versionname"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12ssp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:fontFamily="@font/poppins_semibold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text=""
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </TextView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

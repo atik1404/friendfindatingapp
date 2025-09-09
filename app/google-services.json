@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "176628957073",
+    "project_id": "friendfin-a43ac",
+    "storage_bucket": "friendfin-a43ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:176628957073:android:1f34ba3e97e55cd36ee430",
+        "android_client_info": {
+          "package_name": "com.friendfinapp.dating"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "176628957073-5hs6akleadis1n8jcdjblshou4akso4k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.friendfinapp.dating",
+            "certificate_hash": "3466aedcaf54b4e75c3b6f9b2381d11a03fb78c7"
+          }
+        },
+        {
+          "client_id": "176628957073-6p3h6emi054meff8g7o35r5573dvq72c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.friendfinapp.dating",
+            "certificate_hash": "5af3d15847a10f4c99b2582637ae6366bd1c3741"
+          }
+        },
+        {
+          "client_id": "176628957073-lll0macf6raivbvguuic9m9aoiuop4tn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDl7aZzfcGaux-hxtd6Gu-bBBdqJg7cn_g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "176628957073-lll0macf6raivbvguuic9m9aoiuop4tn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

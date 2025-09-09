@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="match_parent"
+    tools:context=".ui.landingpage.fragments.chatfragment.ChatFragment">
+
+    <LinearLayout
+
+        android:id="@+id/lin"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:orientation="vertical"
+        android:background="@drawable/serach_bg"
+        android:padding="2dp">
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="false"
+            android:clickable="false"
+            android:focusableInTouchMode="false"
+            android:iconifiedByDefault="false"
+            android:theme="@style/search_view"
+            app:iconifiedByDefault="false"
+            android:layoutDirection="rtl"
+            app:queryHint="@string/search_hints"
+            app:queryBackground="@android:color/transparent"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lin2"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_48sdp"
+        android:layout_marginHorizontal="@dimen/_5sdp"
+        android:orientation="vertical"
+
+        android:padding="2dp"
+       >
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="@dimen/_10sdp"
+        android:id="@+id/recyclerChatUser"
+        android:background="@color/white"
+
+        app:layout_constraintTop_toBottomOf="@+id/lin2"
+        app:layout_constraintBottom_toTopOf="@+id/adView"
+        android:nestedScrollingEnabled="true"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        >
+    </androidx.recyclerview.widget.RecyclerView>
+
+
+    <com.google.android.gms.ads.AdView
+        ads:layout_constraintBottom_toBottomOf="parent"
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/BannerAdsUnitId">
+    </com.google.android.gms.ads.AdView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

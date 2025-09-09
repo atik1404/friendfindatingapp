@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.settings.SettingsActivity">
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/topActionBar"
+        android:background="@color/signInColor"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+    </LinearLayout>
+
+    <ImageView
+        android:padding="@dimen/_4sdp"
+        android:id="@+id/imageBack"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/ic_round_arrow_back_ios_24"
+        app:layout_constraintBottom_toBottomOf="@+id/topActionBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/topActionBar"
+        app:tint="@color/black" />
+
+    <TextView
+
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="@dimen/_14ssp"
+        android:text="Settings"
+        app:layout_constraintStart_toEndOf="@+id/imageBack"
+        app:layout_constraintTop_toTopOf="@+id/imageBack"
+        app:layout_constraintBottom_toBottomOf="@+id/imageBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </TextView>
+
+    <TextView
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Profile"
+        android:id="@+id/profile"
+        android:textSize="@dimen/_14ssp"
+        android:textColor="@color/black"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@+id/topActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </TextView>
+
+    <View
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:background="@color/Gray_DarkGray"
+        android:id="@+id/view1"
+        app:layout_constraintTop_toBottomOf="@+id/profile"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp">
+
+    </View>
+    <TextView
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Personal Settings"
+        android:id="@+id/personalSettings"
+        android:textSize="@dimen/_14ssp"
+        android:textColor="@color/black"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </TextView>
+
+    <View
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:background="@color/Gray_DarkGray"
+        android:id="@+id/view2"
+        app:layout_constraintTop_toBottomOf="@+id/personalSettings"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp">
+
+    </View>
+
+    <TextView
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Privacy"
+        android:id="@+id/privacy"
+        android:textSize="@dimen/_14ssp"
+        android:textColor="@color/black"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </TextView>
+
+    <View
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:background="@color/Gray_DarkGray"
+        android:id="@+id/view3"
+        app:layout_constraintTop_toBottomOf="@+id/privacy"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp">
+
+    </View>
+
+    <TextView
+        android:visibility="gone"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="Search Settings"
+        android:id="@+id/searchSettings"
+        android:textSize="@dimen/_14ssp"
+        android:textColor="@color/black"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </TextView>
+
+    <View
+        android:visibility="gone"
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:background="@color/Gray_DarkGray"
+        android:id="@+id/view4"
+        app:layout_constraintTop_toBottomOf="@+id/searchSettings"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp">
+
+    </View>
+
+
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/BannerAdsUnitId"
+        ads:layout_constraintBottom_toBottomOf="parent">
+
+    </com.google.android.gms.ads.AdView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

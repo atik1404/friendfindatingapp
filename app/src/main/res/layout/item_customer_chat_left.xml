@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp">
+
+        <LinearLayout
+            android:id="@+id/chatTextLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/nameUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semibold"
+                android:text=""
+                android:textColor="@color/main_text_color"
+                android:textSize="@dimen/_8ssp">
+
+            </TextView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/left_customer_chat_bg"
+                android:padding="@dimen/_10sdp">
+
+                <androidx.cardview.widget.CardView
+
+                    android:id="@+id/imageCard"
+                    android:layout_width="@dimen/_200sdp"
+                    android:layout_height="@dimen/_200sdp"
+                    android:elevation="@dimen/_2sdp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/current_order_bg"
+                        android:gravity="center">
+
+                        <ImageView
+
+                            android:id="@+id/messageImage"
+                            android:contentDescription="@string/todo"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/allvip">
+
+                        </ImageView>
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+
+                    android:id="@+id/videoCard"
+                    android:layout_width="@dimen/_200sdp"
+                    android:layout_height="@dimen/_200sdp"
+                    android:elevation="@dimen/_2sdp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/current_order_bg"
+                        android:gravity="center">
+
+                        <ImageView
+
+                            android:id="@+id/messageVideoThumbnil"
+                            android:contentDescription="@string/todo"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/allvip">
+
+                        </ImageView>
+
+                        <View
+                            android:background="@drawable/item_blur"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                        </View>
+
+                        <ImageView
+                            android:id="@+id/videoPlayClick"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/ic_playerplayb"
+                            android:layout_width="@dimen/_30sdp"
+                            android:layout_height="@dimen/_30sdp">
+
+                        </ImageView>
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/chatText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:fontFamily="@font/poppins"
+                    android:text="@string/hello"
+                    android:textColor="@color/main_text_color"
+                    android:textSize="@dimen/_12ssp"
+
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageCard">
+
+                </TextView>
+
+                <RelativeLayout
+
+                    android:id="@+id/audioView"
+                    android:visibility="gone"
+                    android:layout_marginHorizontal="@dimen/_5sdp"
+
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_width="@dimen/_200sdp"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imageViewPlayPause"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_playerplayb"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentStart="true"
+                        android:padding="8dp" />
+
+                    <!--                    <SeekBar-->
+                    <!--                        android:id="@+id/seekBar"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_toEndOf="@id/imageViewPlayPause"-->
+                    <!--                        android:layout_centerVertical="true"-->
+                    <!--                        android:layout_marginStart="8dp"-->
+                    <!--                        android:layout_marginEnd="8dp" />-->
+
+                    <LinearLayout
+                        android:id="@+id/seekBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_toEndOf="@id/imageViewPlayPause"
+                        android:layout_toStartOf="@+id/textViewDuration"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="@dimen/_2sdp"
+                        android:layout_marginEnd="@dimen/_2sdp"
+                        >
+
+
+                        <SeekBar
+                            android:splitTrack="false"
+                            android:progress="20"
+                            android:layout_gravity="bottom"
+                            android:id="@+id/progressBarParent"
+                            android:progressDrawable="@drawable/seekbar_style"
+                            android:thumb="@drawable/custom_thumb"
+                            android:maxHeight="6dp"
+                            android:minHeight="6dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                        </SeekBar>
+                        <!--                <ProgressBar-->
+                        <!--                    android:id="@+id/progressBarParent"-->
+                        <!--                    style="@style/CustomProgressBarStyle"-->
+
+                        <!--                    android:layout_width="fill_parent"-->
+                        <!--                    android:layout_height="@dimen/_30sdp"-->
+                        <!--                    android:layout_gravity="bottom" />-->
+
+                        <!--                    <com.google.android.exoplayer2.ui.DefaultTimeBar-->
+                        <!--                        android:id="@id/exo_progress"-->
+                        <!--                        android:layout_width="0dp"-->
+                        <!--                        android:layout_weight="1"-->
+                        <!--                        android:layout_height="26dp"/>-->
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textViewDuration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:text="00:00"
+                        android:textSize="12sp"
+                        />
+
+                </RelativeLayout>
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/animation"
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="@dimen/_70sdp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="typing.json"
+                app:lottie_loop="true" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
