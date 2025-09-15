@@ -70,10 +70,22 @@ class AppOpenManager(myApplication: AppController) : ActivityLifecycleCallbacks,
         val request = adRequest
         AppOpenAd.load(
             myApplication, AD_UNIT_ID, request,
-            AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT, loadCallback as AppOpenAdLoadCallback
+             object : AppOpenAdLoadCallback() {
+                override fun onAdLoaded(ad: AppOpenAd) {
+                    // keep a reference & show when appropriate
+                    ad.fullScreenContentCallback = object : FullScreenContentCallback() {
+                        override fun onAdDismissedFullScreenContent() {
+                            // preload next ad if you want
+                        }
+                    }
+                    //if(currentActivity != null)
+                    //ad.show(currentActivity)
+                }
+                override fun onAdFailedToLoad(error: LoadAdError) {
+                    Log.w("AppOpenAd", "Failed: ${error.code} ${error.message}")
+                }
+            }
         )
-
-
     }
 
     /**
