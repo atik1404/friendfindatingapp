@@ -2,11 +2,13 @@ package com.friendfinapp.dating.application
 
 import android.app.Application
 import android.content.res.Resources
+import com.friendfinapp.dating.BuildConfig
 import com.friendfinapp.dating.appopen.AppOpenManager
 
 import com.google.android.gms.ads.MobileAds
 
 import com.google.android.gms.ads.RequestConfiguration
+import timber.log.Timber
 
 class AppController : Application() {
 
@@ -14,6 +16,7 @@ class AppController : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
 
         instance = this
         res = resources
@@ -26,8 +29,6 @@ class AppController : Application() {
         val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
         MobileAds.setRequestConfiguration(configuration)
         appOpenManager = AppOpenManager(this)
-
-
     }
 
     companion object {

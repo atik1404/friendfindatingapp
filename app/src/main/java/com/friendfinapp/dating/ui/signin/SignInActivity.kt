@@ -67,7 +67,7 @@ class SignInActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_in)
 
 
-        setUpAds()
+        //setUpAds()
         setUpView()
         setUpListener()
     }
@@ -77,24 +77,28 @@ class SignInActivity : AppCompatActivity() {
 
 
         MobileAds.initialize(
-           this
+            this
         ) { }
 
         val testDeviceIds = listOf("33BE2250B43518CCDA7DE426D04EE231")
         val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
         MobileAds.setRequestConfiguration(configuration)
         var adRequest = AdRequest.Builder().build()
-        InterstitialAd.load(this,getString(R.string.Interestitial_Ads_ID), adRequest, object : InterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                Log.d("TAG", adError.message)
-                mInterstitialAd = null
-            }
+        InterstitialAd.load(
+            this,
+            getString(R.string.Interestitial_Ads_ID),
+            adRequest,
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    Log.d("TAG", adError.message)
+                    mInterstitialAd = null
+                }
 
-            override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                Log.d("TAG", "Ad was loaded.")
-                mInterstitialAd = interstitialAd
-            }
-        })
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    Log.d("TAG", "Ad was loaded.")
+                    mInterstitialAd = interstitialAd
+                }
+            })
     }
 
 
@@ -109,15 +113,16 @@ class SignInActivity : AppCompatActivity() {
         // true if your app has been downloaded from Play Store
         return installer != null && validInstallers.contains(installer)
     }
+
     private fun setUpView() {
 
 
-        if (verifyInstallerId(this)){
-            binding.continueGoogle.visibility=View.VISIBLE
-            binding.linearLayout.visibility=View.VISIBLE
-        }else{
-            binding.continueGoogle.visibility=View.INVISIBLE
-            binding.linearLayout.visibility=View.INVISIBLE
+        if (verifyInstallerId(this)) {
+            binding.continueGoogle.visibility = View.VISIBLE
+            binding.linearLayout.visibility = View.VISIBLE
+        } else {
+            binding.continueGoogle.visibility = View.INVISIBLE
+            binding.linearLayout.visibility = View.INVISIBLE
         }
 
 
@@ -127,7 +132,7 @@ class SignInActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(LogInViewModel::class.java)
 
         if (!Constants.IS_SUBSCRIBE) {
-            binding.adView.visibility= View.VISIBLE
+            binding.adView.visibility = View.VISIBLE
             val adView = AdView(this)
             val adRequest = AdRequest.Builder().build()
 
@@ -135,15 +140,15 @@ class SignInActivity : AppCompatActivity() {
 
             adView.adUnitId = getString(R.string.BannerAdsUnitId)
             binding.adView.loadAd(adRequest)
-        }else{
-            binding.adView.visibility= View.GONE
+        } else {
+            binding.adView.visibility = View.GONE
         }
     }
 
     private fun setUpListener() {
 
 
-        binding.continueGoogle.setOnClickListener{
+        binding.continueGoogle.setOnClickListener {
             googleSignIn()
         }
         binding.editEmail.editText!!.addTextChangedListener(object : TextWatcher {
@@ -235,8 +240,10 @@ class SignInActivity : AppCompatActivity() {
                 customDialog!!.dismiss()
                 return@OnClickListener
             } else {
-                signIn(binding.editEmail.editText?.text.toString().trim(),
-                    binding.editPassword.editText?.text.toString().trim())
+                signIn(
+                    binding.editEmail.editText?.text.toString().trim(),
+                    binding.editPassword.editText?.text.toString().trim()
+                )
             }
         })
         binding.signUp.setOnClickListener {
@@ -285,7 +292,7 @@ class SignInActivity : AppCompatActivity() {
                     )
                 }
 
-            }else{
+            } else {
                 startActivity(
                     Intent(
                         this@SignInActivity,
@@ -316,7 +323,7 @@ class SignInActivity : AppCompatActivity() {
     private fun googleSignIn() {
         val gso: GoogleSignInOptions =
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-               // .requestIdToken(getString(R.string.default_web_client_id))
+                // .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build()
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -324,7 +331,6 @@ class SignInActivity : AppCompatActivity() {
         startActivityForResult(signInIntent, rcSignIn)
 
     }
-
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -353,13 +359,13 @@ class SignInActivity : AppCompatActivity() {
             val personId: String? = account.id
             val personPhoto: Uri? = account.photoUrl
 
-            Log.d("TAG", "perFormSocialSignIn: "+account.displayName)
-            Log.d("TAG", "perFormSocialSignIn: "+account.email)
-            Log.d("TAG", "perFormSocialSignIn: "+account.givenName)
-            Log.d("TAG", "perFormSocialSignIn: "+account.id)
+            Log.d("TAG", "perFormSocialSignIn: " + account.displayName)
+            Log.d("TAG", "perFormSocialSignIn: " + account.email)
+            Log.d("TAG", "perFormSocialSignIn: " + account.givenName)
+            Log.d("TAG", "perFormSocialSignIn: " + account.id)
 
 
-          //  requestSignInApi(personName, personEmail, personId, personPhoto)
+            //  requestSignInApi(personName, personEmail, personId, personPhoto)
             requestSignInApi(personEmail)
 
         }
@@ -440,7 +446,7 @@ class SignInActivity : AppCompatActivity() {
     private fun signIn(username: String, password: String) {
 
 
-        viewModel.signInUser(username,password).observe(this) {
+        viewModel.signInUser(username, password).observe(this) {
 
             if (it.count == 1) {
                 sessionManager.login = true
@@ -557,10 +563,12 @@ class SignInActivity : AppCompatActivity() {
                 binding.editPassword.error = "Field can't be empty"
                 false
             }
+
             passwordInput.length < 10 -> {
                 binding.editPassword.error = "Password needs to have minimum of 10 character"
                 false
             }
+
             else -> {
                 binding.editPassword.error = null
                 true
@@ -571,10 +579,5 @@ class SignInActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finishAffinity()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setUpAds()
     }
 }

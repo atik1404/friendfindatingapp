@@ -7,7 +7,7 @@ import com.friendfinapp.dating.ui.signup.model.RegisterResponseModel
 
 object Constants {
     const val BaseUrl = "https://friendfin.com/friendfinapi/"
-    // const val BaseUrl = "https://test1.friendfin.com/friendfinapi/"
+    const val TestBaseUrl = "https://test1.friendfin.com/friendfinapi/"
     // const val BaseUrl = "https://test1.friendfin.com/friendfinapi/"
 
     //    var TOPIC_ALL_AUDIO_LIST: MutableList<AllRecentClipsResponseModel.Clip>? = ArrayList()

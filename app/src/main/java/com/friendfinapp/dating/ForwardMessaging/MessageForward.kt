@@ -74,21 +74,10 @@ class MessageForward : AppCompatActivity() {
         setContentView(binding.root)
         initialize()
         setupRecyclerView()
-        setupAds()
+        //setupAds()
         toUserToken = intent.getStringExtra("toUserToken").toString()
         loadChatUsers()
         setupClickListeners()
-
-
-
-
-
-
-
-
-
-
-
 
 
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

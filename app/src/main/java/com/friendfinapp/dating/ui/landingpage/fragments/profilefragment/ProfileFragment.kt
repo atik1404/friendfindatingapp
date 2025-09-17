@@ -73,7 +73,7 @@ class ProfileFragment : Fragment() {
 
         instance = this
         setUpView()
-        setUpAds()
+        //setUpAds()
 
         setUpClickListener()
 

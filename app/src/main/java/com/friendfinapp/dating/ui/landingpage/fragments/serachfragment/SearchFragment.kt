@@ -73,7 +73,7 @@ class SearchFragment : Fragment() ,SearchInterface{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         instance=this
-        setUpAds()
+        //setUpAds()
         setUpRecyclerView()
         setUpView()
 
@@ -176,11 +176,6 @@ class SearchFragment : Fragment() ,SearchInterface{
                 mInterstitialAd = interstitialAd
             }
         })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setUpAds()
     }
 
     private fun setUpRecyclerView() {

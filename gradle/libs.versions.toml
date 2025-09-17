@@ -35,6 +35,7 @@ sdpAndroid = "1.1.1"
 sspAndroid = "1.1.1"
 volley = "1.2.1"
 workRuntime = "2.10.4"
+timberVersion = "5.0.1"
 
 firebasecrashlyticsplugin = "3.0.6"
 googleServices = "4.4.3"
@@ -87,6 +88,7 @@ sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdpAndroid
 ssp-android = { module = "com.intuit.ssp:ssp-android", version.ref = "sspAndroid" }
 viewmodel = { module = "android.arch.lifecycle:viewmodel", version.ref = "extensions_version" }
 volley = { module = "com.android.volley:volley", version.ref = "volley" }
+timber = {group = "com.jakewharton.timber", name = "timber", version.ref = "timberVersion"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

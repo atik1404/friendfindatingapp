@@ -72,7 +72,7 @@ class ChatFragment : Fragment() {
         instance = this
 
         setUpView()
-        setUpAds()
+        //setUpAds()
         setUpRecyclerView()
         //getChatData()
         getChatData()

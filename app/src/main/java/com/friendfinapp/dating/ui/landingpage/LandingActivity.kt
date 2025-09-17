@@ -110,7 +110,7 @@ class LandingActivity : AppCompatActivity() {
         setUpBottomNav()
 
         setUpView()
-        setUpAds()
+        //setUpAds()
 
         onNewIntent(intent)
 
@@ -691,7 +691,7 @@ class LandingActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        setUpAds()
+        //setUpAds()
     }
 
 }
