@@ -45,6 +45,10 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -57,6 +61,7 @@ import com.friendfinapp.dating.ForwardMessaging.ForwardMessageCompainion
 import com.friendfinapp.dating.ForwardMessaging.MessageForward
 import com.friendfinapp.dating.R
 import com.friendfinapp.dating.application.AppController
+import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.cropper.CropImage
 import com.friendfinapp.dating.cropper.CropImageView
 import com.friendfinapp.dating.databinding.ActivityChatRoomBinding
@@ -98,7 +103,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.hypot
 
 
-class ChatRoomActivity : AppCompatActivity(), GestureDetector.OnGestureListener {
+class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetector.OnGestureListener {
 
     //animation like whats up Audio click variable
 
@@ -163,8 +168,6 @@ class ChatRoomActivity : AppCompatActivity(), GestureDetector.OnGestureListener 
 
     //end animation variable
 
-
-    private lateinit var binding: ActivityChatRoomBinding
     var fromUserName = ""
     var toUserImage = ""
     var toUserName = ""
@@ -206,20 +209,15 @@ class ChatRoomActivity : AppCompatActivity(), GestureDetector.OnGestureListener 
 
 
     private lateinit var gestureDetector: GestureDetector
+    override fun viewBindingLayout(): ActivityChatRoomBinding = ActivityChatRoomBinding.inflate(layoutInflater)
+
+    override fun initializeView(savedInstanceState: Bundle?) {
+    }
 
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val window: Window = this.window
-        window.statusBarColor = ContextCompat.getColor(this, R.color.signInColor)
-
-
-        //ForwadCompaionList.userForwardList.clear()
-        //ForwadCompaionList.messageList.clear()
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_chat_room)
-
-
 
         binding.forward.setOnClickListener {
             val bundle: Bundle? = intent.extras
