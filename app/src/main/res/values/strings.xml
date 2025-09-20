@@ -117,6 +117,7 @@
     <string name="ageRange">Age Range</string>
     <string name="iAm">I am looking for</string>
     <string name="whoIs">Who is seeking</string>
+    <string name="message_search">Message Search</string>
 
 
     <string name="CHANNEL_ID">com.friendfinapp.dating</string>

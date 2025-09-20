@@ -17,6 +17,7 @@ import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -28,12 +29,15 @@ import com.friendfinapp.dating.helper.Constants.TESTEXO
 import com.friendfinapp.dating.helper.Constants.length
 import com.friendfinapp.dating.helper.ProgressCustomDialog
 import com.friendfinapp.dating.helper.changeActivity
-import com.friendfinapp.dating.ui.chatroom.ChatRoomActivity
 import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatResponseModel
 import com.friendfinapp.dating.ui.videoplay.VideoViewPlayActivity
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.friendfinapp.dating.helper.dateparser.DateTimeFormat
+import com.iamkamrul.dateced.DateCed
+import com.jerp.common.dateparser.DateTimeParser
+import com.jerp.common.dateparser.DateTimeParser.convertReadableDateTime
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -43,6 +47,7 @@ class LiveChatAdapter(
 
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    private var lastDateGrouped = ""
 
     private var currentPlayingPosition: Int = -1
     private var exoPlayer: SimpleExoPlayer? = null
@@ -85,12 +90,8 @@ class LiveChatAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
-
-
-
+        val sendTime = chatList[position].sendTime ?: ""
         if (holder.itemViewType == 0) {
-
             if (position == chatList.size - 1) {
 
                 if (animationCheck) {
@@ -115,11 +116,9 @@ class LiveChatAdapter(
                 holder.itemView.setBackgroundColor(Color.TRANSPARENT) // or default background
             }
 
-
-
-
             val viewHolder2: ViewHolder2 = holder as ViewHolder2
-
+            viewHolder2.binding.dateTv.text = chatList[position].effectiveDate
+            viewHolder2.binding.dateTv.isVisible = chatList[position].effectiveDate.isNotEmpty()
             if (chatList[position].imageURL.isNullOrEmpty() && chatList[position].audioURL.isNullOrEmpty() && chatList[position].videoURL.isNullOrEmpty()) {
 
                 viewHolder2.binding.imageCard.visibility = View.GONE
@@ -132,7 +131,8 @@ class LiveChatAdapter(
                 viewHolder2.binding.nameUser.text = chatList[position].fromUsername.toString()
 
 
-            } else if (!chatList[position].imageURL.isNullOrEmpty() && chatList[position].audioURL.isNullOrEmpty() && chatList[position].videoURL.isNullOrEmpty()) {
+            }
+            else if (!chatList[position].imageURL.isNullOrEmpty() && chatList[position].audioURL.isNullOrEmpty() && chatList[position].videoURL.isNullOrEmpty()) {
                 viewHolder2.binding.audioView.visibility = View.GONE
                 viewHolder2.binding.videoCard.visibility = View.GONE
                 viewHolder2.binding.imageCard.visibility = View.VISIBLE
@@ -145,7 +145,8 @@ class LiveChatAdapter(
 
                 viewHolder2.binding.chatText.text = chatList[position].body.toString()
                 viewHolder2.binding.nameUser.text = chatList[position].fromUsername.toString()
-            } else if (!chatList[position].videoURL.isNullOrEmpty() && chatList[position].audioURL.isNullOrEmpty() && chatList[position].imageURL.isNullOrEmpty()) {
+            }
+            else if (!chatList[position].videoURL.isNullOrEmpty() && chatList[position].audioURL.isNullOrEmpty() && chatList[position].imageURL.isNullOrEmpty()) {
                 viewHolder2.binding.audioView.visibility = View.GONE
                 viewHolder2.binding.imageCard.visibility = View.GONE
                 viewHolder2.binding.videoCard.visibility = View.VISIBLE
@@ -187,7 +188,8 @@ class LiveChatAdapter(
 
                 viewHolder2.binding.chatText.text = chatList[position].body.toString()
                 viewHolder2.binding.nameUser.text = chatList[position].fromUsername.toString()
-            } else {
+            }
+            else {
                 viewHolder2.binding.imageCard.visibility = View.GONE
                 viewHolder2.binding.videoCard.visibility = View.GONE
                 viewHolder2.binding.chatText.visibility = View.GONE
@@ -301,10 +303,21 @@ class LiveChatAdapter(
 
             }
 
-        } else {
-
-
+            try {
+                viewHolder2.binding.sendTimeTv.text =
+                    chatList[position].sendTime?.convertReadableDateTime(
+                        DateTimeFormat.ddmmyyyy24H, DateTimeFormat.sqlhma
+                    )
+            } catch (ex: Exception) {
+                viewHolder2.binding.sendTimeTv.text = DateTimeParser.getCurrentDeviceDateTime(
+                    DateTimeFormat.sqlhma
+                )
+            }
+        }
+        else {
             val viewHolder: ViewHolder = holder as ViewHolder
+            viewHolder.binding.dateTv.text = chatList[position].effectiveDate
+            viewHolder.binding.dateTv.isVisible = chatList[position].effectiveDate.isNotEmpty()
 
             if (position == chatList.size - 1) {
                 Log.d("TAG", "onBindViewHolder: problem" + position)
@@ -855,46 +868,39 @@ class LiveChatAdapter(
                 }
             }
 
+            try {
+                viewHolder.binding.sendTimeTv.text =
+                    chatList[position].sendTime?.convertReadableDateTime(
+                        DateTimeFormat.ddmmyyyy24H, DateTimeFormat.sqlhma
+                    )
+            } catch (ex: Exception) {
+                viewHolder.binding.sendTimeTv.text = DateTimeParser.getCurrentDeviceDateTime(
+                    DateTimeFormat.sqlhma
+                )
+            }
         }
-
 
         holder.itemView.setOnClickListener {
             toggleSelectionMode(position, holder)
         }
 
-
-        Log.d("TAG", "position : " + position)
-
         val item = chatList[position]
         holder.itemView.setOnLongClickListener {
-            // If already in selection mode, toggle item selection
-
-
             toggleSelectionMode(position, holder)
-
-
-
             return@setOnLongClickListener true
         }
 
-
-// Highlight selected items
         if (selectedItems.contains(position)) {
-            Log.d(
-                "TAG",
-                "onBindViewHolder: " + position + selectedItems.size + selectedItems.toString()
-            )
             holder.itemView.setBackgroundColor(
                 ContextCompat.getColor(
                     holder.itemView.context, R.color.signInColor
                 )
             )
         } else {
-            Log.d("TAG", "onBindViewHolder2: " + selectedItems.size + selectedItems.toString())
             holder.itemView.background = null
         }
 
-
+        lastDateGrouped = sendTime.convertReadableDateTime(DateTimeFormat.ddmmyyyy24H, DateTimeFormat.outputDMy)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -922,18 +928,15 @@ class LiveChatAdapter(
         chatList.clear()
         chatList.addAll(chatItem)
 
-        Log.d("TAG", "addData: " + chatList.size)
         notifyDataSetChanged()
-        //  notifyItemInserted(searchList.size - searchItem.size)
     }
 
     fun addDataNewItem(chatItem: List<LiveChatResponseModel.Data>) {
-        Log.d("TAG", "addDataNewItemssss: " + chatItem.size)
-//        Log.d("TAG", "addDataNewItem: "+chatList[chatList.size-1].imageURL.toString())
-//        Log.d("TAG", "addDataNewItem: "+chatList[chatList.size-2].imageURL.toString())
-
         if (!chatList.isNullOrEmpty()) {
-            if (chatList[chatList.size - 1].body.toString() != chatItem[chatItem.size - 1].body.toString() || chatList[chatList.size - 1].imageURL.toString() != chatItem[chatItem.size - 1].imageURL.toString() || chatList[chatList.size - 1].audioURL.toString() != chatItem[chatItem.size - 1].audioURL.toString() || chatList[chatList.size - 1].videoURL.toString() != chatItem[chatItem.size - 1].videoURL.toString()) {
+            if (chatList[chatList.size - 1].body.toString() != chatItem[chatItem.size - 1].body.toString() ||
+                chatList[chatList.size - 1].imageURL.toString() != chatItem[chatItem.size - 1].imageURL.toString() ||
+                chatList[chatList.size - 1].audioURL.toString() != chatItem[chatItem.size - 1].audioURL.toString() ||
+                chatList[chatList.size - 1].videoURL.toString() != chatItem[chatItem.size - 1].videoURL.toString()) {
 
                 chatList.addAll(listOf(chatItem[chatItem.size - 1]))
 
@@ -965,8 +968,6 @@ class LiveChatAdapter(
         val mediaUri = Uri.parse(audioUrl)
         val mediaItem = MediaItem.fromUri(mediaUri)
 
-
-
         exoPlayer = SimpleExoPlayer.Builder(seekBar.context).build()
         exoPlayer?.apply {
             exoPlayer!!.setMediaItem(mediaItem)
@@ -975,8 +976,6 @@ class LiveChatAdapter(
             playWhenReady = true
             addListener(object : Player.Listener {
                 override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
-
-
                     when (playbackState) {
 
                         Player.STATE_IDLE -> {
@@ -1115,7 +1114,6 @@ class LiveChatAdapter(
         if (isSelectionModeEnabled) {
 
 
-
             toggleSelection(position, holder)
             Log.d("bu", "selection mode call : ")
 
@@ -1132,33 +1130,34 @@ class LiveChatAdapter(
         //  Log.d("bur", "toggleSelection call: " + position)
 
 
-            // ChatRoomActivity.instance?.selectedMessageList?.clear()
-            if (selectedItems.contains(position)) {
-                selectedItems.remove(position)
-                invokeList.remove(chatList[position])
+        // ChatRoomActivity.instance?.selectedMessageList?.clear()
+        if (selectedItems.contains(position)) {
+            selectedItems.remove(position)
+            invokeList.remove(chatList[position])
 
-                onItemLongClick?.invoke(invokeList)
-                draw(holder, position)
+            onItemLongClick?.invoke(invokeList)
+            draw(holder, position)
+
+        } else {
+
+            if (selectedItems.size == 5) {
+
+                Toast.makeText(context, "You can only share upto 5 messages", Toast.LENGTH_SHORT)
+                    .show()
 
             } else {
 
-                if (selectedItems.size == 5) {
 
-                    Toast.makeText(context, "You can only share upto 5 messages", Toast.LENGTH_SHORT).show()
+                //Log.d("TAG", "toggleSelection: " + position)
+                selectedItems.add(position)
+                invokeList.add(chatList[position])
 
-                }else {
-
-
-                    //Log.d("TAG", "toggleSelection: " + position)
-                    selectedItems.add(position)
-                    invokeList.add(chatList[position])
-
-                    onItemLongClick?.invoke(invokeList)
-                    draw(holder, position)
-                    notifyItemChanged(position)  // Important!
-                }
-
+                onItemLongClick?.invoke(invokeList)
+                draw(holder, position)
+                notifyItemChanged(position)  // Important!
             }
+
+        }
 
     }
 
@@ -1208,6 +1207,4 @@ class LiveChatAdapter(
         selectedMessageList.clear()
 
     }
-
-
 }

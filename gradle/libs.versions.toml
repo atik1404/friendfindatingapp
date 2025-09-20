@@ -40,6 +40,7 @@ timberVersion = "5.0.1"
 firebasecrashlyticsplugin = "3.0.6"
 googleServices = "4.4.3"
 ksp = "2.2.10-2.0.2"
+dateced = "1.1.1"
 
 [libraries]
 android-image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "androidImageCropper" }
@@ -89,6 +90,7 @@ ssp-android = { module = "com.intuit.ssp:ssp-android", version.ref = "sspAndroid
 viewmodel = { module = "android.arch.lifecycle:viewmodel", version.ref = "extensions_version" }
 volley = { module = "com.android.volley:volley", version.ref = "volley" }
 timber = {group = "com.jakewharton.timber", name = "timber", version.ref = "timberVersion"}
+dateced = { group = "com.github.kamrul3288", name = "dateced", version.ref = "dateced" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

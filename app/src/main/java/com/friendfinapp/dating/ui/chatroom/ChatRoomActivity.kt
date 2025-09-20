@@ -93,6 +93,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -541,8 +542,8 @@ class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetecto
             }
         }
 
-        binding.reportUser.setOnClickListener {
-            showReportDialog()
+        binding.menuIv.setOnClickListener {
+            showPopupMenuItems()
         }
 
         binding.imageHoldDelete.setOnClickListener {
@@ -590,44 +591,36 @@ class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetecto
         //adapter.setHasStableIds(true)
         binding.livechatRcv.adapter = adapter
 
-
-        adapter.onItemLongClick = {
-            //showReportDialog(it)
-            Log.d("bu", "setUpRecyclerView: " + it.size)
-            Log.d("bu", "setUpRecyclerView: " + selectedMessageList.size)
-
-
+        adapter.onItemLongClick = { item->
             selectedMessageList.clear()
-            selectedMessageList.addAll(it)
+            selectedMessageList.addAll(item)
             stringsFromLoop.clear()
 
 
             ForwardMessageCompainion.selectedMessageList.clear()
-            ForwardMessageCompainion.selectedMessageList.addAll(it)
+            ForwardMessageCompainion.selectedMessageList.addAll(item)
 
             ForwadCompaionList.messageList.clear()
-            ForwadCompaionList.messageList.addAll(it.map { msg-> msg.id.toString() })
+            ForwadCompaionList.messageList.addAll(item.map { msg-> msg.id.toString() })
 
-            for (id in it) {
+            for (id in item) {
                 stringsFromLoop.add(id.id!!.toString())
                 Log.d("bu", "setUpRecyclerView: " + stringsFromLoop.toString())
             }
 
-            if (it.isEmpty()) {
+            if (item.isEmpty()) {
                 binding.userProfileImage.visibility = View.VISIBLE
                 binding.userName.visibility = View.VISIBLE
-                binding.reportUser.visibility = View.VISIBLE
+                binding.menuIv.visibility = View.VISIBLE
                 binding.forward.visibility = View.GONE
                 binding.menuDot.visibility = View.GONE
             } else {
                 binding.userProfileImage.visibility = View.GONE
                 binding.userName.visibility = View.GONE
-                binding.reportUser.visibility = View.GONE
+                binding.menuIv.visibility = View.GONE
                 binding.forward.visibility = View.VISIBLE
                 binding.menuDot.visibility = View.VISIBLE
             }
-
-
         }
     }
 
@@ -653,6 +646,34 @@ class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetecto
 
                 R.id.nav_report -> {
                     // Handle menu item 2 click
+                    true
+                }
+                // Add more menu item cases as needed
+                else -> false
+            }
+        }
+
+        // Show the PopupMenu
+        popupMenu.show()
+    }
+
+    private fun showPopupMenuItems() {
+        // Create PopupMenu instance
+        val popupMenu = PopupMenu(this, binding.menuIv)
+
+        // Inflate your menu resource here
+        popupMenu.inflate(R.menu.pop_up_chat_room_menu)
+
+        // Set menu item click listener
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_report_user -> {
+                    showReportDialog()
+                    true
+                }
+
+                R.id.menu_search -> {
+                    showToastMessage("Search Clicked")
                     true
                 }
                 // Add more menu item cases as needed
@@ -916,7 +937,9 @@ messageViewModel.getMessageWithAudio(
             }
         })
 
-    }fun getChatList() {
+    }
+
+    fun getChatListSearchResult() {
         var from = fromUserName.trim()
         var to = toUserName.trim()
         var chatPostingModel: LiveChatPostingModel =
@@ -945,8 +968,44 @@ messageViewModel.getMessageWithAudio(
                     }
                     it.data.let {
                         customDialog?.dismiss()
-                        adapter.addData(it!!)
-                    } } } } }
+                        adapter.addData(getModifiedChatList(it!!))
+                        Timber.e("modifiedList: ${getModifiedChatList(it!!).map { it.effectiveDate }}")
+                    } } } }
+    }
+
+    fun getChatList() {
+        var from = fromUserName.trim()
+        var to = toUserName.trim()
+        var chatPostingModel: LiveChatPostingModel =
+            LiveChatPostingModel(from.toString().trim(), to.toString().trim())
+
+
+        if (!check) {
+            customDialog?.show()
+            check = true
+        }
+        //
+
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
+                // Do something
+                viewModel.getChatList(chatPostingModel).observe(this@ChatRoomActivity) {
+
+                    it.isBlocked.let { block ->
+                        if (block!!) {
+                            binding.sendViewMessageLayout.visibility = View.GONE
+                            binding.blockedView.visibility = View.VISIBLE
+                        } else {
+                            binding.sendViewMessageLayout.visibility = View.VISIBLE
+                            binding.blockedView.visibility = View.GONE
+                        }
+                    }
+                    it.data.let {
+                        customDialog?.dismiss()
+                        adapter.addData(getModifiedChatList(it!!))
+                        Timber.e("modifiedList: ${getModifiedChatList(it!!).map { it.effectiveDate }}")
+                    } } } }
+    }
 
     fun getChatList2() {
 
@@ -980,29 +1039,14 @@ messageViewModel.getMessageWithAudio(
                     }
                     chatList.data.let {
                         customDialog?.dismiss()
-
-//                        if (it != null) {
-//                            for (i in it){
-//                                Log.d("TAG", "getChatList2: "+i.body)
-//                            }
-//
-//
-//                        }
-                        adapter.addDataNewItem(it!!)
-
-                        val scrollPosition: Int = it.size
-
-                        Log.d("TAG", "getChatList2: " + it.size)
-                        // scrolltobottom(scrollPosition)
-                        // binding.rvchats.smoothScrollToPosition(scrollPosition)
+                        adapter.addDataNewItem(getModifiedChatList(it!!))
+                        Timber.e("modifiedList2: ${getModifiedChatList(it!!).map { it.effectiveDate }}")
 
                         if (it.isNotEmpty()) {
                             if (Constants.fromUserName == it[it.size - 1].fromUsername.toString() && Constants.textMessage == it[it.size - 1].body.toString()
                                 && Constants.imageUrl == it[it.size - 1].imageURL.toString() && Constants.audioUrl == it[it.size - 1].audioURL.toString()
                                 && Constants.videoUrl == it[it.size - 1].videoURL.toString()
                             ) {
-
-
                                 Constants.fromUserName = it[it.size - 1].fromUsername.toString()
                                 Constants.textMessage = it[it.size - 1].body.toString()
                                 Constants.imageUrl = it[it.size - 1].imageURL.toString()
@@ -1014,8 +1058,6 @@ messageViewModel.getMessageWithAudio(
                                     binding.livechatRcv.smoothScrollToPosition(
                                         // scrollPosition
                                         adapter.chatList.size
-
-
                                     )
                                 }, 100)
 
@@ -1026,13 +1068,31 @@ messageViewModel.getMessageWithAudio(
                                 Constants.videoUrl = it[it.size - 1].videoURL.toString()
                             }
                         }
-
-
                     }
                 }
             }
         }
+    }
 
+    private fun getModifiedChatList(
+        chats: List<LiveChatResponseModel.Data>
+    ): List<LiveChatResponseModel.Data> {
+        // Work on a mutable copy if Data has a mutable `var effectiveDate: String`
+        val items = chats.toMutableList()
+        var lastDate: String? = null
+
+        for (i in items.indices) {
+            val curDate  = items[i].sendTime?.split(" ")?.get(0)
+            if (curDate != null && curDate != lastDate) {
+                // first item of a new block → keep the date
+                items[i].effectiveDate = curDate
+                lastDate = curDate
+            } else {
+                // same as previous (or null) → blank
+                items[i].effectiveDate = ""
+            }
+        }
+        return items
     }
 
     //end
@@ -2017,12 +2077,12 @@ messageViewModel.getMessageWithAudio(
         var instance: ChatRoomActivity? = null
     }
 
-    override fun onBackPressed() {
-        //  handler.removeCallbacks(runnable!!)
-        super.onBackPressed()
-        adapter.stopPlayback()
-        adapter.exitSelectionMode()
-        ChatFragment.instance?.getChatDataWhenBackFromChatRoom()
+    override fun onBackPressedDispatcher(handler: () -> Unit) {
+        super.onBackPressedDispatcher {
+            adapter.stopPlayback()
+            adapter.exitSelectionMode()
+            ChatFragment.instance?.getChatDataWhenBackFromChatRoom()
+        }
     }
 
     override fun onDestroy() {
@@ -2066,213 +2126,10 @@ messageViewModel.getMessageWithAudio(
         return true
     }
 
-
     override fun onLongPress(e: MotionEvent) {}
     override fun onFling(p0: MotionEvent?, p1: MotionEvent, p2: Float, p3: Float): Boolean {
         return true
     }
 
-
-    //    private fun audioPlayer(audio:File) {
-//        //set up MediaPlayer
-//
-//
-//
-//        val path=audio.absolutePath
-//        val fileName = audio.name
-//
-//        Log.d("bur", "stopRecording: "+path + File.separator + fileName)
-//        val mp = MediaPlayer()
-//        try {
-//            mp.setDataSource(path)
-//            mp.prepare()
-//            mp.start()
-//        } catch (e: java.lang.Exception) {
-//            e.printStackTrace()
-//            Log.d("bur", "audioPlayerError: "+e.message)
-//        }
-//    }
-
-
-//    //start audio recording button animation
-//
-//    private fun startRecordingAnimation() {
-//        animatorSet?.cancel()
-//
-//        val scaleXAnimator = ObjectAnimator.ofFloat(binding.send, "scaleX", 1f, 1.2f)
-//        scaleXAnimator.repeatCount = ObjectAnimator.INFINITE
-//        scaleXAnimator.repeatMode = ObjectAnimator.REVERSE
-//
-//        val scaleYAnimator = ObjectAnimator.ofFloat(binding.send, "scaleY", 1f, 1.2f)
-//        scaleYAnimator.repeatCount = ObjectAnimator.INFINITE
-//        scaleYAnimator.repeatMode = ObjectAnimator.REVERSE
-//
-//        val alphaAnimator = ObjectAnimator.ofFloat(binding.send, "alpha", 1f, 0.5f)
-//        alphaAnimator.repeatCount = ObjectAnimator.INFINITE
-//        alphaAnimator.repeatMode = ObjectAnimator.REVERSE
-//
-//        animatorSet = AnimatorSet()
-//        animatorSet?.playTogether(scaleXAnimator, scaleYAnimator, alphaAnimator)
-//        animatorSet?.duration = 500
-//        animatorSet?.start()
-//    }
-//
-//    //end
-
-//    //stop audio recording button animation
-//
-//    private fun stopRecordingAnimation() {
-//        animatorSet?.cancel()
-//        binding.send.scaleX = 1f
-//        binding.send.scaleY = 1f
-//        binding.send.alpha = 1f
-//    }
-//
-//
-//    //end
-
-
-    //image choose dialog
-    //   var dialog: Dialog? = null
-
-//    @RequiresApi(Build.VERSION_CODES.R)
-//    private fun showChooserDialog() {
-//
-//        //val btnSheet: View = layoutInflater.inflate(R.layout.dialog_ask_chosser, null)
-//        dialog = Dialog(this)
-//        dialog!!.requestWindowFeature(Window.FEATURE_NO_TITLE)
-//        dialog!!.setCancelable(true)
-//        dialog!!.setContentView(R.layout.dialog_ask_chosser)
-//        dialog!!.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//        val width: Int = (this.resources.displayMetrics.widthPixels * 0.95).toInt()
-//        dialog!!.window!!.setLayout(width, WindowManager.LayoutParams.WRAP_CONTENT)
-//        val close = dialog!!.findViewById<ImageView>(R.id.close) as ImageView
-//        val galley = dialog!!.findViewById<TextView>(R.id.gallery) as TextView
-//        val camera = dialog!!.findViewById<TextView>(R.id.camera) as TextView
-//
-//        galley.setOnClickListener {
-//            dialog!!.dismiss()
-//
-//            if (permissionHelper!!.checkPermissionForUploadScreenshot()) {
-//
-//                pickImageGallery()
-//
-//            } else {
-//                permissionHelper!!.requestPermissionUploadScreenshot()
-//            }
-//
-//        }
-//
-//        camera.setOnClickListener {
-//            dialog!!.dismiss()
-//            if (permissionHelper!!.checkPermissionForCamera()) {
-//                pickImageCamera()
-//            } else {
-//                permissionHelper!!.requestPermissionForCamera()
-//            }
-//
-//        }
-//
-//        close.setOnClickListener {
-//
-//
-//            dialog!!.dismiss()
-//            //   revealShow(btnSheet, false, dialog);
-//
-//
-//        }
-//
-//
-////        dialog!!.setOnShowListener { revealShow(btnSheet, true, null) }
-////
-////        dialog!!.setOnKeyListener(DialogInterface.OnKeyListener { dialogInterface, i, keyEvent ->
-////            if (i == KeyEvent.KEYCODE_BACK) {
-////                revealShow(btnSheet, false, dialog)
-////                return@OnKeyListener true
-////            }
-////            false
-////        })
-//
-//
-//        dialog!!.show()
-//    }
-//    //end
-
-//    private fun sendMessage(message: String) {
-//
-//        var myUserName = sessionManager.username
-//        var sendUserName = toUserName.trim()
-//
-//        val sendMessage: SendMessagePostingModel =
-//            SendMessagePostingModel(myUserName, sendUserName, message, 0, 0)
-//
-//
-//        customDialog?.show()
-//        messageViewModel.getMessage(sendMessage).observe(this) {
-//            if (it.status_code == 200) {
-//                customDialog?.dismiss()
-//
-//                getUserToken(toUserName.trim(), message)
-//
-//
-//                instance?.getChatList2()
-//                binding.edit.setText("")
-//
-//
-//            } else {
-//                Toast.makeText(this, "Something went wrong.", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
-
-
-//    //slide left animation
-//
-//    fun tryAnimation(view: View?) {
-//        val animation: Animation = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left)
-//        view?.startAnimation(animation)
-//    }
-//
-//    //end
-//    //record animation
-//
-//    private fun handleMicrophoneButtonTouch(view: View, motionEvent: MotionEvent): Boolean {
-//
-//
-//        when (motionEvent.action) {
-//
-//
-//            MotionEvent.ACTION_DOWN -> {
-//
-//                if (permissionHelper!!.checkPermissionForRecordAudio()) {
-//                    if (!isTextSending) {
-//                        startRecordingAnimation()
-//
-//                        startRecording()
-//                    }
-//                } else {
-//                    permissionHelper!!.requestPermissionForAudio()
-//                }
-//
-//                // startRecording()
-//            }
-//
-//            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-//                if (permissionHelper!!.checkPermissionForRecordAudio()) {
-//
-//                    if (!isTextSending) {
-//                        stopRecordingAnimation()
-//                        stopRecording()
-//                    }
-//                }
-//                // stopRecording()
-//            }
-//
-//
-//        }
-//        return false
-//    }
-//
-//    //end
 
 }

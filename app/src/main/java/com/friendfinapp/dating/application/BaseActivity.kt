@@ -5,12 +5,15 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import androidx.viewbinding.ViewBinding
+import com.friendfinapp.dating.ui.landingpage.fragments.chatfragment.ChatFragment
+import kotlinx.coroutines.android.HandlerDispatcher
 
 abstract class BaseActivity<D:ViewBinding> : AppCompatActivity(){
 
@@ -58,5 +61,17 @@ abstract class BaseActivity<D:ViewBinding> : AppCompatActivity(){
         super.onDestroy()
         activityContext = null
         //finish()
+    }
+
+    open fun onBackPressedDispatcher(handler: ()-> Unit){
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                handler.invoke()
+
+                // then perform the default back action
+                isEnabled = false
+                onBackPressedDispatcher.onBackPressed()
+            }
+        })
     }
 }

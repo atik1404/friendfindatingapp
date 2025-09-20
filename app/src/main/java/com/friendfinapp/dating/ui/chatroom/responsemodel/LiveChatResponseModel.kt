@@ -61,5 +61,11 @@ class LiveChatResponseModel {
         @SerializedName("videoDuration")
         @Expose
         val videoDuration: String? = null
+
+        @SerializedName("sendTime")
+        @Expose
+        val sendTime: String? = null
+
+        var effectiveDate: String = ""
     }
 }

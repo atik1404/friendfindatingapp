@@ -14,6 +14,10 @@ class LiveChatViewModel : ViewModel() {
     private val repo = MainRepo()
 
     fun getChatList(chatPostingModel: LiveChatPostingModel) : LiveData<LiveChatResponseModel> = repo.getChatList(chatPostingModel)
+
+    fun getChatListSearchResult(chatPostingModel: LiveChatPostingModel) : LiveData<LiveChatResponseModel> = repo.getChatList(chatPostingModel)
+
+
     fun deleteChatList(
         stringsFromLoop: MutableList<String>,
         customDialog: ProgressCustomDialog?,
