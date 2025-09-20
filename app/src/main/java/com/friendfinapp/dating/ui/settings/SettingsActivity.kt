@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import com.friendfinapp.dating.R
+import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.databinding.ActivitySettingsBinding
 import com.friendfinapp.dating.helper.Constants
 import com.friendfinapp.dating.ui.privacypolicy.PrivacyPolicyActivity
@@ -15,12 +16,11 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 
-class SettingsActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySettingsBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+class SettingsActivity : BaseActivity<ActivitySettingsBinding>() {
+    override fun viewBindingLayout(): ActivitySettingsBinding =
+        ActivitySettingsBinding.inflate(layoutInflater)
 
-        binding=DataBindingUtil.setContentView(this,R.layout.activity_settings)
+    override fun initializeView(savedInstanceState: Bundle?) {
 
 
         setUpView()
@@ -31,7 +31,7 @@ class SettingsActivity : AppCompatActivity() {
     private fun setUpView() {
 
         if (!Constants.IS_SUBSCRIBE) {
-            binding.adView.visibility=View.VISIBLE
+            binding.adView.visibility = View.VISIBLE
             val adView = AdView(this)
             val adRequest = AdRequest.Builder().build()
 
@@ -39,17 +39,17 @@ class SettingsActivity : AppCompatActivity() {
 
             adView.adUnitId = getString(R.string.BannerAdsUnitId)
             binding.adView.loadAd(adRequest)
-        }else{
-            binding.adView.visibility= View.GONE
+        } else {
+            binding.adView.visibility = View.GONE
         }
     }
 
     private fun setUpClickListener() {
-        binding.imageBack.setOnClickListener{
+        binding.imageBack.setOnClickListener {
             finish()
         }
 
-        binding.privacy.setOnClickListener{
+        binding.privacy.setOnClickListener {
             startActivity(
                 Intent(
                     this@SettingsActivity,
@@ -58,7 +58,7 @@ class SettingsActivity : AppCompatActivity() {
             )
         }
 
-        binding.profile.setOnClickListener{
+        binding.profile.setOnClickListener {
             startActivity(
                 Intent(
                     this@SettingsActivity,

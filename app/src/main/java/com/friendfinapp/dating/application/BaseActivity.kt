@@ -1,11 +1,13 @@
 package com.friendfinapp.dating.application
 
 import android.app.Activity
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -20,6 +22,7 @@ abstract class BaseActivity<D:ViewBinding> : AppCompatActivity(){
     protected lateinit var binding:D
     protected var activityContext: Activity? = null
     protected abstract fun viewBindingLayout(): D
+
     protected abstract fun initializeView(savedInstanceState: Bundle?)
 
     override fun onCreate(savedInstanceState: Bundle?) {

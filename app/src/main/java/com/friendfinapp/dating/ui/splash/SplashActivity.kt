@@ -19,6 +19,7 @@ import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.BillingResponseCode.OK
 
 import com.friendfinapp.dating.R
+import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.databinding.ActivitySplashBinding
 import com.friendfinapp.dating.helper.Constants
 import com.friendfinapp.dating.helper.Constants.IS_SUBSCRIBE
@@ -40,30 +41,24 @@ import java.util.concurrent.TimeUnit
 
 
 @SuppressLint("CustomSplashScreen")
-class SplashActivity : AppCompatActivity() , PurchasesUpdatedListener {
-    var binding: ActivitySplashBinding? = null
+class SplashActivity : BaseActivity<ActivitySplashBinding>(), PurchasesUpdatedListener {
     private lateinit var sessionManager: SessionManager
     var customDialog: ProgressCustomDialog? = null
     private lateinit var viewModel: LogInViewModel
     private lateinit var mGoogleSignInClient: GoogleSignInClient
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        this.window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
+    override fun viewBindingLayout(): ActivitySplashBinding =
+        ActivitySplashBinding.inflate(layoutInflater)
 
+    override fun initializeView(savedInstanceState: Bundle?) {
 
         setUpView()
 
 
-        if (sessionManager.login){
+        if (sessionManager.login) {
 
             val googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this)
 
-            if (googleSignInAccount!=null){
+            if (googleSignInAccount != null) {
                 viewModel.signInGoogleUser(googleSignInAccount.email!!).observe(this) {
                     if (it.count == 1) {
                         sessionManager.login = true
@@ -114,11 +109,11 @@ class SplashActivity : AppCompatActivity() , PurchasesUpdatedListener {
                         ).show()
                     }
                 }
-            }else{
+            } else {
                 userInfoGet()
             }
 
-        }else{
+        } else {
             val gso: GoogleSignInOptions =
                 GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(getString(R.string.default_web_client_ids))
@@ -138,80 +133,77 @@ class SplashActivity : AppCompatActivity() , PurchasesUpdatedListener {
                     } catch (e: InterruptedException) {
                         e.printStackTrace()
                     } finally {
-                            startActivity(intent)
-                            finish()
+                        startActivity(intent)
+                        finish()
                     }
                 }
             }
             thread.start()
         }
-
-
+        Constants.AUTHORIZATION_TOKEN = sessionManager.token ?: ""
     }
 
 
-
-        private fun userInfoGet() {
-
+    private fun userInfoGet() {
 
 
-            var username=sessionManager.username!!.toString()
+        var username = sessionManager.username!!
 
-            var password=sessionManager.password!!.toString()
-            Log.d("TAG", "signIn22: "+username)
-            Log.d("TAG", "signIn: "+password)
-            viewModel.signInUser(username,password).observe(this) {
+        var password = sessionManager.password!!
+        Log.d("TAG", "signIn22: " + username)
+        Log.d("TAG", "signIn: " + password)
+        viewModel.signInUser(username, password).observe(this) {
 
 
-                if (it.count == 1) {
-                    sessionManager.login = true
-                    Log.d("TAG", "signIn: " + it.data?.username)
-                    Constants.USER_INFO.username = it.data?.username
-                    Log.d("TAG", "signIn: " + Constants.USER_INFO.username)
-                    Constants.USER_INFO.active = it.data?.active
-                    Constants.USER_INFO.password = it.data?.password
-                    Constants.USER_INFO.email = it.data?.email
-                    Constants.USER_INFO.name = it.data?.name
-                    Constants.USER_INFO.gender = it.data?.gender
-                    Constants.USER_INFO.receiveEmails = it.data?.receiveEmails
-                    Constants.USER_INFO.interestedIn = it.data?.interestedIn
-                    Constants.USER_INFO.birthdate = it.data?.birthdate
-                    Constants.USER_INFO.country = it.data?.country
-                    Constants.USER_INFO.state = it.data?.state
-                    Constants.USER_INFO.city = it.data?.city
-                    Constants.USER_INFO.zipCode = it.data?.zipCode
-                    Constants.USER_INFO.messageVerificationsLeft = it.data?.messageVerificationsLeft
-                    Constants.USER_INFO.languageId = it.data?.languageId
-                    Constants.USER_INFO.userIP = it.data?.userIP
-                    Constants.USER_INFO.tokenUniqueId = it.data?.tokenUniqueId
-                    Constants.USER_INFO.profileSkin = it.data?.profileSkin
-                    Constants.USER_ID = Constants.USER_INFO.username.toString()
-                    sessionManager.setInfo(
-                        password.toString().trim(),
-                        it.data?.email,
-                        it.data?.username,
-                        it.data?.name,
-                        it.data?.interestedIn,
-                        it.data?.gender,
-                        it.data?.active,
-                        it.data?.country,
-                        it.data?.state,
-                        it.data?.city,
-                        it.data?.birthdate
-                    )
+            if (it.count == 1) {
+                sessionManager.login = true
+                Log.d("TAG", "signIn: " + it.data?.username)
+                Constants.USER_INFO.username = it.data?.username
+                Log.d("TAG", "signIn: " + Constants.USER_INFO.username)
+                Constants.USER_INFO.active = it.data?.active
+                Constants.USER_INFO.password = it.data?.password
+                Constants.USER_INFO.email = it.data?.email
+                Constants.USER_INFO.name = it.data?.name
+                Constants.USER_INFO.gender = it.data?.gender
+                Constants.USER_INFO.receiveEmails = it.data?.receiveEmails
+                Constants.USER_INFO.interestedIn = it.data?.interestedIn
+                Constants.USER_INFO.birthdate = it.data?.birthdate
+                Constants.USER_INFO.country = it.data?.country
+                Constants.USER_INFO.state = it.data?.state
+                Constants.USER_INFO.city = it.data?.city
+                Constants.USER_INFO.zipCode = it.data?.zipCode
+                Constants.USER_INFO.messageVerificationsLeft = it.data?.messageVerificationsLeft
+                Constants.USER_INFO.languageId = it.data?.languageId
+                Constants.USER_INFO.userIP = it.data?.userIP
+                Constants.USER_INFO.tokenUniqueId = it.data?.tokenUniqueId
+                Constants.USER_INFO.profileSkin = it.data?.profileSkin
+                Constants.USER_ID = Constants.USER_INFO.username.toString()
+                sessionManager.setInfo(
+                    password.toString().trim(),
+                    it.data?.email,
+                    it.data?.username,
+                    it.data?.name,
+                    it.data?.interestedIn,
+                    it.data?.gender,
+                    it.data?.active,
+                    it.data?.country,
+                    it.data?.state,
+                    it.data?.city,
+                    it.data?.birthdate
+                )
 
-                    checkSaveProfile(username)
-                } else {
+                checkSaveProfile(username)
+            } else {
 
-                    sessionManager.login = false
-                    Toast.makeText(
-                        this@SplashActivity,
-                        "Something Went Wrong! Please Close the app and start from again. Thanks.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+                sessionManager.login = false
+                Toast.makeText(
+                    this@SplashActivity,
+                    "Something Went Wrong! Please Close the app and start from again. Thanks.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
+    }
 
     private fun checkSaveProfile(username: String?) {
         viewModel.fetchProfile(username).observe(this) {
@@ -274,7 +266,7 @@ class SplashActivity : AppCompatActivity() , PurchasesUpdatedListener {
         viewModel = ViewModelProvider(this).get(LogInViewModel::class.java)
 
 
-         purchaseFinding()
+        purchaseFinding()
     }
 
     // Check network status
@@ -286,7 +278,11 @@ class SplashActivity : AppCompatActivity() , PurchasesUpdatedListener {
 
     private fun showNoInternetMessage() {
         // Implement your "No Internet" UI logic here, e.g., display a Snackbar or Toast
-        Snackbar.make(findViewById(android.R.id.content), "No Internet Connection", Snackbar.LENGTH_LONG).show()
+        Snackbar.make(
+            findViewById(android.R.id.content),
+            "No Internet Connection",
+            Snackbar.LENGTH_LONG
+        ).show()
     }
 
     // Create a one-time work request (optional)
@@ -299,7 +295,7 @@ class SplashActivity : AppCompatActivity() , PurchasesUpdatedListener {
     private var billingClient: BillingClient? = null
     private fun purchaseFinding() {
 
-         billingClient = BillingClient
+        billingClient = BillingClient
             .newBuilder(this)
             .enablePendingPurchases()
             .setListener(this)
@@ -332,22 +328,21 @@ class SplashActivity : AppCompatActivity() , PurchasesUpdatedListener {
         ) { billingResult, purchases -> // check billingResult
             // process returned purchase list, e.g. display the plans user owns
             if (purchases.isNullOrEmpty()) {
-                Toast.makeText(this,"No existing in app purchases found",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "No existing in app purchases found", Toast.LENGTH_SHORT)
+                    .show()
                 Log.d("bur", "No existing in app purchases found.")
                 IS_SUBSCRIBE = false
             } else {
                 IS_SUBSCRIBE = true
 
-                var skus=purchases[0].products[0].toString()
+                var skus = purchases[0].products[0].toString()
 
                 // var skus= result.purchasesList!![0].skus[0].toString()
-                SKUS=skus
-                Toast.makeText(this,"Existing purchases: $purchases",Toast.LENGTH_SHORT).show()
+                SKUS = skus
+                Toast.makeText(this, "Existing purchases: $purchases", Toast.LENGTH_SHORT).show()
                 Log.d("bur", "Existing purchases: $purchases")
             }
         }
-
-
 
 
 //        if (!billingClient!!.isReady) {

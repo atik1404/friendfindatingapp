@@ -17,6 +17,7 @@ object Constants {
     var USER_PROFILE_INFO_PICTURE: MutableList<FetchProfileResponseModel.Userimage> = ArrayList()
     var USER_OTHER_PROFILE_INFO: MutableList<OthersProfileResponseModel.Data> = ArrayList()
     var USER_ID = ""
+    var AUTHORIZATION_TOKEN = ""
 
     var IS_SUBSCRIBE = false
 

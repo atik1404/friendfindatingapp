@@ -932,7 +932,7 @@ class LiveChatAdapter(
     }
 
     fun addDataNewItem(chatItem: List<LiveChatResponseModel.Data>) {
-        if (!chatList.isNullOrEmpty()) {
+        if (chatList.isNotEmpty()) {
             if (chatList[chatList.size - 1].body.toString() != chatItem[chatItem.size - 1].body.toString() ||
                 chatList[chatList.size - 1].imageURL.toString() != chatItem[chatItem.size - 1].imageURL.toString() ||
                 chatList[chatList.size - 1].audioURL.toString() != chatItem[chatItem.size - 1].audioURL.toString() ||
@@ -953,7 +953,6 @@ class LiveChatAdapter(
                 animationCheck = true
                 typingAnimationCheck = true
             }
-
         }
     }
 

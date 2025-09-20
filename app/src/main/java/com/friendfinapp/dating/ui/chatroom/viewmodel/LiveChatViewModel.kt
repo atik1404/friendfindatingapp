@@ -7,6 +7,7 @@ import com.friendfinapp.dating.ui.chatroom.ChatRoomActivity
 import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatMessageDeleteResponseModel
 import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatPostingModel
 import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatResponseModel
+import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatSearchModel
 import com.friendfinapp.dating.ui.mainrepo.MainRepo
 
 class LiveChatViewModel : ViewModel() {
@@ -15,7 +16,7 @@ class LiveChatViewModel : ViewModel() {
 
     fun getChatList(chatPostingModel: LiveChatPostingModel) : LiveData<LiveChatResponseModel> = repo.getChatList(chatPostingModel)
 
-    fun getChatListSearchResult(chatPostingModel: LiveChatPostingModel) : LiveData<LiveChatResponseModel> = repo.getChatList(chatPostingModel)
+    fun getChatListSearchResult(chatPostingModel: LiveChatSearchModel) : LiveData<LiveChatResponseModel> = repo.getChatListSearchResult(chatPostingModel)
 
 
     fun deleteChatList(

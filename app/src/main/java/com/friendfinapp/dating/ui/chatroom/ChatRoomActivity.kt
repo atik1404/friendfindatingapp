@@ -48,6 +48,7 @@ import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -65,6 +66,7 @@ import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.cropper.CropImage
 import com.friendfinapp.dating.cropper.CropImageView
 import com.friendfinapp.dating.databinding.ActivityChatRoomBinding
+import com.friendfinapp.dating.databinding.DialogSearchMessageBinding
 import com.friendfinapp.dating.helper.Constants
 import com.friendfinapp.dating.helper.Constants.finalRecordTime
 import com.friendfinapp.dating.helper.Constants.hidden
@@ -74,10 +76,12 @@ import com.friendfinapp.dating.helper.FileUtils
 import com.friendfinapp.dating.helper.PermissionHelper
 import com.friendfinapp.dating.helper.ProgressCustomDialog
 import com.friendfinapp.dating.helper.SessionManager
+import com.friendfinapp.dating.helper.showViewAlertDialog
 import com.friendfinapp.dating.notification.*
 import com.friendfinapp.dating.ui.chatroom.adapter.LiveChatAdapter
 import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatPostingModel
 import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatResponseModel
+import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatSearchModel
 import com.friendfinapp.dating.ui.chatroom.viewmodel.LiveChatViewModel
 import com.friendfinapp.dating.ui.landingpage.fragments.chatfragment.ChatFragment
 import com.friendfinapp.dating.ui.othersprofile.model.MessageViewModel
@@ -102,6 +106,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.hypot
+import kotlin.math.roundToInt
 
 
 class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetector.OnGestureListener {
@@ -130,6 +135,7 @@ class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetecto
     private var animBlink: Animation? =
         null
     private var animJump: Animation? = null
+    private var isMessageSearch: Boolean = false
     private var animJumpFast: Animation? = null
 
     private var isDeleting = false
@@ -212,14 +218,8 @@ class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetecto
     private lateinit var gestureDetector: GestureDetector
     override fun viewBindingLayout(): ActivityChatRoomBinding = ActivityChatRoomBinding.inflate(layoutInflater)
 
-    override fun initializeView(savedInstanceState: Bundle?) {
-    }
-
-
     @RequiresApi(Build.VERSION_CODES.R)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun initializeView(savedInstanceState: Bundle?) {
         binding.forward.setOnClickListener {
             val bundle: Bundle? = intent.extras
 
@@ -304,8 +304,6 @@ class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetecto
         if (!permissionHelper!!.checkPermissionForRecordAudio()) {
             permissionHelper!!.requestPermissionForAudio()
         }
-
-        //end
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -441,8 +439,17 @@ class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetecto
     }
 
 
+    private fun clearSearchResult(){
+        isMessageSearch = false
+        binding.searchResultTv.visibility = View.GONE
+        getChatList()
+    }
+
     @RequiresApi(Build.VERSION_CODES.R)
     private fun setUpClickListener() {
+        binding.searchResultTv.setOnClickListener {
+            clearSearchResult()
+        }
 
         binding.imageBack.setOnClickListener {
             adapter.stopPlayback()
@@ -452,6 +459,7 @@ class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetecto
         }
 
         binding.send.setOnClickListener {
+            clearSearchResult()
 
             if (permissionHelper!!.checkPermissionForNotification()) {
 
@@ -673,7 +681,7 @@ class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetecto
                 }
 
                 R.id.menu_search -> {
-                    showToastMessage("Search Clicked")
+                    showSearchMessageDialog()
                     true
                 }
                 // Add more menu item cases as needed
@@ -769,9 +777,6 @@ class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetecto
                 }
         } catch (e: Exception) {       }
     }
-
-
-
 
     private fun uploadAudioFileToServer(outputFile: File, recordingDuration: Long) {
         var myUserName = sessionManager.username
@@ -902,6 +907,7 @@ messageViewModel.getMessageWithAudio(
 
         }
     }
+
     private fun sendNotification(toUserToken: String, message: String) {
         Log.d("TAG", "testNotificationImage: " + sessionManager.getProfileImage.toString())
         val data = Data(
@@ -939,23 +945,47 @@ messageViewModel.getMessageWithAudio(
 
     }
 
-    fun getChatListSearchResult() {
-        var from = fromUserName.trim()
-        var to = toUserName.trim()
-        var chatPostingModel: LiveChatPostingModel =
-            LiveChatPostingModel(from.toString().trim(), to.toString().trim())
 
+    private fun showSearchMessageDialog() {
+        val dialogBinding = DialogSearchMessageBinding.inflate(layoutInflater)
 
-        if (!check) {
-            customDialog?.show()
-            check = true
+        val dialog = this.showViewAlertDialog(
+            dialogBinding.root,
+            null,
+            R.style.AlertDialogTransparentBg,
+            true
+        )
+
+        dialogBinding.apply {
+            searchBtn.setOnClickListener {
+                val searchKey = searchEt.text.toString()
+                if(searchKey.isEmpty()){
+                    return@setOnClickListener
+                }
+                getChatListSearchResult(searchKey)
+                isMessageSearch = true
+                dialog.dismiss()
+            }
+            closeBtn.setOnClickListener {  dialog.dismiss() }
         }
-        //
+    }
+
+    fun getChatListSearchResult(searchKey : String) {
+        val from = fromUserName.trim()
+        val to = toUserName.trim()
+        val params = LiveChatSearchModel(from.trim(), to.trim(), searchKey)
+        if(searchKey.isEmpty()){
+            return
+        }
+
+        customDialog?.show()
 
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
                 // Do something
-                viewModel.getChatList(chatPostingModel).observe(this@ChatRoomActivity) {
+                viewModel.getChatListSearchResult(params).observe(this@ChatRoomActivity) {
+
+                    customDialog?.dismiss()
 
                     it.isBlocked.let { block ->
                         if (block!!) {
@@ -966,10 +996,17 @@ messageViewModel.getMessageWithAudio(
                             binding.blockedView.visibility = View.GONE
                         }
                     }
+                    if(it.data?.isEmpty() == true){
+                        showToastMessage("No result found")
+                        return@observe
+                    }
+                    binding.searchResultTv.text = "Search result showing for $searchKey"
+                    binding.searchResultTv.isVisible = isMessageSearch
                     it.data.let {
-                        customDialog?.dismiss()
+
+                        adapter.addData(emptyList())
                         adapter.addData(getModifiedChatList(it!!))
-                        Timber.e("modifiedList: ${getModifiedChatList(it!!).map { it.effectiveDate }}")
+                        Timber.e("modifiedList3: ${getModifiedChatList(it!!).map { it.effectiveDate }}")
                     } } } }
     }
 
@@ -1038,34 +1075,36 @@ messageViewModel.getMessageWithAudio(
                         }
                     }
                     chatList.data.let {
-                        customDialog?.dismiss()
-                        adapter.addDataNewItem(getModifiedChatList(it!!))
-                        Timber.e("modifiedList2: ${getModifiedChatList(it!!).map { it.effectiveDate }}")
+                        if(!isMessageSearch){
+                            customDialog?.dismiss()
+                            adapter.addDataNewItem(getModifiedChatList(it!!))
+                            Timber.e("modifiedList2: ${getModifiedChatList(it!!).map { it.effectiveDate }}")
 
-                        if (it.isNotEmpty()) {
-                            if (Constants.fromUserName == it[it.size - 1].fromUsername.toString() && Constants.textMessage == it[it.size - 1].body.toString()
-                                && Constants.imageUrl == it[it.size - 1].imageURL.toString() && Constants.audioUrl == it[it.size - 1].audioURL.toString()
-                                && Constants.videoUrl == it[it.size - 1].videoURL.toString()
-                            ) {
-                                Constants.fromUserName = it[it.size - 1].fromUsername.toString()
-                                Constants.textMessage = it[it.size - 1].body.toString()
-                                Constants.imageUrl = it[it.size - 1].imageURL.toString()
-                                Constants.audioUrl = it[it.size - 1].audioURL.toString()
-                                Constants.videoUrl = it[it.size - 1].videoURL.toString()
-                            } else {
-                                binding.livechatRcv.postDelayed({
+                            if (it.isNotEmpty()) {
+                                if (Constants.fromUserName == it[it.size - 1].fromUsername.toString() && Constants.textMessage == it[it.size - 1].body.toString()
+                                    && Constants.imageUrl == it[it.size - 1].imageURL.toString() && Constants.audioUrl == it[it.size - 1].audioURL.toString()
+                                    && Constants.videoUrl == it[it.size - 1].videoURL.toString()
+                                ) {
+                                    Constants.fromUserName = it[it.size - 1].fromUsername.toString()
+                                    Constants.textMessage = it[it.size - 1].body.toString()
+                                    Constants.imageUrl = it[it.size - 1].imageURL.toString()
+                                    Constants.audioUrl = it[it.size - 1].audioURL.toString()
+                                    Constants.videoUrl = it[it.size - 1].videoURL.toString()
+                                } else {
+                                    binding.livechatRcv.postDelayed({
 
-                                    binding.livechatRcv.smoothScrollToPosition(
-                                        // scrollPosition
-                                        adapter.chatList.size
-                                    )
-                                }, 100)
+                                        binding.livechatRcv.smoothScrollToPosition(
+                                            // scrollPosition
+                                            adapter.chatList.size
+                                        )
+                                    }, 100)
 
-                                Constants.fromUserName = it[it.size - 1].fromUsername.toString()
-                                Constants.textMessage = it[it.size - 1].body.toString()
-                                Constants.imageUrl = it[it.size - 1].imageURL.toString()
-                                Constants.audioUrl = it[it.size - 1].audioURL.toString()
-                                Constants.videoUrl = it[it.size - 1].videoURL.toString()
+                                    Constants.fromUserName = it[it.size - 1].fromUsername.toString()
+                                    Constants.textMessage = it[it.size - 1].body.toString()
+                                    Constants.imageUrl = it[it.size - 1].imageURL.toString()
+                                    Constants.audioUrl = it[it.size - 1].audioURL.toString()
+                                    Constants.videoUrl = it[it.size - 1].videoURL.toString()
+                                }
                             }
                         }
                     }
@@ -1180,10 +1219,7 @@ messageViewModel.getMessageWithAudio(
         }
     }
 
-
     private fun stopRecording() {
-
-
         if (isRecording) {
             try {
                 mediaRecorder.apply {

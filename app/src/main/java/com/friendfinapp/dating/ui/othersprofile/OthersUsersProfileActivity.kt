@@ -19,6 +19,7 @@ import androidx.work.WorkManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.friendfinapp.dating.R
+import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.databinding.ActivityOthersUsersProfileBinding
 import com.friendfinapp.dating.helper.Constants
 import com.friendfinapp.dating.helper.InternetHelper
@@ -45,9 +46,8 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 
-class OthersUsersProfileActivity : AppCompatActivity() {
+class OthersUsersProfileActivity : BaseActivity<ActivityOthersUsersProfileBinding>() {
 
-    private lateinit var binding: ActivityOthersUsersProfileBinding
     var customDialog: ProgressCustomDialog? = null
 
     private lateinit var sessionManager: SessionManager
@@ -63,12 +63,11 @@ class OthersUsersProfileActivity : AppCompatActivity() {
     private lateinit var apiService2: APIService2
 
     private lateinit var internetHelper: InternetHelper
+    override fun viewBindingLayout(): ActivityOthersUsersProfileBinding =
+        ActivityOthersUsersProfileBinding.inflate(layoutInflater)
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_others_users_profile)
+    override fun initializeView(savedInstanceState: Bundle?) {
         val bundle: Bundle? = intent.extras
         if (bundle != null) {
 
@@ -134,7 +133,7 @@ class OthersUsersProfileActivity : AppCompatActivity() {
         Log.d("TAG", "loadUserProfile: " + username)
         customDialog?.show()
 
-        if (internetHelper.isOnline()){
+        if (internetHelper.isOnline()) {
             messageViewModel.otherUserProfile(ownUserName, otherUserName).observe(this) {
 
 
@@ -253,17 +252,22 @@ class OthersUsersProfileActivity : AppCompatActivity() {
                 // }
 
             }
-        }else{
+        } else {
             customDialog?.dismiss()
             finish()
-            Toast.makeText(this,"No Internet Connection. Please try again!",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "No Internet Connection. Please try again!", Toast.LENGTH_SHORT)
+                .show()
         }
 
         messageViewModel.failureResult.observe(this) {
             if (it) {
                 customDialog!!.dismiss()
                 finish()
-                Toast.makeText(this,"There is Connection Error. Please try again.If problem persist then close the app and again run!",Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "There is Connection Error. Please try again.If problem persist then close the app and again run!",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -276,7 +280,8 @@ class OthersUsersProfileActivity : AppCompatActivity() {
 
 
             startActivity(
-                Intent(this, ProfileImageViewer::class.java).putExtra("userimage",userimage))
+                Intent(this, ProfileImageViewer::class.java).putExtra("userimage", userimage)
+            )
 
 
         }
@@ -475,7 +480,6 @@ class OthersUsersProfileActivity : AppCompatActivity() {
     private fun setUpView() {
 
 
-
         // Create a periodic work request (every 15 minutes)
         val networkCheckWorkRequest = PeriodicWorkRequest.Builder(
             NetworkCheckWorker::class.java, 15, TimeUnit.MINUTES
@@ -507,7 +511,7 @@ class OthersUsersProfileActivity : AppCompatActivity() {
 
 
         binding.userName.text = username
-       // var imageBytes = userimage.toByteArray()
+        // var imageBytes = userimage.toByteArray()
         //        val imageByteArray: ByteArray = Base64.getDecoder().decode(imageBytes)
 //        val decodedString = String(imageByteArray)
 
@@ -517,7 +521,7 @@ class OthersUsersProfileActivity : AppCompatActivity() {
         //  Log.d("TAG", "onBindViewHolder: "+decodedString)
 
         Glide.with(this)
-            .load(Constants.BaseUrl+userimage)
+            .load(Constants.BaseUrl + userimage)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .placeholder(R.drawable.logo)
             .into(binding.userProfile)
@@ -546,7 +550,6 @@ class OthersUsersProfileActivity : AppCompatActivity() {
     }
 
 
-
     // Check network status
     private fun isConnected(): Boolean {
         val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -556,12 +559,16 @@ class OthersUsersProfileActivity : AppCompatActivity() {
 
     private fun showNoInternetMessage() {
 
-        if (customDialog!=null){
+        if (customDialog != null) {
             customDialog!!.dismiss()
             finish()
         }
         // Implement your "No Internet" UI logic here, e.g., display a Snackbar or Toast
-        Snackbar.make(findViewById(android.R.id.content), "No Internet Connection", Snackbar.LENGTH_LONG).show()
+        Snackbar.make(
+            findViewById(android.R.id.content),
+            "No Internet Connection",
+            Snackbar.LENGTH_LONG
+        ).show()
     }
 
     // Create a one-time work request (optional)

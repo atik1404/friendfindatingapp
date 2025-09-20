@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.friendfinapp.dating.R
+import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.databinding.ActivityProfileBinding
 import com.friendfinapp.dating.helper.Constants
 import com.friendfinapp.dating.helper.Constants.USER_INFO
@@ -20,16 +21,16 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 
 
-class ProfileActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityProfileBinding
+class ProfileActivity : BaseActivity<ActivityProfileBinding>() {
 
     var customDialog: ProgressCustomDialog? = null
 
     private lateinit var sessionManager: SessionManager
     private lateinit var viewModel: LogInViewModel
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_profile)
+    override fun viewBindingLayout(): ActivityProfileBinding =
+        ActivityProfileBinding.inflate(layoutInflater)
+
+    override fun initializeView(savedInstanceState: Bundle?) {
         setUpView()
 
         setUpClickListener()
@@ -116,7 +117,7 @@ class ProfileActivity : AppCompatActivity() {
         binding.email.text = USER_INFO.email.toString()
 
         val strs = USER_INFO.birthdate.toString().split("T").toTypedArray()
-       // binding.date.text = USER_INFO.birthdate.toString()
+        // binding.date.text = USER_INFO.birthdate.toString()
         binding.date.text = strs[0].toString()
 
 

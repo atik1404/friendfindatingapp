@@ -1,4 +1,5 @@
 package com.friendfinapp.dating.ui.signup
+
 import kotlinx.coroutines.Dispatchers
 
 import android.annotation.SuppressLint
@@ -29,6 +30,7 @@ import com.friendfinapp.dating.GeonamesApi
 import com.friendfinapp.dating.R
 import com.friendfinapp.dating.RestCountriesApi
 import com.friendfinapp.dating.RetrofitClient1
+import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.databinding.ActivitySignUpBinding
 import com.friendfinapp.dating.helper.Constants
 import com.friendfinapp.dating.helper.Constants.USER_ID
@@ -69,10 +71,9 @@ import java.util.regex.Pattern
 data class Country(val name: String, val states: List<State>)
 data class State(val name: String, val cities: List<String>)
 
-class SignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
-   GoogleApiClient.ConnectionCallbacks {
+class SignUpActivity : BaseActivity<ActivitySignUpBinding>(), AdapterView.OnItemSelectedListener,
+    GoogleApiClient.ConnectionCallbacks {
 
-    private lateinit var binding: ActivitySignUpBinding
     private lateinit var countryStateCityRepository: CountryStateCityRepository
     private lateinit var customDialog: ProgressCustomDialog
 
@@ -164,7 +165,6 @@ class SignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
     var ip = ""
 
 
-
     var check = true
 
     var email = ""
@@ -177,28 +177,16 @@ class SignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
 
 
     private var handle: RecaptchaHandle? = null
+    override fun viewBindingLayout(): ActivitySignUpBinding =
+        ActivitySignUpBinding.inflate(layoutInflater)
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up)
+    override fun initializeView(savedInstanceState: Bundle?) {
         val restCountriesApi = RetrofitClient1.create(RestCountriesApi::class.java)
         val geonamesApi = RetrofitClient1.create(GeonamesApi::class.java)
         countryStateCityRepository = CountryStateCityRepository(restCountriesApi, geonamesApi)
 
-
-
         setupAdapters()
         fetchCountries()
-
-
-
-
-
-
-
-
-
 
         if (intent.getStringExtra("email") != null) {
             email = intent.getStringExtra("email").toString()
@@ -207,11 +195,9 @@ class SignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
         }
 
 //        Toast.makeText(applicationContext, "oncreate", Toast.LENGTH_SHORT).show()
-        Log.d("CheckToast" , "ONCREATE")
+        Log.d("CheckToast", "ONCREATE")
         // Set up spinners with data
 //        setupSpinners()
-
-
 
 
         googleApiClient = GoogleApiClient.Builder(this)
@@ -220,30 +206,6 @@ class SignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
             .build()
 
         googleApiClient.connect()
-
-//        Recaptcha.getClient(this)
-//            .init(siteKey)
-//            .addOnSuccessListener(
-//                this
-//            ) { handle -> // Handle success ...
-//                this@SignUpActivity.handle = handle
-//
-//                Toast.makeText(this,"success",Toast.LENGTH_SHORT).show()
-//            }
-//            .addOnFailureListener(
-//                this
-//            ) { e ->
-//                if (e is ApiException) {
-//                    val apiException = e as ApiException
-//                    val apiErrorStatus: Status = apiException.status
-//                    Log.d("TAG", "x: "+apiErrorStatus.statusMessage+"   code "+apiErrorStatus.statusCode)
-//                    Toast.makeText(this,"success"+apiErrorStatus.statusMessage,Toast.LENGTH_SHORT).show()
-//                    // Handle api errors ...
-//                } else {
-//                    // Handle other failures ...
-//                    Toast.makeText(this,"fail",Toast.LENGTH_SHORT).show()
-//                }
-//            }
 
         setUpView()
         setUpClickListener()
@@ -265,26 +227,37 @@ class SignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
         binding.spinnerCity.adapter = cityAdapter
 
         // Set listeners for cascading spinners
-        binding.spinnerCountry.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedCountry = countryAdapter.getItem(position) ?: return
-                binding.countrys.editText!!.isEnabled = true
-                binding.spinnerCountry.visibility = View.VISIBLE
+        binding.spinnerCountry.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val selectedCountry = countryAdapter.getItem(position) ?: return
+                    binding.countrys.editText!!.isEnabled = true
+                    binding.spinnerCountry.visibility = View.VISIBLE
 
-                binding.countrys.editText?.setText(selectedCountry)
+                    binding.countrys.editText?.setText(selectedCountry)
 
-                binding.countrys.editText!!.isEnabled = false
-                fetchStates(selectedCountry)
+                    binding.countrys.editText!!.isEnabled = false
+                    fetchStates(selectedCountry)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {}
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {}
-        }
 
 
 
 
         binding.spinnerStates.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 val selectedState = stateAdapter.getItem(position) ?: return
                 val selectedCountry = binding.spinnerStates.selectedItem.toString()
                 binding.states.editText!!.isEnabled = true
@@ -293,7 +266,7 @@ class SignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
                 binding.states.editText?.setText(selectedState)
                 binding.states.editText!!.isEnabled = false
 
-                Log.d("StateSpinner" , "Called")
+                Log.d("StateSpinner", "Called")
                 fetchCities(binding.spinnerCountry.selectedItem.toString(), selectedState)
             }
 
@@ -322,14 +295,19 @@ class SignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
 
 
         binding.spinnerCity.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 val selectedState = cityAdapter.getItem(position) ?: return
                 binding.citys.editText!!.isEnabled = true
                 binding.citys.editText?.setText(selectedState)
                 binding.citys.editText!!.isEnabled = false
                 binding.spinnerCity.visibility = View.VISIBLE
 
-                Log.d("StateSpinner" , "Called")
+                Log.d("StateSpinner", "Called")
                 fetchCities(binding.spinnerCountry.selectedItem.toString(), selectedState)
 
             }
@@ -376,7 +354,7 @@ class SignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
         val url = "https://countriesnow.space/api/v0.1/countries/states"
         val requestQueue = Volley.newRequestQueue(this)
 
-        Log.d("Country " , country)
+        Log.d("Country ", country)
         val params = JSONObject().apply { put("country", country) }
         Log.d("Params", params.toString()) // Log the request body
 
@@ -451,7 +429,7 @@ class SignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
                             cityList.add(cities.getString(i))
                         }
 
-                        Log.d("citieslist" ,cityList.toString())
+                        Log.d("citieslist", cityList.toString())
                         if (cityList.isNotEmpty()) {
                             cityAdapter.clear()
                             cityAdapter.addAll(cityList)
@@ -477,8 +455,6 @@ class SignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
 
         requestQueue.add(jsonObjectRequest)
     }
-
-
 
 
     var formatted: String = ""
@@ -975,10 +951,12 @@ class SignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
                 binding.editPassword.error = "Field can't be empty"
                 false
             }
+
             passwordInput.length < 10 -> {
                 binding.editPassword.error = "Password has minimum 10 characters"
                 false
             }
+
             else -> {
                 binding.editPassword.error = null
                 true
@@ -993,10 +971,12 @@ class SignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
                 binding.editFullName.error = "Field can't be empty"
                 false
             }
+
             firstnameInput.length > 20 -> {
                 binding.editFullName.error = "First name is too long"
                 false
             }
+
             else -> {
                 binding.editFullName.error = null
                 true
@@ -1019,10 +999,12 @@ class SignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
                 binding.editUserName.error = "Invalid chars in username!"
                 false
             }
+
             firstnameInput.isEmpty() -> {
                 binding.editUserName.error = "Field can't be empty!"
                 false
             }
+
             firstnameInput.length > 20 -> {
                 binding.editUserName.error = "Username too long! Should be at most {20} chars."
                 false
@@ -1032,10 +1014,12 @@ class SignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
                 binding.editUserName.error = "Username too short! Should be at least {3} chars."
                 false
             }
+
             firstnameInput.contains(" ") -> {
                 binding.editUserName.error = "Invalid chars in username!"
                 false
             }
+
             else -> {
                 binding.editUserName.error = null
                 true
@@ -1131,7 +1115,7 @@ class SignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
         ip = getLocalIpAddress()!!
         // initialize country picker
         // initialize country picker
-      //  countryPicker = CountryPicker.Builder().with(this).listener(this).build()
+        //  countryPicker = CountryPicker.Builder().with(this).listener(this).build()
 
 //        try {
 //            getStateJson()
@@ -1164,7 +1148,6 @@ class SignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
             binding.adView.visibility = View.GONE
         }
     }
-
 
 
     var selectedItem = -1
@@ -1226,7 +1209,6 @@ class SignUpActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener,
 //
 
     // Sample data for countries, states, and cities
-
 
 
     private lateinit var mGoogleSignInClient: GoogleSignInClient

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/_10sdp"
+        android:paddingVertical="@dimen/_20sdp">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchTil"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:layout_marginEnd="12dp"
+            android:layout_weight="1"
+            app:boxStrokeColor="@color/toolbar_color"
+            app:boxStrokeWidth="1dp"
+            app:errorEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/searchEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/poppins"
+                android:hint="Search here..."
+                android:inputType="text"
+                android:padding="10dp"
+
+                android:textSize="@dimen/_12ssp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/closeBtn"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_44sdp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_marginVertical="@dimen/_10sdp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/signInColor"
+                android:elevation="@dimen/_20sdp"
+                android:fontFamily="@font/poppins_bold"
+                android:text="close"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/forgetPassword" />
+
+            <Button
+                android:id="@+id/searchBtn"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_44sdp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_marginVertical="@dimen/_10sdp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/signInColor"
+                android:elevation="@dimen/_20sdp"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Search"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/forgetPassword" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

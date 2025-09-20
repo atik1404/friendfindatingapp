@@ -25,6 +25,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.friendfinapp.dating.R
+import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.databinding.ActivityPersonalSettingsBinding
 import com.friendfinapp.dating.helper.Constants
 import com.friendfinapp.dating.helper.InternetHelper
@@ -62,9 +63,8 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 
-class PersonalSettingsActivity : AppCompatActivity(){
+class PersonalSettingsActivity : BaseActivity<ActivityPersonalSettingsBinding>(){
 
-    private lateinit var binding:ActivityPersonalSettingsBinding
 
     private lateinit var countryAdapter: ArrayAdapter<String>
     private lateinit var stateAdapter: ArrayAdapter<String>
@@ -92,13 +92,10 @@ class PersonalSettingsActivity : AppCompatActivity(){
 
 
      var birthdate : String = ""
+    override fun viewBindingLayout(): ActivityPersonalSettingsBinding =
+        ActivityPersonalSettingsBinding.inflate(layoutInflater)
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding=DataBindingUtil.setContentView(this,R.layout.activity_personal_settings)
-
-
+    override fun initializeView(savedInstanceState: Bundle?) {
         setUpView()
         getAllPersonalData()
         setupAdapters()

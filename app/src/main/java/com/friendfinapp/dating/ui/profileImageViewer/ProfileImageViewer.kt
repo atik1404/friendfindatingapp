@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.friendfinapp.dating.R
+import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.databinding.ActivityOthersUsersProfileBinding
 import com.friendfinapp.dating.databinding.ActivityProfileImageViewerBinding
 import com.friendfinapp.dating.helper.Constants
@@ -14,13 +15,12 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 
-class ProfileImageViewer : AppCompatActivity() {
+class ProfileImageViewer : BaseActivity<ActivityProfileImageViewerBinding>() {
     var userimage = ""
-    private lateinit var binding: ActivityProfileImageViewerBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun viewBindingLayout(): ActivityProfileImageViewerBinding =
+        ActivityProfileImageViewerBinding.inflate(layoutInflater)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_profile_image_viewer)
+    override fun initializeView(savedInstanceState: Bundle?) {
 
         val bundle: Bundle? = intent.extras
         if (bundle != null) {
@@ -42,7 +42,7 @@ class ProfileImageViewer : AppCompatActivity() {
     private fun setUpView() {
 
         Glide.with(this)
-            .load(Constants.BaseUrl+userimage)
+            .load(Constants.BaseUrl + userimage)
             .diskCacheStrategy(DiskCacheStrategy.ALL)
             .placeholder(R.drawable.friendfin_n)
             .into(binding.photoView)

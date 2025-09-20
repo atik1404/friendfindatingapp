@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.friendfinapp.dating.R
+import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.databinding.ActivityChatSerachBinding
 import com.friendfinapp.dating.helper.Constants
 import com.friendfinapp.dating.helper.ProgressCustomDialog
@@ -26,10 +27,9 @@ import com.friendfinapp.dating.ui.chatsearch.viewmodel.ChatSearchViewModel
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 
-class ChatSearchActivity : AppCompatActivity() {
+class ChatSearchActivity : BaseActivity<ActivityChatSerachBinding>() {
 
 
-    private lateinit var binding:ActivityChatSerachBinding
     private var suggestions: List<SuggestionResponseModel.Data> = ArrayList()
 
     var customDialog: ProgressCustomDialog? = null
@@ -37,15 +37,14 @@ class ChatSearchActivity : AppCompatActivity() {
 
 
     private lateinit var sessionManager: SessionManager
-    private lateinit var adapter : SearchSuggestionAdapter
-    private lateinit var searchResultAdapter : SearchResultAdapter
+    private lateinit var adapter: SearchSuggestionAdapter
+    private lateinit var searchResultAdapter: SearchResultAdapter
 
     private lateinit var viewModel: ChatSearchViewModel
+    override fun viewBindingLayout(): ActivityChatSerachBinding =
+        ActivityChatSerachBinding.inflate(layoutInflater)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding=DataBindingUtil.setContentView(this,R.layout.activity_chat_serach)
-
+    override fun initializeView(savedInstanceState: Bundle?) {
         setUpView()
 
         setUpSuggestionRecyclerView()
@@ -55,14 +54,12 @@ class ChatSearchActivity : AppCompatActivity() {
         getSearchResult()
 
         setUpClickListener()
-
-
     }
 
     private fun setUpSearchResultRecyclerView() {
         val layoutManager = LinearLayoutManager(this)
         binding.rvResult.layoutManager = layoutManager
-        searchResultAdapter = SearchResultAdapter (this){username, userimage ->
+        searchResultAdapter = SearchResultAdapter(this) { username, userimage ->
             run {
 
 //
@@ -151,7 +148,7 @@ class ChatSearchActivity : AppCompatActivity() {
     private fun setUpSuggestionRecyclerView() {
         val layoutManager = LinearLayoutManager(this)
         binding.rvSuggestions.layoutManager = layoutManager
-        adapter = SearchSuggestionAdapter (this){
+        adapter = SearchSuggestionAdapter(this) {
             run {
 
 
@@ -159,14 +156,14 @@ class ChatSearchActivity : AppCompatActivity() {
                 imm!!.hideSoftInputFromWindow(binding.root.windowToken, 0)
 
 
-                binding.searchView.setQuery(it.toString(),false)
+                binding.searchView.setQuery(it.toString(), false)
                 binding.rvSuggestions.visibility = View.GONE
                 binding.rvResult.visibility = View.VISIBLE
 
 
                 customDialog?.show()
 
-                getSerachResult(Constants.USER_INFO.username,it.toString())
+                getSerachResult(Constants.USER_INFO.username, it.toString())
 
 //                (requireActivity() as SearchActivity).productList = productList
 //                (requireActivity() as SearchActivity).loadFragment(SearchResultFragment())
@@ -181,7 +178,7 @@ class ChatSearchActivity : AppCompatActivity() {
 
     private fun getSerachResult(myUserName: String?, OtherUserName: String) {
 
-        viewModel.getSearchResult(myUserName,OtherUserName)
+        viewModel.getSearchResult(myUserName, OtherUserName)
     }
 
     private fun setUpClickListener() {
@@ -191,12 +188,14 @@ class ChatSearchActivity : AppCompatActivity() {
         }
 
 
-
-        val searchIcon = binding.searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_button)
+        val searchIcon =
+            binding.searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_button)
         searchIcon.setColorFilter(Color.BLACK)
-        val closeIcon = binding.searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
+        val closeIcon =
+            binding.searchView.findViewById<ImageView>(androidx.appcompat.R.id.search_close_btn)
         closeIcon.setColorFilter(Color.DKGRAY)
-        val searchAutoComplete: SearchView.SearchAutoComplete = binding.searchView.findViewById(androidx.appcompat.R.id.search_src_text)
+        val searchAutoComplete: SearchView.SearchAutoComplete =
+            binding.searchView.findViewById(androidx.appcompat.R.id.search_src_text)
         searchAutoComplete.setHintTextColor(Color.BLACK)
         searchAutoComplete.setTextColor(Color.BLACK)
 
@@ -223,15 +222,15 @@ class ChatSearchActivity : AppCompatActivity() {
 
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
                 imm!!.hideSoftInputFromWindow(binding.root.windowToken, 0)
-               // (requireActivity() as SearchActivity).productList = suggestions
+                // (requireActivity() as SearchActivity).productList = suggestions
                 //(requireActivity() as SearchActivity).loadFragment(SearchResultFragment())
-               // (requireActivity() as SearchActivity).searchKey = query
+                // (requireActivity() as SearchActivity).searchKey = query
 
                 //if (AUTH_TOKEN.isEmpty()) {
-                  //  saveHistory(query)
-              //  } else {
+                //  saveHistory(query)
+                //  } else {
                 //    viewModel.sendServerProductDataByKeyword(query)
-               // }
+                // }
 
 
                 return true
@@ -241,7 +240,7 @@ class ChatSearchActivity : AppCompatActivity() {
 
                 if (newText.isNotEmpty())
                     binding.rvResult.visibility = View.GONE
-                    viewModel.getServerChatDataHintByKeyword(Constants.USER_INFO.username!!,newText)
+                viewModel.getServerChatDataHintByKeyword(Constants.USER_INFO.username!!, newText)
                 //SearchResultFragment.instance?.filterByKeyword(newText)
 
                 if (binding.rvSuggestions.visibility != View.VISIBLE) {
@@ -273,8 +272,8 @@ class ChatSearchActivity : AppCompatActivity() {
     }
 
     private fun setUpView() {
-        viewModel=ViewModelProvider(this).get(ChatSearchViewModel::class.java)
-        customDialog =  ProgressCustomDialog(this)
+        viewModel = ViewModelProvider(this).get(ChatSearchViewModel::class.java)
+        customDialog = ProgressCustomDialog(this)
         sessionManager = SessionManager(this)
 //        adapter= SearchSuggestionAdapter(this){
 //
@@ -283,7 +282,7 @@ class ChatSearchActivity : AppCompatActivity() {
 
         if (!Constants.IS_SUBSCRIBE) {
 
-            binding.adView.visibility=View.VISIBLE
+            binding.adView.visibility = View.VISIBLE
             val adView = AdView(this)
             val adRequest = AdRequest.Builder().build()
 
@@ -291,8 +290,8 @@ class ChatSearchActivity : AppCompatActivity() {
 
             adView.adUnitId = getString(R.string.BannerAdsUnitId)
             binding.adView.loadAd(adRequest)
-        }else{
-            binding.adView.visibility=View.GONE
+        } else {
+            binding.adView.visibility = View.GONE
         }
 
     }

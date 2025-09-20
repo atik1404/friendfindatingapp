@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.friendfinapp.dating.R
+import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.databinding.ActivitySaveProfileBinding
 import com.friendfinapp.dating.helper.Constants
 import com.friendfinapp.dating.helper.Constants.USER_INFO
@@ -28,9 +29,9 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 
-class SaveProfileActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+class SaveProfileActivity : BaseActivity<ActivitySaveProfileBinding>(),
+    AdapterView.OnItemSelectedListener {
 
-    private lateinit var binding: ActivitySaveProfileBinding
 
     var customDialog: ProgressCustomDialog? = null
 
@@ -38,7 +39,6 @@ class SaveProfileActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
 
     private lateinit var viewModel: SaveProfileViewModel
     private lateinit var loginViewModel: LogInViewModel
-
 
 
     private var saveProfileList: MutableList<SaveProfilePostingModel> = ArrayList()
@@ -53,7 +53,7 @@ class SaveProfileActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         "Friendship"
     )
     var Eyes = arrayOf("Blue", "Green", "Hazel", "Brown", "Gray", "Black", "Blue-green", "Other")
-    var EyeHairs = arrayOf("Brown", "Blond", "Black","Gray", "White", "Red", "Bald" )
+    var EyeHairs = arrayOf("Brown", "Blond", "Black", "Gray", "White", "Red", "Bald")
     var Smoking = arrayOf("No", "Sometimes", "Often", "Smoker", "Total addict")
     var Drinking = arrayOf("No", "Often", "Only in company", "Daily", "Alcoholic")
     var interest = arrayOf("Computer", "Music", "Nature", "Adventure", "Movie", "Chat", "Sports")
@@ -218,9 +218,10 @@ class SaveProfileActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
     )
 
     var profile = ""
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_save_profile)
+    override fun viewBindingLayout(): ActivitySaveProfileBinding =
+        ActivitySaveProfileBinding.inflate(layoutInflater)
+
+    override fun initializeView(savedInstanceState: Bundle?) {
 
 
         setUpView()
@@ -229,7 +230,6 @@ class SaveProfileActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
             loadUserProfile(USER_INFO.username.toString().trim())
         }
         setUpClickListener()
-
     }
 
 
@@ -361,10 +361,11 @@ class SaveProfileActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
 
         }
     }
+
     private fun setUpClickListener() {
 
 
-        binding.imageBack.setOnClickListener{
+        binding.imageBack.setOnClickListener {
             finish()
         }
 
@@ -421,37 +422,37 @@ class SaveProfileActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         var interest = ""
 
         if (binding.tvComputer.isChecked) {
-            interest = interest+binding.tvComputer.text.toString().trim()+ ":"
+            interest = interest + binding.tvComputer.text.toString().trim() + ":"
         }
         if (binding.tvMusic.isChecked) {
-            interest = interest+binding.tvMusic.text.toString().trim()+ ":"
+            interest = interest + binding.tvMusic.text.toString().trim() + ":"
         }
 
         if (binding.tvNature.isChecked) {
-            interest = interest + binding.tvNature.text.toString().trim()+ ":"
+            interest = interest + binding.tvNature.text.toString().trim() + ":"
         }
         if (binding.tvAdventure.isChecked) {
-            interest = interest  + binding.tvAdventure.text.toString().trim()+ ":"
+            interest = interest + binding.tvAdventure.text.toString().trim() + ":"
         }
 
         if (binding.tvSports.isChecked) {
-            interest = interest  + binding.tvSports.text.toString().trim()+ ":"
+            interest = interest + binding.tvSports.text.toString().trim() + ":"
         }
         if (binding.tvMovies.isChecked) {
-            interest = interest  + binding.tvMovies.text.toString().trim()+ ":"
+            interest = interest + binding.tvMovies.text.toString().trim() + ":"
         }
 
         if (binding.tvChat.isChecked) {
-            interest = interest  + binding.tvChat.text.toString().trim()+ ":"
+            interest = interest + binding.tvChat.text.toString().trim() + ":"
         }
 
 
-        if (interest.isEmpty()){
-            interest="--No Answer--"
+        if (interest.isEmpty()) {
+            interest = "--No Answer--"
         }
 
 
-        var finalInterest=interest.substring(0, interest.length - 1)
+        var finalInterest = interest.substring(0, interest.length - 1)
         var postingModel12: SaveProfilePostingModel =
             SaveProfilePostingModel(username, 12, finalInterest, 1)
 
@@ -518,10 +519,10 @@ class SaveProfileActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
 
                 if (!it.userimage.isNullOrEmpty()) {
                     sessionManager.setProfile(it.userimage!![0].userimage.toString())
-                    Constants.myProfileImage =it.userimage!![0].userimage.toString()
-                }else{
+                    Constants.myProfileImage = it.userimage!![0].userimage.toString()
+                } else {
                     sessionManager.setProfile("")
-                    Constants.myProfileImage =""
+                    Constants.myProfileImage = ""
                 }
                 startActivity(
                     Intent(
@@ -581,7 +582,6 @@ class SaveProfileActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
     private fun setUpView() {
 
 
-
         customDialog = ProgressCustomDialog(this)
         sessionManager = SessionManager(this)
         viewModel = ViewModelProvider(this).get(SaveProfileViewModel::class.java)
@@ -600,7 +600,7 @@ class SaveProfileActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
 
         if (!Constants.IS_SUBSCRIBE) {
 
-            binding.adView.visibility=View.VISIBLE
+            binding.adView.visibility = View.VISIBLE
             val adView = AdView(this)
             val adRequest = AdRequest.Builder().build()
 
@@ -608,8 +608,8 @@ class SaveProfileActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
 
             adView.adUnitId = getString(R.string.BannerAdsUnitId)
             binding.adView.loadAd(adRequest)
-        }else{
-            binding.adView.visibility=View.GONE
+        } else {
+            binding.adView.visibility = View.GONE
         }
     }
 

@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.friendfinapp.dating.R
+import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.databinding.ActivityReportAnAbuseBinding
 import com.friendfinapp.dating.helper.Constants
 import com.friendfinapp.dating.helper.InternetHelper
@@ -21,24 +22,19 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 
 
-
-
-
-class ReportAnAbuse : AppCompatActivity() {
-    private lateinit var binding: ActivityReportAnAbuseBinding
+class ReportAnAbuse : BaseActivity<ActivityReportAnAbuseBinding>() {
     var customDialog: ProgressCustomDialog? = null
 
     private lateinit var sessionManager: SessionManager
     private lateinit var viewModel: ReportViewModel
 
-    var username=""
+    var username = ""
 
     private lateinit var internetHelper: InternetHelper
-    @RequiresApi(Build.VERSION_CODES.M)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun viewBindingLayout(): ActivityReportAnAbuseBinding =
+        ActivityReportAnAbuseBinding.inflate(layoutInflater)
 
-        binding=DataBindingUtil.setContentView(this,R.layout.activity_report_an_abuse)
+    override fun initializeView(savedInstanceState: Bundle?) {
         customDialog = ProgressCustomDialog(this)
         sessionManager = SessionManager(this)
         viewModel = ViewModelProvider(this).get(ReportViewModel::class.java)
@@ -47,7 +43,7 @@ class ReportAnAbuse : AppCompatActivity() {
 
 
 //        val bundle :Bundle ?=intent.extras
-        if (intent.getStringExtra("reportedUserName")!=null){
+        if (intent.getStringExtra("reportedUserName") != null) {
             username = intent.getStringExtra("reportedUserName").toString() // 1
 
 
@@ -55,7 +51,7 @@ class ReportAnAbuse : AppCompatActivity() {
 
 
         if (!Constants.IS_SUBSCRIBE) {
-            binding.adView.visibility= View.VISIBLE
+            binding.adView.visibility = View.VISIBLE
             val adView = AdView(this)
             val adRequest = AdRequest.Builder().build()
 
@@ -63,13 +59,12 @@ class ReportAnAbuse : AppCompatActivity() {
 
             adView.adUnitId = getString(R.string.BannerAdsUnitId)
             binding.adView.loadAd(adRequest)
-        }else{
-            binding.adView.visibility= View.GONE
+        } else {
+            binding.adView.visibility = View.GONE
         }
         setUpClickListener()
 
     }
-
 
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -101,8 +96,8 @@ class ReportAnAbuse : AppCompatActivity() {
                         }
                     })
                 }
-            }else{
-                Toast.makeText(this,"No Internet Connection",Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -111,6 +106,7 @@ class ReportAnAbuse : AppCompatActivity() {
             finish()
         }
     }
+
     private fun isNotValid(email: String): Boolean {
         val passwordInput = email.trim { it <= ' ' }
         return if (passwordInput == "") {

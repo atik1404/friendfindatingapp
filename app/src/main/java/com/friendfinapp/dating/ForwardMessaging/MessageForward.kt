@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.friendfinapp.dating.R
+import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.databinding.ForwardMessageBinding
 import com.friendfinapp.dating.helper.Constants.IS_SUBSCRIBE
 import com.friendfinapp.dating.helper.Constants.myProfileImage
@@ -48,13 +49,13 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.Objects
 
-class MessageForward : AppCompatActivity() {
-    companion object{
+class MessageForward : BaseActivity<ForwardMessageBinding>() {
+    companion object {
         var shouldReloadChatRoom = false
     }
+
     private lateinit var messageViewModel: MessageViewModel
 
-    private lateinit var binding: ForwardMessageBinding
     private lateinit var viewModel: ChatViewModel
     private lateinit var sessionManager: SessionManager
     private lateinit var internetHelper: InternetHelper
@@ -65,12 +66,10 @@ class MessageForward : AppCompatActivity() {
     private var canScroll = true
     private var mInterstitialAd: InterstitialAd? = null
     var toUserToken = ""
+    override fun viewBindingLayout(): ForwardMessageBinding =
+        ForwardMessageBinding.inflate(layoutInflater)
 
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ForwardMessageBinding.inflate(layoutInflater)
+    override fun initializeView(savedInstanceState: Bundle?) {
         setContentView(binding.root)
         initialize()
         setupRecyclerView()
@@ -91,8 +90,6 @@ class MessageForward : AppCompatActivity() {
                 return true
             }
         })
-
-
     }
 
     private fun initialize() {
@@ -213,7 +210,7 @@ class MessageForward : AppCompatActivity() {
 
         binding.sendFab.setOnClickListener {
             forwardMessageToMultipleUser()
-            Log.e("button","Button clicked")
+            Log.e("button", "Button clicked")
         }
     }
 
@@ -351,7 +348,7 @@ class MessageForward : AppCompatActivity() {
 
     }
 
-    fun sendMessageWithImageAndText(message: String, imageUri: Uri? , toUserName: String) {
+    fun sendMessageWithImageAndText(message: String, imageUri: Uri?, toUserName: String) {
         //  Toast.makeText(this, "Image uri  found."+uri, Toast.LENGTH_SHORT).show()
         var imageStream = contentResolver.openInputStream(imageUri!!)
 
@@ -387,10 +384,7 @@ class MessageForward : AppCompatActivity() {
                 if (it.status_code == 200) {
                     customDialog?.dismiss()
 
-                    getUserToken(toUserName.trim(), message , toUserName.trim())
-
-
-
+                    getUserToken(toUserName.trim(), message, toUserName.trim())
 
 
                 } else {
@@ -442,7 +436,8 @@ class MessageForward : AppCompatActivity() {
                                 }
 
                                 // Start ChatRoomActivity with the bundle
-                                val intent = Intent(this@MessageForward, ChatRoomActivity::class.java)
+                                val intent =
+                                    Intent(this@MessageForward, ChatRoomActivity::class.java)
                                 intent.putExtras(bundle)
                                 startActivity(intent)
                                 ForwadCompaionList.userForwardList.clear()
@@ -455,7 +450,7 @@ class MessageForward : AppCompatActivity() {
                             //customDialog?.dismiss()
                             Toast.makeText(this, "Something went wrong.", Toast.LENGTH_SHORT).show()
                         }
-                    }catch (error: Exception){
+                    } catch (error: Exception) {
                         finish()
                     }
                 }

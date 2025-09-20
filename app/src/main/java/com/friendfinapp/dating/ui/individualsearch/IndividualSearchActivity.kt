@@ -18,6 +18,7 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.friendfinapp.dating.R
+import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.databinding.ActivityIndividualSearchBinding
 import com.friendfinapp.dating.helper.Constants
 import com.friendfinapp.dating.helper.ProgressCustomDialog
@@ -34,8 +35,8 @@ import java.io.IOException
 import java.net.URLEncoder
 import java.util.HashMap
 
-class IndividualSearchActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener{
-    private lateinit var binding: ActivityIndividualSearchBinding
+class IndividualSearchActivity : BaseActivity<ActivityIndividualSearchBinding>(),
+    AdapterView.OnItemSelectedListener {
 
     lateinit var viewModel: IndividualSearchViewModel
 
@@ -58,9 +59,6 @@ class IndividualSearchActivity : AppCompatActivity(), AdapterView.OnItemSelected
     var ip = ""
 
 
-
-
-
     var check = true
 
 
@@ -79,13 +77,10 @@ class IndividualSearchActivity : AppCompatActivity(), AdapterView.OnItemSelected
     var EyeHairs = arrayOf("Select", "Brown", "Blond", "Black", "Gray", "White", "Red", "Bald")
     var Smoking = arrayOf("Select", "No", "Sometimes", "Often", "Smoker", "Total addict")
     var Drinking = arrayOf("Select", "No", "Often", "Only in company", "Daily", "Alcoholic")
+    override fun viewBindingLayout(): ActivityIndividualSearchBinding =
+        ActivityIndividualSearchBinding.inflate(layoutInflater)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_individual_search)
-
-
+    override fun initializeView(savedInstanceState: Bundle?) {
         setUpView()
         setUpClickListener()
 
@@ -104,7 +99,7 @@ class IndividualSearchActivity : AppCompatActivity(), AdapterView.OnItemSelected
         setUpSpinner(binding.whoIsSeekingSpinner, whoIsSeeking)
         // initialize country picker
         // initialize country picker
-       // countryPicker = CountryPicker.Builder().with(this).listener(this).build()
+        // countryPicker = CountryPicker.Builder().with(this).listener(this).build()
 //
 //        try {
 //            getStateJson()
@@ -191,8 +186,7 @@ class IndividualSearchActivity : AppCompatActivity(), AdapterView.OnItemSelected
                 && binding.spinerSmoking.selectedItem.toString() == "Select" && binding.spinerbodyType.selectedItem.toString() == "Select"
                 && binding.spinerlookingFor.selectedItem.toString() == "Select" && binding.spiner.selectedItem.toString() == "Select"
                 && !binding.tvOnline.isChecked && !binding.tvPhotoRequire.isChecked
-            )
-            {
+            ) {
 
                 Toast.makeText(
                     this,
@@ -201,14 +195,24 @@ class IndividualSearchActivity : AppCompatActivity(), AdapterView.OnItemSelected
                 ).show()
                 return@setOnClickListener
 
-            }else{
-                sendSearch2(binding.editUserName.editText!!.text.toString().trim(),binding.minAge.editText!!.text.toString().trim()
-                    ,binding.maxAge.editText!!.text.toString().trim(),binding.countrys.editText!!.text.toString().trim()
-                ,binding.citys.editText!!.text.toString().trim(),binding.states.editText!!.text.toString().trim()
-                ,binding.spinerEyes.selectedItem.toString(),binding.spinerDrinking.selectedItem.toString()
-                ,binding.spinerHair.selectedItem.toString(),binding.spinerSmoking.selectedItem.toString()
-                ,binding.spinerbodyType.selectedItem.toString(),binding.spinerlookingFor.selectedItem.toString()
-                ,binding.spiner.selectedItem.toString(),binding.tvOnline.isChecked,binding.tvPhotoRequire.isChecked)
+            } else {
+                sendSearch2(
+                    binding.editUserName.editText!!.text.toString().trim(),
+                    binding.minAge.editText!!.text.toString().trim(),
+                    binding.maxAge.editText!!.text.toString().trim(),
+                    binding.countrys.editText!!.text.toString().trim(),
+                    binding.citys.editText!!.text.toString().trim(),
+                    binding.states.editText!!.text.toString().trim(),
+                    binding.spinerEyes.selectedItem.toString(),
+                    binding.spinerDrinking.selectedItem.toString(),
+                    binding.spinerHair.selectedItem.toString(),
+                    binding.spinerSmoking.selectedItem.toString(),
+                    binding.spinerbodyType.selectedItem.toString(),
+                    binding.spinerlookingFor.selectedItem.toString(),
+                    binding.spiner.selectedItem.toString(),
+                    binding.tvOnline.isChecked,
+                    binding.tvPhotoRequire.isChecked
+                )
             }
 //            if (!validUserNAme()) {
 //
@@ -218,7 +222,6 @@ class IndividualSearchActivity : AppCompatActivity(), AdapterView.OnItemSelected
 //
 //            }
         }
-
 
 
 //        binding.Countrylin.setOnClickListener {
@@ -266,22 +269,23 @@ class IndividualSearchActivity : AppCompatActivity(), AdapterView.OnItemSelected
         isPhotoRequire: Boolean
     ) {
 
-        startActivity(Intent(this,IndividualSearchResult::class.java)
-            .putExtra("userName",userName)
-            .putExtra("minAge",minAge)
-            .putExtra("maxAge",maxAge)
-            .putExtra("country",country)
-            .putExtra("city",city)
-            .putExtra("state",state)
-            .putExtra("eye",eye)
-            .putExtra("drinking",drinking)
-            .putExtra("hair",hair)
-            .putExtra("smoking",smoking)
-            .putExtra("bodyType",bodyType)
-            .putExtra("lookingFor",lookingFor)
-            .putExtra("gender",gender)
-            .putExtra("isOnline",isOnline)
-            .putExtra("isPhotoRequire",isPhotoRequire)
+        startActivity(
+            Intent(this, IndividualSearchResult::class.java)
+                .putExtra("userName", userName)
+                .putExtra("minAge", minAge)
+                .putExtra("maxAge", maxAge)
+                .putExtra("country", country)
+                .putExtra("city", city)
+                .putExtra("state", state)
+                .putExtra("eye", eye)
+                .putExtra("drinking", drinking)
+                .putExtra("hair", hair)
+                .putExtra("smoking", smoking)
+                .putExtra("bodyType", bodyType)
+                .putExtra("lookingFor", lookingFor)
+                .putExtra("gender", gender)
+                .putExtra("isOnline", isOnline)
+                .putExtra("isPhotoRequire", isPhotoRequire)
         )
 
     }
@@ -432,6 +436,7 @@ class IndividualSearchActivity : AppCompatActivity(), AdapterView.OnItemSelected
             }
         }
     }
+
     private fun validUserNAme(): Boolean {
         val passwordInput = binding.editUserName.editText!!.text.toString().trim { it <= ' ' }
         return if (passwordInput == "") {
@@ -453,7 +458,7 @@ class IndividualSearchActivity : AppCompatActivity(), AdapterView.OnItemSelected
 
     }
 
-//    override fun onSelectState(state: State?) {
+    //    override fun onSelectState(state: State?) {
 //
 //        binding.states.editText?.setText(state!!.stateName)
 //        CityPicker.equalCityObject.clear()
@@ -574,94 +579,110 @@ class IndividualSearchActivity : AppCompatActivity(), AdapterView.OnItemSelected
 //            cityObject?.add(cityData)
 //        }
 //    }
-private fun setupAdapters() {
-    countryAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, mutableListOf())
-    countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-    binding.spinnerCountry.adapter = countryAdapter
+    private fun setupAdapters() {
+        countryAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, mutableListOf())
+        countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerCountry.adapter = countryAdapter
 
-    stateAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, mutableListOf())
-    stateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-    binding.spinnerStates.adapter = stateAdapter
+        stateAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, mutableListOf())
+        stateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerStates.adapter = stateAdapter
 
-    cityAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, mutableListOf())
-    cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-    binding.spinnerCity.adapter = cityAdapter
+        cityAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, mutableListOf())
+        cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerCity.adapter = cityAdapter
 
-    // Set listeners for cascading spinners
-    binding.spinnerCountry.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-            val selectedCountry = countryAdapter.getItem(position) ?: return
-            binding.countrys.editText!!.isEnabled = true
+        // Set listeners for cascading spinners
+        binding.spinnerCountry.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val selectedCountry = countryAdapter.getItem(position) ?: return
+                    binding.countrys.editText!!.isEnabled = true
+                    binding.spinnerCountry.visibility = View.VISIBLE
+
+                    binding.countrys.editText?.setText(selectedCountry)
+
+                    binding.countrys.editText!!.isEnabled = false
+                    fetchStates(selectedCountry)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {}
+            }
+
+
+
+
+        binding.spinnerStates.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selectedState = stateAdapter.getItem(position) ?: return
+                val selectedCountry = binding.spinnerStates.selectedItem.toString()
+                binding.states.editText!!.isEnabled = true
+                binding.spinnerStates.visibility = View.VISIBLE
+
+                binding.states.editText?.setText(selectedState)
+                binding.states.editText!!.isEnabled = false
+
+                Log.d("StateSpinner", "Called")
+                fetchCities(binding.spinnerCountry.selectedItem.toString(), selectedState)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
+        binding.callcountry.setOnClickListener {
             binding.spinnerCountry.visibility = View.VISIBLE
 
-            binding.countrys.editText?.setText(selectedCountry)
+            binding.spinnerCountry.performClick()
 
-            binding.countrys.editText!!.isEnabled = false
-            fetchStates(selectedCountry)
         }
 
-        override fun onNothingSelected(parent: AdapterView<*>) {}
-    }
 
-
-
-
-    binding.spinnerStates.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-            val selectedState = stateAdapter.getItem(position) ?: return
-            val selectedCountry = binding.spinnerStates.selectedItem.toString()
-            binding.states.editText!!.isEnabled = true
+        binding.callstate.setOnClickListener {
             binding.spinnerStates.visibility = View.VISIBLE
-
-            binding.states.editText?.setText(selectedState)
-            binding.states.editText!!.isEnabled = false
-
-            Log.d("StateSpinner" , "Called")
-            fetchCities(binding.spinnerCountry.selectedItem.toString(), selectedState)
+            binding.spinnerStates.performClick()
         }
 
-        override fun onNothingSelected(parent: AdapterView<*>) {}
-    }
 
-    binding.callcountry.setOnClickListener {
-        binding.spinnerCountry.visibility = View.VISIBLE
-
-        binding.spinnerCountry.performClick()
-
-    }
-
-
-    binding.callstate.setOnClickListener {
-        binding.spinnerStates.visibility = View.VISIBLE
-        binding.spinnerStates.performClick()
-    }
-
-
-    binding.callcity.setOnClickListener {
-        binding.spinnerCity.visibility = View.VISIBLE
-
-        binding.spinnerCity.performClick()
-    }
-
-
-    binding.spinnerCity.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-            val selectedState = cityAdapter.getItem(position) ?: return
-            binding.citys.editText!!.isEnabled = true
-            binding.citys.editText?.setText(selectedState)
-            binding.citys.editText!!.isEnabled = false
+        binding.callcity.setOnClickListener {
             binding.spinnerCity.visibility = View.VISIBLE
 
-            Log.d("StateSpinner" , "Called")
-            fetchCities(binding.spinnerCountry.selectedItem.toString(), selectedState)
-
+            binding.spinnerCity.performClick()
         }
 
-        override fun onNothingSelected(parent: AdapterView<*>) {}
+
+        binding.spinnerCity.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selectedState = cityAdapter.getItem(position) ?: return
+                binding.citys.editText!!.isEnabled = true
+                binding.citys.editText?.setText(selectedState)
+                binding.citys.editText!!.isEnabled = false
+                binding.spinnerCity.visibility = View.VISIBLE
+
+                Log.d("StateSpinner", "Called")
+                fetchCities(binding.spinnerCountry.selectedItem.toString(), selectedState)
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
+
     }
-
-
-}
 
     private fun fetchCountries() {
         val url = "https://countriesnow.space/api/v0.1/countries"
@@ -699,7 +720,7 @@ private fun setupAdapters() {
         val url = "https://countriesnow.space/api/v0.1/countries/states"
         val requestQueue = Volley.newRequestQueue(this)
 
-        Log.d("Country " , country)
+        Log.d("Country ", country)
         val params = JSONObject().apply { put("country", country) }
         Log.d("Params", params.toString()) // Log the request body
 
@@ -774,7 +795,7 @@ private fun setupAdapters() {
                             cityList.add(cities.getString(i))
                         }
 
-                        Log.d("citieslist" ,cityList.toString())
+                        Log.d("citieslist", cityList.toString())
                         if (cityList.isNotEmpty()) {
                             cityAdapter.clear()
                             cityAdapter.addAll(cityList)
@@ -800,8 +821,6 @@ private fun setupAdapters() {
 
         requestQueue.add(jsonObjectRequest)
     }
-
-
 
 
 }

@@ -16,7 +16,8 @@ public class LiveChatSearchModel {
     @Expose
     private String searchValue;
 
-    public LiveChatSearchModel(String fromUsername, String toUsername) {
+    public LiveChatSearchModel(String fromUsername, String toUsername, String searchValue) {
+        this.searchValue = searchValue;
         this.fromUsername = fromUsername;
         this.toUsername = toUsername;
     }

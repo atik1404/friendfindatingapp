@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.friendfinapp.dating.R
+import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.databinding.ActivityIndividualSearchResultBinding
 import com.friendfinapp.dating.ui.common.Common
 import com.friendfinapp.dating.ui.individualsearch.adapter.IndividualSearchResultAdapter
@@ -22,17 +23,20 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.friendfinapp.dating.helper.*
 
 
-class IndividualSearchResult : AppCompatActivity(), IndividualSearchInterface {
+class IndividualSearchResult : BaseActivity<ActivityIndividualSearchResultBinding>(),
+    IndividualSearchInterface {
 
 
-     var value: String? = null
+    var value: String? = null
 
     companion object {
 
         @JvmStatic
         var instance: IndividualSearchResult? = null
     }
-    private lateinit var binding: ActivityIndividualSearchResultBinding
+
+    override fun viewBindingLayout(): ActivityIndividualSearchResultBinding =
+        ActivityIndividualSearchResultBinding.inflate(layoutInflater)
 
     private lateinit var viewModel: IndividualSearchResultViewModel
     var customDialog: ProgressCustomDialog? = null
@@ -71,10 +75,8 @@ class IndividualSearchResult : AppCompatActivity(), IndividualSearchInterface {
 
     private var firstTime = true
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_individual_search_result)
-       instance =this
+    override fun initializeView(savedInstanceState: Bundle?) {
+        instance = this
 
         val bundle: Bundle? = intent.extras
         if (bundle != null) {
@@ -153,7 +155,6 @@ class IndividualSearchResult : AppCompatActivity(), IndividualSearchInterface {
             isOnline,
             isPhotoRequire
         )
-
     }
 
     private fun setUpClickListener() {
@@ -193,6 +194,7 @@ class IndividualSearchResult : AppCompatActivity(), IndividualSearchInterface {
             "Male" -> {
                 "1"
             }
+
             else -> {
                 "2"
             }
@@ -285,6 +287,7 @@ class IndividualSearchResult : AppCompatActivity(), IndividualSearchInterface {
             "Male" -> {
                 "1"
             }
+
             else -> {
                 "2"
             }
@@ -449,8 +452,8 @@ class IndividualSearchResult : AppCompatActivity(), IndividualSearchInterface {
 
         }
 
-       // adapter.setHasStableIds(true)
-       // binding.recyclerSearch.hasFixedSize()
+        // adapter.setHasStableIds(true)
+        // binding.recyclerSearch.hasFixedSize()
         binding.recyclerSearch.adapter = adapter
 
         // detectScroll()
@@ -489,7 +492,7 @@ class IndividualSearchResult : AppCompatActivity(), IndividualSearchInterface {
 
     override fun onProductLoadError(message: String) {
         Common.isDataLodingState = false
-        Toast.makeText(this, ""+message, Toast.LENGTH_SHORT)
+        Toast.makeText(this, "" + message, Toast.LENGTH_SHORT)
             .show()
     }
 }

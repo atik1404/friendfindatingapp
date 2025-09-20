@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.friendfinapp.dating.R
+import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.databinding.ActivityForgetPasswordBinding
 import com.friendfinapp.dating.helper.Constants
 import com.friendfinapp.dating.helper.InternetHelper
@@ -25,21 +26,18 @@ import com.google.android.gms.ads.AdView
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-class ForgetPasswordActivity : AppCompatActivity() {
+class ForgetPasswordActivity : BaseActivity<ActivityForgetPasswordBinding>() {
 
-    private lateinit var binding: ActivityForgetPasswordBinding
     private lateinit var customDialog: ProgressCustomDialog
 
 
     private lateinit var viewModel: ForgetPasswordViewModel
 
     private lateinit var internetHelper: InternetHelper
+    override fun viewBindingLayout(): ActivityForgetPasswordBinding =
+        ActivityForgetPasswordBinding.inflate(layoutInflater)
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_forget_password)
+    override fun initializeView(savedInstanceState: Bundle?) {
         setUpView()
         setUpListener()
 
@@ -132,50 +130,50 @@ class ForgetPasswordActivity : AppCompatActivity() {
                         }
                     })
 
+                }
+            } else {
+                Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show()
             }
-        }else{
-            Toast.makeText(this,"No Internet Connection",Toast.LENGTH_SHORT).show()
-            }
+
+        }
 
     }
 
-}
 
+    private fun setUpView() {
 
-private fun setUpView() {
+        customDialog = ProgressCustomDialog(this)
+        viewModel = ViewModelProvider(this).get(ForgetPasswordViewModel::class.java)
 
-    customDialog = ProgressCustomDialog(this)
-    viewModel = ViewModelProvider(this).get(ForgetPasswordViewModel::class.java)
+        if (!Constants.IS_SUBSCRIBE) {
+            binding.adView.visibility = View.VISIBLE
+            val adView = AdView(this)
+            val adRequest = AdRequest.Builder().build()
 
-    if (!Constants.IS_SUBSCRIBE) {
-        binding.adView.visibility = View.VISIBLE
-        val adView = AdView(this)
-        val adRequest = AdRequest.Builder().build()
+            adView.setAdSize(AdSize.BANNER)
 
-        adView.setAdSize(AdSize.BANNER)
-
-        adView.adUnitId = getString(R.string.BannerAdsUnitId)
-        binding.adView.loadAd(adRequest)
-    } else {
-        binding.adView.visibility = View.GONE
+            adView.adUnitId = getString(R.string.BannerAdsUnitId)
+            binding.adView.loadAd(adRequest)
+        } else {
+            binding.adView.visibility = View.GONE
+        }
     }
-}
 
-private fun isEmailValid(email: String): Boolean {
-    val regExpn = ("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
-            + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-            + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
-            + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-            + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
-            + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$")
-    val emaill = email.trim { it <= ' ' }
-    val inputStr: CharSequence = emaill
-    val pattern: Pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE)
-    val matcher: Matcher = pattern.matcher(inputStr)
-    if (matcher.matches()) {
-        binding.editEmail.error = null
-        return true
-    } else binding.editEmail.error = "Please Enter Valid Email!"
-    return false
-}
+    private fun isEmailValid(email: String): Boolean {
+        val regExpn = ("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
+                + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+                + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
+                + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$")
+        val emaill = email.trim { it <= ' ' }
+        val inputStr: CharSequence = emaill
+        val pattern: Pattern = Pattern.compile(regExpn, Pattern.CASE_INSENSITIVE)
+        val matcher: Matcher = pattern.matcher(inputStr)
+        if (matcher.matches()) {
+            binding.editEmail.error = null
+            return true
+        } else binding.editEmail.error = "Please Enter Valid Email!"
+        return false
+    }
 }

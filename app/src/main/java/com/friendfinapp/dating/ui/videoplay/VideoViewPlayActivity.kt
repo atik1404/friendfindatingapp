@@ -7,6 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.friendfinapp.dating.R
+import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.databinding.ActivityVideoViewPlayBinding
 import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.DefaultRenderersFactory
@@ -24,19 +25,16 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 
 
-class VideoViewPlayActivity : AppCompatActivity() {
+class VideoViewPlayActivity : BaseActivity<ActivityVideoViewPlayBinding>() {
 
-    private lateinit var binding: ActivityVideoViewPlayBinding
 
     private var player: ExoPlayer? = null
 
     var videoUrl = ""
+    override fun viewBindingLayout(): ActivityVideoViewPlayBinding =
+        ActivityVideoViewPlayBinding.inflate(layoutInflater)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_video_view_play)
-
-
+    override fun initializeView(savedInstanceState: Bundle?) {
         val bundle: Bundle? = intent.extras
         if (bundle != null) {
             videoUrl = bundle.getString("videoUrl").toString() // 1
@@ -68,7 +66,6 @@ class VideoViewPlayActivity : AppCompatActivity() {
 
         // Prepare the MediaSource
         val videoUri = Uri.parse(videoUrl)
-
 
 
         val mediaItem = MediaItem.fromUri(videoUri)

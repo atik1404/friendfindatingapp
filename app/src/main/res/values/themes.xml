@@ -79,4 +79,9 @@
         <item name="android:windowBackground">@color/signInColor</item>
     </style>
 
+    <style name="AlertDialogTransparentBg" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

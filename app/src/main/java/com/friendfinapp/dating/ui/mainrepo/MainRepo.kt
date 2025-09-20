@@ -12,6 +12,7 @@ import com.friendfinapp.dating.ui.chatroom.ChatRoomActivity
 import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatMessageDeleteResponseModel
 import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatPostingModel
 import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatResponseModel
+import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatSearchModel
 import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatTokenResponseModel
 import com.friendfinapp.dating.ui.chatsearch.model.SearchResultResponseModel
 import com.friendfinapp.dating.ui.chatsearch.model.SuggestionResponseModel
@@ -69,6 +70,7 @@ import okio.BufferedSink
 import okio.ForwardingSink
 import okio.Sink
 import okio.buffer
+import reduceImageSize
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -824,6 +826,36 @@ class MainRepo {
 
 
         RetrofitClient.instance?.api?.getChatConversation(chatPostingModel)?.enqueue(object : Callback<LiveChatResponseModel>{
+            override fun onResponse(
+                call: Call<LiveChatResponseModel>,
+                response: Response<LiveChatResponseModel>
+            ) {
+                if (response.isSuccessful){
+                    chatList.value=response.body()
+                }
+
+                Log.d("TAG", "onResponse: " + response.raw().toString())
+                Log.d("TAG", "onResponse: " + response.body().toString())
+                Log.d("TAG", "onResponse: " + response.body().toString())
+                Log.d("TAG", "onResponse: " + response.errorBody()?.string())
+                Log.d("TAG", "onResponse: " + response.message()+response.code())
+                showErrorLog(Gson().toJson(response.body()))
+            }
+
+            override fun onFailure(call: Call<LiveChatResponseModel>, t: Throwable) {
+                Log.d("TAG", "onFailure: " + t.message)
+            }
+
+        })
+
+        return chatList
+    }
+
+    fun getChatListSearchResult(chatPostingModel: LiveChatSearchModel): LiveData<LiveChatResponseModel> {
+        val chatList = MutableLiveData<LiveChatResponseModel>()
+
+
+        RetrofitClient.instance?.api?.getChatListSearchResult(chatPostingModel)?.enqueue(object : Callback<LiveChatResponseModel>{
             override fun onResponse(
                 call: Call<LiveChatResponseModel>,
                 response: Response<LiveChatResponseModel>

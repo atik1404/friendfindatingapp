@@ -3,6 +3,7 @@ package com.friendfinapp.dating.ui.network
 import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatMessageDeleteResponseModel
 import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatPostingModel
 import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatResponseModel
+import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatSearchModel
 import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatTokenResponseModel
 import com.friendfinapp.dating.ui.chatsearch.model.SearchResultResponseModel
 import com.friendfinapp.dating.ui.chatsearch.model.SuggestionResponseModel
@@ -230,6 +231,10 @@ interface ApiInterface {
     @POST("v1/SendMessageHistory")
     @Headers(*["Content-Type: application/json;charset=utf-8", "Accept: application/json;charset=utf-8"])
     fun getChatConversation(@Body body: LiveChatPostingModel): Call<LiveChatResponseModel>
+
+    @POST("v1/SendMessageHistorySearch")
+    @Headers(*["Content-Type: application/json;charset=utf-8", "Accept: application/json;charset=utf-8"])
+    fun getChatListSearchResult(@Body body: LiveChatSearchModel): Call<LiveChatResponseModel>
 
     @POST("v1/Search")
     @Headers(*["Content-Type: application/json;charset=utf-8", "Accept: application/json;charset=utf-8"])

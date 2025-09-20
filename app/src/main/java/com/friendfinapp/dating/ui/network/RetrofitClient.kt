@@ -2,6 +2,7 @@ package com.friendfinapp.dating.ui.network
 
 
 import com.friendfinapp.dating.helper.Constants
+import com.friendfinapp.dating.helper.SessionManager
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -42,7 +43,7 @@ class RetrofitClient {
                 val original = chain.request()
                 val requestBuilder = original.newBuilder()
                     .addHeader("Accept", "application/json")
-                    //.addHeader("Authorization", "Bearer "+helper.getString(SpKey.authToken))
+                    .addHeader("Authorization", "Bearer ${Constants.AUTHORIZATION_TOKEN}")
                 val request = requestBuilder.build()
                 chain.proceed(request)
             }
@@ -54,6 +55,7 @@ class RetrofitClient {
             val interceptor = HttpLoggingInterceptor { message -> Timber.e(message) }
             interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.HEADERS }
             interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
+            Timber.e("Authorization Token: ${Constants.AUTHORIZATION_TOKEN}")
             return interceptor
         }
     }

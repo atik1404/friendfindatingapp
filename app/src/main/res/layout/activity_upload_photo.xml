@@ -97,15 +97,23 @@
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/uploadImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <TextView
         android:textColor="@color/black"
         android:textSize="@dimen/_12ssp"
-
         android:fontFamily="@font/poppins_bold"
         android:layout_marginTop="@dimen/_20sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/uploadImage"
+        app:layout_constraintTop_toBottomOf="@+id/progressBar"
         android:id="@+id/imageUploadText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">

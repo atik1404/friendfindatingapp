@@ -22,22 +22,22 @@ import com.friendfinapp.dating.ui.vipactivity.vipadapter.VipPagerAdapter
 import android.net.Uri
 
 import android.content.Intent
+import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.helper.Constants
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 
 
-class VipPremiumActivity : AppCompatActivity() ,  ViewPager.OnPageChangeListener,
-    PurchasesUpdatedListener{
+class VipPremiumActivity : BaseActivity<ActivityVipPremiumBinding>(),
+    ViewPager.OnPageChangeListener,
+    PurchasesUpdatedListener {
 
-    private lateinit var binding: ActivityVipPremiumBinding
     private var mContext: Context? = null
     private var mAdapter: VipPagerAdapter? = null
 
     private var dotsCount = 0
     private lateinit var dots: Array<ImageView?>
-
 
 
     //premium
@@ -55,35 +55,33 @@ class VipPremiumActivity : AppCompatActivity() ,  ViewPager.OnPageChangeListener
 
     var check = false
     var mResources = intArrayOf(R.drawable.allvip, R.drawable.noads)
-       // R.drawable.inboxvip,R.drawable.ic_intro11, R.drawable.ic_intro22, R.drawable.ic_intro33)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding=DataBindingUtil.setContentView(this,R.layout.activity_vip_premium)
+    override fun viewBindingLayout(): ActivityVipPremiumBinding =
+        ActivityVipPremiumBinding.inflate(layoutInflater)
+
+    override fun initializeView(savedInstanceState: Bundle?) {
         mContext = this
 
-
-
-
-        mAdapter = VipPagerAdapter(this@VipPremiumActivity, mContext as VipPremiumActivity, mResources)
+        mAdapter =
+            VipPagerAdapter(this@VipPremiumActivity, mContext as VipPremiumActivity, mResources)
         binding.viewpager.adapter = mAdapter
         binding.viewpager.currentItem = 0
         binding.viewpager.setOnPageChangeListener(this)
         setPageViewIndicator()
         setUpClickListener()
 
-           if (!Constants.IS_SUBSCRIBE) {
-               binding.adView.visibility= View.VISIBLE
-               var adView = AdView(this)
-               val adRequest = AdRequest.Builder().build()
+        if (!Constants.IS_SUBSCRIBE) {
+            binding.adView.visibility = View.VISIBLE
+            var adView = AdView(this)
+            val adRequest = AdRequest.Builder().build()
 
-               adView.setAdSize(AdSize.BANNER)
+            adView.setAdSize(AdSize.BANNER)
 
 
-               adView.adUnitId = getString(R.string.BannerAdsUnitId)
-               binding.adView.loadAd(adRequest)
-           }else{
-               binding.adView.visibility= View.GONE
-           }
+            adView.adUnitId = getString(R.string.BannerAdsUnitId)
+            binding.adView.loadAd(adRequest)
+        } else {
+            binding.adView.visibility = View.GONE
+        }
     }
 
     private fun setUpView(oneMonth: Button, yearly: Button) {
@@ -91,7 +89,7 @@ class VipPremiumActivity : AppCompatActivity() ,  ViewPager.OnPageChangeListener
         skuList.add(sku1)
         skuList.add(sku2)
         skuList.add(sku3)
-        setupBillingClient(oneMonth,yearly)
+        setupBillingClient(oneMonth, yearly)
 
 
     }
@@ -109,7 +107,7 @@ class VipPremiumActivity : AppCompatActivity() ,  ViewPager.OnPageChangeListener
 
 
                     Log.d("TAG", "onBillingSetupFinished: ")
-                    loadAllSKUs(oneMonth,yearly)
+                    loadAllSKUs(oneMonth, yearly)
                 }
             }
 
@@ -142,7 +140,7 @@ class VipPremiumActivity : AppCompatActivity() ,  ViewPager.OnPageChangeListener
                         //Toast.makeText(InnAppProducts.this, "" + skuDetails.getSku(), Toast.LENGTH_SHORT).show();
                         //System.out.println(skuDetails.getSku());
                         println(skuDetails.price)
-                        Log.d("TAG", "loadAllSKUs: sku 1  "+skuDetailsList.size)
+                        Log.d("TAG", "loadAllSKUs: sku 1  " + skuDetailsList.size)
                         if (skuDetails.sku == sku1) {
                             mSkuDetails = skuDetails
 //                            buttonBuyBasic.setEnabled(true)
@@ -150,9 +148,9 @@ class VipPremiumActivity : AppCompatActivity() ,  ViewPager.OnPageChangeListener
 //                                buttonBuyBasic.getText().toString() + " " + skuDetails.price
 //                            )
 
-                            Log.d("TAG", "loadAllSKUs: sku 1  "+skuDetailsList.size)
+                            Log.d("TAG", "loadAllSKUs: sku 1  " + skuDetailsList.size)
 
-                            oneMonth.setOnClickListener{
+                            oneMonth.setOnClickListener {
                                 Log.d("TAG", "loadAllSKUs: sku 111")
                                 val billingFlowParams = BillingFlowParams
                                     .newBuilder()
@@ -202,22 +200,26 @@ class VipPremiumActivity : AppCompatActivity() ,  ViewPager.OnPageChangeListener
                     }
                 }
             }
-        } else Toast.makeText(this@VipPremiumActivity, "billingclient not ready", Toast.LENGTH_SHORT)
+        } else Toast.makeText(
+            this@VipPremiumActivity,
+            "billingclient not ready",
+            Toast.LENGTH_SHORT
+        )
             .show()
 
     }
 
     private fun setUpClickListener() {
 
-        binding.imageBack.setOnClickListener{
+        binding.imageBack.setOnClickListener {
             finish()
         }
-        binding.getStarted.setOnClickListener{
+        binding.getStarted.setOnClickListener {
             showDialogs()
         }
     }
-    private lateinit var dialog:Dialog
 
+    private lateinit var dialog: Dialog
 
 
     private fun showDialogs() {
@@ -234,30 +236,34 @@ class VipPremiumActivity : AppCompatActivity() ,  ViewPager.OnPageChangeListener
         dialog.getWindow()?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
 
 
+        var oneMonth = dialog.findViewById<Button>(R.id.onemotnh)
 
-       var oneMonth = dialog.findViewById<Button>(R.id.onemotnh)
-
-       var yearly = dialog.findViewById<Button>(R.id.yearly)
-       var manageSubscription = dialog.findViewById<Button>(R.id.manageSubscription)
-
+        var yearly = dialog.findViewById<Button>(R.id.yearly)
+        var manageSubscription = dialog.findViewById<Button>(R.id.manageSubscription)
 
 
-        manageSubscription.setOnClickListener{
-            if (SKUS.isNotEmpty()){
+
+        manageSubscription.setOnClickListener {
+            if (SKUS.isNotEmpty()) {
                 val browserIntent = Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse("https://play.google.com/store/account/subscriptions?sku="+SKUS+"&package=com.friendfinapp.dating")
+                    Uri.parse("https://play.google.com/store/account/subscriptions?sku=" + SKUS + "&package=com.friendfinapp.dating")
                 )
                 startActivity(browserIntent)
-            }else{
-                Toast.makeText(this@VipPremiumActivity, "You Dont Have Any Subscription", Toast.LENGTH_SHORT)
+            } else {
+                Toast.makeText(
+                    this@VipPremiumActivity,
+                    "You Dont Have Any Subscription",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             }
         }
-        setUpView(oneMonth,yearly)
+        setUpView(oneMonth, yearly)
 
         dialog.show()
     }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun setPageViewIndicator() {
         Log.d("###setPageViewIndicator", " : called")
@@ -316,7 +322,10 @@ class VipPremiumActivity : AppCompatActivity() ,  ViewPager.OnPageChangeListener
         binding.viewpager.currentItem = position
     }
 
-    override fun onPurchasesUpdated(billingResult: BillingResult, purchases: MutableList<Purchase>?) {
+    override fun onPurchasesUpdated(
+        billingResult: BillingResult,
+        purchases: MutableList<Purchase>?
+    ) {
 
 
         val responseCode: Int = billingResult.getResponseCode()
@@ -350,11 +359,11 @@ class VipPremiumActivity : AppCompatActivity() ,  ViewPager.OnPageChangeListener
                     acknowledgePurchaseResponseListener!!
                 )
                 if (purchase.skus.equals(sku1)) {
-                   // buyCoinsViaServer(sku1)
+                    // buyCoinsViaServer(sku1)
                 } else if (purchase.skus.equals(sku2)) {
-                  //  buyCoinsViaServer(sku2)
+                    //  buyCoinsViaServer(sku2)
                 } else if (purchase.skus.equals(sku3)) {
-                   // buyCoinsViaServer(sku3)
+                    // buyCoinsViaServer(sku3)
                 }
             }
         }

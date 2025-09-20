@@ -20,9 +20,11 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.friendfinapp.dating.R
+import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.cropper.CropImage
 import com.friendfinapp.dating.cropper.CropImageView
 import com.friendfinapp.dating.databinding.ActivityUploadPhotoBinding
@@ -32,29 +34,28 @@ import com.friendfinapp.dating.ui.uploadphoto.viewmodel.UploadPhotoViewModel
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import reduceImageSize
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.*
 
-class UploadPhotoActivity : AppCompatActivity() {
+class UploadPhotoActivity : BaseActivity<ActivityUploadPhotoBinding>() {
 
-    private lateinit var binding: ActivityUploadPhotoBinding
     private var permissionHelper: PermissionHelper? = null
-
-    var customDialog: ProgressCustomDialog? = null
 
     private lateinit var sessionManager: SessionManager
 
     private lateinit var viewModel: UploadPhotoViewModel
 
     private var uri: Uri? = null
+    override fun viewBindingLayout(): ActivityUploadPhotoBinding = ActivityUploadPhotoBinding.inflate(layoutInflater)
 
     @RequiresApi(Build.VERSION_CODES.R)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_upload_photo)
-
+    override fun initializeView(savedInstanceState: Bundle?) {
         instance = this
 
         setUpView()
@@ -66,7 +67,6 @@ class UploadPhotoActivity : AppCompatActivity() {
 
         permissionHelper = PermissionHelper(this)
 
-        customDialog = ProgressCustomDialog(this)
         sessionManager = SessionManager(this)
         viewModel = ViewModelProvider(this).get(UploadPhotoViewModel::class.java)
 
@@ -111,61 +111,58 @@ class UploadPhotoActivity : AppCompatActivity() {
 
     @SuppressLint("SuspiciousIndentation")
     private fun uploadImageToTheServer(imageUri: Uri?) {
-        //   Toast.makeText(this, "Image uri  found."+uri, Toast.LENGTH_SHORT).show()
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                binding.progressBar.isVisible = true
+                binding.uploadImage.isEnabled = false
+                val username = sessionManager.username
+                val ID = "1"
+                val Primary = "1"
+                val Explicit = "1"
+                val Private = "1"
+                val FaceCrop = "1"
+                val ManualApproval = "1"
+                val Salute = "1"
+                val photoalbum = "1"
+                val name = sessionManager.fullName
+                val approved = "0"
+                val approvedDate = "2022-03-07T10:44:19.97"
+                val file = File(Objects.requireNonNull(FileUtils.getPath(this@UploadPhotoActivity, imageUri)))
 
+                val reduceFileSize = file.reduceImageSize(this@UploadPhotoActivity)
+                val image = FileUtils.getPath(this@UploadPhotoActivity, imageUri)
 
-        //var imageStream = contentResolver.openInputStream(imageUri!!)
-        //var selectedImage = BitmapFactory.decodeStream(imageStream)
-        try {
-            val username = sessionManager.username
-            val ID = "1"
-            val Primary = "1"
-            val Explicit = "1"
-            val Private = "1"
-            val FaceCrop = "1"
-            val ManualApproval = "1"
-            val Salute = "1"
-            val photoalbum = "1"
-            val name = sessionManager.fullName
-            val approved = "0"
-            val approvedDate = "2022-03-07T10:44:19.97"
-            val file = File(Objects.requireNonNull(FileUtils.getPath(this, imageUri)))
+                viewModel.photoUpload(
+                    ID,
+                    username,
+                    photoalbum,
+                    Uri.parse(image),
+                    reduceFileSize,
+                    name,
+                    "hello",
+                    approved,
+                    approvedDate,
+                    Primary,
+                    Explicit,
+                    Private,
+                    FaceCrop,
+                    ManualApproval,
+                    Salute
+                ).observe(this@UploadPhotoActivity, {
+                    if (it.statusCode == 200) {
+                        binding.imageBan.setImageURI(null)
+                        binding.imageUploadText.text = "Image uploaded successfully."
+                    }
 
-
-            val image = FileUtils.getPath(this, imageUri)
-
-
-
-            viewModel.photoUpload(
-                ID,
-                username,
-                photoalbum,
-                Uri.parse(image),
-                file,
-                name,
-                "hello",
-                approved,
-                approvedDate,
-                Primary,
-                Explicit,
-                Private,
-                FaceCrop,
-                ManualApproval,
-                Salute
-            ).observe(this, {
-                if (it.statusCode == 200) {
-
-                    binding.imageBan.setImageURI(null)
-
-                    binding.imageUploadText.text = "Image uploaded successfully."
-
-                    //     Toast.makeText(this, "Image Upload " +it.message, Toast.LENGTH_SHORT).show()
-                    customDialog?.dismiss()
-                }
-            })
-        } catch (e: Exception) {
-            // showMessage(getString(R.string.failed_message))
+                    binding.progressBar.isVisible = false
+                    binding.uploadImage.isEnabled = true
+                })
+            } catch (e: Exception) {
+                // showMessage(getString(R.string.failed_message))
+            }
         }
+
+
     }
 
 

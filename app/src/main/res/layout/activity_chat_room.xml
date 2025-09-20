@@ -5,11 +5,9 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.chatroom.ChatRoomActivity">
-
 
         <LinearLayout
             android:id="@+id/topActionBar"
@@ -20,6 +18,28 @@
             app:layout_constraintTop_toTopOf="parent">
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/searchResultTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            app:drawableEndCompat="@drawable/ic_close"
+            android:drawablePadding="@dimen/_10sdp"
+            android:layout_margin="@dimen/_8sdp"
+            android:visibility="gone"
+            tools:text="Search result showing of hi"
+            android:textColor="@color/white"
+            android:paddingVertical="@dimen/_5sdp"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:background="@drawable/rounded_bg_btn_new"
+            android:textSize="@dimen/_10ssp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topActionBar">
+
+        </TextView>
+
 
 
         <ImageView
@@ -69,7 +89,6 @@
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:layout_marginVertical="@dimen/_10sdp"
             android:src="@drawable/ic_user"
-
             app:civ_border_color="@color/white"
             app:civ_border_width="1dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageBack"
@@ -93,7 +112,6 @@
         </TextView>
 
         <TextView
-
             android:id="@+id/reportUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -106,7 +124,6 @@
             app:layout_constraintBottom_toBottomOf="@+id/imageBack"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imageBack">
-
         </TextView>
 
         <ImageButton
@@ -127,7 +144,7 @@
             android:layout_height="0dp"
 
             app:layout_constraintBottom_toTopOf="@+id/sendView"
-            app:layout_constraintTop_toBottomOf="@+id/topActionBar"
+            app:layout_constraintTop_toBottomOf="@+id/searchResultTv"
             app:layout_constraintVertical_bias="0.0"
             tools:layout_editor_absoluteX="192dp">
 
@@ -382,7 +399,6 @@
             </ImageView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/sendView"
@@ -673,7 +689,6 @@
             app:layout_constraintTop_toTopOf="@+id/sendView" />
 
         <androidx.cardview.widget.CardView
-
             android:id="@+id/layoutLock"
             android:layout_width="48dp"
             android:layout_height="180dp"
@@ -724,7 +739,6 @@
 
         </androidx.cardview.widget.CardView>
 
-
         <LinearLayout
             android:id="@+id/holdTextView"
             android:layout_width="@dimen/_150sdp"
@@ -753,23 +767,7 @@
 
         </LinearLayout>
 
-        <!--        <ProgressBar-->
-        <!--            android:visibility="gone"-->
-        <!--            android:layout_marginHorizontal="@dimen/_30sdp"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent"-->
-        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--            android:id="@+id/customProgressBar"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:indeterminate="false"-->
-        <!--            android:progressDrawable="@drawable/custom_progress_bar"-->
-        <!--            style="?android:attr/progressBarStyleHorizontal" />-->
-
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-
             android:id="@+id/send"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -782,7 +780,6 @@
             app:tint="@color/black" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-
             android:id="@+id/sendLockAudio"
             android:layout_width="48dp"
             android:layout_height="48dp"
@@ -794,18 +791,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:tint="@color/black" />
-
-        <!--        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"-->
-        <!--            android:id="@+id/adView"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_alignParentBottom="true"-->
-        <!--            android:layout_centerHorizontal="true"-->
-        <!--            ads:adSize="BANNER"-->
-        <!--            ads:adUnitId="@string/BannerAdsUnitId"-->
-        <!--            ads:layout_constraintBottom_toBottomOf="parent">-->
-
-        <!--        </com.google.android.gms.ads.AdView>-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
