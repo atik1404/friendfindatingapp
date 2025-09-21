@@ -297,7 +297,11 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(), PurchasesUpdatedLi
 
         billingClient = BillingClient
             .newBuilder(this)
-            .enablePendingPurchases()
+            .enablePendingPurchases(
+                PendingPurchasesParams.newBuilder()
+                    .enableOneTimeProducts()
+                    .build()
+            )
             .setListener(this)
             .build()
         billingClient!!.startConnection(object : BillingClientStateListener {
@@ -327,7 +331,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(), PurchasesUpdatedLi
                 .build()
         ) { billingResult, purchases -> // check billingResult
             // process returned purchase list, e.g. display the plans user owns
-            if (purchases.isNullOrEmpty()) {
+            if (purchases.isEmpty()) {
                 Toast.makeText(this, "No existing in app purchases found", Toast.LENGTH_SHORT)
                     .show()
                 Log.d("bur", "No existing in app purchases found.")

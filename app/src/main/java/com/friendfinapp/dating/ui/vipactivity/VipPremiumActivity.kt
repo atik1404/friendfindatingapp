@@ -5,14 +5,12 @@ import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.*
-import androidx.databinding.DataBindingUtil
 import androidx.viewpager.widget.ViewPager
 import com.android.billingclient.api.*
 import com.friendfinapp.dating.R
@@ -27,6 +25,7 @@ import com.friendfinapp.dating.helper.Constants
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import timber.log.Timber
 
 
 class VipPremiumActivity : BaseActivity<ActivityVipPremiumBinding>(),
@@ -43,13 +42,13 @@ class VipPremiumActivity : BaseActivity<ActivityVipPremiumBinding>(),
     //premium
 
     private var billingClient: BillingClient? = null
-    private val skuList: MutableList<String> = ArrayList<String>()
+    private val skuList: MutableList<String> = ArrayList()
 
     private val sku1 = "com.friendfin.basic"
     private val sku2 = "com.friendfin.standard"
     private val sku3 = "com.friendfin.premium"
 
-    var mSkuDetails: SkuDetails? = null
+    var mSkuDetails: ProductDetails? = null
     var userId: String? = null
     var acknowledgePurchaseResponseListener: AcknowledgePurchaseResponseListener? = null
 
@@ -85,36 +84,33 @@ class VipPremiumActivity : BaseActivity<ActivityVipPremiumBinding>(),
     }
 
     private fun setUpView(oneMonth: Button, yearly: Button) {
-
         skuList.add(sku1)
         skuList.add(sku2)
         skuList.add(sku3)
         setupBillingClient(oneMonth, yearly)
-
-
     }
 
     private fun setupBillingClient(oneMonth: Button, yearly: Button) {
-
-        acknowledgePurchaseResponseListener =
-            AcknowledgePurchaseResponseListener { billingResult -> println(billingResult.responseCode) }
+        Timber.e("setupBillingClient: $skuList")
+        acknowledgePurchaseResponseListener = AcknowledgePurchaseResponseListener { billingResult -> println(billingResult.responseCode) }
         billingClient =
-            BillingClient.newBuilder(this).enablePendingPurchases().setListener(this).build()
-        billingClient!!.startConnection(object : BillingClientStateListener {
+            BillingClient.newBuilder(this)
+                .setListener(this)
+                .enablePendingPurchases(
+                PendingPurchasesParams.newBuilder()
+                    .enableOneTimeProducts()
+                    .build()
+            ).build()
+        billingClient?.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    // The BillingClient is setup successfully
-
-
-                    Log.d("TAG", "onBillingSetupFinished: ")
+                    Timber.e("onBillingSetupFinished: ")
                     loadAllSKUs(oneMonth, yearly)
                 }
             }
 
             override fun onBillingServiceDisconnected() {
-                // Try to restart the connection on the next request to
-                // Google Play by calling the startConnection() method.
-                Log.d("TAG", "disconnect: ")
+                Timber.e("onBillingServiceDisconnected: ")
             }
         })
     }
@@ -123,39 +119,44 @@ class VipPremiumActivity : BaseActivity<ActivityVipPremiumBinding>(),
 
         //Toast.makeText(InnAppProducts.this, "", Toast.LENGTH_SHORT).show();
         if (billingClient!!.isReady) {
-            //Toast.makeText(InnAppProducts.this, "billingclient ready", Toast.LENGTH_SHORT).show();
-            val params = SkuDetailsParams.newBuilder()
-                .setSkusList(skuList)
-                .setType(BillingClient.SkuType.SUBS)
+            val products = skuList.distinct().map {
+                QueryProductDetailsParams.Product.newBuilder()
+                    .setProductId(it)
+                    .setProductType(BillingClient.ProductType.SUBS) // or INAPP if you sell one-time items
+                    .build()
+            }
+            val params = QueryProductDetailsParams.newBuilder()
+                .setProductList(products)
                 .build()
-            billingClient!!.querySkuDetailsAsync(
+            billingClient?.queryProductDetailsAsync(
                 params
-            ) { billingResult, skuDetailsList ->
+            ) { billingResult, skuDetails ->
                 //Toast.makeText(InnAppProducts.this, "inside query" + billingResult.getResponseCode(), Toast.LENGTH_SHORT).show();
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK
-                    && skuDetailsList!!.isNotEmpty()
-                ) {
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    val skuDetailsList = skuDetails.productDetailsList
+                    Timber.e("loadAllSKUs1: $skuDetailsList and ${skuDetailsList.size}")
                     for (skuDetailsObject in skuDetailsList) {
-                        val skuDetails = skuDetailsObject as SkuDetails
-                        //Toast.makeText(InnAppProducts.this, "" + skuDetails.getSku(), Toast.LENGTH_SHORT).show();
-                        //System.out.println(skuDetails.getSku());
-                        println(skuDetails.price)
-                        Log.d("TAG", "loadAllSKUs: sku 1  " + skuDetailsList.size)
-                        if (skuDetails.sku == sku1) {
-                            mSkuDetails = skuDetails
-//                            buttonBuyBasic.setEnabled(true)
-//                            buttonBuyBasic.setText(
-//                                buttonBuyBasic.getText().toString() + " " + skuDetails.price
-//                            )
+                        Timber.e("loadAllSKUs2: $skuDetailsObject}")
+                        val productDetails = skuDetailsObject as ProductDetails
+                        Timber.e("loadAllSKUs3: sku 1  " + skuDetailsList.size)
+                        if (productDetails.productId == sku1) {
+                            Timber.e("loadAllSKUs: $skuDetailsObject}")
+                            mSkuDetails = productDetails
 
-                            Log.d("TAG", "loadAllSKUs: sku 1  " + skuDetailsList.size)
+                            Timber.e("loadAllSKUs: sku 1  " + skuDetailsList.size)
 
                             oneMonth.setOnClickListener {
-                                Log.d("TAG", "loadAllSKUs: sku 111")
+                                Timber.e("loadAllSKUs: sku 111")
+                                val productDetailsParamsList = listOf(
+                                    BillingFlowParams.ProductDetailsParams.newBuilder()
+                                        .setProductDetails(productDetails)
+                                        .build()
+                                )
                                 val billingFlowParams = BillingFlowParams
                                     .newBuilder()
-                                    .setSkuDetails(skuDetails)
+                                    .setProductDetailsParamsList(productDetailsParamsList)
                                     .build()
+
                                 billingClient!!.launchBillingFlow(
                                     this@VipPremiumActivity,
                                     billingFlowParams
@@ -163,39 +164,27 @@ class VipPremiumActivity : BaseActivity<ActivityVipPremiumBinding>(),
                             }
 
                         }
-                        if (skuDetails.sku == sku2) {
-                            Log.d("TAG", "loadAllSKUs: sku 2")
-                            mSkuDetails = skuDetails
-//                            buttonBuyStandard.setEnabled(true)
-//                            buttonBuyStandard.setText(
-//                                buttonBuyStandard.getText().toString() + " " + skuDetails.price
-//                            )
-                            yearly.setOnClickListener(View.OnClickListener {
+                        if (productDetails.productId == sku2) {
+                            Timber.e("loadAllSKUs: sku 2")
+                            mSkuDetails = productDetails
+                            val productDetailsParamsList = listOf(
+                                BillingFlowParams.ProductDetailsParams.newBuilder()
+                                    .setProductDetails(productDetails)
+                                    .build()
+                            )
+                            yearly.setOnClickListener {
                                 val billingFlowParams = BillingFlowParams
                                     .newBuilder()
-                                    .setSkuDetails(skuDetails)
+                                    .setProductDetailsParamsList(productDetailsParamsList)
                                     .build()
                                 billingClient!!.launchBillingFlow(
                                     this@VipPremiumActivity,
                                     billingFlowParams
                                 )
-                            })
-                        } else if (skuDetails.sku == sku3) {
-                            mSkuDetails = skuDetails
-//                            buttonBuyPremium.setEnabled(true)
-//                            buttonBuyPremium.setText(
-//                                buttonBuyPremium.getText().toString() + " " + skuDetails.price
-//                            )
-//                            sixMonth?.setOnClickListener(View.OnClickListener {
-//                                val billingFlowParams = BillingFlowParams
-//                                    .newBuilder()
-//                                    .setSkuDetails(skuDetails)
-//                                    .build()
-//                                billingClient!!.launchBillingFlow(
-//                                    this@VipPremiumActivity,
-//                                    billingFlowParams
-//                                )
-//                            })
+                            }
+                        }
+                        else if (productDetails.productId == sku3) {
+                            mSkuDetails = productDetails
                         }
                     }
                 }
@@ -204,9 +193,7 @@ class VipPremiumActivity : BaseActivity<ActivityVipPremiumBinding>(),
             this@VipPremiumActivity,
             "billingclient not ready",
             Toast.LENGTH_SHORT
-        )
-            .show()
-
+        ).show()
     }
 
     private fun setUpClickListener() {
@@ -229,11 +216,11 @@ class VipPremiumActivity : BaseActivity<ActivityVipPremiumBinding>(),
         dialog = Dialog(this@VipPremiumActivity)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.dialog_payment)
-        dialog.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 //        dialog.setCanceledOnTouchOutside(false)
         val width = (resources.displayMetrics.widthPixels * 0.90).toInt()
         //  int height = (int)(getResources().getDisplayMetrics().heightPixels*0.90);
-        dialog.getWindow()?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
 
 
         var oneMonth = dialog.findViewById<Button>(R.id.onemotnh)
@@ -328,8 +315,8 @@ class VipPremiumActivity : BaseActivity<ActivityVipPremiumBinding>(),
     ) {
 
 
-        val responseCode: Int = billingResult.getResponseCode()
-        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK
+        val responseCode: Int = billingResult.responseCode
+        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK
             && purchases != null
         ) {
             for (purchase in purchases) {
