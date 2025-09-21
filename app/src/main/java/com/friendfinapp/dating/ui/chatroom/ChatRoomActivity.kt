@@ -76,6 +76,7 @@ import com.friendfinapp.dating.helper.FileUtils
 import com.friendfinapp.dating.helper.PermissionHelper
 import com.friendfinapp.dating.helper.ProgressCustomDialog
 import com.friendfinapp.dating.helper.SessionManager
+import com.friendfinapp.dating.helper.dateparser.DateTimeFormat
 import com.friendfinapp.dating.helper.showViewAlertDialog
 import com.friendfinapp.dating.notification.*
 import com.friendfinapp.dating.ui.chatroom.adapter.LiveChatAdapter
@@ -87,6 +88,11 @@ import com.friendfinapp.dating.ui.landingpage.fragments.chatfragment.ChatFragmen
 import com.friendfinapp.dating.ui.othersprofile.model.MessageViewModel
 import com.friendfinapp.dating.ui.reportanabuse.ReportAnAbuse
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.iamkamrul.dateced.DateCed
+import com.iamkamrul.dateced.TimeDifferenceUnit
+import com.iamkamrul.dateced.TimeZoneId
+import com.jerp.common.dateparser.DateTimeParser
+import com.jerp.common.dateparser.parseUtcToLocalCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -978,14 +984,14 @@ messageViewModel.getMessageWithAudio(
             return
         }
 
-        customDialog?.show()
+        //customDialog?.show()
 
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
                 // Do something
                 viewModel.getChatListSearchResult(params).observe(this@ChatRoomActivity) {
 
-                    customDialog?.dismiss()
+                    //customDialog?.dismiss()
 
                     it.isBlocked.let { block ->
                         if (block!!) {
@@ -1120,16 +1126,23 @@ messageViewModel.getMessageWithAudio(
         val items = chats.toMutableList()
         var lastDate: String? = null
 
-        for (i in items.indices) {
-            val curDate  = items[i].sendTime?.split(" ")?.get(0)
-            if (curDate != null && curDate != lastDate) {
-                // first item of a new block → keep the date
-                items[i].effectiveDate = curDate
-                lastDate = curDate
-            } else {
-                // same as previous (or null) → blank
-                items[i].effectiveDate = ""
+        try {
+            for (i in items.indices) {
+                val sendDate = items[i].sendTime
+                val curDate  = sendDate?.parseUtcToLocalCompat(DateTimeFormat.outputDMy)
+                if (curDate != null && curDate != lastDate) {
+                    // first item of a new block → keep the date
+                    val formattedDate = sendDate.parseUtcToLocalCompat(DateTimeFormat.sqlYMDHMS)
+                    val dayDiff = DateCed.Factory.now().timeDifference(formattedDate, unit = TimeDifferenceUnit.DAY)
+                    items[i].effectiveDate = DateTimeParser.formatRelativeDateLabel(dayDiff.toInt(), formattedDate)
+                    lastDate = curDate
+                } else {
+                    // same as previous (or null) → blank
+                    items[i].effectiveDate = ""
+                }
             }
+        }catch (ex : Exception){
+            ex.printStackTrace()
         }
         return items
     }

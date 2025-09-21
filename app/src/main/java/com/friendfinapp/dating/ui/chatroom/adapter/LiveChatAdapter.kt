@@ -36,8 +36,10 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.friendfinapp.dating.helper.dateparser.DateTimeFormat
 import com.iamkamrul.dateced.DateCed
+import com.iamkamrul.dateced.TimeZoneId
 import com.jerp.common.dateparser.DateTimeParser
 import com.jerp.common.dateparser.DateTimeParser.convertReadableDateTime
+import com.jerp.common.dateparser.parseUtcToLocalCompat
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -304,14 +306,9 @@ class LiveChatAdapter(
             }
 
             try {
-                viewHolder2.binding.sendTimeTv.text =
-                    chatList[position].sendTime?.convertReadableDateTime(
-                        DateTimeFormat.ddmmyyyy24H, DateTimeFormat.sqlhma
-                    )
+                viewHolder2.binding.sendTimeTv.text = chatList[position].sendTime?.parseUtcToLocalCompat(DateTimeFormat.sqlhma)
             } catch (ex: Exception) {
-                viewHolder2.binding.sendTimeTv.text = DateTimeParser.getCurrentDeviceDateTime(
-                    DateTimeFormat.sqlhma
-                )
+                viewHolder2.binding.sendTimeTv.text = DateCed.Factory.now().hMa
             }
         }
         else {
@@ -869,14 +866,9 @@ class LiveChatAdapter(
             }
 
             try {
-                viewHolder.binding.sendTimeTv.text =
-                    chatList[position].sendTime?.convertReadableDateTime(
-                        DateTimeFormat.ddmmyyyy24H, DateTimeFormat.sqlhma
-                    )
+                viewHolder.binding.sendTimeTv.text =  chatList[position].sendTime?.parseUtcToLocalCompat(DateTimeFormat.sqlhma)
             } catch (ex: Exception) {
-                viewHolder.binding.sendTimeTv.text = DateTimeParser.getCurrentDeviceDateTime(
-                    DateTimeFormat.sqlhma
-                )
+                viewHolder.binding.sendTimeTv.text = DateCed.Factory.now().hMa
             }
         }
 

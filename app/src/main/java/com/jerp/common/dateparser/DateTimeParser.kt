@@ -3,10 +3,41 @@ package com.jerp.common.dateparser
 import com.iamkamrul.dateced.DateCed
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.time.LocalDate
+import java.time.*
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
+
+fun String.parseUtcToLocalCompat(
+    outputPattern: String = "yyyy-MM-dd HH:mm:ss"
+): String {
+    val patterns = arrayOf(
+        "yyyy-MM-dd'T'HH:mm:ss.SSSX", // with millis + offset/Z
+        "yyyy-MM-dd'T'HH:mm:ss.SSS",  // with millis, no offset
+        "yyyy-MM-dd'T'HH:mm:ssX",     // no millis, with offset/Z
+        "yyyy-MM-dd'T'HH:mm:ss"       // plain
+    )
+
+    var parsedDate: Date? = null
+    for (p in patterns) {
+        try {
+            val inFmt = SimpleDateFormat(p, Locale.US).apply {
+                timeZone = TimeZone.getTimeZone("UTC")
+            }
+            parsedDate = inFmt.parse(this)
+            if (parsedDate != null) break
+        } catch (_: ParseException) {
+            // try next pattern
+        }
+    }
+    if (parsedDate == null) return this
+
+    val outFmt = SimpleDateFormat(outputPattern, Locale.getDefault()).apply {
+        timeZone = TimeZone.getDefault() // local
+    }
+    return outFmt.format(parsedDate)
+}
 
 
 object DateTimeParser {
@@ -85,25 +116,29 @@ object DateTimeParser {
         dayDiff: Int,
         date: String,
     ): String {
-        val effectiveDate = when {
-            dayDiff <= 0 -> "Today" // also covers future/invalid negatives
-            dayDiff == 1 -> "Yesterday"
-            dayDiff in 2..5 -> {
-                // sat, sun, mon…
-                DateCed.Factory.parse(date).day
+        try {
+            val effectiveDate = when {
+                dayDiff <= 0 -> "Today" // also covers future/invalid negatives
+                dayDiff == 1 -> "Yesterday"
+                dayDiff in 2..5 -> {
+                    // sat, sun, mon…
+                    DateCed.Factory.parse(date).day
+                }
+                dayDiff in 6..180 -> {
+                    // EEE, MMM dd  -> "Sat, Sep 14"
+                    val fmt = DateCed.Factory.parse(date).format("EEE, MMM dd")
+                    fmt
+                }
+                else -> {
+                    // MMM dd, yyyy -> "Sep 14, 2025"
+                    val fmt = DateCed.Factory.parse(date).format("MMM dd, yyyy")
+                    fmt
+                }
             }
-            dayDiff in 6..180 -> {
-                // EEE, MMM dd  -> "Sat, Sep 14"
-                val fmt = DateCed.Factory.parse(date).format("EEE, MMM dd")
-                fmt
-            }
-            else -> {
-                // MMM dd, yyyy -> "Sep 14, 2025"
-                val fmt = DateCed.Factory.parse(date).format("MMM dd, yyyy")
-                fmt
-            }
+            return effectiveDate
+        }catch (ex : Exception){
+            ex.printStackTrace()
+            return date
         }
-
-        return "$effectiveDate \n$dayDiff \n$date"
     }
 }

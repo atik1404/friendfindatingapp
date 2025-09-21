@@ -507,7 +507,8 @@ class LandingActivity : AppCompatActivity() {
 
 
         binding.includeToolbar.searchIndividual.setOnClickListener {
-            startActivity(Intent(this@LandingActivity, IndividualSearchActivity::class.java))
+            //startActivity(Intent(this@LandingActivity, IndividualSearchActivity::class.java))
+            startActivity(Intent(this@LandingActivity, VipPremiumActivity::class.java))
         }
         binding.includeToolbar.address.setOnClickListener {
             startActivity(Intent(this@LandingActivity, IndividualSearchActivity::class.java))
