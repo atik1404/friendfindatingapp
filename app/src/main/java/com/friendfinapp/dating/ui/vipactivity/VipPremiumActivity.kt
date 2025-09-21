@@ -147,11 +147,18 @@ class VipPremiumActivity : BaseActivity<ActivityVipPremiumBinding>(),
 
                             oneMonth.setOnClickListener {
                                 Timber.e("loadAllSKUs: sku 111")
+                                val offer = productDetails.subscriptionOfferDetails?.firstOrNull()
+                                if (offer == null) {
+                                    Timber.e("No subscriptionOfferDetails for ${productDetails.productId}. Check Play Console base plan/offers & country availability.")
+                                    return@setOnClickListener
+                                }
                                 val productDetailsParamsList = listOf(
                                     BillingFlowParams.ProductDetailsParams.newBuilder()
                                         .setProductDetails(productDetails)
+                                        .setOfferToken(offer.offerToken)
                                         .build()
                                 )
+
                                 val billingFlowParams = BillingFlowParams
                                     .newBuilder()
                                     .setProductDetailsParamsList(productDetailsParamsList)
@@ -167,12 +174,20 @@ class VipPremiumActivity : BaseActivity<ActivityVipPremiumBinding>(),
                         if (productDetails.productId == sku2) {
                             Timber.e("loadAllSKUs: sku 2")
                             mSkuDetails = productDetails
-                            val productDetailsParamsList = listOf(
-                                BillingFlowParams.ProductDetailsParams.newBuilder()
-                                    .setProductDetails(productDetails)
-                                    .build()
-                            )
+
                             yearly.setOnClickListener {
+                                val offer = productDetails.subscriptionOfferDetails?.firstOrNull()
+                                if (offer == null) {
+                                    Timber.e("No subscriptionOfferDetails for ${productDetails.productId}. Check Play Console base plan/offers & country availability.")
+                                    return@setOnClickListener
+                                }
+                                val productDetailsParamsList = listOf(
+                                    BillingFlowParams.ProductDetailsParams.newBuilder()
+                                        .setProductDetails(productDetails)
+                                        .setOfferToken(offer.offerToken)
+                                        .build()
+                                )
+
                                 val billingFlowParams = BillingFlowParams
                                     .newBuilder()
                                     .setProductDetailsParamsList(productDetailsParamsList)
@@ -194,6 +209,54 @@ class VipPremiumActivity : BaseActivity<ActivityVipPremiumBinding>(),
             "billingclient not ready",
             Toast.LENGTH_SHORT
         ).show()
+    }
+
+
+    override fun onPurchasesUpdated(
+        billingResult: BillingResult,
+        purchases: MutableList<Purchase>?
+    ) {
+
+
+        val responseCode: Int = billingResult.responseCode
+        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK
+            && purchases != null
+        ) {
+            for (purchase in purchases) {
+                handlePurchase(purchase)
+            }
+        } else if (responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
+            // Handle an error caused by a user cancelling the purchase flow.
+        } else if (responseCode == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
+            Toast.makeText(
+                applicationContext,
+                "You have recently bought this item. Try another item or try again later",
+                Toast.LENGTH_LONG
+            ).show()
+        } else {
+            //Log.d(TAG, "Other code" + responseCode);
+        }
+    }
+
+    private fun handlePurchase(purchase: Purchase) {
+        if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+            if (!purchase.isAcknowledged) {
+                val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                    .setPurchaseToken(purchase.purchaseToken)
+                    .build()
+                billingClient!!.acknowledgePurchase(
+                    acknowledgePurchaseParams,
+                    acknowledgePurchaseResponseListener!!
+                )
+                if (purchase.skus.equals(sku1)) {
+                    // buyCoinsViaServer(sku1)
+                } else if (purchase.skus.equals(sku2)) {
+                    //  buyCoinsViaServer(sku2)
+                } else if (purchase.skus.equals(sku3)) {
+                    // buyCoinsViaServer(sku3)
+                }
+            }
+        }
     }
 
     private fun setUpClickListener() {
@@ -307,52 +370,5 @@ class VipPremiumActivity : BaseActivity<ActivityVipPremiumBinding>(),
 
     fun scrollPage(position: Int) {
         binding.viewpager.currentItem = position
-    }
-
-    override fun onPurchasesUpdated(
-        billingResult: BillingResult,
-        purchases: MutableList<Purchase>?
-    ) {
-
-
-        val responseCode: Int = billingResult.responseCode
-        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK
-            && purchases != null
-        ) {
-            for (purchase in purchases) {
-                handlePurchase(purchase)
-            }
-        } else if (responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
-            // Handle an error caused by a user cancelling the purchase flow.
-        } else if (responseCode == BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED) {
-            Toast.makeText(
-                applicationContext,
-                "You have recently bought this item. Try another item or try again later",
-                Toast.LENGTH_LONG
-            ).show()
-        } else {
-            //Log.d(TAG, "Other code" + responseCode);
-        }
-    }
-
-    private fun handlePurchase(purchase: Purchase) {
-        if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-            if (!purchase.isAcknowledged) {
-                val acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
-                    .setPurchaseToken(purchase.purchaseToken)
-                    .build()
-                billingClient!!.acknowledgePurchase(
-                    acknowledgePurchaseParams,
-                    acknowledgePurchaseResponseListener!!
-                )
-                if (purchase.skus.equals(sku1)) {
-                    // buyCoinsViaServer(sku1)
-                } else if (purchase.skus.equals(sku2)) {
-                    //  buyCoinsViaServer(sku2)
-                } else if (purchase.skus.equals(sku3)) {
-                    // buyCoinsViaServer(sku3)
-                }
-            }
-        }
     }
 }
