@@ -426,6 +426,7 @@ class SignInActivity : AppCompatActivity() {
                             it.data?.city,
                             it.data?.birthdate
                         )
+                        sessionManager.token = it.data?.token
 
                         checkSaveProfile(it.data?.username)
 
@@ -472,6 +473,7 @@ class SignInActivity : AppCompatActivity() {
                 Constants.USER_INFO.tokenUniqueId = it.data?.tokenUniqueId
                 Constants.USER_INFO.profileSkin = it.data?.profileSkin
                 Constants.USER_ID = Constants.USER_INFO.username.toString()
+                Constants.AUTHORIZATION_TOKEN = it.data?.token ?: ""
 
                 Log.d("TAG", "signIn: " + password.toString().trim())
                 sessionManager.setInfo(

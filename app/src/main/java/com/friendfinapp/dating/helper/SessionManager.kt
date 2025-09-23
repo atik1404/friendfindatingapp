@@ -1,5 +1,6 @@
 package com.friendfinapp.dating.helper
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import com.friendfinapp.dating.helper.SessionHelper.AUTH_TOKEN
@@ -35,7 +36,8 @@ import com.friendfinapp.dating.helper.SessionHelper.isFirstOpen
 import java.util.*
 
 class SessionManager(var context: Context) {
-    private var sharedPreferences: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+    private var sharedPreferences: SharedPreferences =
+        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     var editor: SharedPreferences.Editor = sharedPreferences.edit()
     fun setFirstOpen(state: Boolean) {
         editor.putBoolean(isFirstOpen, state)
@@ -99,8 +101,19 @@ class SessionManager(var context: Context) {
             editor.apply()
         }
 
-    fun setInfo(id: String?, email: String?, name: String?, userFullName: String?,userInterest:Int?,userGender:Int?,userActivate:Int?,userCountry:String?,userState:String?,
-    userCity:String?,userDateOfBirth:String?) {
+    fun setInfo(
+        id: String?,
+        email: String?,
+        name: String?,
+        userFullName: String?,
+        userInterest: Int?,
+        userGender: Int?,
+        userActivate: Int?,
+        userCountry: String?,
+        userState: String?,
+        userCity: String?,
+        userDateOfBirth: String?
+    ) {
         editor.putString(USER_ID, id)
         editor.putString(USER_EMAIL, email)
         editor.putString(USER_NAME, name)
@@ -116,35 +129,36 @@ class SessionManager(var context: Context) {
         editor.apply()
     }
 
-    fun setProfile(image:String){
-        editor.putString(USER_PROFILE,image)
+    fun setProfile(image: String) {
+        editor.putString(USER_PROFILE, image)
         editor.apply()
         editor.commit()
     }
 
-    fun setPassword(newPassword:String){
+    fun setPassword(newPassword: String) {
         editor.putString(USER_ID, newPassword)
         editor.apply()
         editor.commit()
     }
-    val getProfileImage:String
-        get() = sharedPreferences.getString(USER_PROFILE,"").toString()
 
-    fun setTokens(tokens:String){
-        editor.putString(USER_TOKEN,tokens)
+    val getProfileImage: String
+        get() = sharedPreferences.getString(USER_PROFILE, "").toString()
+
+    fun setTokens(tokens: String) {
+        editor.putString(USER_TOKEN, tokens)
         editor.apply()
     }
-    val getTokens: String?
-        get() = sharedPreferences.getString(USER_TOKEN,"")
 
+    val getTokens: String?
+        get() = sharedPreferences.getString(USER_TOKEN, "")
 
 
     val fullName: String?
-        get() = sharedPreferences.getString(USER_Fullname,"")
+        get() = sharedPreferences.getString(USER_Fullname, "")
     val username: String?
-    get() = sharedPreferences.getString(USER_NAME,"")
+        get() = sharedPreferences.getString(USER_NAME, "")
     val password: String?
-        get() = sharedPreferences.getString(USER_ID,"")
+        get() = sharedPreferences.getString(USER_ID, "")
     val interest: Int
         get() = sharedPreferences.getInt(USER_Interested, 1)
 
@@ -204,5 +218,25 @@ class SessionManager(var context: Context) {
 
     companion object {
         const val PRIVATE_MODE = 0
+
+        @SuppressLint("StaticFieldLeak")
+        @Volatile
+        private var INSTANCE: SessionManager? = null
+
+        /** Call once from Application.onCreate() */
+        fun init(context: Context) {
+            if (INSTANCE == null) {
+                synchronized(this) {
+                    if (INSTANCE == null) {
+                        INSTANCE = SessionManager(context.applicationContext)
+                    }
+                }
+            }
+        }
+
+        /** Get the global instance anywhere */
+        fun get(): SessionManager =
+            INSTANCE
+                ?: error("SessionManager not initialized. Call SessionManager.init(context) in Application.onCreate().")
     }
 }

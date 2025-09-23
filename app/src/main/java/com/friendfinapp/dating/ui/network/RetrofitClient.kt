@@ -33,6 +33,8 @@ class RetrofitClient {
             }
 
         private fun okHttpClient(): OkHttpClient {
+            val sessionManager = SessionManager.get()
+            val token = Constants.AUTHORIZATION_TOKEN.ifEmpty { sessionManager.token }
             val httpClient = OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
@@ -43,7 +45,7 @@ class RetrofitClient {
                 val original = chain.request()
                 val requestBuilder = original.newBuilder()
                     .addHeader("Accept", "application/json")
-                    .addHeader("Authorization", "Bearer ${Constants.AUTHORIZATION_TOKEN}")
+                    .addHeader("Authorization", "Bearer $token")
                 val request = requestBuilder.build()
                 chain.proceed(request)
             }

@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.res.Resources
 import com.friendfinapp.dating.BuildConfig
 import com.friendfinapp.dating.appopen.AppOpenManager
+import com.friendfinapp.dating.helper.SessionManager
 
 import com.google.android.gms.ads.MobileAds
 
@@ -29,6 +30,8 @@ class AppController : Application() {
         val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
         MobileAds.setRequestConfiguration(configuration)
         appOpenManager = AppOpenManager(this)
+
+        SessionManager.init(this)
     }
 
     companion object {
