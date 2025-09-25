@@ -91,73 +91,6 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(), AdapterView.OnItem
     private lateinit var stateAdapter: ArrayAdapter<String>
     private lateinit var cityAdapter: ArrayAdapter<String>
 
-    class SignUpActivity : AppCompatActivity() {
-
-        private lateinit var binding: ActivitySignUpBinding
-
-//        override fun onCreate(savedInstanceState: Bundle?) {
-//            super.onCreate(savedInstanceState)
-//            binding = ActivitySignUpBinding.inflate(layoutInflater)
-//            setContentView(binding.root)
-//
-//        }
-
-
-        // Method to clear city spinner when needed
-
-
-//        private fun setupSpinners() {
-//            val countries = getCountries()
-//
-//            // Set up the country spinner
-//            val countryAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, countries.map { it.name })
-//            countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//            binding.spinnerCountry.adapter = countryAdapter
-//
-//            // Set item selected listener for country spinner
-//            binding.spinnerCountry.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-//                    val selectedCountry = countries[position]
-//
-//                    // Update the states spinner based on the selected country
-//                    val stateAdapter = ArrayAdapter(this@SignUpActivity, android.R.layout.simple_spinner_item, selectedCountry.states.map { it.name })
-//                    stateAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//                    binding.spinnerStates.adapter = stateAdapter
-//
-//                    // Reset the city spinner when the country is changed
-//                    clearCitySpinner()
-//                }
-//
-//                override fun onNothingSelected(parent: AdapterView<*>) {
-//                    // Do nothing
-//                }
-//            }
-//
-//            // Set item selected listener for state spinner
-//            binding.spinnerStates.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-//                    val selectedCountry = countries[binding.spinnerCountry.selectedItemPosition]
-//                    val selectedState = selectedCountry.states[position]
-//
-//                    // Update the cities spinner based on the selected state
-//                    val cityAdapter = ArrayAdapter(this@SignUpActivity, android.R.layout.simple_spinner_item, selectedState.cities)
-//                    cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//                    binding.spinnerCity.adapter = cityAdapter
-//                }
-//
-//                override fun onNothingSelected(parent: AdapterView<*>) {
-//                    // Do nothing
-//                }
-//            }
-//        }
-
-        // Method to clear city spinner when needed
-
-
-        // Sample data for countries, states, and cities
-
-    }
-
     // Pickers
 
     var countryID = 0
@@ -259,7 +192,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(), AdapterView.OnItem
                 id: Long
             ) {
                 val selectedState = stateAdapter.getItem(position) ?: return
-                val selectedCountry = binding.spinnerStates.selectedItem.toString()
+                binding.spinnerStates.selectedItem.toString()
                 binding.states.editText!!.isEnabled = true
                 binding.spinnerStates.visibility = View.VISIBLE
 
@@ -359,7 +292,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(), AdapterView.OnItem
         Log.d("Params", params.toString()) // Log the request body
 
         val jsonObjectRequest = object : JsonObjectRequest(
-            Request.Method.POST, url, params,
+            Method.POST, url, params,
             { response ->
                 try {
                     Log.d("Response", response.toString()) // Log the full response
@@ -808,15 +741,23 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(), AdapterView.OnItem
                     it.data?.city,
                     it.data?.birthdate
                 )
-
-                Toast.makeText(this, "" + it.message, Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this@SignUpActivity, SaveProfileActivity::class.java))
-                finish()
-
+                signIn(userName, password, it.message.toString())
             } else {
                 Toast.makeText(this, "" + it.message, Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun signIn(username: String, password: String, message: String) {
+        viewModel.signInUser(username, password).observe(this) {
+            if (it.count == 1) {
+                Constants.AUTHORIZATION_TOKEN = it.data?.token ?: ""
+                sessionManager.token = it.data?.token
+            }
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this@SignUpActivity, SaveProfileActivity::class.java))
+            finish()
+        }
     }
 
     fun getLocalIpAddress(): String? {
@@ -828,7 +769,7 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(), AdapterView.OnItem
                 while (enumIpAddr.hasMoreElements()) {
                     val inetAddress = enumIpAddr.nextElement()
                     if (!inetAddress.isLoopbackAddress && inetAddress is Inet4Address) {
-                        return inetAddress.getHostAddress()
+                        return inetAddress.hostAddress
                     }
                 }
             }

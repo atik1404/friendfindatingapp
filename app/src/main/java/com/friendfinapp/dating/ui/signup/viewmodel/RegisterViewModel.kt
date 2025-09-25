@@ -3,6 +3,7 @@ package com.friendfinapp.dating.ui.signup.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.friendfinapp.dating.ui.mainrepo.MainRepo
+import com.friendfinapp.dating.ui.signin.model.LoginResponseModel
 import com.friendfinapp.dating.ui.signup.model.RegisterResponseModel
 
 class RegisterViewModel : ViewModel() {
@@ -48,6 +49,6 @@ class RegisterViewModel : ViewModel() {
     latitude,tokenUniqueId,credits,moderationScore,spamSuspected,faceControlApproved,profileSkin,statusText,featuredMember,mySpaceID,facebookID,
     eventsSettings)
 
-
+    fun signInUser(username: String, password: String): LiveData<LoginResponseModel> = repo.loginUser(username,password)
 
 }

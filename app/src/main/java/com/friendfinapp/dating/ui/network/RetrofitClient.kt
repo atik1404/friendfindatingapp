@@ -34,7 +34,7 @@ class RetrofitClient {
 
         private fun okHttpClient(): OkHttpClient {
             val sessionManager = SessionManager.get()
-            val token = Constants.AUTHORIZATION_TOKEN.ifEmpty { sessionManager.token }
+            val token = sessionManager.token
             val httpClient = OkHttpClient.Builder()
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
@@ -57,7 +57,6 @@ class RetrofitClient {
             val interceptor = HttpLoggingInterceptor { message -> Timber.e(message) }
             interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.HEADERS }
             interceptor.apply { interceptor.level = HttpLoggingInterceptor.Level.BODY }
-            Timber.e("Authorization Token: ${Constants.AUTHORIZATION_TOKEN}")
             return interceptor
         }
     }
