@@ -48,7 +48,4 @@ class RegisterViewModel : ViewModel() {
     postalcode,city,ip,messageVerificationsLeft,languageId,billingDetails,invitedBy,incomingMessagesRestrictions,affiliateID,options,longitude,
     latitude,tokenUniqueId,credits,moderationScore,spamSuspected,faceControlApproved,profileSkin,statusText,featuredMember,mySpaceID,facebookID,
     eventsSettings)
-
-    fun signInUser(username: String, password: String): LiveData<LoginResponseModel> = repo.loginUser(username,password)
-
 }

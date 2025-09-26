@@ -74,6 +74,7 @@ import reduceImageSize
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 import java.io.File
 import java.util.Arrays
 
@@ -853,29 +854,21 @@ class MainRepo {
 
     fun getChatListSearchResult(chatPostingModel: LiveChatSearchModel): LiveData<LiveChatResponseModel> {
         val chatList = MutableLiveData<LiveChatResponseModel>()
-
-
-        RetrofitClient.instance?.api?.getChatListSearchResult(chatPostingModel)?.enqueue(object : Callback<LiveChatResponseModel>{
+        RetrofitClient.instance?.api?.getChatListSearchResult(chatPostingModel,)?.enqueue(object : Callback<LiveChatResponseModel>{
             override fun onResponse(
                 call: Call<LiveChatResponseModel>,
                 response: Response<LiveChatResponseModel>
             ) {
                 if (response.isSuccessful){
                     chatList.value=response.body()
+                }else {
+                    chatList.value = null
                 }
-
-                Log.d("TAG", "onResponse: " + response.raw().toString())
-                Log.d("TAG", "onResponse: " + response.body().toString())
-                Log.d("TAG", "onResponse: " + response.body().toString())
-                Log.d("TAG", "onResponse: " + response.errorBody()?.string())
-                Log.d("TAG", "onResponse: " + response.message()+response.code())
-                showErrorLog(Gson().toJson(response.body()))
             }
 
             override fun onFailure(call: Call<LiveChatResponseModel>, t: Throwable) {
-                Log.d("TAG", "onFailure: " + t.message)
+                chatList.value = null
             }
-
         })
 
         return chatList

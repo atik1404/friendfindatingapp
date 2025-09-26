@@ -140,7 +140,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(), PurchasesUpdatedLi
             }
             thread.start()
         }
-        Constants.AUTHORIZATION_TOKEN = sessionManager.token ?: ""
     }
 
 

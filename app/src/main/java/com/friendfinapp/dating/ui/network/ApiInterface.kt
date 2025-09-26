@@ -234,7 +234,9 @@ interface ApiInterface {
 
     @POST("v1/SendMessageHistorySearch")
     @Headers(*["Content-Type: application/json;charset=utf-8", "Accept: application/json;charset=utf-8"])
-    fun getChatListSearchResult(@Body body: LiveChatSearchModel): Call<LiveChatResponseModel>
+    fun getChatListSearchResult(
+        @Body body: LiveChatSearchModel,
+    ): Call<LiveChatResponseModel>
 
     @POST("v1/Search")
     @Headers(*["Content-Type: application/json;charset=utf-8", "Accept: application/json;charset=utf-8"])

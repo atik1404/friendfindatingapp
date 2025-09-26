@@ -976,23 +976,25 @@ messageViewModel.getMessageWithAudio(
         }
     }
 
-    fun getChatListSearchResult(searchKey : String) {
+    fun getChatListSearchResult(searchKey: String) {
         val from = fromUserName.trim()
         val to = toUserName.trim()
         val params = LiveChatSearchModel(from.trim(), to.trim(), searchKey)
-        if(searchKey.isEmpty()){
+        if (searchKey.isEmpty()) {
             return
         }
 
-        //customDialog?.show()
+        customDialog?.show()
 
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
                 // Do something
                 viewModel.getChatListSearchResult(params).observe(this@ChatRoomActivity) {
-
-                    //customDialog?.dismiss()
-
+                    customDialog?.dismiss()
+                    if(it == null){
+                        showToastMessage("Something went wrong, please try again.")
+                        return@observe
+                    }
                     it.isBlocked.let { block ->
                         if (block!!) {
                             binding.sendViewMessageLayout.visibility = View.GONE
@@ -1002,18 +1004,20 @@ messageViewModel.getMessageWithAudio(
                             binding.blockedView.visibility = View.GONE
                         }
                     }
-                    if(it.data?.isEmpty() == true){
+                    if (it.data?.isEmpty() == true) {
                         showToastMessage("No result found")
                         return@observe
                     }
                     binding.searchResultTv.text = "Search result showing for $searchKey"
                     binding.searchResultTv.isVisible = isMessageSearch
                     it.data.let {
-
                         adapter.addData(emptyList())
                         adapter.addData(getModifiedChatList(it!!))
                         Timber.e("modifiedList3: ${getModifiedChatList(it!!).map { it.effectiveDate }}")
-                    } } } }
+                    }
+                }
+            }
+        }
     }
 
     fun getChatList() {
@@ -1084,7 +1088,6 @@ messageViewModel.getMessageWithAudio(
                         if(!isMessageSearch){
                             customDialog?.dismiss()
                             adapter.addDataNewItem(getModifiedChatList(it!!))
-                            Timber.e("modifiedList2: ${getModifiedChatList(it!!).map { it.effectiveDate }}")
 
                             if (it.isNotEmpty()) {
                                 if (Constants.fromUserName == it[it.size - 1].fromUsername.toString() && Constants.textMessage == it[it.size - 1].body.toString()

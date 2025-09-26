@@ -741,23 +741,13 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(), AdapterView.OnItem
                     it.data?.city,
                     it.data?.birthdate
                 )
-                signIn(userName, password, it.message.toString())
+                Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this@SignUpActivity, SaveProfileActivity::class.java))
+                finish()
             } else {
                 Toast.makeText(this, "" + it.message, Toast.LENGTH_SHORT).show()
             }
         })
-    }
-
-    private fun signIn(username: String, password: String, message: String) {
-        viewModel.signInUser(username, password).observe(this) {
-            if (it.count == 1) {
-                Constants.AUTHORIZATION_TOKEN = it.data?.token ?: ""
-                sessionManager.token = it.data?.token
-            }
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-            startActivity(Intent(this@SignUpActivity, SaveProfileActivity::class.java))
-            finish()
-        }
     }
 
     fun getLocalIpAddress(): String? {
