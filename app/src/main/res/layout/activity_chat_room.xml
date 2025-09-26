@@ -23,23 +23,25 @@
             android:id="@+id/searchResultTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_semibold"
-            app:drawableEndCompat="@drawable/ic_close"
-            android:drawablePadding="@dimen/_10sdp"
             android:layout_margin="@dimen/_8sdp"
-            android:visibility="gone"
-            tools:text="Search result showing of hi"
-            android:textColor="@color/white"
-            android:paddingVertical="@dimen/_5sdp"
-            android:paddingHorizontal="@dimen/_15sdp"
             android:background="@drawable/rounded_bg_btn_new"
+            android:backgroundTint="@color/colorTextGray"
+            android:drawablePadding="@dimen/_10sdp"
+            android:fontFamily="@font/poppins_semibold"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:textColor="@color/white"
             android:textSize="@dimen/_10ssp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone"
+            app:drawableEndCompat="@drawable/ic_close"
+            app:drawableTint="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/topActionBar">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/topActionBar"
+            tools:text="Search result showing of hi"
+            tools:visibility="visible">
 
         </TextView>
-
 
 
         <ImageView
@@ -118,9 +120,9 @@
             android:layout_marginHorizontal="@dimen/_10sdp"
             android:fontFamily="@font/poppins"
             android:text="Report User"
-            android:visibility="gone"
             android:textColor="@color/Red"
             android:textSize="@dimen/_10ssp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/imageBack"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imageBack">
@@ -130,13 +132,13 @@
             android:id="@+id/menuIv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/delteConfirmText"
-            android:src="@drawable/ic_more_vertical"
             android:background="@color/transparent"
+            android:contentDescription="@string/delteConfirmText"
             android:padding="@dimen/_8sdp"
+            android:src="@drawable/ic_more_vertical"
             app:layout_constraintBottom_toBottomOf="@+id/imageBack"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageBack"/>
+            app:layout_constraintTop_toTopOf="@+id/imageBack" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
