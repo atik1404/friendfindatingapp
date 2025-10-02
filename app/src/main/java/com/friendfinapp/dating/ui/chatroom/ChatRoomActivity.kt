@@ -71,7 +71,6 @@ import com.friendfinapp.dating.application.BaseActivity
 import com.friendfinapp.dating.cropper.CropImage
 import com.friendfinapp.dating.cropper.CropImageView
 import com.friendfinapp.dating.databinding.ActivityChatRoomBinding
-import com.friendfinapp.dating.databinding.DialogSearchMessageBinding
 import com.friendfinapp.dating.helper.Constants
 import com.friendfinapp.dating.helper.Constants.finalRecordTime
 import com.friendfinapp.dating.helper.Constants.hidden
@@ -993,31 +992,6 @@ messageViewModel.getMessageWithAudio(
             }
         })
 
-    }
-
-
-    private fun showSearchMessageDialog() {
-        val dialogBinding = DialogSearchMessageBinding.inflate(layoutInflater)
-
-        val dialog = this.showViewAlertDialog(
-            dialogBinding.root,
-            null,
-            R.style.AlertDialogTransparentBg,
-            true
-        )
-
-        dialogBinding.apply {
-            searchBtn.setOnClickListener {
-                val searchKey = searchEt.text.toString()
-                if(searchKey.isEmpty()){
-                    return@setOnClickListener
-                }
-                getChatListSearchResult(searchKey)
-                isMessageSearch = true
-                dialog.dismiss()
-            }
-            closeBtn.setOnClickListener {  dialog.dismiss() }
-        }
     }
 
     fun getChatListSearchResult(searchKey: String) {
