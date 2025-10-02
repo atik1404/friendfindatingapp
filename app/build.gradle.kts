@@ -14,7 +14,7 @@ android {
         applicationId = "com.friendfinapp.dating"
         minSdk = 24
         targetSdk = 36
-        versionCode = 144
+        versionCode = 145
         versionName = "1.0.144"
 
         multiDexEnabled = true
