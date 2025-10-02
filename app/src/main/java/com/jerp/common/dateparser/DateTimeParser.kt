@@ -124,14 +124,9 @@ object DateTimeParser {
                     // sat, sun, mon…
                     DateCed.Factory.parse(date).day
                 }
-                dayDiff in 6..180 -> {
-                    // EEE, MMM dd  -> "Sat, Sep 14"
-                    val fmt = DateCed.Factory.parse(date).format("EEE, MMM dd")
-                    fmt
-                }
                 else -> {
                     // MMM dd, yyyy -> "Sep 14, 2025"
-                    val fmt = DateCed.Factory.parse(date).format("MMM dd, yyyy")
+                    val fmt = DateCed.Factory.parse(date).format("MMMM dd, yyyy")
                     fmt
                 }
             }

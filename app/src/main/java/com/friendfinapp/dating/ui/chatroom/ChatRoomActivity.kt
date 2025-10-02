@@ -27,6 +27,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
 import android.view.GestureDetector
+import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewAnimationUtils
@@ -37,6 +38,9 @@ import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
@@ -50,6 +54,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
+import androidx.core.widget.doAfterTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -95,6 +100,7 @@ import com.jerp.common.dateparser.DateTimeParser
 import com.jerp.common.dateparser.parseUtcToLocalCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -118,6 +124,9 @@ import kotlin.math.roundToInt
 class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetector.OnGestureListener {
 
     //animation like whats up Audio click variable
+
+    private var searchJob: Job? = null
+
 
 
     enum class UserBehaviour {
@@ -154,13 +163,13 @@ class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetecto
     private var timeFormatter: SimpleDateFormat? = null
 
     private var lastX = 0f
-    private var lastY: kotlin.Float = 0f
+    private var lastY: Float = 0f
     private var firstX = 0f
-    private var firstY: kotlin.Float = 0f
+    private var firstY: Float = 0f
 
     private val directionOffset = 0f
-    private var cancelOffset: kotlin.Float = 0f
-    private var lockOffset: kotlin.Float = 0f
+    private var cancelOffset: Float = 0f
+    private var lockOffset: Float = 0f
     private var dp = 0f
     private var isLocked = false
 
@@ -409,7 +418,7 @@ class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetecto
 
         timeFormatter = SimpleDateFormat("m:ss", Locale.getDefault())
 
-        val displayMetrics: DisplayMetrics = this.getResources().getDisplayMetrics()
+        val displayMetrics: DisplayMetrics = this.getResources().displayMetrics
         screenHeight = displayMetrics.heightPixels
         screenWidth = displayMetrics.widthPixels
 
@@ -423,20 +432,20 @@ class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetecto
         dp = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             1f,
-            this.getResources().getDisplayMetrics()
+            this.getResources().displayMetrics
         )
 
         animBlink = AnimationUtils.loadAnimation(
             this,
-            com.friendfinapp.dating.R.anim.blink
+            R.anim.blink
         )
         animJump = AnimationUtils.loadAnimation(
             this,
-            com.friendfinapp.dating.R.anim.jump
+            R.anim.jump
         )
         animJumpFast = AnimationUtils.loadAnimation(
             this,
-            com.friendfinapp.dating.R.anim.jump_fast
+            R.anim.jump_fast
         )
 
 
@@ -448,6 +457,9 @@ class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetecto
     private fun clearSearchResult(){
         isMessageSearch = false
         binding.searchResultTv.visibility = View.GONE
+        binding.searchBarLn.isVisible = false
+        binding.profileHeaderCl.isVisible = true
+        binding.searchEt.hideKeyboard()
         getChatList()
     }
 
@@ -584,6 +596,36 @@ class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetecto
         binding.menuDot.setOnClickListener {
             showPopupMenu()
         }
+
+        binding.closeBtn.setOnClickListener {
+            clearSearchResult()
+        }
+
+        binding.searchEt.onSearchTextChange()
+    }
+
+    private fun EditText.onSearchTextChange(){
+        this.doAfterTextChanged { text->
+            searchJob?.cancel()                     // cancel previous pending job
+            searchJob = lifecycleScope.launch {     // use viewLifecycleOwner.lifecycleScope in Fragment
+                delay(1_000)                        // 1s debounce
+                val query = text.toString().trim()
+                if (query.length >= 2) {            // optional: avoid tiny queries
+                    getChatListSearchResult(query)
+                    isMessageSearch = true
+                }
+            }
+        }
+    }
+
+    fun View.showKeyboard() {
+        val imm = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    fun View.hideKeyboard() {
+        val imm = context.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
 
@@ -687,10 +729,12 @@ class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetecto
                 }
 
                 R.id.menu_search -> {
-                    showSearchMessageDialog()
+                    binding.searchEt.requestFocus()
+                    binding.searchBarLn.isVisible = true
+                    binding.profileHeaderCl.isVisible = false
+                    binding.searchEt.showKeyboard()
                     true
                 }
-                // Add more menu item cases as needed
                 else -> false
             }
         }
@@ -814,7 +858,7 @@ messageViewModel.getMessageWithAudio(
     }
 
     private fun sendMessageWithImageAndText(message: String, imageUri: Uri?) {
-        var imageStream = contentResolver.openInputStream(imageUri!!)
+        contentResolver.openInputStream(imageUri!!)
         var myUserName = sessionManager.username
         var sendUserName = toUserName.trim()
         try {
@@ -845,7 +889,7 @@ messageViewModel.getMessageWithAudio(
 
     private fun sendMessageWithVideoAndText(message: String, videoUris: Uri?) {
         Log.d("TAG", "sendMessageWithVideoAndText: " + videoUris)
-        var imageStream = contentResolver.openInputStream(videoUris!!)
+        contentResolver.openInputStream(videoUris!!)
         var myUserName = sessionManager.username
         var sendUserName = toUserName.trim()
         try {
@@ -1008,7 +1052,7 @@ messageViewModel.getMessageWithAudio(
                         showToastMessage("No result found")
                         return@observe
                     }
-                    binding.searchResultTv.text = "Search result showing for $searchKey"
+                    binding.searchResultTv.text = "${it.data?.size} result showing for $searchKey"
                     binding.searchResultTv.isVisible = isMessageSearch
                     it.data.let {
                         adapter.addData(emptyList())
@@ -1166,7 +1210,7 @@ messageViewModel.getMessageWithAudio(
             val anim: Animator =
                 ViewAnimationUtils.createCircularReveal(binding.revealView, cx, cy, 0f, endRadius)
 
-            binding.revealView.setVisibility(View.VISIBLE)
+            binding.revealView.visibility = View.VISIBLE
             anim.duration = 500
             anim.start()
             hidden = false
@@ -1176,7 +1220,7 @@ messageViewModel.getMessageWithAudio(
             anim.addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
-                    binding.revealView.setVisibility(View.INVISIBLE)
+                    binding.revealView.visibility = View.INVISIBLE
                     hidden = true
                 }
             })
@@ -1187,7 +1231,7 @@ messageViewModel.getMessageWithAudio(
     }
 
     fun hideRevealView() {
-        if (binding.revealView.getVisibility() === View.VISIBLE) {
+        if (binding.revealView.visibility === View.VISIBLE) {
             showRevealView()
             hidden = true
         }
@@ -1323,7 +1367,7 @@ messageViewModel.getMessageWithAudio(
 
 
     fun convertBytesToMB(sizeInBytes: Long, decimalPlaces: Int): Double {
-        val factor = BigDecimal(10).pow(decimalPlaces * 2)
+        BigDecimal(10).pow(decimalPlaces * 2)
         val result =
             BigDecimal(sizeInBytes).divide(BigDecimal(1024 * 1024), 2, BigDecimal.ROUND_HALF_UP)
         //return result.toDouble() / factor.toDouble()
@@ -1431,7 +1475,7 @@ messageViewModel.getMessageWithAudio(
 
 
                 } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                    val exception: Exception = result.getError()
+                    val exception: Exception = result.error
                     // CustomMessage(this, exception.message!!)
                     Log.d("bur", "onActivityResult: " + exception)
                     Toast.makeText(this, "imsge uri from cache " + exception, Toast.LENGTH_SHORT)
@@ -1843,8 +1887,8 @@ messageViewModel.getMessageWithAudio(
                         -dp * 40
                     }
 
-                    binding.dustin.setTranslationX(displacement)
-                    binding.dustinCover.setTranslationX(displacement)
+                    binding.dustin.translationX = displacement
+                    binding.dustinCover.translationX = displacement
 
                     binding.dustinCover.animate().translationX(0f).rotation(-120f).setDuration(350)
                         .setInterpolator(
@@ -1855,8 +1899,8 @@ messageViewModel.getMessageWithAudio(
                         DecelerateInterpolator()
                     ).setListener(object : Animator.AnimatorListener {
                         override fun onAnimationStart(animation: Animator) {
-                            binding.dustin.setVisibility(View.VISIBLE)
-                            binding.dustinCover.setVisibility(View.VISIBLE)
+                            binding.dustin.visibility = View.VISIBLE
+                            binding.dustinCover.visibility = View.VISIBLE
                         }
 
                         override fun onAnimationEnd(animation: Animator) {}
@@ -1961,9 +2005,9 @@ messageViewModel.getMessageWithAudio(
     fun showCameraIcon(showCameraIcon: Boolean) {
         this.showCameraIcon = showCameraIcon
         if (showCameraIcon) {
-            binding.image.setVisibility(View.VISIBLE)
+            binding.image.visibility = View.VISIBLE
         } else {
-            binding.image.setVisibility(View.GONE)
+            binding.image.visibility = View.GONE
         }
     }
 
@@ -1974,9 +2018,9 @@ messageViewModel.getMessageWithAudio(
     fun showAttachmentIcon(showAttachmentIcon: Boolean) {
         this.showAttachmentIcon = showAttachmentIcon
         if (showAttachmentIcon) {
-            binding.attachFile.setVisibility(View.VISIBLE)
+            binding.attachFile.visibility = View.VISIBLE
         } else {
-            binding.attachFile.setVisibility(View.INVISIBLE)
+            binding.attachFile.visibility = View.INVISIBLE
         }
     }
 
@@ -2060,7 +2104,7 @@ messageViewModel.getMessageWithAudio(
                         // Hide the view here
 
 
-                        ChatRoomActivity.instance?.hideRevealView()
+                        instance?.hideRevealView()
 
 //                    viewToHide.visibility=View.INVISIBLE
 //                    hidden=true

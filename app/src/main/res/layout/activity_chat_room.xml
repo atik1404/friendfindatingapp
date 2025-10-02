@@ -43,103 +43,157 @@
 
         </TextView>
 
-
-        <ImageView
-            android:id="@+id/forward"
-            android:layout_width="@dimen/_35sdp"
-            android:layout_height="@dimen/_35sdp"
-            android:contentDescription="@string/todo"
-            android:padding="@dimen/_4sdp"
-            android:src="@drawable/forward"
+        <LinearLayout
+            android:id="@+id/searchBarLn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/topActionBar"
-            app:layout_constraintEnd_toStartOf="@+id/menu_dot"
-            app:layout_constraintTop_toTopOf="@+id/topActionBar"
-            app:tint="@color/black" />
-
-
-        <ImageView
-            android:id="@+id/menu_dot"
-            android:layout_width="@dimen/_35sdp"
-            android:layout_height="@dimen/_35sdp"
-            android:contentDescription="@string/todo"
-            android:padding="@dimen/_4sdp"
-            android:src="@drawable/dot"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/topActionBar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/topActionBar"
-            app:tint="@color/black" />
-
-        <ImageView
-            android:id="@+id/imageBack"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:contentDescription="@string/todo"
-            android:padding="@dimen/_4sdp"
-            android:src="@drawable/ic_round_arrow_back_ios_24"
-            app:layout_constraintBottom_toBottomOf="@+id/topActionBar"
+            android:paddingHorizontal="@dimen/_5sdp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/topActionBar"
-            app:tint="@color/black" />
+            app:layout_constraintBottom_toBottomOf="@+id/topActionBar">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/userProfileImage"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:layout_marginVertical="@dimen/_10sdp"
-            android:src="@drawable/ic_user"
-            app:civ_border_color="@color/white"
-            app:civ_border_width="1dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageBack"
-            app:layout_constraintStart_toEndOf="@+id/imageBack"
-            app:layout_constraintTop_toTopOf="@+id/imageBack" />
+            <EditText
+                android:id="@+id/searchEt"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/poppins"
+                android:background="@color/transparent"
+                android:hint="Search here..."
+                android:focusable="true"
+                android:imeOptions="actionDone"
+                android:focusableInTouchMode="true"
+                android:layout_gravity="center_vertical"
+                android:paddingVertical="@dimen/_5sdp"
+                android:drawableStart="@drawable/baseline_search_24"
+                android:inputType="text"
+                android:textSize="@dimen/_12ssp" />
 
-        <TextView
+            <TextView
+                android:id="@+id/closeBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_marginVertical="@dimen/_10sdp"
+                android:layout_gravity="center_vertical"
+                android:backgroundTint="@color/signInColor"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Cancel"
+                android:textColor="@color/black"/>
 
-            android:id="@+id/userName"
-            android:layout_width="wrap_content"
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/profileHeaderCl"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:fontFamily="@font/poppins_semibold"
-            android:text="User Name"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_14ssp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageBack"
-            app:layout_constraintStart_toEndOf="@+id/userProfileImage"
-            app:layout_constraintTop_toTopOf="@+id/imageBack">
-
-        </TextView>
-
-        <TextView
-            android:id="@+id/reportUser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:fontFamily="@font/poppins"
-            android:text="Report User"
-            android:textColor="@color/Red"
-            android:textSize="@dimen/_10ssp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/imageBack"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageBack">
-        </TextView>
+            app:layout_constraintTop_toTopOf="@+id/topActionBar"
+            app:layout_constraintBottom_toBottomOf="@+id/topActionBar">
 
-        <ImageButton
-            android:id="@+id/menuIv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/transparent"
-            android:contentDescription="@string/delteConfirmText"
-            android:padding="@dimen/_8sdp"
-            android:src="@drawable/ic_more_vertical"
-            app:layout_constraintBottom_toBottomOf="@+id/imageBack"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageBack" />
 
+            <ImageView
+                android:id="@+id/forward"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:contentDescription="@string/todo"
+                android:padding="@dimen/_4sdp"
+                android:src="@drawable/forward"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/menu_dot"
+                app:tint="@color/black" />
+
+
+            <ImageView
+                android:id="@+id/menu_dot"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:contentDescription="@string/todo"
+                android:padding="@dimen/_4sdp"
+                android:src="@drawable/dot"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:tint="@color/black" />
+
+            <ImageView
+                android:id="@+id/imageBack"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:contentDescription="@string/todo"
+                android:padding="@dimen/_4sdp"
+                android:src="@drawable/ic_round_arrow_back_ios_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:tint="@color/black" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/userProfileImage"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:layout_marginVertical="@dimen/_10sdp"
+                android:src="@drawable/ic_user"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="1dp"
+                app:layout_constraintBottom_toBottomOf="@+id/imageBack"
+                app:layout_constraintStart_toEndOf="@+id/imageBack"
+                app:layout_constraintTop_toTopOf="@+id/imageBack" />
+
+            <TextView
+
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="User Name"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14ssp"
+                app:layout_constraintBottom_toBottomOf="@+id/imageBack"
+                app:layout_constraintStart_toEndOf="@+id/userProfileImage"
+                app:layout_constraintTop_toTopOf="@+id/imageBack">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/reportUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                android:fontFamily="@font/poppins"
+                android:text="Report User"
+                android:textColor="@color/Red"
+                android:textSize="@dimen/_10ssp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/imageBack"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/imageBack">
+            </TextView>
+
+            <ImageButton
+                android:id="@+id/menuIv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:contentDescription="@string/delteConfirmText"
+                android:padding="@dimen/_8sdp"
+                android:src="@drawable/ic_more_vertical"
+                app:layout_constraintBottom_toBottomOf="@+id/imageBack"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/imageBack" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
