@@ -1026,7 +1026,7 @@ messageViewModel.getMessageWithAudio(
                         showToastMessage("No result found")
                         return@observe
                     }
-                    binding.searchResultTv.text = "${it.data?.size} result showing for $searchKey"
+                    binding.searchResultTv.text = "${it.data?.size} result(s) for $searchKey"
                     binding.searchResultTv.isVisible = isMessageSearch
                     it.data.let {
                         adapter.addData(emptyList())
