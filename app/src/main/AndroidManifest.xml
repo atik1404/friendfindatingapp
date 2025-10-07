@@ -40,10 +40,6 @@
             android:exported="false"
             android:theme="@style/Theme.FriendfinNoActionBar"/>
         <activity
-            android:name=".ui.TestActivity"
-            android:exported="false"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
             android:name=".ui.settingspersonal.PersonalSettingsActivity"
             android:exported="false"
             android:theme="@style/Theme.FriendfinNoActionBar" />
@@ -98,17 +94,7 @@
             android:screenOrientation="nosensor"
             android:theme="@style/Theme.FriendfinNoActionBar" />
         <activity
-            android:name=".alphotos.PhotosActivity"
-            android:exported="false"
-            android:screenOrientation="nosensor"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
             android:name=".ui.settings.SettingsActivity"
-            android:exported="false"
-            android:screenOrientation="nosensor"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
-            android:name=".ui.help.HelpActivity"
             android:exported="false"
             android:screenOrientation="nosensor"
             android:theme="@style/Theme.FriendfinNoActionBar" />

@@ -23,7 +23,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-
 import com.friendfinapp.dating.R
 import com.friendfinapp.dating.databinding.ActivityLandingBinding
 import com.friendfinapp.dating.helper.Constants
@@ -34,7 +33,6 @@ import com.friendfinapp.dating.helper.ProgressCustomDialog
 import com.friendfinapp.dating.helper.SessionManager
 import com.friendfinapp.dating.helper.showEventLog
 import com.friendfinapp.dating.notification.ReceivedNotifications
-import com.friendfinapp.dating.ui.TestActivity
 import com.friendfinapp.dating.ui.individualsearch.IndividualSearchActivity
 import com.friendfinapp.dating.ui.landingpage.fragments.chatfragment.ChatFragment
 import com.friendfinapp.dating.ui.landingpage.fragments.profilefragment.ProfileFragment
@@ -55,7 +53,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
-import java.util.*
+import java.util.Arrays
 
 
 class LandingActivity : AppCompatActivity() {
