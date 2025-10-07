@@ -27,18 +27,15 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
 import android.view.GestureDetector
-import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewAnimationUtils
-import android.view.Window
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
@@ -46,16 +43,10 @@ import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
-import androidx.core.view.updatePadding
 import androidx.core.widget.doAfterTextChanged
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -81,7 +72,6 @@ import com.friendfinapp.dating.helper.PermissionHelper
 import com.friendfinapp.dating.helper.ProgressCustomDialog
 import com.friendfinapp.dating.helper.SessionManager
 import com.friendfinapp.dating.helper.dateparser.DateTimeFormat
-import com.friendfinapp.dating.helper.showViewAlertDialog
 import com.friendfinapp.dating.notification.*
 import com.friendfinapp.dating.ui.chatroom.adapter.LiveChatAdapter
 import com.friendfinapp.dating.ui.chatroom.responsemodel.LiveChatPostingModel
@@ -94,9 +84,8 @@ import com.friendfinapp.dating.ui.reportanabuse.ReportAnAbuse
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.iamkamrul.dateced.DateCed
 import com.iamkamrul.dateced.TimeDifferenceUnit
-import com.iamkamrul.dateced.TimeZoneId
-import com.jerp.common.dateparser.DateTimeParser
-import com.jerp.common.dateparser.parseUtcToLocalCompat
+import com.friendfinapp.dating.helper.dateparser.DateTimeParser
+import com.friendfinapp.dating.helper.dateparser.parseUtcToLocalCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -117,7 +106,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.hypot
-import kotlin.math.roundToInt
 
 
 class ChatRoomActivity : BaseActivity<ActivityChatRoomBinding>(), GestureDetector.OnGestureListener {
