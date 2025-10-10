@@ -38,20 +38,19 @@ class RetrofitClient {
     private fun okHttpClient(): OkHttpClient {
         val sessionManager = SessionManager.get()
         val token = sessionManager.token?.ifEmpty { Constants.AUTHORIZATION_TOKEN }
-        Timber.e("AuthToken@: $token")
         val httpClient = OkHttpClient.Builder()
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(60, TimeUnit.SECONDS)
             .addInterceptor(provideLoggerInterceptor())
 
         httpClient.addInterceptor { chain ->
             val original = chain.request()
             val requestBuilder = original.newBuilder()
-                .addHeader("Accept", "application/json")
+//                .addHeader("Accept", "application/json")
 //                .addHeader("Content-Type", "application/json;charset=utf-8")
 //                .addHeader("Accept", "application/json;charset=utf-8")
-                .addHeader("Authorization", "Bearer $token")
+//                .addHeader("Authorization", "Bearer $token")
             val request = requestBuilder.build()
             chain.proceed(request)
         }

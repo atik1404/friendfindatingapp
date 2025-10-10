@@ -28,7 +28,7 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("friendfinjks")
+            storeFile = file("app_credential/friendfinjks")
             storePassword = "friendfinapp"
             keyAlias = "key0"
             keyPassword = "friendfinapp"
