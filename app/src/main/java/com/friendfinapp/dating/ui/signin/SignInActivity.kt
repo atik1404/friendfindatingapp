@@ -67,7 +67,7 @@ class SignInActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_in)
 
 
-        //setUpAds()
+        setUpAds()
         setUpView()
         setUpListener()
     }
@@ -83,22 +83,22 @@ class SignInActivity : AppCompatActivity() {
         val testDeviceIds = listOf("33BE2250B43518CCDA7DE426D04EE231")
         val configuration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
         MobileAds.setRequestConfiguration(configuration)
-        var adRequest = AdRequest.Builder().build()
-        InterstitialAd.load(
-            this,
-            getString(R.string.Interestitial_Ads_ID),
-            adRequest,
-            object : InterstitialAdLoadCallback() {
-                override fun onAdFailedToLoad(adError: LoadAdError) {
-                    Log.d("TAG", adError.message)
-                    mInterstitialAd = null
-                }
-
-                override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                    Log.d("TAG", "Ad was loaded.")
-                    mInterstitialAd = interstitialAd
-                }
-            })
+//        var adRequest = AdRequest.Builder().build()
+//        InterstitialAd.load(
+//            this,
+//            getString(R.string.Interestitial_Ads_ID),
+//            adRequest,
+//            object : InterstitialAdLoadCallback() {
+//                override fun onAdFailedToLoad(adError: LoadAdError) {
+//                    Log.d("TAG", adError.message)
+//                    mInterstitialAd = null
+//                }
+//
+//                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+//                    Log.d("TAG", "Ad was loaded.")
+//                    mInterstitialAd = interstitialAd
+//                }
+//            })
     }
 
 
@@ -119,15 +119,13 @@ class SignInActivity : AppCompatActivity() {
         binding.continueGoogle.visibility = View.VISIBLE
         binding.linearLayout.visibility = View.VISIBLE
 
-//        if (verifyInstallerId(this)) {
-//            binding.continueGoogle.visibility = View.VISIBLE
-//            binding.linearLayout.visibility = View.VISIBLE
-//        } else {
-//            binding.continueGoogle.visibility = View.INVISIBLE
-//            binding.linearLayout.visibility = View.INVISIBLE
-//        }
-
-
+        if (verifyInstallerId(this)) {
+            binding.continueGoogle.visibility = View.VISIBLE
+            binding.linearLayout.visibility = View.VISIBLE
+        } else {
+            binding.continueGoogle.visibility = View.INVISIBLE
+            binding.linearLayout.visibility = View.INVISIBLE
+        }
 
         customDialog = ProgressCustomDialog(this)
         sessionManager = SessionManager(this)
@@ -581,5 +579,10 @@ class SignInActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finishAffinity()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setUpAds()
     }
 }
