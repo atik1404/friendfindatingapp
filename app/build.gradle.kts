@@ -40,8 +40,8 @@ android {
             isMinifyEnabled = false
             signingConfig = signingConfigs.getByName("release")
             proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
     }
@@ -71,25 +71,10 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
-    implementation(libs.legacy.support.v4)
 
     // multi dex
     implementation(libs.androidx.multidex)
 
-    // ssp sdp
-    implementation(libs.sdp.android)
-    implementation(libs.ssp.android)
-
-    // lottie
-    implementation(libs.lottie)
 
     // gson
     implementation(libs.gson)
@@ -97,24 +82,14 @@ dependencies {
     // spinkit
     implementation(libs.android.spinkit)
 
-    implementation(libs.circleimageview)
 
     // retrofit
     implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-    implementation(libs.converter.scalars)
     implementation(libs.dateced)
 
     // ok http
     implementation(libs.okhttp)
-    implementation(libs.logging.interceptor)
 
-    // view model
-    implementation(libs.viewmodel)
-
-    // glide
-    implementation(libs.glide)
-    annotationProcessor(libs.compiler)
 
     // localisation
     implementation(libs.localisation)
@@ -153,7 +128,7 @@ dependencies {
     implementation(libs.exoplayer.smoothstreaming)
     implementation(libs.exoplayer.ui)
 
-    implementation(libs.volley)
+    implementation(libs.bundles.ui.helpers)
 
     // If you enabled desugaring above:
     // coreLibraryDesugaring(libs.desugar.jdk.libs)

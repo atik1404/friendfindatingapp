@@ -21,10 +21,8 @@
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 
     <application
-        android:name=".application.AppController"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-
         android:icon="@drawable/friendfin"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -35,114 +33,9 @@
         android:theme="@style/Theme.Friendfin"
         android:usesCleartextTraffic="true"
         tools:replace="android:theme">
-        <activity
-            android:name=".ui.videoplay.VideoViewPlayActivity"
-            android:exported="false"
-            android:theme="@style/Theme.FriendfinNoActionBar"/>
-        <activity
-            android:name=".ui.settingspersonal.PersonalSettingsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
-            android:name=".cropper.CropImageActivity"
-            android:theme="@style/AppThemeCrop" />
-        <activity
-            android:name=".ui.profileImageViewer.ProfileImageViewer"
-            android:exported="false"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
-            android:name=".ui.individualsearch.IndividualSearchResult"
-            android:exported="false"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
-            android:name=".ui.chatsearch.ChatSearchActivity"
-            android:exported="false"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
-            android:name=".ui.reportanabuse.ReportAnAbuse"
-            android:exported="false"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
-            android:name=".ui.individualsearch.IndividualSearchActivity"
-            android:exported="false"
-            android:screenOrientation="nosensor"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
-            android:name=".ui.chatroom.ChatRoomActivity"
-            android:exported="false"
-            android:screenOrientation="nosensor"
-            android:theme="@style/Theme.FriendfinNoActionBar">
-            <intent-filter>
-                <action android:name="ChatRoomActivity" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
         <activity
-            android:name=".ui.privacypolicy.PrivacyPolicyActivity"
-            android:exported="false"
-            android:screenOrientation="nosensor"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
-            android:name=".ui.othersprofile.OthersUsersProfileActivity"
-            android:exported="false"
-            android:screenOrientation="nosensor"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
-            android:name=".ui.uploadphoto.UploadPhotoActivity"
-            android:exported="false"
-            android:screenOrientation="nosensor"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
-            android:name=".ui.settings.SettingsActivity"
-            android:exported="false"
-            android:screenOrientation="nosensor"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
-            android:name=".ui.vipactivity.VipPremiumActivity"
-            android:exported="false"
-            android:screenOrientation="nosensor"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
-            android:name=".ui.profileactivity.ProfileActivity"
-            android:exported="false"
-            android:screenOrientation="nosensor"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-
-        <activity android:name=".ForwardMessaging.MessageForward"
-           android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity
-            android:name=".ui.saveprofile.SaveProfileActivity"
-            android:exported="false"
-            android:screenOrientation="nosensor"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
-            android:name=".ui.landingpage.LandingActivity"
-            android:exported="false"
-            android:screenOrientation="nosensor"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
-            android:name=".ui.forgetpassword.ForgetPasswordActivity"
-            android:exported="false"
-            android:screenOrientation="nosensor"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
-            android:name=".ui.signup.SignUpActivity"
-            android:exported="false"
-            android:screenOrientation="nosensor"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
-            android:name=".ui.signin.SignInActivity"
-            android:exported="false"
-            android:screenOrientation="nosensor"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
-            android:name=".ui.intro.IntroActivity"
-            android:exported="false"
-            android:screenOrientation="nosensor"
-            android:theme="@style/Theme.FriendfinNoActionBar" />
-        <activity
-            android:name=".ui.splash.SplashActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="nosensor"
             android:theme="@style/Theme.FriendfinNoActionBar">
@@ -152,9 +45,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"
@@ -172,16 +62,16 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/CHANNEL_ID" />
 
-        <service
-            android:name=".notification.ReceivedNotifications"
-            android:enabled="true"
-            android:exported="false"
-            android:permission="com.google.android.c2dm.permission.SEND">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-                <action android:name="com.google.android.c2dm.permission.RECEIVE" />
-            </intent-filter>
-        </service>
+        <!--        <service-->
+        <!--            android:name=".notification.ReceivedNotifications"-->
+        <!--            android:enabled="true"-->
+        <!--            android:exported="false"-->
+        <!--            android:permission="com.google.android.c2dm.permission.SEND">-->
+        <!--            <intent-filter>-->
+        <!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
+        <!--                <action android:name="com.google.android.c2dm.permission.RECEIVE" />-->
+        <!--            </intent-filter>-->
+        <!--        </service>-->
 
         <provider
             android:name="androidx.core.content.FileProvider"
