@@ -8,7 +8,6 @@
 
     <item
         android:id="@+id/nav_livechat"
-        android:icon="@drawable/ic_pesan"
         android:title="@string/livechat" />
 
 <!--    <item-->
@@ -17,7 +16,6 @@
 <!--        android:title="@string/workout" />-->
     <item
         android:id="@+id/nav_profile"
-        android:icon="@drawable/ic_profil"
         android:title="@string/about" />
 
 </menu>

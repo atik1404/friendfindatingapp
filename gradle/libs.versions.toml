@@ -11,7 +11,6 @@ googleServices = "4.4.4"
 
 billing = "8.0.0"
 
-
 androidxComposeActivity = "1.11.0"
 androidxComposeBom = "2025.10.00"
 runtimeComposeVersion = "2.6.0-beta01"
@@ -50,7 +49,7 @@ coil = "2.7.0"
 circleImageViewVersion = "3.1.0"
 androidImageCropper = "4.6.0"
 
-hiltVersion = "2.57.1"
+hiltVersion = "2.57.2"
 navigationVersion = "2.9.5"
 timberVersion = "5.0.1"
 viewStateLayoutVersion = "1.1.1"
@@ -116,7 +115,7 @@ androidx-livedata = { group = "androidx.lifecycle", name = "lifecycle-livedata-k
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleVersion" }
 androidx-lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycleVersion" }
 lifecycle-extensions = { group = "android.arch.lifecycle", name = "extensions", version.ref = "extensions_version" }
-
+androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleVersion" }
 androidx-preference = { group = "androidx.preference", name = "preference", version.ref = "preferenceVersion" }
 androidx-swipe-refresh = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swipeLayoutVersion" }
 
@@ -256,20 +255,13 @@ lifecycle = [
     "androidx-livedata",
     "androidx-lifecycle-runtime",
     "androidx-lifecycle-service",
-    "lifecycle-extensions"
-]
-
-# ---- View Navigation (non-Compose) ----
-navigation = [
-    "navigation-fragment",
-    "navigation-ui",
-    "hilt-navigation"
+    "lifecycle-extensions",
+    "androidx-lifecycle-runtime-compose"
 ]
 
 # ---- DI ----
 di = [
     "hilt-android",
-    "hilt-compiler",
     "javax-inject"
 ]
 
@@ -294,7 +286,6 @@ room = [
     "room-ktx",
     "room-runtime",
     "room-common",
-    "room-compiler",
 ]
 
 # ---- Images / Media widgets ----
@@ -308,7 +299,6 @@ images = [
 
 # ---- Firebase ----
 firebase = [
-    "firebase-bom",
     "firebase-messaging",
     "firebase-analytics",
     "firebase-crashlytics",
@@ -376,10 +366,28 @@ testing = [
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebasecrashlyticsplugin" }
-google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltVersion" }
+
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebasecrashlyticsplugin" }
+firebase-perf-plugin = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerfplugin" }
+
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+
+
+android-library-compose-convention-plugin = { id = "android.library.compose", version = "unspecified" }
+android-compose-convention-plugin = { id = "android.compose.application", version = "unspecified" }
+android-room = { id = "android.room", version = "unspecified" }
+android-core-application = { id = "android.application", version = "unspecified" }
+android-features = { id = "android.features", version = "unspecified" }
+android-firebase = { id = "android.firebase", version = "unspecified" }
+android-hilt = { id = "android.hilt", version = "unspecified" }
+android-core-library = { id = "android.library", version = "unspecified" }

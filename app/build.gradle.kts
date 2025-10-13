@@ -1,34 +1,33 @@
+import com.friendfinapp.AppConfig
+
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
+    alias(libs.plugins.android.core.application)
+    alias(libs.plugins.android.compose.convention.plugin)
+    alias(libs.plugins.android.hilt)
+    alias(libs.plugins.android.firebase)
+    alias(libs.plugins.firebase.perf.plugin)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.friendfinapp.dating"
-
-    compileSdk = 36
+    namespace = AppConfig.applicationId
+    compileSdk = AppConfig.compileSdkVersion
 
     defaultConfig {
-        applicationId = "com.friendfinapp.dating"
-        minSdk = 24
-        targetSdk = 36
-        versionCode = 145
-        versionName = "1.0.144"
+        applicationId = AppConfig.applicationId
+        minSdk = AppConfig.minimumSdkVersion
+        targetSdk = AppConfig.targetSdkVersion
+        versionCode = AppConfig.versionCode
+        versionName = AppConfig.versionName
+        testInstrumentationRunner = AppConfig.testInstrumentationRunner
 
         multiDexEnabled = true
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     signingConfigs {
         create("release") {
-            storeFile = file("friendfinjks")
+            storeFile = file("app_credential/friendfinjks")
             storePassword = "friendfinapp"
             keyAlias = "key0"
             keyPassword = "friendfinapp"
@@ -36,8 +35,17 @@ android {
     }
 
     buildTypes {
+        debug {
+            signingConfig = signingConfigs.getByName("debug")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -49,7 +57,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-        // coreLibraryDesugaringEnabled = true // if you use desugaring, uncomment and add dependency
+    }
+    buildFeatures {
+        compose = true
     }
 
     buildFeatures {
@@ -58,12 +68,13 @@ android {
         buildConfig = true
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.3.2"
     }
-
-    lint {
-        checkReleaseBuilds = false
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 }
 

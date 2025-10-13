@@ -1,9 +1,0 @@
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item android:drawable="@drawable/circle_bg" />
-
-    <item
-        android:drawable="@drawable/camera_svg_file"
-        android:gravity="center" />
-
-</layer-list>

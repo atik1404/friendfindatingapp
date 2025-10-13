@@ -1,14 +1,13 @@
+@file:Suppress("UnstableApiUsage")
+
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
-        google {
-            content {
-                includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
-                includeGroupByRegex("androidx.*")
-            }
-        }
+        google()
         mavenCentral()
         gradlePluginPortal()
+        maven("https://oss.jfrog.org/libs-snapshot")
+        maven("https://www.jitpack.io")
     }
 }
 
@@ -17,9 +16,13 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven(url = "https://jitpack.io")
+        gradlePluginPortal()
+        maven("https://www.jitpack.io")
+        maven("https://oss.jfrog.org/libs-snapshot")
     }
 }
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "friendfin"
 include(":app")
