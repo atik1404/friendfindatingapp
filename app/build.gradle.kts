@@ -79,6 +79,17 @@ android {
 }
 
 dependencies {
+    with(projects){
+        implementation(core.di)
+        implementation(core.domain)
+        implementation(core.model.entity)
+        implementation(core.sharedpref)
+
+        implementation(core.common)
+        implementation(core.designSystem)
+        implementation(core.ui)
+    }
+
     implementation(libs.timber)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

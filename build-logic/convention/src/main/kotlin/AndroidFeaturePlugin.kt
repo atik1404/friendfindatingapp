@@ -26,15 +26,15 @@ class AndroidFeaturePlugin : Plugin<Project> {
             }
 
             dependencies {
-//                add("implementation", project(":core:di"))
-//                add("implementation", project(":core:domain"))
-//                add("implementation", project(":core:model:entity"))
-//                add("implementation", project(":library:sharedpref"))
-//
-//                add("implementation", project(":core:common"))
-//                add("implementation", project(":core:design-system"))
-//                add("implementation", project(":core:ui"))
-//
+                add("implementation", project(":core:di"))
+                add("implementation", project(":core:domain"))
+                add("implementation", project(":core:model:entity"))
+                add("implementation", project(":core:sharedpref"))
+
+                add("implementation", project(":core:common"))
+                add("implementation", project(":core:design-system"))
+                add("implementation", project(":core:ui"))
+
                 add("implementation", libs.findBundle("core.ui").get())
                 add("implementation", libs.findBundle("lifecycle").get())
 

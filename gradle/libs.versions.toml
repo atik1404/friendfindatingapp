@@ -349,10 +349,6 @@ debug-tools = [
 
 # ---- UI helpers ----
 ui-helpers = [
-    "date-picker",
-    "dot-indicator",
-    "view-state-layout",
-    "android-spinkit",
     "sdp",
     "ssp"
 ]

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="application_name">Intercity Seller</string>
+
+    <!--    String resource naming convention-->
+    <!--    https://github.com/leapfrogtechnology/android-guidelines/blob/master/ResourcesGuidelines.md-->
+
+    <!--    Prefix	        Description-->
+    <!--    error_	        Used for error messages-->
+    <!--    title_	        Used for dialog titles-->
+    <!--    action_	        Used for option menu actions-->
+    <!--    msg_	        Used for generic message such as in a dialog-->
+    <!--    label_	        Used for activity labels-->
+    <!--    button_	        Used for button text-->
+    <!--    hint_	        Used for hint-->
+    <!--    desc_	        Used for image descriptions-->
+    <!--    heading_        Used for heading-->
+</resources>

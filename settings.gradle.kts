@@ -26,3 +26,15 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "friendfin"
 include(":app")
+
+include(":core:cache")
+include(":core:data")
+include (":core:di")
+include(":core:domain")
+include(":core:common")
+include(":core:design-system")
+include(":core:ui")
+include(":core:sharedpref")
+
+include(":core:model:apiresponse")
+include(":core:model:entity")
