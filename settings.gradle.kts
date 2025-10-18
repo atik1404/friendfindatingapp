@@ -1,5 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
+
 pluginManagement {
     includeBuild("build-logic")
     repositories {
@@ -38,3 +39,5 @@ include(":core:sharedpref")
 
 include(":core:model:apiresponse")
 include(":core:model:entity")
+
+include(":feature:auth:splash-screen")

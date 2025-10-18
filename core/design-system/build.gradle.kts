@@ -1,14 +1,9 @@
 plugins {
-    alias(libs.plugins.android.core.library)
-    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.android.library.compose.convention.plugin)
 }
 
 android {
     namespace = "com.friend.designsystem"
-
-    buildFeatures {
-        viewBinding = true
-    }
 
     sourceSets.getByName("main") {
         res.srcDir("src/main/res/vector-icon")

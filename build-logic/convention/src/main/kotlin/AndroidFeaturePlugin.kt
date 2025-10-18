@@ -1,7 +1,9 @@
 
+import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import com.friendfinapp.AppConfig
 import com.friendfinapp.libs
 import com.android.build.gradle.LibraryExtension
+import com.friendfinapp.configureKSP
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -13,16 +15,18 @@ class AndroidFeaturePlugin : Plugin<Project> {
         with(target) {
             pluginManager.apply {
                 apply("android.library")
+                apply("android.library.compose")
                 apply("android.hilt")
-                apply("android.navigation")
+                apply("org.jetbrains.kotlin.plugin.compose")
             }
             extensions.configure<LibraryExtension> {
                 defaultConfig {
                     testInstrumentationRunner = AppConfig.testInstrumentationRunner
                 }
-                buildFeatures {
-                    viewBinding = true
-                }
+            }
+
+            extensions.configure<LibraryAndroidComponentsExtension> {
+                configureKSP(this)
             }
 
             dependencies {
@@ -39,9 +43,8 @@ class AndroidFeaturePlugin : Plugin<Project> {
                 add("implementation", libs.findBundle("lifecycle").get())
 
                 add("implementation", libs.findBundle("compose.core").get())
-                add("implementation", libs.findBundle("compose.tooling").get())
+                add("debugImplementation", libs.findBundle("compose.tooling").get())
 
-                add("implementation", libs.findLibrary("view.state.layout").get())
                 add("implementation", libs.findLibrary("dateced").get())
                 add("implementation", libs.findLibrary("timber").get())
                 add("implementation", libs.findLibrary("gson").get())

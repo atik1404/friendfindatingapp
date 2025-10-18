@@ -14,7 +14,7 @@
 #-----------------------------------
 -keep class co.jatri.domain.** { *; }
 -keep class co.jatri.domain.roomentity.** { *; }
--keep class com.jatri.entity.** { *; }
+-keep class com.friendfinapp.entity.** { *; }
 -keep class co.jatri.apiresponse.** { *; }
 
 #-----------------------------------

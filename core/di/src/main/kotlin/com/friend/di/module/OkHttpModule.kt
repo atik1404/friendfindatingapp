@@ -16,7 +16,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object OkHttpModule {
-
     @Provides
     @Singleton
     fun provideLoggerInterceptor(): HttpLoggingInterceptor {
@@ -31,7 +30,7 @@ object OkHttpModule {
     fun provideOkHttpClient(
         loggerInterceptor: HttpLoggingInterceptor,
         helper: SharedPrefHelper,
-        refreshToken: AuthenticationRefreshToken
+        //refreshToken: AuthenticationRefreshToken
     ): OkHttpClient {
         val timeOut = 30
         val httpClient = OkHttpClient().newBuilder()
@@ -39,7 +38,7 @@ object OkHttpModule {
             .readTimeout(timeOut.toLong(), TimeUnit.SECONDS)
             .writeTimeout(timeOut.toLong(), TimeUnit.SECONDS)
 
-        httpClient.authenticator(refreshToken)
+        //httpClient.authenticator(refreshToken)
         httpClient.addInterceptor(loggerInterceptor)
         httpClient.addInterceptor { chain ->
             val original = chain.request()

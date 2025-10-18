@@ -3,7 +3,6 @@ package com.friend.data.apiservice
 
 import com.friend.di.authrefresh.AuthRefreshApiService
 import com.friend.di.authrefresh.AuthRefreshServiceHolder
-import com.friend.di.qualifier.CredentialBaseUrl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

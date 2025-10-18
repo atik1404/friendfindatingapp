@@ -58,18 +58,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    buildFeatures {
-        compose = true
-    }
 
     buildFeatures {
-        viewBinding = true
-        dataBinding = true
+        compose = true
         buildConfig = true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.2"
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
     packaging {
         resources {
@@ -79,79 +75,40 @@ android {
 }
 
 dependencies {
-    with(projects){
-        implementation(core.di)
-        implementation(core.domain)
-        implementation(core.model.entity)
-        implementation(core.sharedpref)
+    with(projects.core){
+        implementation(di)
+        implementation(domain)
+        implementation(model.entity)
+        implementation(sharedpref)
 
-        implementation(core.common)
-        implementation(core.designSystem)
-        implementation(core.ui)
+        implementation(common)
+        implementation(designSystem)
+        implementation(ui)
     }
 
-    implementation(libs.timber)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
+    with(projects.feature){
+        implementation(auth.splashScreen)
+    }
 
-    // multi dex
-    implementation(libs.androidx.multidex)
+    with(libs){
+        implementation(androidx.core.ktx)
+        implementation(androidx.appcompat)
 
+        implementation(bundles.compose.core)
+        implementation(bundles.compose.navigation)
+        implementation(bundles.androidx.navigation.dependencies)
+        implementation(libs.kotlinx.serialization.core)
 
-    // gson
-    implementation(libs.gson)
+        debugImplementation(leakcanary)
+        implementation(timber)
 
-    // spinkit
-    implementation(libs.android.spinkit)
+        implementation(platform(firebase.bom))
+        implementation(firebase.analytics)
+        implementation(firebase.crashlytics)
 
+        testImplementation(test.junit)
+        androidTestImplementation(test.extjunit)
+        androidTestImplementation(test.espresso)
+    }
 
-    // retrofit
-    implementation(libs.retrofit)
-    implementation(libs.dateced)
-
-    // ok http
-    implementation(libs.okhttp)
-
-
-    // localisation
-    implementation(libs.localisation)
-
-    // permission
-    implementation(libs.dexter)
-
-    // billing
-    implementation(libs.billing)
-
-    // admob
-    implementation(libs.play.services.ads)
-
-    // google auth
-    implementation(libs.play.services.auth)
-
-    // Firebase BoM + libs
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.messaging)
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.crashlytics)
-
-    implementation(libs.photoview)
-
-    implementation(libs.play.services.safetynet)
-    implementation(libs.play.services.recaptcha)
-
-    // image cropper
-    implementation(libs.android.image.cropper)
-
-    // exoplayer
-    implementation(libs.exoplayer)
-    implementation(libs.exoplayer.core)
-    implementation(libs.exoplayer.dash)
-    implementation(libs.exoplayer.hls)
-    implementation(libs.exoplayer.smoothstreaming)
-    implementation(libs.exoplayer.ui)
-
-    implementation(libs.bundles.ui.helpers)
-
-    // If you enabled desugaring above:
-    // coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

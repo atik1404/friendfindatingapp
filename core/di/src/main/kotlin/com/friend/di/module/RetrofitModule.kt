@@ -3,7 +3,6 @@ package com.friend.di.module
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.friend.di.qualifier.AppBaseUrl
-import com.friend.di.qualifier.CredentialBaseUrl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,22 +18,13 @@ import javax.inject.Singleton
 object RetrofitModule {
     @Provides
     @Singleton
-    @CredentialBaseUrl
-    @JvmStatic
-    fun provideRetrofitCredential(@CredentialBaseUrl baseUrl: String, okHttpClient: OkHttpClient, factory: GsonConverterFactory): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .client(okHttpClient)
-            .addConverterFactory(factory)
-            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-            .build()
-    }
-
-    @Provides
-    @Singleton
     @AppBaseUrl
     @JvmStatic
-    fun provideRetrofit(@AppBaseUrl baseUrl: String, okHttpClient: OkHttpClient, factory: GsonConverterFactory): Retrofit {
+    fun provideRetrofit(
+        @AppBaseUrl baseUrl: String,
+        okHttpClient: OkHttpClient,
+        factory: GsonConverterFactory
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(baseUrl)
             .client(okHttpClient)
