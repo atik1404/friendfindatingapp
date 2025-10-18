@@ -11,4 +11,6 @@ dependencies {
     implementation(libs.bundles.compose.core)
     implementation(libs.androidx.compose.materialicon)
     implementation(libs.bundles.compose.tooling)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.compose.material3)
 }

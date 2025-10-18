@@ -2,25 +2,24 @@ package com.friend.login
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.friend.designsystem.theme.backgroundColors
-import com.friend.ui.components.AppButtonVariant
-import com.friend.ui.components.AppFilledButton
+import com.friend.designsystem.spacing.SpacingToken
+import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppScaffold
+import com.friend.ui.components.AppTextField
 import com.friend.ui.components.LoadLocalImage
 import com.friend.designsystem.R as Res
 
@@ -32,7 +31,7 @@ fun LoginScreen() {
     ) { padding ->
         Column(
             modifier = Modifier
-                .padding(padding),
+                .padding(SpacingToken.medium),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
@@ -44,11 +43,38 @@ fun LoginScreen() {
                 contentScale = ContentScale.FillHeight
             )
 
-            AppFilledButton(
+            AppTextField(
+                value = "",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
+                label = "Email",
+                placeholder = "Enter your email",
+                onValueChange = {},
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next
+                ),
+            )
+
+            AppTextField(
+                isPassword = true,
+                value = "",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp),
+                label = "Password",
+                placeholder = "Enter your Password",
+                onValueChange = {},
+            )
+
+            Spacer(modifier = Modifier.height(SpacingToken.large))
+
+            AppElevatedButton(
                 modifier = Modifier.fillMaxWidth(),
-                buttonText = "Login with Friend",
-                onClick = { /* TODO: Handle login action */ },
-                variant = AppButtonVariant.Primary
+                text = "Login",
+                onClick = {
+
+                },
             )
         }
     }
