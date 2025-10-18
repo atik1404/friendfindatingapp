@@ -41,3 +41,4 @@ include(":core:model:apiresponse")
 include(":core:model:entity")
 
 include(":feature:auth:splash-screen")
+include(":feature:auth:login")

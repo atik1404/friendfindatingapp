@@ -5,7 +5,10 @@ import kotlinx.serialization.Serializable
 
 sealed interface AppScreen : NavKey
 
-sealed interface Main : AppScreen {
+sealed interface AuthScreens : AppScreen {
     @Serializable
-    object SplashScreen : AppScreen
+    object SplashNavScreen : AppScreen
+
+    @Serializable
+    object LoginNavScreen : AppScreen
 }

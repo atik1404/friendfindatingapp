@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.friend.splash"
+    namespace = "com.friend.login"
 }
 
 dependencies {

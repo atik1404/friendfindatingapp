@@ -88,6 +88,7 @@ dependencies {
 
     with(projects.feature){
         implementation(auth.splashScreen)
+        implementation(auth.login)
     }
 
     with(libs){

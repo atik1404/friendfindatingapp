@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="application_name">Intercity Seller</string>
+    <string name="application_name">Dating</string>
+
+    <string name="AdmobAppId">ca-app-pub-3432824199077306~5758884091</string>
+    <string name="BannerAdsUnitId">ca-app-pub-3432824199077306/3324531097</string>
+    <string name="Interestitial_Ads_ID">ca-app-pub-3432824199077306/96983677501234</string>
+    <string name="AppOpenAdId">ca-app-pub-3432824199077306/6994471618</string>
+
+    <string name="CHANNEL_ID">com.friendfinapp.dating</string>
+    <string name="fcmlink">https://fcm.googleapis.com</string>
+
+
+    <string name="msg_image_content_description">Image content description</string>
+    <string name="msg_dating_app">The Dating App</string>
 
     <!--    String resource naming convention-->
     <!--    https://github.com/leapfrogtechnology/android-guidelines/blob/master/ResourcesGuidelines.md-->

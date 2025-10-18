@@ -15,7 +15,7 @@ import androidx.navigation3.ui.NavDisplay
 
 @Composable
 fun AppNav() {
-    val backStack = rememberNavBackStack(Main.SplashScreen).toMutableStateList()
+    val backStack = rememberNavBackStack(AuthScreens.SplashNavScreen).toMutableStateList()
     val navResults = remember { NavResultManager() }
 
     CompositionLocalProvider(
@@ -53,7 +53,7 @@ fun AppNav() {
                     )
             },
             entryProvider = entryProvider {
-                MainNavGraph.register(backStack, this)
+                AuthNavGraph.register(backStack, this)
             }
         )
     }

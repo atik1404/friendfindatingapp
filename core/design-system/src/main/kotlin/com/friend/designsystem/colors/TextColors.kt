@@ -14,6 +14,8 @@ data class TextColors(
     val warning: Color,          // warning text
     val error: Color,            // error text
     val link: Color,             // hyperlinks
+    val white: Color,             // hyperlinks
+    val black: Color,             // hyperlinks
 )
 
 val LocalTextColors = staticCompositionLocalOf {
@@ -25,7 +27,9 @@ val LocalTextColors = staticCompositionLocalOf {
         success = ColorPalette.Green500,
         warning = ColorPalette.Yellow500,
         error = ColorPalette.Red600,
-        link = ColorPalette.Blue500
+        link = ColorPalette.Blue500,
+        white = Color.White,
+        black = Color.Black,
     )
 }
 
@@ -37,7 +41,9 @@ fun textColorsForLight() = TextColors(
     success = ColorPalette.Green500,
     warning = ColorPalette.Yellow700,
     error = ColorPalette.Red700,
-    link = Brand.Primary
+    link = Brand.Primary,
+    white = Color.White,
+    black = Color.Black,
 )
 
 fun textColorsForDark() = TextColors(
@@ -48,5 +54,7 @@ fun textColorsForDark() = TextColors(
     success = ColorPalette.Green300,
     warning = ColorPalette.Yellow300,
     error = ColorPalette.Red300,
-    link = Brand.Primary
+    link = Brand.Primary,
+    white = Color.White,
+    black = Color.Black,
 )

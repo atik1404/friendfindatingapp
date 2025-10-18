@@ -1,17 +1,20 @@
 package com.friend.designsystem.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import com.friend.designsystem.colors.AppButtonColors
 import com.friend.designsystem.colors.BackgroundColors
 import com.friend.designsystem.colors.ColorPalette
 import com.friend.designsystem.colors.DividerColors
 import com.friend.designsystem.colors.IconColors
 import com.friend.designsystem.colors.LocalBackgroundColors
+import com.friend.designsystem.colors.LocalButtonColors
 import com.friend.designsystem.colors.LocalDividerColors
 import com.friend.designsystem.colors.LocalIconColors
 import com.friend.designsystem.colors.LocalStrokeColors
@@ -22,6 +25,8 @@ import com.friend.designsystem.colors.SurfaceColors
 import com.friend.designsystem.colors.TextColors
 import com.friend.designsystem.colors.backgroundColorsForDark
 import com.friend.designsystem.colors.backgroundColorsForLight
+import com.friend.designsystem.colors.buttonColorsForDark
+import com.friend.designsystem.colors.buttonColorsForLight
 import com.friend.designsystem.colors.dividerColorsForDark
 import com.friend.designsystem.colors.dividerColorsForLight
 import com.friend.designsystem.colors.iconsColorsForDark
@@ -127,7 +132,6 @@ val DarkColors = darkColorScheme(
 
     outline = ColorPalette.Gray600,
     outlineVariant = ColorPalette.Gray700,
-    //scrim = Color(0x99000000),
 
     surfaceBright = ColorPalette.Gray900,
     surfaceDim = ColorPalette.Gray950,
@@ -147,6 +151,7 @@ fun AppTheme(
     val colors = if (darkTheme) DarkColors else LightColors
 
     val textColors = if (darkTheme) textColorsForDark() else textColorsForLight()
+    val buttonColors = if (darkTheme) buttonColorsForDark() else buttonColorsForLight()
     val backgroundColors = if (darkTheme) backgroundColorsForDark() else backgroundColorsForLight()
     val dividerColors = if (darkTheme) dividerColorsForDark() else dividerColorsForLight()
     val strokeColors = if (darkTheme) strokesColorsForDark() else strokesColorsForLight()
@@ -160,6 +165,7 @@ fun AppTheme(
         LocalStrokeColors provides strokeColors,
         LocalSurfaceColors provides surfaceColors,
         LocalIconColors provides iconColors,
+        LocalButtonColors provides buttonColors,
     ) {
         MaterialTheme(
             colorScheme = colors,
@@ -186,3 +192,6 @@ val MaterialTheme.surfaceColors: SurfaceColors
 
 val MaterialTheme.iconColors: IconColors
     @Composable get() = LocalIconColors.current
+
+val MaterialTheme.buttonColors: AppButtonColors
+    @Composable get() = LocalButtonColors.current
