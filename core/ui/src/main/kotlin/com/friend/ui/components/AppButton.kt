@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -23,6 +24,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.theme.buttonColors
 
 /* -------------------------------------------------------------------------- */
@@ -47,7 +49,7 @@ private fun ButtonContent(
             Spacer(Modifier.width(iconSpacing))
         }
 
-        Text(text)
+        Text(text, modifier = Modifier.padding(top = SpacingToken.micro, bottom = SpacingToken.micro))
 
         if (trailingIcon != null) {
             Spacer(Modifier.width(iconSpacing))
@@ -74,8 +76,6 @@ fun AppElevatedButton(
     colors: ButtonColors = MaterialTheme.buttonColors.primaryButton,
     elevation: ButtonElevation? = ButtonDefaults.elevatedButtonElevation(),
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
-    role: Role? = null,
-    // Icon options
     leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
     iconTint: Color = LocalContentColor.current,

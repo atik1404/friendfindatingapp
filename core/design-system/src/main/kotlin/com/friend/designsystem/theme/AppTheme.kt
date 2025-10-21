@@ -9,6 +9,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import com.friend.designsystem.colors.AppButtonColors
+import com.friend.designsystem.colors.AppTextFieldColors
 import com.friend.designsystem.colors.BackgroundColors
 import com.friend.designsystem.colors.ColorPalette
 import com.friend.designsystem.colors.DividerColors
@@ -20,6 +21,7 @@ import com.friend.designsystem.colors.LocalIconColors
 import com.friend.designsystem.colors.LocalStrokeColors
 import com.friend.designsystem.colors.LocalSurfaceColors
 import com.friend.designsystem.colors.LocalTextColors
+import com.friend.designsystem.colors.LocalTextFieldColors
 import com.friend.designsystem.colors.StrokesColors
 import com.friend.designsystem.colors.SurfaceColors
 import com.friend.designsystem.colors.TextColors
@@ -37,6 +39,8 @@ import com.friend.designsystem.colors.surfaceColorsForDark
 import com.friend.designsystem.colors.surfaceColorsForLight
 import com.friend.designsystem.colors.textColorsForDark
 import com.friend.designsystem.colors.textColorsForLight
+import com.friend.designsystem.colors.textFieldColorForDark
+import com.friend.designsystem.colors.textFieldColorForLight
 import com.friend.designsystem.typography.AppTypography
 
 object Brand {
@@ -151,6 +155,7 @@ fun AppTheme(
     val colors = if (darkTheme) DarkColors else LightColors
 
     val textColors = if (darkTheme) textColorsForDark() else textColorsForLight()
+    val textFieldColors = if (darkTheme) textFieldColorForDark() else textFieldColorForLight()
     val buttonColors = if (darkTheme) buttonColorsForDark() else buttonColorsForLight()
     val backgroundColors = if (darkTheme) backgroundColorsForDark() else backgroundColorsForLight()
     val dividerColors = if (darkTheme) dividerColorsForDark() else dividerColorsForLight()
@@ -160,6 +165,7 @@ fun AppTheme(
 
     CompositionLocalProvider(
         LocalTextColors provides textColors,
+        LocalTextFieldColors provides textFieldColors,
         LocalBackgroundColors provides backgroundColors,
         LocalDividerColors provides dividerColors,
         LocalStrokeColors provides strokeColors,
@@ -177,6 +183,9 @@ fun AppTheme(
 
 val MaterialTheme.textColors: TextColors
     @Composable get() = LocalTextColors.current
+
+val MaterialTheme.textFieldColors: AppTextFieldColors
+    @Composable get() = LocalTextFieldColors.current
 
 val MaterialTheme.dividerColors: DividerColors
     @Composable get() = LocalDividerColors.current

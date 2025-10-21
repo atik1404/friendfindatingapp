@@ -11,20 +11,20 @@ data class StrokesColors(
 
 val LocalStrokeColors = staticCompositionLocalOf {
     StrokesColors(
-        primary = ColorPalette.Gray950,
+        primary = ColorPalette.Gray100,
         secondary = ColorPalette.Gray500,
         tertiary = ColorPalette.Gray200,
     )
 }
 
 fun strokesColorsForLight() = StrokesColors(
-    primary = ColorPalette.Gray900,
+    primary = ColorPalette.Gray100,
     secondary = ColorPalette.Gray600,
-    tertiary = ColorPalette.Gray500,
+    tertiary = ColorPalette.Gray200,
 )
 
 fun strokesColorsForDark() = StrokesColors(
     primary = ColorPalette.Gray100,
-    secondary = ColorPalette.Gray400,
-    tertiary = ColorPalette.Gray500,
+    secondary = ColorPalette.Gray500,
+    tertiary = ColorPalette.Gray200,
 )
