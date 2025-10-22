@@ -2,12 +2,14 @@ package com.friend.designsystem.spacing
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+@Immutable
 object SpacingToken {
-    val none = 0.dp           // no space
+    val none = 0.dp          // no space
     val micro = 4.dp          // very tight space
     val tiny = 8.dp           // small space, text-to-text
     val extraSmall = 10.dp    // uncommon but slightly bigger than tiny

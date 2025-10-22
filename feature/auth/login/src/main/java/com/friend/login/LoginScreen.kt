@@ -1,8 +1,10 @@
 package com.friend.login
 
-import androidx.compose.foundation.background
+import AppDivider
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -22,24 +23,22 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.friend.designsystem.spacing.RadiusToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.StrokeTokens
-import com.friend.designsystem.theme.backgroundColors
+import com.friend.designsystem.theme.dividerColors
 import com.friend.designsystem.theme.strokeColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppOutlineTextField
+import com.friend.ui.components.AppOutlinedButton
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AppText
 import com.friend.ui.components.LoadLocalImage
@@ -54,8 +53,8 @@ fun LoginScreen() {
         ConstraintLayout(
             modifier = Modifier.fillMaxSize()
         ) {
-            val guideline = createGuidelineFromTop(.35f)
-            val (bannerImage, loginUi) = createRefs()
+            val guideline = createGuidelineFromTop(.3f)
+            val (bannerImage, loginUi, googleLoginBtn, loginTypeDivider) = createRefs()
 
             var email by rememberSaveable { mutableStateOf("") }
             var password by rememberSaveable { mutableStateOf("") }
@@ -63,7 +62,7 @@ fun LoginScreen() {
             LoadLocalImage(
                 imageResId = Res.drawable.img_login_illustration,
                 modifier = Modifier.constrainAs(bannerImage) {
-                    top.linkTo(parent.top, SpacingToken.large)
+                    top.linkTo(parent.top, margin = SpacingToken.large)
                     bottom.linkTo(guideline)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
@@ -72,6 +71,47 @@ fun LoginScreen() {
                 },
                 contentScale = ContentScale.Fit
             )
+
+            AppOutlinedButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = SpacingToken.large, end = SpacingToken.large)
+                    .constrainAs(googleLoginBtn){
+                        top.linkTo(bannerImage.bottom)
+                    },
+                text = "Login with Google",
+                onClick = {
+
+                },
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = SpacingToken.extraSmall, start = SpacingToken.large, end = SpacingToken.large)
+                    .constrainAs(loginTypeDivider){
+                        top.linkTo(googleLoginBtn.bottom)
+                    },
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                AppDivider(
+                    modifier = Modifier.weight(1f),
+                    color = MaterialTheme.dividerColors.primary
+                )
+
+                AppText(
+                    text = "OR",
+                    fontWeight = FontWeight.Medium,
+                    textColor = MaterialTheme.textColors.primary,
+                    modifier = Modifier.padding(horizontal = SpacingToken.small)
+                )
+
+                AppDivider(
+                    modifier = Modifier.weight(1f),
+                    color = MaterialTheme.dividerColors.primary
+                )
+            }
 
             Column(
                 modifier = Modifier
@@ -82,7 +122,7 @@ fun LoginScreen() {
                         shape = RoundedCornerShape(RadiusToken.large)
                     )
                     .constrainAs(loginUi) {
-                        top.linkTo(guideline)
+                        top.linkTo(loginTypeDivider.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                         height = Dimension.preferredWrapContent
@@ -136,6 +176,16 @@ fun LoginScreen() {
                 AppText(
                     text = "Don't have an account? Sign Up",
                     fontWeight = FontWeight.Medium,
+                    textColor = MaterialTheme.textColors.secondary,
+                    modifier = Modifier
+                )
+
+                Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+                AppText(
+                    text = "@All Rights reserved- FriendFin",
+                    fontWeight = FontWeight.Light,
+                    textStyle = AppTypography.bodySmall,
                     textColor = MaterialTheme.textColors.secondary,
                     modifier = Modifier
                 )

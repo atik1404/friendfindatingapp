@@ -11,20 +11,20 @@ data class DividerColors(
 
 val LocalDividerColors = staticCompositionLocalOf {
     DividerColors(
-        primary = ColorPalette.Gray950,
-        secondary = ColorPalette.Gray500,
-        tertiary = ColorPalette.Gray200,
+        primary = ColorPalette.Gray200,
+        secondary = ColorPalette.Gray300,
+        tertiary = ColorPalette.Gray400,
     )
 }
 
 fun dividerColorsForLight() = DividerColors(
-    primary = ColorPalette.Gray900,
-    secondary = ColorPalette.Gray600,
-    tertiary = ColorPalette.Gray500,
+    primary = ColorPalette.Gray200,
+    secondary = ColorPalette.Gray300,
+    tertiary = ColorPalette.Gray400,
 )
 
 fun dividerColorsForDark() = DividerColors(
-    primary = ColorPalette.Gray100,
-    secondary = ColorPalette.Gray400,
-    tertiary = ColorPalette.Gray500,
+    primary = ColorPalette.Gray200,
+    secondary = ColorPalette.Gray300,
+    tertiary = ColorPalette.Gray400,
 )

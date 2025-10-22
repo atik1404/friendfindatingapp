@@ -143,4 +143,15 @@ internal object ColorPalette {
     val Pink700 = Color(0xFFBE123C)
     val Pink800 = Color(0xFF9F1239)
     val Pink900 = Color(0xFF881337)
+
+    val NavyBlue50 = Color(0xFFE8F0FE)
+    val NavyBlue100 = Color(0xFFD2E3FC)
+    val NavyBlue200 = Color(0xFFA8C2F0)
+    val NavyBlue300 = Color(0xFF7B9FE3)
+    val NavyBlue400 = Color(0xFF4C78D1)
+    val NavyBlue500 = Color(0xFF1E40AF) // Core Navy Blue
+    val NavyBlue600 = Color(0xFF1E3A8A)
+    val NavyBlue700 = Color(0xFF172554)
+    val NavyBlue800 = Color(0xFF13203C)
+    val NavyBlue900 = Color(0xFF0B132B)
 }
