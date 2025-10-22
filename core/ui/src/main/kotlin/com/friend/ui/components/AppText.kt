@@ -27,7 +27,9 @@ fun AppText(
     leading: (@Composable (() -> Unit))? = null,
     trailing: (@Composable (() -> Unit))? = null,
 ) {
-    return Row {
+    return Row(
+        modifier = modifier
+    ) {
         if (leading != null) {
             leading()
         }

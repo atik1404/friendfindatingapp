@@ -10,9 +10,23 @@
     <string name="CHANNEL_ID">com.friendfinapp.dating</string>
     <string name="fcmlink">https://fcm.googleapis.com</string>
 
+    <string name="action_login_with_google">Login with Google</string>
+    <string name="action_login">Login</string>
+    <string name="action_forgot_password">Forgot Password?</string>
+    <string name="action_sign_up">Sign Up</string>
+    <string name="action_no_account">Don\'t have an account? Sign Up</string>
+    <string name="action_logout">Logout</string>
+
+    <string name="label_or">OR</string>
+    <string name="label_username">Username*</string>
+    <string name="label_password">Password*</string>
+
+    <string name="hint_user_name">Enter your Username</string>
+    <string name="hint_password">Enter your Password</string>
 
     <string name="msg_image_content_description">Image content description</string>
     <string name="msg_dating_app">The Dating App</string>
+    <string name="msg_copyright">\@All rights reserved by FriendFin</string>
 
     <!--    String resource naming convention-->
     <!--    https://github.com/leapfrogtechnology/android-guidelines/blob/master/ResourcesGuidelines.md-->

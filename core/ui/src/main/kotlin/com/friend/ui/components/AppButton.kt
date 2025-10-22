@@ -14,18 +14,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.theme.buttonColors
+import com.friend.designsystem.theme.textColors
 
 /* -------------------------------------------------------------------------- */
 /*  Shared internal content for all buttons                                   */
@@ -37,7 +38,9 @@ private fun ButtonContent(
     leadingIcon: ImageVector?,
     trailingIcon: ImageVector?,
     iconSpacing: Dp,
-    iconTint: Color
+    iconTint: Color,
+    textColor: Color,
+    fontWeight: FontWeight = FontWeight.Medium
 ) {
     Row {
         if (leadingIcon != null) {
@@ -49,7 +52,7 @@ private fun ButtonContent(
             Spacer(Modifier.width(iconSpacing))
         }
 
-        Text(text, modifier = Modifier.padding(top = SpacingToken.micro, bottom = SpacingToken.micro))
+        AppText(text, modifier = Modifier.padding(top = SpacingToken.micro, bottom = SpacingToken.micro), textColor = textColor, fontWeight = fontWeight)
 
         if (trailingIcon != null) {
             Spacer(Modifier.width(iconSpacing))
@@ -95,7 +98,8 @@ fun AppElevatedButton(
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon,
             iconSpacing = iconSpacing,
-            iconTint = iconTint
+            iconTint = iconTint,
+            textColor = MaterialTheme.textColors.white
         )
     }
 }
@@ -114,8 +118,6 @@ fun AppOutlinedButton(
     colors: ButtonColors = ButtonDefaults.outlinedButtonColors(),
     border: BorderStroke? = ButtonDefaults.outlinedButtonBorder(enabled),
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
-    role: Role? = null,
-    // Icon options
     leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
     iconTint: Color = LocalContentColor.current,
@@ -135,7 +137,8 @@ fun AppOutlinedButton(
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon,
             iconSpacing = iconSpacing,
-            iconTint = iconTint
+            iconTint = iconTint,
+            textColor = MaterialTheme.textColors.primary
         )
     }
 }
@@ -153,8 +156,6 @@ fun AppTextButton(
     shape: Shape = ButtonDefaults.shape,
     colors: ButtonColors = ButtonDefaults.textButtonColors(),
     contentPadding: PaddingValues = ButtonDefaults.TextButtonContentPadding,
-    role: Role? = null,
-    // Icon options
     leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
     iconTint: Color = LocalContentColor.current,
@@ -173,7 +174,8 @@ fun AppTextButton(
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon,
             iconSpacing = iconSpacing,
-            iconTint = iconTint
+            iconTint = iconTint,
+            textColor = MaterialTheme.textColors.primary
         )
     }
 }

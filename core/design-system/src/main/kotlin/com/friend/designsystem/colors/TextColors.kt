@@ -20,7 +20,7 @@ data class TextColors(
 
 val LocalTextColors = staticCompositionLocalOf {
     TextColors(
-        primary = ColorPalette.NavyBlue900,
+        primary = ColorPalette.NavyBlue800,
         secondary = ColorPalette.Gray500,
         tertiary = ColorPalette.Gray200,
         inverse = ColorPalette.Gray50,
@@ -34,7 +34,7 @@ val LocalTextColors = staticCompositionLocalOf {
 }
 
 fun textColorsForLight() = TextColors(
-    primary = ColorPalette.NavyBlue900,
+    primary = ColorPalette.NavyBlue800,
     secondary = ColorPalette.Gray600,
     tertiary = ColorPalette.Gray500,
     inverse = ColorPalette.Gray100,
@@ -47,7 +47,7 @@ fun textColorsForLight() = TextColors(
 )
 
 fun textColorsForDark() = TextColors(
-    primary = ColorPalette.NavyBlue900,
+    primary = ColorPalette.NavyBlue800,
     secondary = ColorPalette.Gray400,
     tertiary = ColorPalette.Gray500,
     inverse = ColorPalette.Gray900,

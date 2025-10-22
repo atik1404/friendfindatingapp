@@ -27,13 +27,13 @@ annotation class DarkPreview
 @Preview(
     name = "Light",
     showBackground = true,
-    showSystemUi = true,
+    showSystemUi = false,
     uiMode = Configuration.UI_MODE_NIGHT_NO
 )
 @Preview(
     name = "Dark",
     showBackground = true,
-    showSystemUi = true,
+    showSystemUi = false,
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 annotation class LightDarkPreview
