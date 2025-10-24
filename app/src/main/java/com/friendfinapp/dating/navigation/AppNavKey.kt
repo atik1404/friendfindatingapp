@@ -11,4 +11,7 @@ sealed interface AuthScreens : AppScreen {
 
     @Serializable
     object LoginNavScreen : AppScreen
+    object RegistrationNavScreen : AppScreen
+    object ForgotPasswordNavScreen : AppScreen
+    object ProfileCompletionNavScreen : AppScreen
 }

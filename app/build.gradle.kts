@@ -67,6 +67,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.15"
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -89,6 +90,9 @@ dependencies {
     with(projects.feature){
         implementation(auth.splashScreen)
         implementation(auth.login)
+        implementation(auth.registraion)
+        implementation(auth.forgotPassword)
+        implementation(auth.profileCompletion)
     }
 
     with(libs){

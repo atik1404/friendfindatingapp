@@ -5,7 +5,10 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
+import com.friend.forgotpassword.ForgotPasswordScreen
 import com.friend.login.LoginScreen
+import com.friend.profilecompletion.ProfileCompletionScreen
+import com.friend.registration.RegistrationScreen
 import com.friend.splash.SplashScreen
 
 object AuthNavGraph {
@@ -26,7 +29,29 @@ object AuthNavGraph {
         }
 
         entry(AuthScreens.LoginNavScreen) {
-            LoginScreen()
+            LoginScreen(
+                navigateToRegistration = {
+                    backStack.add(AuthScreens.RegistrationNavScreen)
+                },
+                navigateToForgotPassword = {
+                    backStack.add(AuthScreens.ForgotPasswordNavScreen)
+                },
+                navigateToProfileCompletion = {
+                    backStack.add(AuthScreens.ProfileCompletionNavScreen)
+                }
+            )
+        }
+
+        entry(AuthScreens.ForgotPasswordNavScreen) {
+            ForgotPasswordScreen()
+        }
+
+        entry(AuthScreens.RegistrationNavScreen) {
+            RegistrationScreen()
+        }
+
+        entry(AuthScreens.ProfileCompletionNavScreen) {
+            ProfileCompletionScreen()
         }
     }
 }

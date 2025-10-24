@@ -77,14 +77,16 @@ import com.friend.designsystem.R as Res
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    modifier: Modifier = Modifier, // allow parent screens to pass outer modifiers
+    navigateToRegistration: () -> Unit,
+    navigateToForgotPassword: () -> Unit,
+    navigateToProfileCompletion: () -> Unit,
 ) {
     val currentContext = LocalContext.current
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
     ) { padding ->
         ConstraintLayout(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)                // from Scaffold
                 .consumeWindowInsets(padding)    // prevent double-inset consumption downstream
@@ -148,6 +150,9 @@ fun LoginScreen(
                         end.linkTo(parent.end)
                         width = Dimension.fillToConstraints
                     },
+                onLoginClick = navigateToProfileCompletion,
+                onForgotPasswordClick = navigateToForgotPassword,
+                onSignUpClick = navigateToRegistration
             )
 
             // Footer: copyright
@@ -243,6 +248,9 @@ fun LoginDivider(
 @Composable
 fun LoginForm(
     modifier: Modifier = Modifier,
+    onLoginClick: () -> Unit,
+    onForgotPasswordClick: () -> Unit,
+    onSignUpClick: () -> Unit
 ) {
     var userName by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
@@ -300,7 +308,7 @@ fun LoginForm(
             text = stringResource(Res.string.action_login),
             isLoading = isLoading,
             onClick = {
-                //isLoading = !isLoading
+                onLoginClick.invoke()
             },
         )
 
@@ -309,7 +317,7 @@ fun LoginForm(
             text = stringResource(Res.string.action_forgot_password),
             modifier = Modifier.wrapContentWidth(Alignment.End),
             onClick = {
-                Timber.e("Forgot pass Button clicked")
+                onForgotPasswordClick.invoke()
             }
         )
 
@@ -325,7 +333,7 @@ fun LoginForm(
                 color = MaterialTheme.textColors.brand,
                 style = AppTypography.bodyMedium.copy(fontWeight = FontWeight.Bold),
                 onClick = {
-                    Timber.e("Sign up Button clicked")
+                    onSignUpClick.invoke()
                 }
             ),
         )
@@ -370,5 +378,9 @@ fun BannerAds(modifier: Modifier = Modifier) {
 @Composable
 @LightDarkPreview
 fun LoginScreenPreview() {
-    LoginScreen()
+    LoginScreen(
+        navigateToRegistration = { },
+        navigateToForgotPassword = { },
+        navigateToProfileCompletion = {}
+    )
 }

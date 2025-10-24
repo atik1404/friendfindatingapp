@@ -48,6 +48,7 @@ class AndroidFeaturePlugin : Plugin<Project> {
                 add("implementation", libs.findLibrary("dateced").get())
                 add("implementation", libs.findLibrary("timber").get())
                 add("implementation", libs.findLibrary("gson").get())
+                add("implementation", libs.findLibrary("androidx.compose.constraintlayout").get())
 
                 add("implementation", libs.findLibrary("kotlin.coroutines").get())
 
