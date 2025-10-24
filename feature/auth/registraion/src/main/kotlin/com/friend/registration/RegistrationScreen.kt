@@ -3,10 +3,12 @@ package com.friend.registration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -15,69 +17,150 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Female
+import androidx.compose.material.icons.rounded.Male
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
-import com.friend.designsystem.R as Res
+import com.friend.ui.common.AppToolbar
 import com.friend.ui.components.AppOutlineTextField
 import com.friend.ui.components.AppScaffold
+import com.friend.ui.components.SingleChoiceSegmentsWithIcons
 import com.friend.ui.preview.LightDarkPreview
+import com.friend.designsystem.R as Res
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationScreen() {
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
+        topBar = { AppToolbar(title = "Registration", onBackClick = {}) }
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()              // from Scaffold
+                .padding(padding)
                 .consumeWindowInsets(padding)    // prevent double-inset consumption downstream
                 .navigationBarsPadding()         // keep content above system nav bar
                 .imePadding()                    // lift content when keyboard shows
                 .verticalScroll(rememberScrollState()) // simple, contents are small; LazyColumn not necessary
                 .appPadding(SpacingToken.small),
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                AppOutlineTextField(
-                    text = "ss",
-                    modifier = Modifier.weight(1f),
-                    title = stringResource(Res.string.label_username),
-                    placeholder = stringResource(Res.string.hint_user_name),
-                    onValueChange = { },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Email,
-                        imeAction = ImeAction.Next,
-                        autoCorrectEnabled = false,
-                    ),
-                )
+            var email by rememberSaveable { mutableStateOf("") }
 
-                AppOutlineTextField(
-                    text = "sss",
-                    modifier = Modifier.weight(1f),
-                    title = stringResource(Res.string.label_full_name),
-                    placeholder = stringResource(Res.string.hint_full_name),
-                    onValueChange = { },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Email,
-                        imeAction = ImeAction.Next,
-                        autoCorrectEnabled = false,
-                    ),
-                )
-            }
+            Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+            NameField()
+
+            Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+            AppOutlineTextField(
+                text = email,
+                modifier = Modifier.fillMaxWidth(),
+                title = stringResource(Res.string.label_email),
+                placeholder = stringResource(Res.string.hint_email),
+                onValueChange = { email = it },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next,
+                    autoCorrectEnabled = false,
+                ),
+            )
+
+            Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+            AppOutlineTextField(
+                text = email,
+                modifier = Modifier.fillMaxWidth(),
+                title = stringResource(Res.string.label_password),
+                placeholder = stringResource(Res.string.hint_password),
+                onValueChange = { email = it },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next,
+                    autoCorrectEnabled = false,
+                ),
+                isPassword = true
+            )
+
+            Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+            var segIndex by remember { mutableIntStateOf(0) }
+            SingleChoiceSegmentsWithIcons(
+                title = "Gender*",
+                options = listOf(
+                    Pair(Icons.Rounded.Male, "Male"),
+                    Pair(Icons.Rounded.Female, "Female"),
+                ),
+                selectedIndex = segIndex.coerceIn(0, 1),
+                onSelected = { segIndex = it }
+            )
+
+            Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+            SingleChoiceSegmentsWithIcons(
+                title = "Interested In*",
+                options = listOf(
+                    Pair(Icons.Rounded.Male, "Male"),
+                    Pair(Icons.Rounded.Female, "Female"),
+                ),
+                selectedIndex = 1,
+                onSelected = { segIndex = it }
+            )
         }
     }
 }
+
+@Composable
+fun NameField() {
+    var userName by rememberSaveable { mutableStateOf("") }
+    var fullName by rememberSaveable { mutableStateOf("") }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        AppOutlineTextField(
+            text = userName,
+            modifier = Modifier.weight(1f),
+            title = stringResource(Res.string.label_username),
+            placeholder = stringResource(Res.string.hint_user_name),
+            onValueChange = { userName = it },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next,
+                autoCorrectEnabled = false,
+            ),
+        )
+
+        Spacer(modifier = Modifier.width(SpacingToken.medium))
+
+        AppOutlineTextField(
+            text = fullName,
+            modifier = Modifier.weight(1f),
+            title = stringResource(Res.string.label_full_name),
+            placeholder = stringResource(Res.string.hint_full_name),
+            onValueChange = { fullName = it },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next,
+                autoCorrectEnabled = false,
+            ),
+        )
+    }
+}
+
 
 @Composable
 @LightDarkPreview

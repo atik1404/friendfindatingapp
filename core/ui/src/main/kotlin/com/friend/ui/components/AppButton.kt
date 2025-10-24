@@ -3,21 +3,34 @@ package com.friend.ui.components
 import android.os.SystemClock
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Female
+import androidx.compose.material.icons.rounded.Male
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,10 +45,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.friend.designsystem.spacing.RadiusToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingVertical
 import com.friend.designsystem.theme.buttonColors
+import com.friend.designsystem.theme.strokeColors
+import com.friend.designsystem.theme.surfaceColors
 import com.friend.designsystem.theme.textColors
+import com.friend.designsystem.typography.AppTypography
+import com.friend.ui.preview.LightDarkPreview
 
 /* -------------------------------------------------------------------------- */
 /*  Shared internal content for all buttons                                   */
@@ -227,4 +245,94 @@ fun AppTextButton(
             modifier = modifier
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SingleChoiceSegmentsWithIcons(
+    title: String? = null,
+    options: List<Pair<ImageVector, String>>,
+    selectedIndex: Int = -1,
+    onSelected: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        title?.let {
+            AppText(
+                text = title,
+                textStyle = AppTypography.bodySmall,
+                fontWeight = FontWeight.Light,
+                modifier = Modifier,
+                textColor = MaterialTheme.textColors.secondary
+            )
+            Spacer(Modifier.height(SpacingToken.micro))
+        }
+        SingleChoiceSegmentedButtonRow(
+            Modifier.fillMaxWidth()
+        ) {
+            options.forEachIndexed { index, (icon, label) ->
+                SegmentedButton(
+                    selected = index == selectedIndex,
+                    onClick = { onSelected(index) },
+                    shape = when (index) {
+                        0 -> {
+                            RoundedCornerShape(
+                                topStart = RadiusToken.large,
+                                bottomStart = RadiusToken.large,
+                                topEnd = 0.dp,
+                                bottomEnd = 0.dp
+                            )
+                        }
+                        options.size -1 -> {
+                            RoundedCornerShape(
+                                topStart = 0.dp,
+                                bottomStart = 0.dp,
+                                topEnd = RadiusToken.large,
+                                bottomEnd = RadiusToken.large
+                            )
+                        }
+                        else -> {
+                            RoundedCornerShape(0.dp)
+                        }
+                    },
+                    colors = SegmentedButtonDefaults.colors(
+                        activeContainerColor = MaterialTheme.surfaceColors.selectedItemColor,
+                        inactiveContainerColor = Color.White,
+                        activeContentColor = MaterialTheme.textColors.white,
+                        inactiveContentColor = MaterialTheme.textColors.primary,
+                        activeBorderColor = MaterialTheme.strokeColors.primary,
+                        inactiveBorderColor = MaterialTheme.strokeColors.primary,
+                    ),
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.appPaddingVertical(SpacingToken.micro)
+                    ) {
+                        Spacer(Modifier.width(SpacingToken.tiny))
+                        Text(label)
+                        Spacer(Modifier.width(SpacingToken.tiny))
+                        Icon(icon, contentDescription = null)
+                    }
+                }
+//                if(index < options.size -1) {
+//                    Spacer(Modifier.width(SpacingToken.micro))
+//                }
+            }
+        }
+    }
+}
+
+
+@Composable
+@LightDarkPreview
+fun LoginScreenPreview() {
+    SingleChoiceSegmentsWithIcons(
+        title = "Interested In*",
+        options = listOf(
+            Pair(Icons.Rounded.Male, "Male"),
+            Pair(Icons.Rounded.Female, "Female"),
+        ),
+        selectedIndex = 1,
+        onSelected = { }
+    )
 }

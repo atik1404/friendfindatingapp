@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -24,6 +26,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import com.friend.designsystem.theme.surfaceColors
+import com.friend.designsystem.theme.textColors
+import com.friend.designsystem.typography.AppTypography
+import com.friend.ui.preview.LightDarkPreview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,22 +42,22 @@ fun AppToolbar(
     leadingIcon: (@Composable (() -> Unit))? = null,   // custom override (e.g., Drawer)
     onBackClick: (() -> Unit)? = null,                 // default back icon when provided
     actions: @Composable RowScope.() -> Unit = {},
-    backgroundColor: Color = MaterialTheme.colorScheme.primary,
-    contentColor: Color = MaterialTheme.colorScheme.onPrimary,
+    backgroundColor: Color = MaterialTheme.surfaceColors.primary,
+    contentColor: Color = MaterialTheme.textColors.white,
     centerTitle: Boolean = false,
-    titleTextStyle: TextStyle = MaterialTheme.typography.titleMedium,
+    titleTextStyle: TextStyle = AppTypography.titleMedium,
     onTitleClick: (() -> Unit)? = null,
     elevation: Dp = 0.dp,
     scrollBehavior: TopAppBarScrollBehavior? = TopAppBarDefaults.pinnedScrollBehavior(),
 ) {
     val navigationIconComposable: @Composable () -> Unit = leadingIcon ?: {
         if (onBackClick != null) {
-//            IconButton(onClick = onBackClick) {
-//                Icon(
-//                    imageVector = Icons.Filled.ArrowBackIosNew,
-//                    contentDescription = "Back"
-//                )
-//            }
+            IconButton(onClick = onBackClick) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBackIosNew,
+                    contentDescription = "Back"
+                )
+            }
         }
     }
 
@@ -108,5 +114,15 @@ fun StatusBarScrim(color: Color = MaterialTheme.colorScheme.primary) {
             .fillMaxWidth()
             .windowInsetsTopHeight(WindowInsets.statusBars)
             .background(color)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@LightDarkPreview
+fun AppToolbarPreview() {
+    AppToolbar(
+        title = "Registration",
+        onBackClick = {}
     )
 }

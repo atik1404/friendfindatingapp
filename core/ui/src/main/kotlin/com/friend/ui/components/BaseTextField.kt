@@ -80,36 +80,41 @@ private fun BaseTextField(
         { Icon(imageVector = it, contentDescription = null) }
     }
 
-    val trailing: @Composable (() -> Unit) = {
-        Row {
-            when {
-                isPassword -> {
-                    IconButton(onClick = { pwdVisible = !pwdVisible }) {
-                        Icon(
-                            imageVector = if (pwdVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-                            contentDescription = if (pwdVisible) "Hide password" else "Show password"
-                        )
-                    }
-                }
-
-                trailingIcon != null && onTrailingClick != null -> {
-                    IconButton(onClick = onTrailingClick) {
-                        Icon(imageVector = trailingIcon, contentDescription = null)
-                    }
-                }
-
-                clearable && value.isNotEmpty() -> {
-                    IconButton(onClick = { onValueChange("") }) {
-                        Icon(
-                            imageVector = Icons.Default.Clear,
-                            contentDescription = "Clear",
-                            modifier = Modifier.size(18.dp)
-                        )
-                    }
+    val trailingContent: (@Composable () -> Unit)? = when {
+        isPassword -> {
+            {
+                IconButton(onClick = { pwdVisible = !pwdVisible }) {
+                    Icon(
+                        imageVector = if (pwdVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                        contentDescription = if (pwdVisible) "Hide password" else "Show password"
+                    )
                 }
             }
         }
+
+        trailingIcon != null && onTrailingClick != null -> {
+            {
+                IconButton(onClick = onTrailingClick) {
+                    Icon(imageVector = trailingIcon, contentDescription = null)
+                }
+            }
+        }
+
+        clearable && value.isNotEmpty() -> {
+            {
+                IconButton(onClick = { onValueChange("") }) {
+                    Icon(
+                        imageVector = Icons.Default.Clear,
+                        contentDescription = "Clear",
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+            }
+        }
+
+        else -> null
     }
+
 
     val labelComposable: (@Composable (() -> Unit))? = label?.let { { Text(it) } }
     val placeholderComposable: (@Composable (() -> Unit))? =
@@ -144,7 +149,6 @@ private fun BaseTextField(
         }
     }
 
-
     when (style) {
         AppTextFieldStyle.Filled -> TextField(
             value = value,
@@ -153,7 +157,7 @@ private fun BaseTextField(
             label = labelComposable,
             placeholder = placeholderComposable,
             leadingIcon = leading,
-            trailingIcon = trailing,
+            trailingIcon = trailingContent,
             singleLine = singleLine,
             maxLines = maxLines,
             enabled = enabled,
@@ -189,7 +193,7 @@ private fun BaseTextField(
             label = labelComposable,
             placeholder = placeholderComposable,
             leadingIcon = leading,
-            trailingIcon = trailing,
+            trailingIcon = trailingContent,
             singleLine = singleLine,
             maxLines = maxLines,
             enabled = enabled,
@@ -251,6 +255,7 @@ fun AppOutlineTextField(
 
         BaseTextField(
             value = text,
+            modifier = Modifier.fillMaxWidth(),
             placeholder = placeholder,
             style = AppTextFieldStyle.Outlined,
             shape = RoundedCornerShape(RadiusToken.large),
@@ -292,7 +297,7 @@ fun AppTextFieldPreview() {
             text = "",
             title = "Outlined TextField",
             placeholder = "Placeholder",
-            onValueChange = {}
+            onValueChange = {},
         )
     }
 }
