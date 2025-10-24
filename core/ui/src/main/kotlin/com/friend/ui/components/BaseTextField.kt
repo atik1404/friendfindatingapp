@@ -1,5 +1,6 @@
 package com.friend.ui.components
 
+import android.health.connect.datatypes.units.Length
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -60,6 +62,7 @@ private fun BaseTextField(
     readOnly: Boolean = false,
     singleLine: Boolean = true,
     maxLines: Int = 1,
+    maxLength: Int? = null,
     isError: Boolean = false,
     errorText: String? = null,
     supportingText: String? = null,
@@ -110,7 +113,16 @@ private fun BaseTextField(
 
     val labelComposable: (@Composable (() -> Unit))? = label?.let { { Text(it) } }
     val placeholderComposable: (@Composable (() -> Unit))? =
-        placeholder?.let { { AppText(it, textColor = MaterialTheme.textColors.secondary, modifier = Modifier, fontWeight = FontWeight.Light ) } }
+        placeholder?.let {
+            {
+                AppText(
+                    it,
+                    textColor = MaterialTheme.textColors.secondary,
+                    modifier = Modifier,
+                    fontWeight = FontWeight.Light
+                )
+            }
+        }
 
     val supportingComposable: (@Composable (() -> Unit))? = when {
         isError && !errorText.isNullOrBlank() -> {
@@ -124,10 +136,19 @@ private fun BaseTextField(
         else -> null
     }
 
+    val cappedChange: (String) -> Unit = { new ->
+        when {
+            maxLength == null -> onValueChange(new)
+            new.length <= maxLength -> onValueChange(new)
+            else -> onValueChange(new.take(maxLength))
+        }
+    }
+
+
     when (style) {
         AppTextFieldStyle.Filled -> TextField(
             value = value,
-            onValueChange = onValueChange,
+            onValueChange = cappedChange,
             modifier = modifier,
             label = labelComposable,
             placeholder = placeholderComposable,
@@ -163,7 +184,7 @@ private fun BaseTextField(
 
         AppTextFieldStyle.Outlined -> OutlinedTextField(
             value = value,
-            onValueChange = onValueChange,
+            onValueChange = cappedChange,
             modifier = modifier,
             label = labelComposable,
             placeholder = placeholderComposable,
@@ -206,7 +227,7 @@ fun AppOutlineTextField(
     text: String,
     title: String,
     placeholder: String,
-    error: Int? = null,
+    error: String? = null,
     leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
     isPassword: Boolean = false,
@@ -214,6 +235,7 @@ fun AppOutlineTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     maxLines: Int = 1,
+    maxLength: Int? = null,
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
@@ -241,13 +263,15 @@ fun AppOutlineTextField(
             keyboardActions = keyboardActions,
             keyboardOptions = keyboardOptions,
             isPassword = isPassword,
+            isError = error != null,
+            maxLength = maxLength
         )
 
-        if (error != null){
+        if (error != null) {
             Spacer(Modifier.height(SpacingToken.micro))
             AppText(
-                text = "Error Outlined TextField",
-                textStyle = AppTypography.bodySmall,
+                text = error,
+                textStyle = AppTypography.labelSmall,
                 fontWeight = FontWeight.Light,
                 textColor = MaterialTheme.textColors.error,
                 modifier = Modifier,

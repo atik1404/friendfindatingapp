@@ -1,14 +1,18 @@
 package com.friend.ui.components
 
+import android.os.SystemClock
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -16,15 +20,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.friend.designsystem.spacing.SpacingToken
+import com.friend.designsystem.spacing.appPaddingVertical
 import com.friend.designsystem.theme.buttonColors
 import com.friend.designsystem.theme.textColors
 
@@ -34,33 +43,57 @@ import com.friend.designsystem.theme.textColors
 
 @Composable
 private fun ButtonContent(
+    modifier: Modifier,
     text: String,
     leadingIcon: ImageVector?,
     trailingIcon: ImageVector?,
     iconSpacing: Dp,
     iconTint: Color,
     textColor: Color,
-    fontWeight: FontWeight = FontWeight.Medium
+    fontWeight: FontWeight = FontWeight.Medium,
+    isLoading: Boolean = false,
 ) {
-    Row {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         if (leadingIcon != null) {
-            Icon(
-                imageVector = leadingIcon,
-                contentDescription = null,
-                tint = iconTint
-            )
+            Icon(imageVector = leadingIcon, contentDescription = null, tint = iconTint)
             Spacer(Modifier.width(iconSpacing))
         }
-
-        AppText(text, modifier = Modifier.padding(top = SpacingToken.micro, bottom = SpacingToken.micro), textColor = textColor, fontWeight = fontWeight)
-
+        AppText(
+            text = text,
+            modifier = modifier,
+            textColor = textColor,
+            fontWeight = fontWeight
+        )
         if (trailingIcon != null) {
             Spacer(Modifier.width(iconSpacing))
-            Icon(
-                imageVector = trailingIcon,
-                contentDescription = null,
-                tint = iconTint
+            Icon(imageVector = trailingIcon, contentDescription = null, tint = iconTint)
+        }
+
+        if (isLoading) {
+            Spacer(modifier = Modifier.width(SpacingToken.tiny))
+            CircularProgressIndicator(
+                strokeWidth = 2.dp,
+                modifier = Modifier.size(18.dp),
+                color = textColor
             )
+        }
+    }
+}
+
+/* Creates a debounced onClick that ignores rapid taps within [debounceMillis]. */
+var lastClickAt = 0L
+@Composable
+private fun rememberDebouncedClick(
+    debounceMillis: Long = 1700L,
+    onClick: () -> Unit
+): () -> Unit {
+    return {
+        val now = System.currentTimeMillis()
+        val isClickAllowed = now - lastClickAt > debounceMillis
+        Log.d("buttonClicked", "isClickAllowed: $isClickAllowed")
+        if (isClickAllowed) {
+            lastClickAt = now
+            onClick()
         }
     }
 }
@@ -75,6 +108,7 @@ fun AppElevatedButton(
     onClick: () -> Unit,                  // required
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    isLoading: Boolean = false,
     shape: Shape = ButtonDefaults.shape,
     colors: ButtonColors = MaterialTheme.buttonColors.primaryButton,
     elevation: ButtonElevation? = ButtonDefaults.elevatedButtonElevation(),
@@ -84,10 +118,13 @@ fun AppElevatedButton(
     iconTint: Color = LocalContentColor.current,
     iconSpacing: Dp = 8.dp,
 ) {
+    val textColor = MaterialTheme.textColors.white
+    val debounced = rememberDebouncedClick(onClick = onClick)
+
     ElevatedButton(
-        onClick = onClick,
+        onClick = debounced,
         modifier = modifier,
-        enabled = enabled,
+        enabled = enabled && !isLoading,
         shape = shape,
         colors = colors,
         elevation = elevation,
@@ -99,7 +136,9 @@ fun AppElevatedButton(
             trailingIcon = trailingIcon,
             iconSpacing = iconSpacing,
             iconTint = iconTint,
-            textColor = MaterialTheme.textColors.white
+            textColor = textColor,
+            isLoading = isLoading,
+            modifier = Modifier.appPaddingVertical(SpacingToken.micro)
         )
     }
 }
@@ -110,10 +149,11 @@ fun AppElevatedButton(
 
 @Composable
 fun AppOutlinedButton(
-    text: String,                         // required
-    onClick: () -> Unit,                  // required
+    text: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    isLoading: Boolean = false,
     shape: Shape = ButtonDefaults.shape,
     colors: ButtonColors = ButtonDefaults.outlinedButtonColors(),
     border: BorderStroke? = ButtonDefaults.outlinedButtonBorder(enabled),
@@ -123,10 +163,13 @@ fun AppOutlinedButton(
     iconTint: Color = LocalContentColor.current,
     iconSpacing: Dp = 8.dp,
 ) {
+    val textColor = MaterialTheme.textColors.primary
+    val debounced = rememberDebouncedClick(onClick = onClick)
+
     OutlinedButton(
-        onClick = onClick,
+        onClick = debounced,
         modifier = modifier,
-        enabled = enabled,
+        enabled = enabled && !isLoading,
         shape = shape,
         colors = colors,
         border = border,
@@ -138,7 +181,9 @@ fun AppOutlinedButton(
             trailingIcon = trailingIcon,
             iconSpacing = iconSpacing,
             iconTint = iconTint,
-            textColor = MaterialTheme.textColors.primary
+            textColor = textColor,
+            isLoading = isLoading,
+            modifier = Modifier.appPaddingVertical(SpacingToken.micro)
         )
     }
 }
@@ -149,8 +194,8 @@ fun AppOutlinedButton(
 
 @Composable
 fun AppTextButton(
-    text: String,                         // required
-    onClick: () -> Unit,                  // required
+    text: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     shape: Shape = ButtonDefaults.shape,
@@ -161,8 +206,11 @@ fun AppTextButton(
     iconTint: Color = LocalContentColor.current,
     iconSpacing: Dp = 8.dp,
 ) {
+    val textColor = MaterialTheme.textColors.primary
+    val debounced = rememberDebouncedClick(onClick = onClick)
+
     TextButton(
-        onClick = onClick,
+        onClick = debounced,
         modifier = modifier,
         enabled = enabled,
         shape = shape,
@@ -175,7 +223,8 @@ fun AppTextButton(
             trailingIcon = trailingIcon,
             iconSpacing = iconSpacing,
             iconTint = iconTint,
-            textColor = MaterialTheme.textColors.primary
+            textColor = textColor,
+            modifier = modifier
         )
     }
 }

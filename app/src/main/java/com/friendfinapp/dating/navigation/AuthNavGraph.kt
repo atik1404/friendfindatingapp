@@ -16,6 +16,7 @@ object AuthNavGraph {
         entry(AuthScreens.SplashNavScreen) {
             SplashScreen(
                 navigateToLoginScreen = {
+                    backStack.clear()
                     backStack.add(AuthScreens.LoginNavScreen)
                 },
                 navigateToHomeScreen = {
@@ -25,7 +26,7 @@ object AuthNavGraph {
         }
 
         entry(AuthScreens.LoginNavScreen) {
-             LoginScreen()
+            LoginScreen()
         }
     }
 }

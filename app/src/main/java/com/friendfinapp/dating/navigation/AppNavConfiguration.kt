@@ -14,7 +14,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 
 @Composable
-fun AppNav() {
+fun AppNavConfiguration() {
     val backStack = rememberNavBackStack(AuthScreens.SplashNavScreen).toMutableStateList()
     val navResults = remember { NavResultManager() }
 
