@@ -252,7 +252,6 @@ fun AppOutlineTextField(
         BaseTextField(
             value = text,
             placeholder = placeholder,
-            modifier = modifier,
             style = AppTextFieldStyle.Outlined,
             shape = RoundedCornerShape(RadiusToken.large),
             leadingIcon = leadingIcon,

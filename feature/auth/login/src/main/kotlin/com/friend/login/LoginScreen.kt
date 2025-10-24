@@ -279,7 +279,6 @@ fun LoginForm(
             placeholder = stringResource(Res.string.hint_user_name),
             onValueChange = { userName = it },
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next,
                 autoCorrectEnabled = false,
             ),
@@ -295,7 +294,6 @@ fun LoginForm(
             onValueChange = { password = it },
             isPassword = true,
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done,
                 autoCorrectEnabled = false,
             ),
