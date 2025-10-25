@@ -47,7 +47,9 @@ object AuthNavGraph {
         }
 
         entry(AuthScreens.RegistrationNavScreen) {
-            RegistrationScreen()
+            RegistrationScreen{
+                backStack.removeLastOrNull()
+            }
         }
 
         entry(AuthScreens.ProfileCompletionNavScreen) {

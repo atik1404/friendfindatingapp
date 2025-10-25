@@ -36,19 +36,34 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
 import com.friend.ui.common.AppToolbar
+import com.friend.ui.common.SimpleDatePickerDialog
+import com.friend.ui.components.AppCheckbox
+import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppOutlineTextField
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.SingleChoiceSegmentsWithIcons
 import com.friend.ui.preview.LightDarkPreview
+import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegistrationScreen() {
+fun RegistrationScreen(
+    onBackButtonClicked: () -> Unit
+) {
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
-        topBar = { AppToolbar(title = "Registration", onBackClick = {}) }
+        topBar = {
+            AppToolbar(
+                title = stringResource(Res.string.title_registration),
+                onBackClick = {
+                    onBackButtonClicked.invoke()
+                })
+        }
     ) { padding ->
+        var dateOfBirth by rememberSaveable { mutableStateOf("") }
+
+        var showDatePicker by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier
                 .fillMaxSize()              // from Scaffold
@@ -118,6 +133,58 @@ fun RegistrationScreen() {
                 selectedIndex = 1,
                 onSelected = { segIndex = it }
             )
+
+            Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+            AppOutlineTextField(
+                text = dateOfBirth,
+                modifier = Modifier.fillMaxWidth(),
+                title = stringResource(Res.string.label_date_of_birth),
+                placeholder = stringResource(Res.string.hint_dob),
+                onValueChange = { dateOfBirth = it },
+                isReadOnly = true,
+                onClickListener = {
+                    showDatePicker = true
+                }
+            )
+
+            if(showDatePicker){
+                SimpleDatePickerDialog(
+                    isMaxDateEnable = true,
+                    onDateSelected = { date ->
+                        Timber.e("Date of Birth Clicked $date")
+                        showDatePicker = false
+                    },
+                    onDismiss = {
+                        showDatePicker = false
+                    }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+            AddressField()
+
+            Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+            var checked by rememberSaveable { mutableStateOf(false) }
+
+            AppCheckbox(
+                checked = checked,
+                onCheckedChange = { checked = it },
+                label = stringResource(Res.string.msg_agree_with_term_condition)
+            )
+
+            Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+            AppElevatedButton(
+                modifier = Modifier.fillMaxWidth(),
+                enabled = checked,
+                text = stringResource(Res.string.action_sign_up),
+                onClick = {
+
+                },
+            )
         }
     }
 }
@@ -161,9 +228,76 @@ fun NameField() {
     }
 }
 
+@Composable
+fun AddressField() {
+    var city by rememberSaveable { mutableStateOf("") }
+    var zipCode by rememberSaveable { mutableStateOf("") }
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            AppOutlineTextField(
+                text = city,
+                modifier = Modifier.weight(1f),
+                title = stringResource(Res.string.label_country),
+                placeholder = stringResource(Res.string.hint_select_item),
+                onValueChange = { city = it },
+                isReadOnly = true,
+                onClickListener = {
+
+                }
+            )
+
+            Spacer(modifier = Modifier.width(SpacingToken.medium))
+
+            AppOutlineTextField(
+                text = city,
+                modifier = Modifier.weight(1f),
+                title = stringResource(Res.string.label_state),
+                placeholder = stringResource(Res.string.hint_select_item),
+                onValueChange = { city = it },
+                isReadOnly = true,
+                onClickListener = {
+                    Timber.e("Date of Birth Clicked")
+                }
+            )
+        }
+
+        Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+        Row {
+            AppOutlineTextField(
+                text = city,
+                modifier = Modifier.weight(1f),
+                title = stringResource(Res.string.label_city),
+                placeholder = stringResource(Res.string.hint_select_item),
+                onValueChange = { city = it },
+                isReadOnly = true,
+                onClickListener = {
+                }
+            )
+
+            Spacer(modifier = Modifier.width(SpacingToken.medium))
+
+            AppOutlineTextField(
+                text = zipCode,
+                modifier = Modifier.weight(1f),
+                title = stringResource(Res.string.label_zip_code),
+                placeholder = stringResource(Res.string.hint_zip_code),
+                onValueChange = { zipCode = it },
+            )
+        }
+    }
+}
+
 
 @Composable
 @LightDarkPreview
 fun LoginScreenPreview() {
-    RegistrationScreen()
+    RegistrationScreen{
+
+    }
 }
