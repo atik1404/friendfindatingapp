@@ -8,6 +8,7 @@ android {
 
 dependencies {
     api(projects.core.designSystem)
+    api(projects.core.common)
     implementation(libs.bundles.compose.core)
     implementation(libs.androidx.compose.materialicon)
     implementation(libs.bundles.compose.tooling)

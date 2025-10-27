@@ -20,6 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Female
 import androidx.compose.material.icons.rounded.Male
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,12 +36,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
+import com.friend.ui.common.AppDatePickerDialog
 import com.friend.ui.common.AppToolbar
-import com.friend.ui.common.SimpleDatePickerDialog
 import com.friend.ui.components.AppCheckbox
 import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppOutlineTextField
 import com.friend.ui.components.AppScaffold
+import com.friend.ui.components.AutoCompleteTextField
 import com.friend.ui.components.SingleChoiceSegmentsWithIcons
 import com.friend.ui.preview.LightDarkPreview
 import timber.log.Timber
@@ -75,8 +77,6 @@ fun RegistrationScreen(
                 .appPadding(SpacingToken.small),
         ) {
             var email by rememberSaveable { mutableStateOf("") }
-
-            Spacer(modifier = Modifier.height(SpacingToken.medium))
 
             NameField()
 
@@ -148,14 +148,13 @@ fun RegistrationScreen(
                 }
             )
 
-            if(showDatePicker){
-                SimpleDatePickerDialog(
-                    isMaxDateEnable = true,
-                    onDateSelected = { date ->
-                        Timber.e("Date of Birth Clicked $date")
+            if (showDatePicker) {
+                AppDatePickerDialog(
+                    onDismissRequest = {
                         showDatePicker = false
                     },
-                    onDismiss = {
+                    onConfirm = {
+                        dateOfBirth = it
                         showDatePicker = false
                     }
                 )
@@ -232,6 +231,18 @@ fun NameField() {
 fun AddressField() {
     var city by rememberSaveable { mutableStateOf("") }
     var zipCode by rememberSaveable { mutableStateOf("") }
+    var text by remember { mutableStateOf("") }
+
+    val cities = listOf(
+        "Dhaka",
+        "Chattogram",
+        "Rajshahi",
+        "Khulna",
+        "Sylhet",
+        "Barishal",
+        "Rangpur",
+        "Mymensingh"
+    )
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -239,45 +250,37 @@ fun AddressField() {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            AppOutlineTextField(
-                text = city,
+            AutoCompleteTextField(
+                allOptions = cities,
                 modifier = Modifier.weight(1f),
-                title = stringResource(Res.string.label_country),
+                label = stringResource(Res.string.label_country),
                 placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { city = it },
-                isReadOnly = true,
-                onClickListener = {
-
-                }
+                onValueChange = { text = it },
+                value = text
             )
 
             Spacer(modifier = Modifier.width(SpacingToken.medium))
 
-            AppOutlineTextField(
-                text = city,
+            AutoCompleteTextField(
+                allOptions = cities,
                 modifier = Modifier.weight(1f),
-                title = stringResource(Res.string.label_state),
+                label = stringResource(Res.string.label_state),
                 placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { city = it },
-                isReadOnly = true,
-                onClickListener = {
-                    Timber.e("Date of Birth Clicked")
-                }
+                onValueChange = { text = it },
+                value = text
             )
         }
 
         Spacer(modifier = Modifier.height(SpacingToken.medium))
 
         Row {
-            AppOutlineTextField(
-                text = city,
+            AutoCompleteTextField(
+                allOptions = cities,
                 modifier = Modifier.weight(1f),
-                title = stringResource(Res.string.label_city),
+                label = stringResource(Res.string.label_city),
                 placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { city = it },
-                isReadOnly = true,
-                onClickListener = {
-                }
+                onValueChange = { text = it },
+                value = text
             )
 
             Spacer(modifier = Modifier.width(SpacingToken.medium))
@@ -297,7 +300,7 @@ fun AddressField() {
 @Composable
 @LightDarkPreview
 fun LoginScreenPreview() {
-    RegistrationScreen{
+    RegistrationScreen {
 
     }
 }

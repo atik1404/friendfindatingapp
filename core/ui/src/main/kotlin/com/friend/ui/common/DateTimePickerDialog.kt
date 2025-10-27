@@ -9,107 +9,89 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
+import com.friend.common.dateparser.DateTimeFormat
+import com.friend.common.dateparser.convertMillisToDate
+import java.util.Calendar
+import java.util.TimeZone
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 @Composable
-fun SimpleDatePickerDialog(
-    onDateSelected: (Long?) -> Unit,
-    onDismiss: () -> Unit,
-    isMaxDateEnable: Boolean = false, // true = block future dates
-    isMinDateEnable: Boolean = false, // true = block past dates
+fun AppDatePickerDialog(
+    onDismissRequest: () -> Unit,
+    onConfirm: (selectedDateMillis: String) -> Unit,
+    minDateMillis: Long? = null,
+    maxDateMillis: Long? = null,
+    startSelectedDateMillis: Long? = null,
+    confirmText: String = "OK",
+    dismissText: String = "Cancel",
 ) {
-    // figure out "today at start of day UTC" in millis
-    val todayStartUtcMillis = remember {
-        // java.time for accuracy
-        val todayStartInstant = LocalDate
-            .now(ZoneId.systemDefault()) // take device local date
-            .atStartOfDay(ZoneId.systemDefault()) // 00:00 local
-            .toInstant()
-        todayStartInstant.toEpochMilli()
+    val selectableDates = remember(minDateMillis, maxDateMillis) {
+        MinMaxSelectableDates(
+            minDateMillis = minDateMillis,
+            maxDateMillis = maxDateMillis
+        )
     }
 
-    // Build selectableDates rules based on params
-    val selectableDates = remember(isMaxDateEnable, isMinDateEnable, todayStartUtcMillis) {
-        object : SelectableDates {
-            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                return when {
-                    // both true → only today allowed
-                    isMaxDateEnable && isMinDateEnable -> {
-                        isSameDay(utcTimeMillis, todayStartUtcMillis)
-                    }
-
-                    // max enabled → user can't go AFTER today
-                    isMaxDateEnable -> {
-                        utcTimeMillis <= endOfDayMillis(todayStartUtcMillis)
-                    }
-
-                    // min enabled → user can't go BEFORE today
-                    isMinDateEnable -> {
-                        utcTimeMillis >= todayStartUtcMillis
-                    }
-
-                    // none → all allowed
-                    else -> true
-                }
-            }
-        }
-    }
-
+    // DatePickerState holds current visible month + selected date
     val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = todayStartUtcMillis,
+        initialSelectedDateMillis = startSelectedDateMillis,
         selectableDates = selectableDates
+        // you can also control initialDisplayedMonthMillis if you want
     )
 
     DatePickerDialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = onDismissRequest,
         confirmButton = {
             TextButton(
                 onClick = {
-                    onDateSelected(datePickerState.selectedDateMillis)
-                    onDismiss()
+                    onConfirm(convertMillisToDate(datePickerState.selectedDateMillis ?: 0L,
+                        DateTimeFormat.sqlYMD))
                 }
-            ) {
-                Text("OK")
-            }
+            ) { Text(confirmText) }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cancel")
+            TextButton(onClick = onDismissRequest) {
+                Text(dismissText)
             }
         }
     ) {
         DatePicker(
-            state = datePickerState
+            state = datePickerState,
         )
     }
 }
 
-/**
- * Helper: check if two millis are the same calendar day (local zone).
- */
-private fun isSameDay(millisA: Long, millisB: Long): Boolean {
-    val zone = ZoneId.systemDefault()
-    val dateA = Instant.ofEpochMilli(millisA).atZone(zone).toLocalDate()
-    val dateB = Instant.ofEpochMilli(millisB).atZone(zone).toLocalDate()
-    return dateA == dateB
+
+@OptIn(ExperimentalMaterial3Api::class)
+class MinMaxSelectableDates(
+    private val minDateMillis: Long? = null,
+    private val maxDateMillis: Long? = null,
+) : SelectableDates {
+
+    // called for specific days
+    override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+        val afterMin = minDateMillis?.let { utcTimeMillis >= it } ?: true
+        val beforeMax = maxDateMillis?.let { utcTimeMillis <= it } ?: true
+        return afterMin && beforeMax
+    }
+
+    // called for year-only selection mode (year grid)
+    override fun isSelectableYear(year: Int): Boolean {
+        // optional: restrict year scrolling.
+        // simplest: allow all years that are within min/max if provided
+        val cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+
+        val minOk = minDateMillis?.let {
+            cal.timeInMillis = it
+            year >= cal.get(Calendar.YEAR)
+        } ?: true
+
+        val maxOk = maxDateMillis?.let {
+            cal.timeInMillis = it
+            year <= cal.get(Calendar.YEAR)
+        } ?: true
+
+        return minOk && maxOk
+    }
 }
 
-/**
- * Helper: get 23:59:59.999 of the same day as [startOfDayMillis].
- * This lets "max today" include all timestamps within today.
- */
-private fun endOfDayMillis(startOfDayMillis: Long): Long {
-    val zone = ZoneId.systemDefault()
-    val endOfDayInstant = Instant
-        .ofEpochMilli(startOfDayMillis)
-        .atZone(zone)
-        .toLocalDate()
-        .atTime(23, 59, 59, 999_000_000)
-        .atZone(zone)
-        .toInstant()
-
-    return endOfDayInstant.toEpochMilli()
-}
