@@ -299,7 +299,7 @@ fun AddressField() {
 
 @Composable
 @LightDarkPreview
-fun LoginScreenPreview() {
+private fun ScreenPreview() {
     RegistrationScreen {
 
     }
