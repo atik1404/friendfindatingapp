@@ -27,7 +27,7 @@ import com.friend.designsystem.theme.textColors
 @Composable
 fun AppText(
     text: String,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     alignment: TextAlign = TextAlign.Start,
     maxLines: Int = 1,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,

@@ -11,6 +11,8 @@
     <string name="fcmlink">https://fcm.googleapis.com</string>
 
     <string name="title_registration">Registration</string>
+    <string name="title_personal_information">Personal Information</string>
+    <string name="title_forgot_password">Forgot Password</string>
 
     <string name="action_login_with_google">Login with Google</string>
     <string name="action_login">Login</string>
@@ -18,6 +20,8 @@
     <string name="action_sign_up">Sign Up</string>
     <string name="action_no_account">Don\'t have an account?</string>
     <string name="action_logout">Logout</string>
+    <string name="action_save">Save</string>
+    <string name="action_send_link">Send Link</string>
 
     <string name="label_or">OR</string>
     <string name="label_username">Username*</string>
@@ -29,6 +33,18 @@
     <string name="label_state">State*</string>
     <string name="label_city">City*</string>
     <string name="label_zip_code">Zip/Postal Code*</string>
+    <string name="label_height">Height*</string>
+    <string name="label_weight">Weight*</string>
+    <string name="label_body_type">Body Type*</string>
+    <string name="label_looking_for">Looking for*</string>
+    <string name="label_eyes">Eyes*</string>
+    <string name="label_hair">Hair*</string>
+    <string name="label_smoking">Smoking*</string>
+    <string name="label_drinking">Drinking*</string>
+    <string name="label_title">Title*</string>
+    <string name="label_about_yourself">About You*</string>
+    <string name="label_whats_up">What\'s Up*</string>
+    <string name="label_interest">Interests*</string>
 
     <string name="hint_user_name">Enter your Username</string>
     <string name="hint_full_name">Enter Full Name</string>
@@ -37,6 +53,9 @@
     <string name="hint_dob">MMM DD, YYYY</string>
     <string name="hint_select_item">Select one</string>
     <string name="hint_zip_code">Enter Code</string>
+    <string name="hint_title">Enter title</string>
+    <string name="hint_about_you">Tell us about you</string>
+    <string name="hint_whats_up">Describe what are you looking for</string>
 
     <string name="msg_image_content_description">Image content description</string>
     <string name="msg_dating_app">The Dating App</string>

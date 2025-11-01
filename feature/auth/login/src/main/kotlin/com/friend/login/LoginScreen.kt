@@ -280,7 +280,6 @@ fun LoginForm(
             onValueChange = { userName = it },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next,
-                autoCorrectEnabled = false,
             ),
         )
 
@@ -295,7 +294,6 @@ fun LoginForm(
             isPassword = true,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
-                autoCorrectEnabled = false,
             ),
         )
 

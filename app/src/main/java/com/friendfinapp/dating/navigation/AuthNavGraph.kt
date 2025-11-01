@@ -43,7 +43,9 @@ object AuthNavGraph {
         }
 
         entry(AuthScreens.ForgotPasswordNavScreen) {
-            ForgotPasswordScreen()
+            ForgotPasswordScreen{
+                backStack.removeLastOrNull()
+            }
         }
 
         entry(AuthScreens.RegistrationNavScreen) {
@@ -53,7 +55,9 @@ object AuthNavGraph {
         }
 
         entry(AuthScreens.ProfileCompletionNavScreen) {
-            ProfileCompletionScreen()
+            ProfileCompletionScreen {
+                backStack.removeLastOrNull()
+            }
         }
     }
 }

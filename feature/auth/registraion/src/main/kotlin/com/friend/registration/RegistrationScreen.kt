@@ -20,7 +20,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Female
 import androidx.compose.material.icons.rounded.Male
-import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,7 +44,6 @@ import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AutoCompleteTextField
 import com.friend.ui.components.SingleChoiceSegmentsWithIcons
 import com.friend.ui.preview.LightDarkPreview
-import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,7 +88,6 @@ fun RegistrationScreen(
                 onValueChange = { email = it },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
-                    autoCorrectEnabled = false,
                 ),
             )
 
@@ -104,7 +101,6 @@ fun RegistrationScreen(
                 onValueChange = { email = it },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
-                    autoCorrectEnabled = false,
                 ),
                 isPassword = true
             )
@@ -207,7 +203,6 @@ fun NameField() {
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next,
-                autoCorrectEnabled = false,
             ),
         )
 
@@ -221,7 +216,6 @@ fun NameField() {
             onValueChange = { fullName = it },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next,
-                autoCorrectEnabled = false,
             ),
         )
     }
@@ -229,7 +223,6 @@ fun NameField() {
 
 @Composable
 fun AddressField() {
-    var city by rememberSaveable { mutableStateOf("") }
     var zipCode by rememberSaveable { mutableStateOf("") }
     var text by remember { mutableStateOf("") }
 
