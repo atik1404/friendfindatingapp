@@ -49,7 +49,8 @@ import com.friend.designsystem.R as Res
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationScreen(
-    onBackButtonClicked: () -> Unit
+    onBackButtonClicked: () -> Unit,
+    navigateToProfileCompletion: () -> Unit,
 ) {
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
@@ -177,7 +178,7 @@ fun RegistrationScreen(
                 enabled = checked,
                 text = stringResource(Res.string.action_sign_up),
                 onClick = {
-
+                    navigateToProfileCompletion.invoke()
                 },
             )
         }
@@ -293,7 +294,8 @@ fun AddressField() {
 @Composable
 @LightDarkPreview
 private fun ScreenPreview() {
-    RegistrationScreen {
-
-    }
+    RegistrationScreen(
+        onBackButtonClicked = {},
+        navigateToProfileCompletion = {}
+    )
 }

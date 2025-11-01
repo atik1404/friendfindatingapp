@@ -49,9 +49,15 @@ object AuthNavGraph {
         }
 
         entry(AuthScreens.RegistrationNavScreen) {
-            RegistrationScreen{
-                backStack.removeLastOrNull()
-            }
+            RegistrationScreen(
+                onBackButtonClicked = {
+                    backStack.removeLastOrNull()
+                },
+                navigateToProfileCompletion = {
+                    backStack.remove(AuthScreens.RegistrationNavScreen)
+                    backStack.add(AuthScreens.ProfileCompletionNavScreen)
+                }
+            )
         }
 
         entry(AuthScreens.ProfileCompletionNavScreen) {
