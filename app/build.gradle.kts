@@ -93,6 +93,7 @@ dependencies {
         implementation(auth.registraion)
         implementation(auth.forgotPassword)
         implementation(auth.profileCompletion)
+        implementation(home)
     }
 
     with(libs){

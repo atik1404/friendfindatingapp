@@ -29,7 +29,7 @@ import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.ui.components.AppText
-import com.friend.ui.components.LoadLocalImage
+import com.friend.ui.components.LocalImageLoader
 import kotlinx.coroutines.delay
 import com.friend.designsystem.R as Res
 
@@ -52,7 +52,7 @@ fun SplashScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            LoadLocalImage(
+            LocalImageLoader(
                 imageResId = Res.drawable.img_splash_background,
                 modifier = Modifier
                     .fillMaxSize()
@@ -90,7 +90,7 @@ fun AnimatedVisibilityImage(visible: Boolean) {
         enter = fadeIn() + scaleIn(initialScale = 0.95f),
         exit  = fadeOut() + scaleOut(targetScale = 0.95f)
     ) {
-        LoadLocalImage(
+        LocalImageLoader(
             imageResId = Res.drawable.friendfin,
         )
     }

@@ -6,6 +6,7 @@ import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
 import com.friend.forgotpassword.ForgotPasswordScreen
+import com.friend.home.HomeScreen
 import com.friend.login.LoginScreen
 import com.friend.profilecompletion.ProfileCompletionScreen
 import com.friend.registration.RegistrationScreen
@@ -23,7 +24,7 @@ object AuthNavGraph {
                     backStack.add(AuthScreens.LoginNavScreen)
                 },
                 navigateToHomeScreen = {
-                    //backStack.add(Main.HomeScreen)
+                    backStack.add(AuthScreens.HomeScreen)
                 }
             )
         }
@@ -36,8 +37,8 @@ object AuthNavGraph {
                 navigateToForgotPassword = {
                     backStack.add(AuthScreens.ForgotPasswordNavScreen)
                 },
-                navigateToProfileCompletion = {
-                    backStack.add(AuthScreens.ProfileCompletionNavScreen)
+                navigateToHome = {
+                    backStack.add(AuthScreens.HomeScreen)
                 }
             )
         }
@@ -62,6 +63,12 @@ object AuthNavGraph {
 
         entry(AuthScreens.ProfileCompletionNavScreen) {
             ProfileCompletionScreen {
+                backStack.removeLastOrNull()
+            }
+        }
+
+        entry(AuthScreens.HomeScreen) {
+            HomeScreen {
                 backStack.removeLastOrNull()
             }
         }

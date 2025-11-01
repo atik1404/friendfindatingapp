@@ -170,7 +170,7 @@ dot-indicator = { group = "com.tbuonomo", name = "dotsindicator", version.ref = 
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timberVersion" }
 view-state-layout = { group = "com.github.kamrul3288", name = "viewstatelayout", version.ref = "viewStateLayoutVersion" }
 dateced = { group = "com.github.kamrul3288", name = "dateced", version.ref = "dateced" }
-coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 date-picker = { group = "com.wdullaer", name = "materialdatetimepicker", version.ref = "datePicker" }
 
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBomVersion" }

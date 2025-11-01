@@ -13,6 +13,7 @@
     <string name="title_registration">Registration</string>
     <string name="title_personal_information">Personal Information</string>
     <string name="title_forgot_password">Forgot Password</string>
+    <string name="title_home">Home</string>
 
     <string name="action_login_with_google">Login with Google</string>
     <string name="action_login">Login</string>

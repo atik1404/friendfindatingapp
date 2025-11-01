@@ -14,4 +14,5 @@ sealed interface AuthScreens : AppScreen {
     object RegistrationNavScreen : AppScreen
     object ForgotPasswordNavScreen : AppScreen
     object ProfileCompletionNavScreen : AppScreen
+    object HomeScreen : AppScreen
 }

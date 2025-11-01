@@ -37,7 +37,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -59,12 +58,11 @@ import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AppText
 import com.friend.ui.components.AppTextButton
 import com.friend.ui.components.ColoredTextSegment
-import com.friend.ui.components.LoadLocalImage
+import com.friend.ui.components.LocalImageLoader
 import com.friend.ui.components.MultiColorText
 import com.friend.ui.preview.LightDarkPreview
 import com.friend.ui.showToastMessage
 import kotlinx.coroutines.delay
-import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 /**
@@ -79,7 +77,7 @@ import com.friend.designsystem.R as Res
 fun LoginScreen(
     navigateToRegistration: () -> Unit,
     navigateToForgotPassword: () -> Unit,
-    navigateToProfileCompletion: () -> Unit,
+    navigateToHome: () -> Unit,
 ) {
     val currentContext = LocalContext.current
     AppScaffold(
@@ -101,7 +99,7 @@ fun LoginScreen(
             val (bannerImage, googleLoginBtn, loginTypeDivider, loginUi, copyrightUi, bannerAds) =
                 createRefs()
 
-            LoadLocalImage(
+            LocalImageLoader(
                 imageResId = Res.drawable.img_login_illustration,
                 modifier = Modifier.constrainAs(bannerImage) {
                     top.linkTo(parent.top)
@@ -150,7 +148,7 @@ fun LoginScreen(
                         end.linkTo(parent.end)
                         width = Dimension.fillToConstraints
                     },
-                onLoginClick = navigateToProfileCompletion,
+                onLoginClick = navigateToHome,
                 onForgotPasswordClick = navigateToForgotPassword,
                 onSignUpClick = navigateToRegistration
             )
@@ -377,6 +375,6 @@ fun LoginScreenPreview() {
     LoginScreen(
         navigateToRegistration = { },
         navigateToForgotPassword = { },
-        navigateToProfileCompletion = {}
+        navigateToHome = {}
     )
 }

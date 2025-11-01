@@ -44,3 +44,5 @@ include(":feature:auth:login")
 include(":feature:auth:profile-completion")
 include(":feature:auth:forgot-password")
 include(":feature:auth:registraion")
+
+include(":feature:home")

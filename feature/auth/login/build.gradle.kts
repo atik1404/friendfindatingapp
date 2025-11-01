@@ -5,7 +5,3 @@ plugins {
 android {
     namespace = "com.friend.login"
 }
-
-dependencies {
-    implementation(libs.androidx.compose.constraintlayout)
-}

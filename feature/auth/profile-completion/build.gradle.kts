@@ -5,7 +5,3 @@ plugins {
 android {
     namespace = "com.friend.profilecompletion"
 }
-
-dependencies {
-
-}
