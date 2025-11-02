@@ -1,5 +1,6 @@
 package com.friend.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Row
@@ -40,20 +41,19 @@ fun AppText(
 ) {
     return Row(
         modifier = modifier
+            .then(
+                if (onClick != null) {
+                    Modifier.clickable { onClick() }
+                } else {
+                    Modifier
+                }
+            )
     ) {
         if (leading != null) {
             leading()
         }
         Text(
             text = text,
-            modifier = modifier
-                .then(
-                    if (onClick != null) {
-                        Modifier.clickable { onClick() }
-                    } else {
-                        Modifier
-                    }
-                ),
             style = textStyle.copy(color = textColor, fontWeight = fontWeight),
             textAlign = alignment,
             maxLines = maxLines,

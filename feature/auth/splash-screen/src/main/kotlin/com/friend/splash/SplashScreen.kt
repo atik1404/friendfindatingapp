@@ -71,8 +71,6 @@ fun SplashScreen(
 
                 AppText(
                     stringResource(Res.string.msg_dating_app),
-                    modifier = Modifier.fillMaxWidth()
-                        .align(Alignment.CenterHorizontally),
                     fontWeight = FontWeight.Bold,
                     textStyle = AppTypography.titleLarge,
                     alignment = TextAlign.Center,

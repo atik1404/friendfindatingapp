@@ -39,7 +39,7 @@ fun NetworkImageLoader(
     modifier: Modifier = Modifier,
     @DrawableRes placeholderRes: Int? = Res.drawable.friendfin,
     @DrawableRes errorRes: Int? = Res.drawable.friendfin,
-    shape: Shape = RoundedCornerShape(RadiusToken.medium),
+    shape: Shape = RoundedCornerShape(RadiusToken.none),
     contentScale: ContentScale = ContentScale.Crop,
 ) {
     AsyncImage(

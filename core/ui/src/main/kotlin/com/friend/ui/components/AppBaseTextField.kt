@@ -52,7 +52,7 @@ import com.friend.designsystem.typography.AppTypography
 enum class AppTextFieldStyle { Filled, Outlined }
 
 @Composable
-private fun BaseTextField(
+fun AppBaseTextField(
     value: String,
     modifier: Modifier = Modifier,
     style: AppTextFieldStyle = AppTextFieldStyle.Outlined,
@@ -268,7 +268,7 @@ fun AppOutlineTextField(
         Box(
             modifier = Modifier.fillMaxWidth()
         ) {
-            BaseTextField(
+            AppBaseTextField(
                 value = text,
                 modifier = textFieldModifier,
                 placeholder = placeholder,
@@ -353,7 +353,7 @@ fun AutoCompleteTextField(
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            BaseTextField(
+            AppBaseTextField(
                 value = value,
                 onValueChange = {
                     onValueChange(it)
@@ -397,7 +397,7 @@ fun AutoCompleteTextField(
 
 @Composable
 @PreviewLightDark
-fun AppTextFieldPreview() {
+private fun AppTextFieldPreview() {
     Column {
         AppOutlineTextField(
             text = "",

@@ -358,15 +358,20 @@ fun CopyrightText(
  */
 @Composable
 fun BannerAds(modifier: Modifier = Modifier) {
-    AppText(
-        text = "Banner ads",
+    Column(
         modifier = modifier
             .fillMaxWidth()
             .height(50.dp)
             .background(Color.Gray)
             .border(1.dp, Color.Black),
-        alignment = TextAlign.Center
-    )
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        AppText(
+            text = "Banner ads",
+            alignment = TextAlign.Center
+        )
+    }
 }
 
 @Composable

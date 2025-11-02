@@ -48,6 +48,7 @@
     <string name="label_interest">Interests*</string>
 
     <string name="hint_user_name">Enter your Username</string>
+    <string name="hint_search_here">Search here....</string>
     <string name="hint_full_name">Enter Full Name</string>
     <string name="hint_password">Enter your Password</string>
     <string name="hint_email">Enter your Email</string>
