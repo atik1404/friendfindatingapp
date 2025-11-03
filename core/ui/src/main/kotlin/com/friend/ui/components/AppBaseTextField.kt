@@ -61,6 +61,7 @@ fun AppBaseTextField(
     leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
     onTrailingClick: (() -> Unit)? = null,
+    onLeadingClick: (() -> Unit)? = null,
     clearable: Boolean = false,
     isPassword: Boolean = false,
     enabled: Boolean = true,
@@ -101,6 +102,14 @@ fun AppBaseTextField(
             {
                 IconButton(onClick = { onTrailingClick?.invoke() }) {
                     Icon(imageVector = trailingIcon, contentDescription = null)
+                }
+            }
+        }
+
+        leadingIcon != null -> {
+            {
+                IconButton(onClick = { onLeadingClick?.invoke() }) {
+                    Icon(imageVector = leadingIcon, contentDescription = null)
                 }
             }
         }

@@ -1,5 +1,8 @@
 @file:Suppress("UnstableApiUsage")
 
+include(":feature:home")
+
+
 pluginManagement {
     includeBuild("build-logic")
     repositories {
@@ -45,4 +48,4 @@ include(":feature:auth:profile-completion")
 include(":feature:auth:forgot-password")
 include(":feature:auth:registraion")
 
-include(":feature:home")
+//include(":feature:home")

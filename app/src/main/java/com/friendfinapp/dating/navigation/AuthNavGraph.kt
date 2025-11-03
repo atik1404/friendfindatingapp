@@ -24,7 +24,7 @@ object AuthNavGraph {
                     backStack.add(AuthScreens.LoginNavScreen)
                 },
                 navigateToHomeScreen = {
-                    backStack.add(AuthScreens.HomeScreen)
+                    backStack.add(AuthScreens.HomeNavScreen)
                 }
             )
         }
@@ -38,7 +38,7 @@ object AuthNavGraph {
                     backStack.add(AuthScreens.ForgotPasswordNavScreen)
                 },
                 navigateToHome = {
-                    backStack.add(AuthScreens.HomeScreen)
+                    backStack.add(AuthScreens.HomeNavScreen)
                 }
             )
         }
@@ -67,7 +67,7 @@ object AuthNavGraph {
             }
         }
 
-        entry(AuthScreens.HomeScreen) {
+        entry(AuthScreens.HomeNavScreen) {
             HomeScreen {
                 backStack.removeLastOrNull()
             }
