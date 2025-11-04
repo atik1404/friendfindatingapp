@@ -8,6 +8,8 @@ data class BackgroundColors(
     val secondary: Color,
     val tertiary: Color,
     val surface: Color,
+    val white: Color,
+    val black: Color,
 )
 
 val LocalBackgroundColors = staticCompositionLocalOf {
@@ -16,6 +18,8 @@ val LocalBackgroundColors = staticCompositionLocalOf {
         secondary = ColorPalette.Gray200,
         tertiary = ColorPalette.Gray300,
         surface = ColorPalette.Gray100,
+        white = ColorPalette.White,
+        black = ColorPalette.Gray700,
     )
 }
 
@@ -24,6 +28,8 @@ fun backgroundColorsForLight() = BackgroundColors(
     secondary = ColorPalette.Gray200,
     tertiary = ColorPalette.Gray300,
     surface = ColorPalette.Gray100,
+    white = ColorPalette.White,
+    black = ColorPalette.Gray700,
 )
 
 fun backgroundColorsForDark() = BackgroundColors(
@@ -31,4 +37,6 @@ fun backgroundColorsForDark() = BackgroundColors(
     secondary = ColorPalette.Gray600,
     tertiary = ColorPalette.Gray400,
     surface = ColorPalette.Gray300,
+    white = ColorPalette.White,
+    black = ColorPalette.Gray700,
 )

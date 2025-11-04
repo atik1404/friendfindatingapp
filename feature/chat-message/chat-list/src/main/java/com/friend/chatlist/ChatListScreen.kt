@@ -1,7 +1,6 @@
-package com.friend.home
+package com.friend.chatlist
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,15 +15,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -35,33 +31,37 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.friend.designsystem.spacing.IconSizeToken
+import com.friend.designsystem.spacing.RadiusToken
 import com.friend.designsystem.spacing.SpacingToken
-import com.friend.designsystem.spacing.appPadding
 import com.friend.designsystem.spacing.appPaddingSymmetric
-import com.friend.designsystem.theme.surfaceColors
+import com.friend.designsystem.theme.backgroundColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.theme.textFieldColors
 import com.friend.designsystem.typography.AppTypography
+import com.friend.ui.common.AppToolbar
 import com.friend.ui.components.AppBaseTextField
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AppText
-import com.friend.ui.components.LocalImageLoader
 import com.friend.ui.components.NetworkImageLoader
 import com.friend.ui.preview.LightDarkPreview
-import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
-    navigateToChatListScreen: () -> Unit,
+fun ChatListScreen(
+    onBackButtonClicked: () -> Unit,
 ) {
     AppScaffold(
-        contentWindowInsets = WindowInsets.safeDrawing
+        contentWindowInsets = WindowInsets.safeDrawing,
+        topBar = {
+            AppToolbar(
+                title = stringResource(Res.string.title_chat),
+                onBackClick = {
+                    onBackButtonClicked.invoke()
+                })
+        }
     ) { padding ->
         Column(
             modifier = Modifier
@@ -70,48 +70,44 @@ fun HomeScreen(
                 .consumeWindowInsets(padding)
                 .navigationBarsPadding()
                 .imePadding()
-                .appPadding(SpacingToken.medium)
+                .appPaddingSymmetric(
+                    horizontal = SpacingToken.extraSmall,
+                    vertical = SpacingToken.medium
+                )
         ) {
             SearchMenu()
-            Spacer(Modifier.height(SpacingToken.medium))
-            ProfileInfo{
-                navigateToChatListScreen.invoke()
-            }
-            Spacer(Modifier.height(SpacingToken.medium))
-            PersonList()
+            Spacer(modifier = Modifier.height(SpacingToken.medium))
+            ChatList()
         }
     }
 }
 
 @Composable
-private fun SearchMenu(){
-    var userName by rememberSaveable { mutableStateOf("") }
+private fun SearchMenu() {
+    var searchKeyword by rememberSaveable { mutableStateOf("") }
     AppBaseTextField(
-        value = userName,
+        value = searchKeyword,
         modifier = Modifier.fillMaxWidth(),
         placeholder = stringResource(Res.string.hint_search_here),
-        onValueChange = { userName = it },
+        onValueChange = { searchKeyword = it },
         colors = MaterialTheme.textFieldColors.outlinedTextField,
-        readOnly = true,
         shape = RoundedCornerShape(SpacingToken.medium),
         trailingIcon = Icons.Default.Search,
-        leadingIcon = Icons.Default.Dashboard,
-        onTrailingClick = {
-            Timber.e("Navigate to search screen")
-        },
-        onLeadingClick = {
-            Timber.e("Open drawer screen")
-        }
     )
 }
 
 @Composable
-private fun ProfileInfo(
-    navigateToChatListScreen: () -> Unit,
-){
+private fun ChatListItem() {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = SpacingToken.micro)
+            .background(
+                MaterialTheme.backgroundColors.white,
+                shape = RoundedCornerShape(RadiusToken.medium)
+            )
+            .appPaddingSymmetric(horizontal = SpacingToken.tiny, vertical = SpacingToken.medium),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         NetworkImageLoader(
             "https://images.unsplash.com/photo-1483909796554-bb0051ab60ad?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2373",
@@ -126,7 +122,7 @@ private fun ProfileInfo(
 
         Column {
             AppText(
-                text = "Good Morning, Atik Faysal",
+                text = "Atik Faysal",
                 textStyle = AppTypography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 textColor = MaterialTheme.textColors.primary,
@@ -137,10 +133,11 @@ private fun ProfileInfo(
             )
 
             AppText(
-                text = "Welcome back to your dashboard",
+                text = "Hey, How are you Atik?",
                 textStyle = AppTypography.bodyMedium,
                 fontWeight = FontWeight.Light,
                 textColor = MaterialTheme.textColors.primary,
+                overflow = TextOverflow.Ellipsis
             )
         }
 
@@ -148,72 +145,28 @@ private fun ProfileInfo(
             modifier = Modifier.weight(1f)
         )
 
-        IconButton(
-            onClick = {
-                navigateToChatListScreen.invoke()
-            }
-        ){
-            LocalImageLoader(
-                imageResId = Res.drawable.ic_chat_bubble,
-                modifier = Modifier.size(IconSizeToken.medium)
-            )
-        }
-    }
-}
-
-@Composable
-private fun PersonList(){
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-    ) {
-        items(100) {
-            UserGreetings()
-        }
-    }
-}
-
-@Composable
-private fun UserGreetings(){
-    Box(
-        contentAlignment = Alignment.BottomCenter,
-        modifier = Modifier.appPadding(SpacingToken.micro)
-    ) {
-        NetworkImageLoader(
-            "https://images.unsplash.com/photo-1483909796554-bb0051ab60ad?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2373",
-            modifier = Modifier
-                .fillMaxSize()
-                .height(200.dp),
-            shape = RoundedCornerShape(SpacingToken.extraSmall)
-        )
-
         AppText(
-            text = "Atik Faysal",
-            textStyle = AppTypography.bodyMedium,
-            fontWeight = FontWeight.Bold,
-            textColor = MaterialTheme.textColors.white,
-            modifier = Modifier
-                .appPaddingSymmetric(
-                    horizontal = SpacingToken.medium,
-                    vertical = SpacingToken.micro
-                )
-                .background(
-                    MaterialTheme.surfaceColors.tertiary.copy(alpha = .1f),
-                    shape = RoundedCornerShape(SpacingToken.medium)
-                )
-                .appPaddingSymmetric(
-                    horizontal = SpacingToken.medium,
-                    vertical = SpacingToken.micro
-                ),
-            alignment = TextAlign.Center,
-            overflow = TextOverflow.Ellipsis
+            text = "10:15 PM",
+            textStyle = AppTypography.bodySmall,
+            fontWeight = FontWeight.Medium,
+            textColor = MaterialTheme.textColors.primary,
         )
+    }
+}
+
+@Composable
+private fun ChatList() {
+    LazyColumn {
+        items(100) {
+            ChatListItem()
+        }
     }
 }
 
 @Composable
 @LightDarkPreview
 private fun ScreenPreview() {
-    HomeScreen {
+    ChatListScreen {
 
     }
 }

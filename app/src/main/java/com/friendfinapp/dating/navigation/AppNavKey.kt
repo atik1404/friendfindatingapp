@@ -10,11 +10,26 @@ sealed interface AuthScreens : AppScreen {
     object SplashNavScreen : AppScreen
     @Serializable
     object LoginNavScreen : AppScreen
+    @Serializable
     object RegistrationNavScreen : AppScreen
+    @Serializable
     object ForgotPasswordNavScreen : AppScreen
+    @Serializable
     object ProfileCompletionNavScreen : AppScreen
 }
 
 sealed interface MainScreens : AppScreen {
+    @Serializable
     object HomeNavScreen : AppScreen
+}
+
+sealed interface ChatMessageScreens : AppScreen {
+    @Serializable
+    object ChatListNavScreen : AppScreen
+
+    @Serializable
+    data class ChatRoomNavScreen(
+        val messageId: String,
+        val userName: String
+    ) : AppScreen
 }

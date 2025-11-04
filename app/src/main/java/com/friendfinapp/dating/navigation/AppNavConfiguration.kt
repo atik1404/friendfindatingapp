@@ -15,7 +15,7 @@ import androidx.navigation3.ui.NavDisplay
 
 @Composable
 fun AppNavConfiguration() {
-    val backStack = rememberNavBackStack(AuthScreens.SplashNavScreen).toMutableStateList()
+    val backStack = rememberNavBackStack(MainScreens.HomeNavScreen).toMutableStateList()
     val navResults = remember { NavResultManager() }
 
     CompositionLocalProvider(
@@ -55,6 +55,7 @@ fun AppNavConfiguration() {
             entryProvider = entryProvider {
                 AuthNavGraph.register(backStack, this)
                 MainNavGraph.register(backStack, this)
+                ChatMessageNavGraph.register(backStack, this)
             }
         )
     }

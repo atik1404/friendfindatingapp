@@ -94,6 +94,7 @@ dependencies {
         implementation(auth.forgotPassword)
         implementation(auth.profileCompletion)
         implementation(home)
+        implementation(chatMessage.chatList)
     }
 
     with(libs){

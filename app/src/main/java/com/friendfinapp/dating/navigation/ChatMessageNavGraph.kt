@@ -4,16 +4,16 @@ import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
-import com.friend.home.HomeScreen
+import com.friend.chatlist.ChatListScreen
 
-object MainNavGraph {
+object ChatMessageNavGraph {
     fun register(
         backStack: NavBackStack,
-        builder: EntryProviderBuilder<NavKey>
+        builder: EntryProviderBuilder<NavKey>,
     ) = with(builder) {
-        entry(MainScreens.HomeNavScreen) {
-            HomeScreen {
-                backStack.add(ChatMessageScreens.ChatListNavScreen)
+        entry(ChatMessageScreens.ChatListNavScreen) {
+            ChatListScreen {
+                backStack.removeLastOrNull()
             }
         }
     }
