@@ -54,6 +54,7 @@ fun AppNavConfiguration() {
             },
             entryProvider = entryProvider {
                 AuthNavGraph.register(backStack, this)
+                MainNavGraph.register(backStack, this)
             }
         )
     }

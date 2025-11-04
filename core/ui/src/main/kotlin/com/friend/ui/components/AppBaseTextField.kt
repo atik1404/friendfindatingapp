@@ -83,7 +83,11 @@ fun AppBaseTextField(
         if (isPassword && !pwdVisible) PasswordVisualTransformation() else VisualTransformation.None
 
     val leading: (@Composable (() -> Unit))? = leadingIcon?.let {
-        { Icon(imageVector = it, contentDescription = null) }
+        {
+            IconButton(onClick = { onLeadingClick?.invoke() }) {
+                Icon(imageVector = leadingIcon, contentDescription = null)
+            }
+        }
     }
 
     val trailingContent: (@Composable () -> Unit)? = when {
@@ -102,14 +106,6 @@ fun AppBaseTextField(
             {
                 IconButton(onClick = { onTrailingClick?.invoke() }) {
                     Icon(imageVector = trailingIcon, contentDescription = null)
-                }
-            }
-        }
-
-        leadingIcon != null -> {
-            {
-                IconButton(onClick = { onLeadingClick?.invoke() }) {
-                    Icon(imageVector = leadingIcon, contentDescription = null)
                 }
             }
         }
@@ -257,8 +253,10 @@ fun AppOutlineTextField(
     isReadOnly: Boolean = false,
     onClickListener: (() -> Unit)? = null,
 ) {
-    val textFieldModifier = if(maxLines > 1) {
-        Modifier.fillMaxWidth().heightIn(100.dp)
+    val textFieldModifier = if (maxLines > 1) {
+        Modifier
+            .fillMaxWidth()
+            .heightIn(100.dp)
     } else {
         Modifier.fillMaxWidth()
     }
@@ -390,7 +388,7 @@ fun AutoCompleteTextField(
             ) {
                 allOptions.forEach { option ->
                     DropdownMenuItem(
-                        text = { Text(option)},
+                        text = { Text(option) },
                         onClick = {
                             onValueChange(option)
                             onOptionSelected(option)

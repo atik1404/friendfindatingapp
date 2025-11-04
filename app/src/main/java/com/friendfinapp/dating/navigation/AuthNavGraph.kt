@@ -1,6 +1,5 @@
 package com.friendfinapp.dating.navigation
 
-
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.NavKey
@@ -24,7 +23,7 @@ object AuthNavGraph {
                     backStack.add(AuthScreens.LoginNavScreen)
                 },
                 navigateToHomeScreen = {
-                    backStack.add(AuthScreens.HomeNavScreen)
+                    backStack.add(MainScreens.HomeNavScreen)
                 }
             )
         }
@@ -38,7 +37,8 @@ object AuthNavGraph {
                     backStack.add(AuthScreens.ForgotPasswordNavScreen)
                 },
                 navigateToHome = {
-                    backStack.add(AuthScreens.HomeNavScreen)
+                    backStack.clear()
+                    backStack.add(MainScreens.HomeNavScreen)
                 }
             )
         }
@@ -63,12 +63,6 @@ object AuthNavGraph {
 
         entry(AuthScreens.ProfileCompletionNavScreen) {
             ProfileCompletionScreen {
-                backStack.removeLastOrNull()
-            }
-        }
-
-        entry(AuthScreens.HomeNavScreen) {
-            HomeScreen {
                 backStack.removeLastOrNull()
             }
         }

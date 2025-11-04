@@ -24,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,10 +38,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
-import com.friend.designsystem.spacing.appPaddingHorizontal
-import com.friend.designsystem.spacing.appPaddingOnly
 import com.friend.designsystem.spacing.appPaddingSymmetric
 import com.friend.designsystem.theme.surfaceColors
 import com.friend.designsystem.theme.textColors
@@ -52,6 +52,7 @@ import com.friend.ui.components.AppText
 import com.friend.ui.components.LocalImageLoader
 import com.friend.ui.components.NetworkImageLoader
 import com.friend.ui.preview.LightDarkPreview
+import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -94,10 +95,10 @@ private fun SearchMenu(){
         trailingIcon = Icons.Default.Search,
         leadingIcon = Icons.Default.Dashboard,
         onTrailingClick = {
-
+            Timber.e("Navigate to search screen")
         },
         onLeadingClick = {
-
+            Timber.e("Open drawer screen")
         }
     )
 }
@@ -143,9 +144,16 @@ private fun ProfileInfo(){
             modifier = Modifier.weight(1f)
         )
 
-        LocalImageLoader(
-            imageResId = Res.drawable.ic_chat
-        )
+        IconButton(
+            onClick = {
+                Timber.e("Navigate to chat room screen")
+            }
+        ){
+            LocalImageLoader(
+                imageResId = Res.drawable.ic_chat_bubble,
+                modifier = Modifier.size(IconSizeToken.medium)
+            )
+        }
     }
 }
 
