@@ -1,6 +1,7 @@
 package com.friend.chatlist
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -46,12 +47,14 @@ import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AppText
 import com.friend.ui.components.NetworkImageLoader
 import com.friend.ui.preview.LightDarkPreview
+import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatListScreen(
     onBackButtonClicked: () -> Unit,
+    navigateToChatRoom: (String, String) -> Unit
 ) {
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
@@ -77,7 +80,9 @@ fun ChatListScreen(
         ) {
             SearchMenu()
             Spacer(modifier = Modifier.height(SpacingToken.medium))
-            ChatList()
+            ChatList{
+                navigateToChatRoom.invoke("Faysal","1234")
+            }
         }
     }
 }
@@ -97,16 +102,19 @@ private fun SearchMenu() {
 }
 
 @Composable
-private fun ChatListItem() {
+private fun ChatListItem(modifier: Modifier) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = SpacingToken.micro)
             .background(
                 MaterialTheme.backgroundColors.white,
                 shape = RoundedCornerShape(RadiusToken.medium)
             )
-            .appPaddingSymmetric(horizontal = SpacingToken.tiny, vertical = SpacingToken.medium),
+            .appPaddingSymmetric(
+                horizontal = SpacingToken.tiny,
+                vertical = SpacingToken.medium
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
         NetworkImageLoader(
@@ -155,10 +163,19 @@ private fun ChatListItem() {
 }
 
 @Composable
-private fun ChatList() {
+private fun ChatList(
+    onItemClicked: (String) -> Unit
+) {
     LazyColumn {
-        items(100) {
-            ChatListItem()
+        items(100, key = { it }) {
+            ChatListItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable{
+                        onItemClicked.invoke("")
+                        Timber.e("item clicked")
+                    }
+            )
         }
     }
 }
@@ -166,7 +183,8 @@ private fun ChatList() {
 @Composable
 @LightDarkPreview
 private fun ScreenPreview() {
-    ChatListScreen {
-
-    }
+    ChatListScreen(
+        onBackButtonClicked = {},
+        navigateToChatRoom = { _, _ -> }
+    )
 }

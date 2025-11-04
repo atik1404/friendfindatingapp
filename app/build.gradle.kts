@@ -95,6 +95,7 @@ dependencies {
         implementation(auth.profileCompletion)
         implementation(home)
         implementation(chatMessage.chatList)
+        implementation(chatMessage.chatRoom)
     }
 
     with(libs){

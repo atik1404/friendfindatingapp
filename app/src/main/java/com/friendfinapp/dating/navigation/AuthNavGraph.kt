@@ -1,11 +1,10 @@
 package com.friendfinapp.dating.navigation
 
-import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
 import com.friend.forgotpassword.ForgotPasswordScreen
-import com.friend.home.HomeScreen
 import com.friend.login.LoginScreen
 import com.friend.profilecompletion.ProfileCompletionScreen
 import com.friend.registration.RegistrationScreen

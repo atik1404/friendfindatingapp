@@ -1,5 +1,4 @@
 @file:Suppress("UnstableApiUsage")
-
 pluginManagement {
     includeBuild("build-logic")
     repositories {
@@ -49,3 +48,4 @@ include(":feature:auth:registraion")
 include(":feature:home")
 
 include(":feature:chat-message:chat-list")
+include(":feature:chat-message:chat-room")

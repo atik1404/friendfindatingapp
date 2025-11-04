@@ -116,7 +116,7 @@ private fun ProfileInfo(
         NetworkImageLoader(
             "https://images.unsplash.com/photo-1483909796554-bb0051ab60ad?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2373",
             modifier = Modifier
-                .size(50.dp),
+                .size(IconSizeToken.extraLarge),
             shape = CircleShape
         )
 
