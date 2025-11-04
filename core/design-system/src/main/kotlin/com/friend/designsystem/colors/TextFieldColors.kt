@@ -20,6 +20,7 @@ data class AppTextFieldColors(
     val outlinedTextField: TextFieldColors,
     val disabledFilledTextField: TextFieldColors,
     val disabledOutlinedTextField: TextFieldColors,
+    val transparentOutlinedTextField: TextFieldColors,
 )
 
 val LocalTextFieldColors = staticCompositionLocalOf {
@@ -67,6 +68,17 @@ val LocalTextFieldColors = staticCompositionLocalOf {
             borderColor = ColorPalette.Blue50,
             focusedBorderColor = ColorPalette.Blue100,
             errorBorderColor = ColorPalette.Red300,
+        ),
+        transparentOutlinedTextField = TextFieldColors(
+            backgroundColor = ColorPalette.White,
+            textColor = ColorPalette.Gray950,
+            placeholderColor = ColorPalette.Gray300,
+            labelColor = ColorPalette.Gray500,
+            leadingIconColor = ColorPalette.Gray500,
+            trailingIconColor = ColorPalette.Gray500,
+            borderColor = ColorPalette.Transparent,
+            focusedBorderColor = ColorPalette.Transparent,
+            errorBorderColor = ColorPalette.Transparent,
         )
     )
 }
@@ -115,6 +127,17 @@ fun textFieldColorForLight() = AppTextFieldColors(
         borderColor = ColorPalette.Blue50,
         focusedBorderColor = ColorPalette.Blue100,
         errorBorderColor = ColorPalette.Red300,
+    ),
+    transparentOutlinedTextField = TextFieldColors(
+        backgroundColor = ColorPalette.White,
+        textColor = ColorPalette.Gray950,
+        placeholderColor = ColorPalette.Gray300,
+        labelColor = ColorPalette.Gray500,
+        leadingIconColor = ColorPalette.Gray500,
+        trailingIconColor = ColorPalette.Gray500,
+        borderColor = ColorPalette.Transparent,
+        focusedBorderColor = ColorPalette.Transparent,
+        errorBorderColor = ColorPalette.Transparent,
     )
 )
 
@@ -162,5 +185,16 @@ fun textFieldColorForDark() = AppTextFieldColors(
         borderColor = ColorPalette.Blue50,
         focusedBorderColor = ColorPalette.Blue100,
         errorBorderColor = ColorPalette.Red300,
+    ),
+    transparentOutlinedTextField = TextFieldColors(
+        backgroundColor = ColorPalette.White,
+        textColor = ColorPalette.Gray950,
+        placeholderColor = ColorPalette.Gray300,
+        labelColor = ColorPalette.Gray500,
+        leadingIconColor = ColorPalette.Gray500,
+        trailingIconColor = ColorPalette.Gray500,
+        borderColor = ColorPalette.Transparent,
+        focusedBorderColor = ColorPalette.Transparent,
+        errorBorderColor = ColorPalette.Transparent,
     )
 )

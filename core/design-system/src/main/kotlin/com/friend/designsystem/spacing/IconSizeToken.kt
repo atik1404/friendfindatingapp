@@ -8,5 +8,6 @@ object IconSizeToken {
     val small = 16.dp        // status, inline with small text
     val medium = 24.dp       // standard action bar / toolbar icon
     val large = 32.dp        // dialogs, cards
+    val mediumLarge = 40.dp        // dialogs, cards
     val extraLarge = 48.dp   // splash, feature icons
 }

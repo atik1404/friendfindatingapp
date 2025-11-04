@@ -76,7 +76,7 @@ fun AppBaseTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     shape: Shape = TextFieldDefaults.shape,
     onValueChange: (String) -> Unit,
-    colors: TextFieldColors,
+    colors: TextFieldColors = MaterialTheme.textFieldColors.outlinedTextField,
 ) {
     var pwdVisible by remember { mutableStateOf(false) }
     val vt: VisualTransformation =

@@ -59,6 +59,7 @@
     <string name="hint_title">Enter title</string>
     <string name="hint_about_you">Tell us about you</string>
     <string name="hint_whats_up">Describe what are you looking for</string>
+    <string name="hint_write_something_here">"Write something here..."</string>
 
     <string name="msg_image_content_description">Image content description</string>
     <string name="msg_dating_app">The Dating App</string>
