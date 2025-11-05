@@ -54,6 +54,7 @@ import com.friend.designsystem.spacing.appPaddingHorizontal
 import com.friend.designsystem.spacing.appPaddingOnly
 import com.friend.designsystem.spacing.appPaddingVertical
 import com.friend.designsystem.theme.backgroundColors
+import com.friend.designsystem.theme.buttonColors
 import com.friend.designsystem.theme.dividerColors
 import com.friend.designsystem.theme.surfaceColors
 import com.friend.designsystem.theme.textColors
@@ -61,10 +62,12 @@ import com.friend.designsystem.theme.textFieldColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.ui.components.AppBaseTextField
 import com.friend.ui.components.AppIconButton
+import com.friend.ui.components.AppPopupMenu
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AppText
 import com.friend.ui.components.NetworkImageLoader
 import com.friend.ui.preview.LightDarkPreview
+import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -74,6 +77,8 @@ fun ChatRoomScreen(
     messageId: String,
     onBackButtonClicked: () -> Unit,
 ) {
+    var isExpanded by remember { mutableStateOf(false) }
+
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
     ) { padding ->
@@ -117,15 +122,26 @@ fun ChatRoomScreen(
                     }
                     .appPaddingVertical(SpacingToken.extraSmall)
             )
-            MessageSendUi(
+
+            Column(
                 modifier = Modifier
                     .constrainAs(messageSendUi) {
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
                     }
-                    .appPaddingOnly(bottom = SpacingToken.medium)
-            )
+            ) {
+                if(isExpanded)
+                    AttachmentTypeUi()
+
+                MessageSendUi(
+                    modifier = Modifier
+                        .appPaddingOnly(bottom = SpacingToken.medium),
+                    onClickAttachment = {
+                        isExpanded = !isExpanded
+                    }
+                )
+            }
         }
     }
 }
@@ -176,11 +192,12 @@ private fun ProfileInfo(
             modifier = Modifier.weight(1f)
         )
 
-        AppIconButton(
+        AppPopupMenu(
+            icon = Icons.Default.MoreVert,
+            menuItems = listOf("Report User", "Message Search",),
             onClick = {
-
-            },
-            vectorIcon = Icons.Default.MoreVert
+                Timber.e("Clicked: $it")
+            }
         )
     }
 }
@@ -268,7 +285,8 @@ private fun MessageList(
 
 @Composable
 private fun MessageSendUi(
-    modifier: Modifier
+    modifier: Modifier,
+    onClickAttachment: () -> Unit
 ) {
     var message by remember { mutableStateOf("") }
 
@@ -306,7 +324,7 @@ private fun MessageSendUi(
 
             AppIconButton(
                 modifier = Modifier.size(IconSizeToken.large),
-                onClick = {},
+                onClick = onClickAttachment,
                 vectorIcon = Icons.Default.AttachFile
             )
 
@@ -325,7 +343,7 @@ private fun MessageSendUi(
             AppIconButton(
                 modifier = Modifier
                     .background(
-                        color = MaterialTheme.surfaceColors.primary,
+                        color = MaterialTheme.buttonColors.primaryButton.disabledContainerColor,
                         shape = CircleShape
                     )
                     .size(IconSizeToken.mediumLarge),
@@ -365,10 +383,10 @@ private fun bubbleShape(isMe: Boolean): Shape {
 private fun bubbleColors(isMe: Boolean): Pair<Color, Color> {
     return if (isMe) {
         // sender (me)
-        Color.Blue.copy(alpha = .5f) to MaterialTheme.textColors.white
+        MaterialTheme.surfaceColors.primary.copy(alpha = .7f) to MaterialTheme.textColors.white
     } else {
         // receiver
-        Color.Yellow.copy(alpha = .75f) to MaterialTheme.textColors.primary
+        MaterialTheme.surfaceColors.yellowLight.copy(alpha = .5f) to MaterialTheme.textColors.primary
     }
 }
 
