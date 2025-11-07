@@ -1,4 +1,4 @@
-package com.friendfinapp.dating.navigation
+package com.friendfinapp.dating.navigation.graph
 
 import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.NavBackStack
@@ -6,9 +6,11 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
 import com.friend.forgotpassword.ForgotPasswordScreen
 import com.friend.login.LoginScreen
-import com.friend.profilecompletion.ProfileCompletionScreen
 import com.friend.registration.RegistrationScreen
 import com.friend.splash.SplashScreen
+import com.friendfinapp.dating.navigation.AuthScreens
+import com.friendfinapp.dating.navigation.MainScreens
+import com.friendfinapp.dating.navigation.ProfileScreens
 
 object AuthNavGraph {
     fun register(
@@ -55,15 +57,9 @@ object AuthNavGraph {
                 },
                 navigateToProfileCompletion = {
                     backStack.remove(AuthScreens.RegistrationNavScreen)
-                    backStack.add(AuthScreens.ProfileCompletionNavScreen)
+                    backStack.add(ProfileScreens.ProfileCompletionNavScreen)
                 }
             )
-        }
-
-        entry(AuthScreens.ProfileCompletionNavScreen) {
-            ProfileCompletionScreen {
-                backStack.removeLastOrNull()
-            }
         }
     }
 }

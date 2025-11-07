@@ -92,10 +92,14 @@ dependencies {
         implementation(auth.login)
         implementation(auth.registraion)
         implementation(auth.forgotPassword)
-        implementation(auth.profileCompletion)
         implementation(home)
+
         implementation(chatMessage.chatList)
         implementation(chatMessage.chatRoom)
+
+        implementation(profileManager.profile)
+        implementation(profileManager.profileOverview)
+        implementation(profileManager.profileCompletion)
     }
 
     with(libs){

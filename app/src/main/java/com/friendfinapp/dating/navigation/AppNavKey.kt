@@ -8,14 +8,15 @@ sealed interface AppScreen : NavKey
 sealed interface AuthScreens : AppScreen {
     @Serializable
     object SplashNavScreen : AppScreen
+
     @Serializable
     object LoginNavScreen : AppScreen
+
     @Serializable
     object RegistrationNavScreen : AppScreen
+
     @Serializable
     object ForgotPasswordNavScreen : AppScreen
-    @Serializable
-    object ProfileCompletionNavScreen : AppScreen
 }
 
 sealed interface MainScreens : AppScreen {
@@ -32,4 +33,18 @@ sealed interface ChatMessageScreens : AppScreen {
         val messageId: String,
         val userName: String
     ) : AppScreen
+}
+
+sealed interface ProfileScreens : AppScreen {
+    @Serializable
+    object ProfileOverviewNavScreen : AppScreen
+
+    @Serializable
+    data class ProfileNavScreen(
+        val userId: String,
+        val userName: String
+    ) : AppScreen
+
+    @Serializable
+    object ProfileCompletionNavScreen : AppScreen
 }

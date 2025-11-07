@@ -1,6 +1,7 @@
 package com.friend.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -52,13 +53,15 @@ import com.friend.ui.components.AppText
 import com.friend.ui.components.LocalImageLoader
 import com.friend.ui.components.NetworkImageLoader
 import com.friend.ui.preview.LightDarkPreview
-import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navigateToChatListScreen: () -> Unit,
+    navigateToOverviewScreen: () -> Unit,
+    navigateToProfileScreen: (String, String) -> Unit,
+    navigateToSearchScreen: () -> Unit,
 ) {
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing
@@ -72,19 +75,30 @@ fun HomeScreen(
                 .imePadding()
                 .appPadding(SpacingToken.medium)
         ) {
-            SearchMenu()
+            SearchBar(
+                navigateToOverviewScreen = navigateToOverviewScreen,
+                navigateToSearchScreen = navigateToSearchScreen
+            )
             Spacer(Modifier.height(SpacingToken.medium))
-            ProfileInfo{
-                navigateToChatListScreen.invoke()
+            ProfileSummary(
+                navigateToChatListScreen = navigateToChatListScreen,
+                navigateToProfileScreen = {
+                    navigateToProfileScreen.invoke("", "")//TODO replace with current user data
+                }
+            )
+            Spacer(Modifier.height(SpacingToken.medium))
+            PersonList{
+                navigateToProfileScreen.invoke("", "")//TODO replace with current user data
             }
-            Spacer(Modifier.height(SpacingToken.medium))
-            PersonList()
         }
     }
 }
 
 @Composable
-private fun SearchMenu(){
+private fun SearchBar(
+    navigateToOverviewScreen: () -> Unit,
+    navigateToSearchScreen: () -> Unit,
+){
     var userName by rememberSaveable { mutableStateOf("") }
     AppBaseTextField(
         value = userName,
@@ -96,18 +110,15 @@ private fun SearchMenu(){
         shape = RoundedCornerShape(SpacingToken.medium),
         trailingIcon = Icons.Default.Search,
         leadingIcon = Icons.Default.Dashboard,
-        onTrailingClick = {
-            Timber.e("Navigate to search screen")
-        },
-        onLeadingClick = {
-            Timber.e("Open drawer screen")
-        }
+        onTrailingClick = navigateToSearchScreen,
+        onLeadingClick = navigateToOverviewScreen
     )
 }
 
 @Composable
-private fun ProfileInfo(
+private fun ProfileSummary(
     navigateToChatListScreen: () -> Unit,
+    navigateToProfileScreen: () -> Unit,
 ){
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -116,7 +127,10 @@ private fun ProfileInfo(
         NetworkImageLoader(
             "https://images.unsplash.com/photo-1483909796554-bb0051ab60ad?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2373",
             modifier = Modifier
-                .size(IconSizeToken.extraLarge),
+                .size(IconSizeToken.extraLarge)
+                .clickable{
+                    navigateToProfileScreen.invoke()
+                },
             shape = CircleShape
         )
 
@@ -162,25 +176,34 @@ private fun ProfileInfo(
 }
 
 @Composable
-private fun PersonList(){
+private fun PersonList(
+    onPersonClick: (String) -> Unit
+){
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
     ) {
         items(100) {
-            UserGreetings()
+            PersonCardItem(
+                modifier = Modifier
+                    .clickable{
+                        onPersonClick.invoke("")
+                    }
+            )
         }
     }
 }
 
 @Composable
-private fun UserGreetings(){
+private fun PersonCardItem(
+    modifier: Modifier
+){
     Box(
         contentAlignment = Alignment.BottomCenter,
-        modifier = Modifier.appPadding(SpacingToken.micro)
+        modifier = modifier.appPadding(SpacingToken.micro)
     ) {
         NetworkImageLoader(
             "https://images.unsplash.com/photo-1483909796554-bb0051ab60ad?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2373",
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .height(200.dp),
             shape = RoundedCornerShape(SpacingToken.extraSmall)
@@ -191,7 +214,7 @@ private fun UserGreetings(){
             textStyle = AppTypography.bodyMedium,
             fontWeight = FontWeight.Bold,
             textColor = MaterialTheme.textColors.white,
-            modifier = Modifier
+            modifier = modifier
                 .appPaddingSymmetric(
                     horizontal = SpacingToken.medium,
                     vertical = SpacingToken.micro
@@ -213,7 +236,10 @@ private fun UserGreetings(){
 @Composable
 @LightDarkPreview
 private fun ScreenPreview() {
-    HomeScreen {
-
-    }
+    HomeScreen(
+        navigateToChatListScreen = {},
+        navigateToOverviewScreen = {},
+        navigateToProfileScreen = { _, _ ->},
+        navigateToSearchScreen = {}
+    )
 }

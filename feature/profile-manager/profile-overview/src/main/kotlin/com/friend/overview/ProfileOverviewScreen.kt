@@ -1,0 +1,168 @@
+package com.friend.overview
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ContactPage
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Policy
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.StarRate
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import com.friend.designsystem.spacing.RadiusToken
+import com.friend.designsystem.spacing.SpacingToken
+import com.friend.designsystem.spacing.appPadding
+import com.friend.designsystem.spacing.appPaddingHorizontal
+import com.friend.designsystem.spacing.appPaddingVertical
+import com.friend.designsystem.theme.backgroundColors
+import com.friend.designsystem.typography.AppTypography
+import com.friend.overview.ui.ProfileSummaryUi
+import com.friend.ui.common.AppToolbar
+import com.friend.ui.components.AppScaffold
+import com.friend.ui.components.AppText
+import com.friend.ui.preview.LightDarkPreview
+import timber.log.Timber
+import com.friend.designsystem.R as Res
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ProfileOverviewScreen(
+    onBackButtonClicked: () -> Unit
+) {
+    AppScaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
+        topBar = {
+            AppToolbar(
+                title = stringResource(Res.string.title_overview),
+                onBackClick = {
+                    onBackButtonClicked.invoke()
+                })
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .consumeWindowInsets(padding)
+                .navigationBarsPadding()
+                .imePadding()
+                .appPadding(SpacingToken.medium)
+        ) {
+            ProfileSummaryUi(
+                modifier = Modifier
+            )
+
+            Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+            MenuCard()
+        }
+    }
+}
+
+@Composable
+private fun MenuCard() {
+    Column(
+        modifier = Modifier
+            .background(
+                color = MaterialTheme.backgroundColors.white,
+                shape = RoundedCornerShape(RadiusToken.medium)
+            )
+            .appPaddingHorizontal(SpacingToken.medium)
+    ) {
+        MenuItem(
+            icon = Icons.Default.Person,
+            menu = stringResource(Res.string.menu_personal_setting)
+        ) {
+            Timber.e("Menu personal setting clicked")
+        }
+
+        MenuItem(
+            icon = Icons.Default.Policy,
+            menu = stringResource(Res.string.menu_privacy_policy)
+        ) {
+            Timber.e("Menu privacy policy clicked")
+        }
+
+        MenuItem(
+            icon = Icons.Default.Share,
+            menu = stringResource(Res.string.menu_share_app)
+        ) {
+            Timber.e("Menu share app clicked")
+        }
+
+        MenuItem(
+            icon = Icons.Default.StarRate,
+            menu = stringResource(Res.string.menu_rate_app)
+        ) {
+            Timber.e("Menu rate app clicked")
+        }
+
+        MenuItem(
+            icon = Icons.Default.ContactPage,
+            menu = stringResource(Res.string.menu_contact_us)
+        ) {
+            Timber.e("Menu contact us clicked")
+        }
+
+        MenuItem(
+            icon = Icons.Default.Logout,
+            menu = stringResource(Res.string.action_logout)
+        ) {
+            Timber.e("Menu Logout clicked")
+        }
+    }
+}
+
+@Composable
+private fun MenuItem(
+    icon: ImageVector,
+    menu: String,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .appPaddingVertical(SpacingToken.medium)
+            .clickable{
+                onClick.invoke()
+            },
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(icon, contentDescription = "")
+        Spacer(modifier = Modifier.width(SpacingToken.small))
+        AppText(menu, textStyle = AppTypography.bodyMedium)
+        Spacer(modifier = Modifier.weight(1f))
+        Icon(Icons.Default.KeyboardArrowRight, contentDescription = "")
+    }
+}
+
+@Composable
+@LightDarkPreview
+private fun ScreenPreview() {
+    ProfileOverviewScreen(
+        onBackButtonClicked = {},
+    )
+}

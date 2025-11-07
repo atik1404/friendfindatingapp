@@ -1,4 +1,5 @@
 @file:Suppress("UnstableApiUsage")
+
 pluginManagement {
     includeBuild("build-logic")
     repositories {
@@ -40,12 +41,14 @@ include(":core:model:entity")
 
 include(":feature:auth:splash-screen")
 include(":feature:auth:login")
-include(":feature:auth:profile-completion")
 include(":feature:auth:forgot-password")
 include(":feature:auth:registraion")
-
 
 include(":feature:home")
 
 include(":feature:chat-message:chat-list")
 include(":feature:chat-message:chat-room")
+
+include(":feature:profile-manager:profile-overview")
+include(":feature:profile-manager:profile")
+include(":feature:profile-manager:profile-completion")
