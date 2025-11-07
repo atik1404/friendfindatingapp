@@ -1,4 +1,4 @@
-package com.friend.chatroom
+package com.friend.chatroom.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

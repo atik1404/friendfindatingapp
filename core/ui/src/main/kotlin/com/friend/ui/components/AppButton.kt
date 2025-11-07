@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.rounded.Female
 import androidx.compose.material.icons.rounded.Male
 import androidx.compose.material3.ButtonColors
@@ -211,6 +210,7 @@ fun AppOutlinedButton(
 @Composable
 fun AppTextButton(
     text: String,
+    textColor: Color = MaterialTheme.textColors.primary,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -220,9 +220,8 @@ fun AppTextButton(
     leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
     iconTint: Color = LocalContentColor.current,
-    iconSpacing: Dp = 8.dp,
+    iconSpacing: Dp = SpacingToken.none,
 ) {
-    val textColor = MaterialTheme.textColors.primary
     val debounced = rememberDebouncedClick(onClick = onClick)
 
     TextButton(

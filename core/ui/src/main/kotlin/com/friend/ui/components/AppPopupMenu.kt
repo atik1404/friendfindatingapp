@@ -1,6 +1,11 @@
 package com.friend.ui.components
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Report
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -16,12 +21,48 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.friend.designsystem.R as Res
 
+enum class PopupMenuType {
+    ReportUser,
+    MessageSearch,
+    DeleteMessage,
+    ForwardMessage
+}
+
+data class PopupMenu(
+    val icon: ImageVector,
+    val menu: Int,
+    val menuType: PopupMenuType
+)
+
+val ChatRoomPopupMenu = listOf(
+    PopupMenu(
+        icon = Icons.Default.Report,
+        menu = Res.string.menu_report_user,
+        menuType = PopupMenuType.ReportUser
+    ),
+    PopupMenu(
+        icon = Icons.Default.Search,
+        menu = Res.string.menu_message_search,
+        menuType = PopupMenuType.MessageSearch
+    ),
+    PopupMenu(
+        icon = Icons.Default.Refresh,
+        menu = Res.string.menu_message_forward,
+        menuType = PopupMenuType.ForwardMessage
+    ),
+    PopupMenu(
+        icon = Icons.Default.Delete,
+        menu = Res.string.menu_delete_message,
+        menuType = PopupMenuType.DeleteMessage
+    ),
+)
+
 @Composable
 fun AppPopupMenu(
     modifier: Modifier = Modifier,
     icon: ImageVector,
-    menuItems: List<String>,
-    onClick: (String) -> Unit
+    menuItems: List<PopupMenu>,
+    onClick: (PopupMenuType) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     Box(
@@ -40,10 +81,10 @@ fun AppPopupMenu(
         ) {
             menuItems.forEach {
                 DropdownMenuItem(
-                    text = { Text(it) },
+                    text = { Text(stringResource(it.menu)) },
                     onClick = {
                         expanded = false
-                        onClick.invoke(it)
+                        onClick.invoke(it.menuType)
                     }
                 )
             }

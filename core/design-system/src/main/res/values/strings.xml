@@ -24,6 +24,9 @@
     <string name="action_logout">Logout</string>
     <string name="action_save">Save</string>
     <string name="action_send_link">Send Link</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_report">Report</string>
+    <string name="action_forward">Forward</string>
 
     <string name="label_or">OR</string>
     <string name="label_username">Username*</string>
@@ -47,6 +50,7 @@
     <string name="label_about_yourself">About You*</string>
     <string name="label_whats_up">What\'s Up*</string>
     <string name="label_interest">Interests*</string>
+    <string name="label_forward_to">Forward to</string>
 
     <string name="hint_user_name">Enter your Username</string>
     <string name="hint_search_here">Search here....</string>
@@ -65,6 +69,13 @@
     <string name="msg_dating_app">The Dating App</string>
     <string name="msg_copyright">\@All rights reserved by FriendFin</string>
     <string name="msg_agree_with_term_condition">I agree to the privacy policy, terms and conditions.</string>
+    <string name="msg_report_abuse">Are you sure you want to report this user for abuse? If so, click on the button below</string>
+
+
+    <string name="menu_report_user">Report User</string>
+    <string name="menu_message_forward">Message Forward</string>
+    <string name="menu_delete_message">Delete Message(s)</string>
+    <string name="menu_message_search">Message Search</string>
 
     <!--    String resource naming convention-->
     <!--    https://github.com/leapfrogtechnology/android-guidelines/blob/master/ResourcesGuidelines.md-->
