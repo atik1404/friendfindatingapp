@@ -8,6 +8,7 @@ import androidx.compose.ui.res.stringResource
 import com.friend.designsystem.R as Res
 import com.friend.ui.common.AppToolbar
 import com.friend.ui.components.AppScaffold
+import com.friend.ui.preview.LightDarkPreview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -18,14 +19,17 @@ fun ProfileScreen(
 ){
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
-        topBar = {
-            AppToolbar(
-                title = "Profile details",
-                onBackClick = {
-                    onBackButtonClicked.invoke()
-                })
-        }
     ) { padding ->
 
     }
+}
+
+@Composable
+@LightDarkPreview
+private fun ScreenPreview() {
+    ProfileScreen(
+        username = "",
+        userId = "",
+        onBackButtonClicked = {},
+    )
 }
