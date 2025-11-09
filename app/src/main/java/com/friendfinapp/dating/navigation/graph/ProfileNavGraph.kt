@@ -4,12 +4,13 @@ import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
+import com.friend.common.constant.PersonalMenu
 import com.friend.overview.ProfileOverviewScreen
+import com.friend.personalsetting.PersonalSettingScreen
 import com.friend.profile.ProfileScreen
 import com.friend.profilecompletion.ProfileCompletionScreen
 import com.friendfinapp.dating.navigation.AuthScreens
 import com.friendfinapp.dating.navigation.ProfileScreens
-import timber.log.Timber
 
 object ProfileNavGraph {
     fun register(
@@ -22,9 +23,19 @@ object ProfileNavGraph {
                 navigateToProfileScreen = {
                     backStack.add(ProfileScreens.ProfileNavScreen("", ""))
                 },
-                navigateToLogoutScreen = {
-                    backStack.clear()
-                    backStack.add(AuthScreens.LoginNavScreen)
+                clickedOnMenu = { menu ->
+                    when(menu){
+                        PersonalMenu.PERSONAL_SETTING -> backStack.add(ProfileScreens.PersonalSettingNavScreen)
+                        PersonalMenu.PRIVACY_POLICY -> {}
+                        PersonalMenu.SHARE_APP -> {}
+                        PersonalMenu.RATE_APP -> {}
+                        PersonalMenu.CHANGE_PASSWORD -> {}
+                        PersonalMenu.CONTACT_US -> {}
+                        PersonalMenu.LOGOUT -> {
+                            backStack.clear()
+                            backStack.add(AuthScreens.LoginNavScreen)
+                        }
+                    }
                 }
             )
         }
@@ -33,7 +44,6 @@ object ProfileNavGraph {
                 username = key.userName,
                 userId = key.userId,
                 navigateToEditProfile = {
-                    Timber.e("navigate to profile completion")
                     backStack.add(ProfileScreens.ProfileCompletionNavScreen)
                 },
                 onBackButtonClicked = {
@@ -43,6 +53,12 @@ object ProfileNavGraph {
         }
         entry(ProfileScreens.ProfileCompletionNavScreen) {
             ProfileCompletionScreen {
+                backStack.removeLastOrNull()
+            }
+        }
+
+        entry(ProfileScreens.PersonalSettingNavScreen) {
+            PersonalSettingScreen {
                 backStack.removeLastOrNull()
             }
         }

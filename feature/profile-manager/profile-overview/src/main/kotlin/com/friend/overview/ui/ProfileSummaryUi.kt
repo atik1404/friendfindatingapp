@@ -50,7 +50,7 @@ fun ProfileSummaryUi(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             NetworkImageLoader(
-                "https://images.unsplash.com/photo-1483909796554-bb0051ab60ad?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2373",
+                "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
                 modifier = Modifier
                     .size(IconSizeToken.extraLarge)
                     .clickable{
@@ -65,7 +65,7 @@ fun ProfileSummaryUi(
 
             Column {
                 AppText(
-                    text = "Atik Faysal",
+                    text = "Tom Cruise",
                     textStyle = AppTypography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     textColor = MaterialTheme.textColors.primary,
@@ -76,7 +76,7 @@ fun ProfileSummaryUi(
                 )
 
                 AppText(
-                    text = "atik@gmail.com",
+                    text = "tom@gmail.com",
                     textStyle = AppTypography.bodyMedium,
                     fontWeight = FontWeight.Light,
                     textColor = MaterialTheme.textColors.primary,

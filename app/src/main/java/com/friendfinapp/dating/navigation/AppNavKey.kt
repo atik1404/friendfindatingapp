@@ -47,4 +47,7 @@ sealed interface ProfileScreens : AppScreen {
 
     @Serializable
     object ProfileCompletionNavScreen : AppScreen
+
+    @Serializable
+    object PersonalSettingNavScreen : AppScreen
 }

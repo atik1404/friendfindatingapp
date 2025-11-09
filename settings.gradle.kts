@@ -1,5 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
+
 pluginManagement {
     includeBuild("build-logic")
     repositories {
@@ -52,3 +53,4 @@ include(":feature:chat-message:chat-room")
 include(":feature:profile-manager:profile-overview")
 include(":feature:profile-manager:profile")
 include(":feature:profile-manager:profile-completion")
+include(":feature:profile-manager:personal-setting")

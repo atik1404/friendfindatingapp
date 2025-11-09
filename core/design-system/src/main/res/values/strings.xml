@@ -25,6 +25,7 @@
     <string name="action_no_account">Don\'t have an account?</string>
     <string name="action_logout">Logout</string>
     <string name="action_save">Save</string>
+    <string name="action_save_changes">Save Changes</string>
     <string name="action_send_link">Send Link</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_report">Report</string>
@@ -83,6 +84,7 @@
     <string name="menu_message_search">Message Search</string>
 
     <string name="menu_personal_setting">Personal Setting</string>
+    <string name="menu_change_password">Change Password</string>
     <string name="menu_privacy_policy">Privacy Policy</string>
     <string name="menu_share_app">Share App</string>
     <string name="menu_rate_app">Rate App</string>

@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContactPage
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Policy
@@ -32,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import com.friend.common.constant.PersonalMenu
 import com.friend.designsystem.spacing.RadiusToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
@@ -44,7 +46,6 @@ import com.friend.ui.common.AppToolbar
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AppText
 import com.friend.ui.preview.LightDarkPreview
-import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,7 +53,7 @@ import com.friend.designsystem.R as Res
 fun ProfileOverviewScreen(
     onBackButtonClicked: () -> Unit,
     navigateToProfileScreen: () -> Unit,
-    navigateToLogoutScreen: () -> Unit,
+    clickedOnMenu: (PersonalMenu) -> Unit,
 ) {
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
@@ -81,8 +82,8 @@ fun ProfileOverviewScreen(
 
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
-            MenuCard(){
-                navigateToLogoutScreen.invoke()
+            MenuCard{
+                clickedOnMenu.invoke(it)
             }
         }
     }
@@ -90,7 +91,7 @@ fun ProfileOverviewScreen(
 
 @Composable
 private fun MenuCard(
-    navigateToLogoutScreen: () -> Unit
+    clickedOnMenu: (PersonalMenu) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -104,42 +105,49 @@ private fun MenuCard(
             icon = Icons.Default.Person,
             menu = stringResource(Res.string.menu_personal_setting)
         ) {
-            Timber.e("Menu personal setting clicked")
+            clickedOnMenu.invoke(PersonalMenu.PERSONAL_SETTING)
+        }
+
+        MenuItem(
+            icon = Icons.Default.Lock,
+            menu = stringResource(Res.string.menu_change_password)
+        ) {
+            clickedOnMenu.invoke(PersonalMenu.CHANGE_PASSWORD)
         }
 
         MenuItem(
             icon = Icons.Default.Policy,
             menu = stringResource(Res.string.menu_privacy_policy)
         ) {
-            Timber.e("Menu privacy policy clicked")
+            clickedOnMenu.invoke(PersonalMenu.PRIVACY_POLICY)
         }
 
         MenuItem(
             icon = Icons.Default.Share,
             menu = stringResource(Res.string.menu_share_app)
         ) {
-            Timber.e("Menu share app clicked")
+            clickedOnMenu.invoke(PersonalMenu.SHARE_APP)
         }
 
         MenuItem(
             icon = Icons.Default.StarRate,
             menu = stringResource(Res.string.menu_rate_app)
         ) {
-            Timber.e("Menu rate app clicked")
+            clickedOnMenu.invoke(PersonalMenu.RATE_APP)
         }
 
         MenuItem(
             icon = Icons.Default.ContactPage,
             menu = stringResource(Res.string.menu_contact_us)
         ) {
-            Timber.e("Menu contact us clicked")
+            clickedOnMenu.invoke(PersonalMenu.CONTACT_US)
         }
 
         MenuItem(
             icon = Icons.Default.Logout,
             menu = stringResource(Res.string.action_logout)
         ) {
-            navigateToLogoutScreen.invoke()
+            clickedOnMenu.invoke(PersonalMenu.LOGOUT)
         }
     }
 }
@@ -173,6 +181,6 @@ private fun ScreenPreview() {
     ProfileOverviewScreen(
         onBackButtonClicked = {},
         navigateToProfileScreen = {},
-        navigateToLogoutScreen = {}
+        clickedOnMenu = {}
     )
 }

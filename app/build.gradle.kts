@@ -100,6 +100,7 @@ dependencies {
         implementation(profileManager.profile)
         implementation(profileManager.profileOverview)
         implementation(profileManager.profileCompletion)
+        implementation(profileManager.personalSetting)
     }
 
     with(libs){

@@ -81,7 +81,7 @@ fun ChatListScreen(
             SearchMenu()
             Spacer(modifier = Modifier.height(SpacingToken.medium))
             ChatList{
-                navigateToChatRoom.invoke("Faysal","1234")
+                navigateToChatRoom.invoke("Tom Cruise","1232344")
             }
         }
     }
@@ -118,7 +118,7 @@ private fun ChatListItem(modifier: Modifier) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         NetworkImageLoader(
-            "https://images.unsplash.com/photo-1483909796554-bb0051ab60ad?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2373",
+            "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
             modifier = Modifier
                 .size(50.dp),
             shape = CircleShape
@@ -130,7 +130,7 @@ private fun ChatListItem(modifier: Modifier) {
 
         Column {
             AppText(
-                text = "Atik Faysal",
+                text = "Tom Cruise",
                 textStyle = AppTypography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 textColor = MaterialTheme.textColors.primary,
@@ -141,7 +141,7 @@ private fun ChatListItem(modifier: Modifier) {
             )
 
             AppText(
-                text = "Hey, How are you Atik?",
+                text = "Hey, How are you Tom?",
                 textStyle = AppTypography.bodyMedium,
                 fontWeight = FontWeight.Light,
                 textColor = MaterialTheme.textColors.primary,

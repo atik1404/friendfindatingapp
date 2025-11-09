@@ -48,7 +48,7 @@ fun MessageItem(modifier: Modifier, isMyMessage: Boolean) {
         )
 
         AppText(
-            text = "Atik Faysal",
+            text = "Tom Cruise",
             textStyle = AppTypography.bodySmall,
             fontWeight = FontWeight.Light,
             textColor = MaterialTheme.textColors.primary,
@@ -68,7 +68,7 @@ fun MessageItem(modifier: Modifier, isMyMessage: Boolean) {
             horizontalAlignment = alignment
         ) {
             AppText(
-                text = "Hey, How are you Atik?Hey, How are you Atik?",
+                text = "Hey, How are you Tom? Hey, How are you Tom?",
                 textStyle = AppTypography.bodyMedium,
                 textColor = contentColor,
                 maxLines = 50

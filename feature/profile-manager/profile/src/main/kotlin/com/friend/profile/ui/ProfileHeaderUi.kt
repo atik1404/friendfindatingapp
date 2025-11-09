@@ -97,7 +97,7 @@ fun ProfileHeaderUi(
                 modifier = modifier.weight(1f)
             ) {
                 AppText(
-                    text = "Atik Faysal",
+                    text = "Tom Cruise",
                     textStyle = AppTypography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     textColor = MaterialTheme.textColors.primary,
@@ -110,7 +110,7 @@ fun ProfileHeaderUi(
                 )
 
                 AppText(
-                    text = "atik@gmail.com",
+                    text = "tom@gmail.com",
                     textStyle = AppTypography.bodyMedium,
                     fontWeight = FontWeight.Light,
                     textColor = MaterialTheme.textColors.primary,
