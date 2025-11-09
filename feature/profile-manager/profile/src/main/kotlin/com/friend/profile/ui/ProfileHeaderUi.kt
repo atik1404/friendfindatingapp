@@ -42,7 +42,7 @@ import com.friend.ui.components.NetworkImageLoader
 @Composable
 fun ProfileHeaderUi(
     modifier: Modifier = Modifier,
-    onEditClick: () -> Unit = {}
+    onEditClick: () -> Unit
 ) {
     val picSize = ImageSizeToken.profilePictureLarge
 
@@ -76,7 +76,7 @@ fun ProfileHeaderUi(
                 AppIconButton(
                     vectorIcon = Icons.Default.Edit,
                     tint = MaterialTheme.surfaceColors.grayLight,
-                    onClick = onEditClick,
+                    onClick = {},
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .size(IconSizeToken.medium) // tweak as you like
@@ -120,7 +120,7 @@ fun ProfileHeaderUi(
 
             AppTextButton(
                 text = "Edit Profile",
-                onClick = {},
+                onClick = onEditClick,
                 textColor = MaterialTheme.textColors.brand,
                 fontWeight = FontWeight.Light
             )

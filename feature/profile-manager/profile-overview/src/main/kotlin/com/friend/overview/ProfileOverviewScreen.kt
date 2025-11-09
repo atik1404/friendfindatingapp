@@ -50,7 +50,9 @@ import com.friend.designsystem.R as Res
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileOverviewScreen(
-    onBackButtonClicked: () -> Unit
+    onBackButtonClicked: () -> Unit,
+    navigateToProfileScreen: () -> Unit,
+    navigateToLogoutScreen: () -> Unit,
 ) {
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
@@ -73,17 +75,23 @@ fun ProfileOverviewScreen(
         ) {
             ProfileSummaryUi(
                 modifier = Modifier
-            )
+            ){
+                navigateToProfileScreen.invoke()
+            }
 
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
-            MenuCard()
+            MenuCard(){
+                navigateToLogoutScreen.invoke()
+            }
         }
     }
 }
 
 @Composable
-private fun MenuCard() {
+private fun MenuCard(
+    navigateToLogoutScreen: () -> Unit
+) {
     Column(
         modifier = Modifier
             .background(
@@ -131,7 +139,7 @@ private fun MenuCard() {
             icon = Icons.Default.Logout,
             menu = stringResource(Res.string.action_logout)
         ) {
-            Timber.e("Menu Logout clicked")
+            navigateToLogoutScreen.invoke()
         }
     }
 }
@@ -164,5 +172,7 @@ private fun MenuItem(
 private fun ScreenPreview() {
     ProfileOverviewScreen(
         onBackButtonClicked = {},
+        navigateToProfileScreen = {},
+        navigateToLogoutScreen = {}
     )
 }

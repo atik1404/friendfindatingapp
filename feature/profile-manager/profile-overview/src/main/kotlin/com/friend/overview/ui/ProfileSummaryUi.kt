@@ -30,7 +30,8 @@ import com.friend.ui.components.NetworkImageLoader
 
 @Composable
 fun ProfileSummaryUi(
-    modifier: Modifier
+    modifier: Modifier,
+    onClick: () -> Unit
 ){
     Card(
         modifier = modifier,
@@ -87,9 +88,7 @@ fun ProfileSummaryUi(
             )
 
             AppIconButton(
-                onClick = {
-
-                },
+                onClick = onClick,
                 vectorIcon = Icons.Default.KeyboardArrowRight
             )
         }

@@ -35,6 +35,7 @@ fun ProfileScreen(
     username: String,
     userId: String,
     onBackButtonClicked: () -> Unit,
+    navigateToEditProfile: () -> Unit,
 ) {
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
@@ -56,8 +57,10 @@ fun ProfileScreen(
                 .appPadding(SpacingToken.small),
         ) {
             ProfileHeaderUi(
-                modifier = Modifier
-            )
+                modifier = Modifier,
+            ){
+                navigateToEditProfile.invoke()
+            }
 
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
@@ -255,5 +258,6 @@ private fun ScreenPreview() {
         username = "",
         userId = "",
         onBackButtonClicked = {},
+        navigateToEditProfile = {}
     )
 }
