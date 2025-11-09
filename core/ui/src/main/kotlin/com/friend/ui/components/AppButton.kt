@@ -209,10 +209,10 @@ fun AppOutlinedButton(
 
 @Composable
 fun AppTextButton(
+    modifier: Modifier = Modifier,
     text: String,
     textColor: Color = MaterialTheme.textColors.primary,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     shape: Shape = ButtonDefaults.shape,
     colors: ButtonColors = ButtonDefaults.textButtonColors(),
@@ -221,6 +221,7 @@ fun AppTextButton(
     trailingIcon: ImageVector? = null,
     iconTint: Color = LocalContentColor.current,
     iconSpacing: Dp = SpacingToken.none,
+    fontWeight: FontWeight = FontWeight.Medium,
 ) {
     val debounced = rememberDebouncedClick(onClick = onClick)
 
@@ -239,7 +240,8 @@ fun AppTextButton(
             iconSpacing = iconSpacing,
             iconTint = iconTint,
             textColor = textColor,
-            modifier = modifier
+            modifier = modifier,
+            fontWeight = fontWeight
         )
     }
 }

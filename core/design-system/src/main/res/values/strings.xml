@@ -16,6 +16,7 @@
     <string name="title_home">Home</string>
     <string name="title_chat">Chat</string>
     <string name="title_overview">Overview</string>
+    <string name="title_profile">Profile</string>
 
     <string name="action_login_with_google">Login with Google</string>
     <string name="action_login">Login</string>
@@ -52,6 +53,9 @@
     <string name="label_whats_up">What\'s Up*</string>
     <string name="label_interest">Interests*</string>
     <string name="label_forward_to">Forward to</string>
+    <string name="label_gender">Gender*</string>
+    <string name="label_interested_in">Interested In*</string>
+    <string name="label_language">Language</string>
 
     <string name="hint_user_name">Enter your Username</string>
     <string name="hint_search_here">Search here....</string>

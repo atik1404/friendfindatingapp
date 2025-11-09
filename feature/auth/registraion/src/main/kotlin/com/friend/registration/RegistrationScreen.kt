@@ -110,7 +110,7 @@ fun RegistrationScreen(
 
             var segIndex by remember { mutableIntStateOf(0) }
             SingleChoiceSegmentsWithIcons(
-                title = "Gender*",
+                title = stringResource(Res.string.label_gender),
                 options = listOf(
                     Pair(Icons.Rounded.Male, "Male"),
                     Pair(Icons.Rounded.Female, "Female"),
@@ -122,7 +122,7 @@ fun RegistrationScreen(
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
             SingleChoiceSegmentsWithIcons(
-                title = "Interested In*",
+                title = stringResource(Res.string.label_interested_in),
                 options = listOf(
                     Pair(Icons.Rounded.Male, "Male"),
                     Pair(Icons.Rounded.Female, "Female"),
