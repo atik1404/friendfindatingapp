@@ -41,7 +41,8 @@ import com.friend.designsystem.R as Res
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileCompletionScreen(
-    onBackButtonClicked: () -> Unit
+    onBackButtonClicked: () -> Unit,
+    onContinueButtonClicked: () -> Unit
 ) {
     var title by rememberSaveable { mutableStateOf("") }
     var aboutYou by rememberSaveable { mutableStateOf("") }
@@ -128,9 +129,7 @@ fun ProfileCompletionScreen(
             AppElevatedButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(Res.string.action_save),
-                onClick = {
-
-                },
+                onClick = onContinueButtonClicked,
             )
         }
     }
@@ -237,7 +236,8 @@ private fun PersonalDetails() {
 @Composable
 @LightDarkPreview
 private fun ScreenPreview() {
-    ProfileCompletionScreen{
-
-    }
+    ProfileCompletionScreen(
+        onBackButtonClicked = {},
+        onContinueButtonClicked = {}
+    )
 }

@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -65,7 +66,8 @@ fun ForgotPasswordScreen(
                 .consumeWindowInsets(padding)    // prevent double-inset consumption downstream
                 .navigationBarsPadding()         // keep content above system nav bar
                 .imePadding()                    // lift content when keyboard shows
-                .appPadding(SpacingToken.small),
+                .appPadding(SpacingToken.large),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LocalImageLoader(
                 imageResId = Res.drawable.img_login_illustration,
@@ -116,7 +118,6 @@ fun ForgotPasswordScreen(
             Spacer(modifier = Modifier.height(SpacingToken.large))
 
             AppText(
-                modifier = Modifier.fillMaxWidth(),
                 text = stringResource(Res.string.msg_copyright),
                 fontWeight = FontWeight.Light,
                 textStyle = AppTypography.bodySmall,

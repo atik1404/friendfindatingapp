@@ -11,6 +11,7 @@ import com.friend.personalsetting.PersonalSettingScreen
 import com.friend.profile.ProfileScreen
 import com.friend.profilecompletion.ProfileCompletionScreen
 import com.friendfinapp.dating.navigation.AuthScreens
+import com.friendfinapp.dating.navigation.MainScreens
 import com.friendfinapp.dating.navigation.ProfileScreens
 
 object ProfileNavGraph {
@@ -53,9 +54,13 @@ object ProfileNavGraph {
             )
         }
         entry(ProfileScreens.ProfileCompletionNavScreen) {
-            ProfileCompletionScreen {
-                backStack.removeLastOrNull()
-            }
+            ProfileCompletionScreen(
+                onBackButtonClicked = {backStack.removeLastOrNull()},
+                onContinueButtonClicked = {
+                    backStack.clear()
+                    backStack.add(MainScreens.HomeNavScreen)
+                }
+            )
         }
 
         entry(ProfileScreens.PersonalSettingNavScreen) {
