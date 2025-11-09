@@ -4,6 +4,7 @@ import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
+import com.friend.changepassword.ChangePasswordScreen
 import com.friend.common.constant.PersonalMenu
 import com.friend.overview.ProfileOverviewScreen
 import com.friend.personalsetting.PersonalSettingScreen
@@ -19,17 +20,17 @@ object ProfileNavGraph {
     ) = with(builder) {
         entry(ProfileScreens.ProfileOverviewNavScreen) {
             ProfileOverviewScreen(
-                onBackButtonClicked = {backStack.removeLastOrNull()},
+                onBackButtonClicked = { backStack.removeLastOrNull() },
                 navigateToProfileScreen = {
                     backStack.add(ProfileScreens.ProfileNavScreen("", ""))
                 },
                 clickedOnMenu = { menu ->
-                    when(menu){
+                    when (menu) {
                         PersonalMenu.PERSONAL_SETTING -> backStack.add(ProfileScreens.PersonalSettingNavScreen)
                         PersonalMenu.PRIVACY_POLICY -> {}
                         PersonalMenu.SHARE_APP -> {}
                         PersonalMenu.RATE_APP -> {}
-                        PersonalMenu.CHANGE_PASSWORD -> {}
+                        PersonalMenu.CHANGE_PASSWORD -> backStack.add(ProfileScreens.ChangePasswordNavScreen)
                         PersonalMenu.CONTACT_US -> {}
                         PersonalMenu.LOGOUT -> {
                             backStack.clear()
@@ -39,7 +40,7 @@ object ProfileNavGraph {
                 }
             )
         }
-        entry<ProfileScreens.ProfileNavScreen> { key->
+        entry<ProfileScreens.ProfileNavScreen> { key ->
             ProfileScreen(
                 username = key.userName,
                 userId = key.userId,
@@ -59,6 +60,12 @@ object ProfileNavGraph {
 
         entry(ProfileScreens.PersonalSettingNavScreen) {
             PersonalSettingScreen {
+                backStack.removeLastOrNull()
+            }
+        }
+
+        entry(ProfileScreens.ChangePasswordNavScreen) {
+            ChangePasswordScreen {
                 backStack.removeLastOrNull()
             }
         }

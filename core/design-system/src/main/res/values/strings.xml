@@ -30,10 +30,14 @@
     <string name="action_cancel">Cancel</string>
     <string name="action_report">Report</string>
     <string name="action_forward">Forward</string>
+    <string name="action_change_password">Change Password</string>
 
     <string name="label_or">OR</string>
     <string name="label_username">Username*</string>
     <string name="label_password">Password*</string>
+    <string name="label_new_password">New Password*</string>
+    <string name="label_confirm_password">Confirm Password*</string>
+    <string name="label_current_password">Current Password*</string>
     <string name="label_full_name">Full Name*</string>
     <string name="label_email">Email*</string>
     <string name="label_date_of_birth">Date of Birth*</string>
@@ -62,6 +66,9 @@
     <string name="hint_search_here">Search here....</string>
     <string name="hint_full_name">Enter Full Name</string>
     <string name="hint_password">Enter your Password</string>
+    <string name="hint_new_password">Enter new Password</string>
+    <string name="hint_confirm_password">Enter confirm Password</string>
+    <string name="hint_current_password">Enter current Password</string>
     <string name="hint_email">Enter your Email</string>
     <string name="hint_dob">MMM DD, YYYY</string>
     <string name="hint_select_item">Select one</string>

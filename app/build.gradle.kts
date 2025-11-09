@@ -101,6 +101,7 @@ dependencies {
         implementation(profileManager.profileOverview)
         implementation(profileManager.profileCompletion)
         implementation(profileManager.personalSetting)
+        implementation(profileManager.changePassword)
     }
 
     with(libs){
