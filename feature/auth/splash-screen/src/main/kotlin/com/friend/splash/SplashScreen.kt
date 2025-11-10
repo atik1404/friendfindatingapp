@@ -24,12 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.ui.components.AppText
 import com.friend.ui.components.LocalImageLoader
+import com.friend.ui.preview.LightPreview
 import kotlinx.coroutines.delay
 import com.friend.designsystem.R as Res
 
@@ -95,7 +95,7 @@ fun AnimatedVisibilityImage(visible: Boolean) {
 }
 
 @Composable
-@PreviewLightDark
+@LightPreview
 fun SplashScreenPreview() {
     SplashScreen()
 }

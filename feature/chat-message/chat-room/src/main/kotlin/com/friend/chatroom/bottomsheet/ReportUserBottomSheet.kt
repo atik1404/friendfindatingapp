@@ -9,7 +9,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
 import com.friend.designsystem.theme.textColors
@@ -17,6 +16,7 @@ import com.friend.designsystem.R as Res
 import com.friend.ui.common.ShowBottomSheet
 import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppText
+import com.friend.ui.preview.LightPreview
 
 @Composable
 fun ReportUserBottomSheet(
@@ -52,7 +52,7 @@ fun ReportUserBottomSheet(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@PreviewLightDark
+@LightPreview
 fun ModalPreview() {
     ReportUserBottomSheet{
 

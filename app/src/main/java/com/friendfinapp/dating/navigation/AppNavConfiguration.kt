@@ -19,7 +19,7 @@ import com.friendfinapp.dating.navigation.graph.ProfileNavGraph
 
 @Composable
 fun AppNavConfiguration() {
-    val backStack = rememberNavBackStack(MainScreens.HomeNavScreen).toMutableStateList()
+    val backStack = rememberNavBackStack(AuthScreens.SplashNavScreen).toMutableStateList()
     val navResults = remember { NavResultManager() }
 
     CompositionLocalProvider(

@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingHorizontal
 import com.friend.designsystem.spacing.appPaddingOnly
@@ -23,6 +22,7 @@ import com.friend.ui.common.ShowBottomSheet
 import com.friend.ui.components.AppCheckbox
 import com.friend.ui.components.AppText
 import com.friend.ui.components.AppTextButton
+import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
 @Composable
@@ -83,7 +83,7 @@ private fun MessageForwardItem(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@PreviewLightDark
+@LightPreview
 fun ForwardMessageModalPreview() {
     MessageForwardBottomSheet(
         onDismiss = {},
