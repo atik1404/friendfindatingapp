@@ -9,7 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 @Preview(
     name = "Light",
     showBackground = true,
-    showSystemUi = true,
+    showSystemUi = false,
     uiMode = Configuration.UI_MODE_NIGHT_NO
 )
 annotation class LightPreview
@@ -18,7 +18,7 @@ annotation class LightPreview
 @Preview(
     name = "Dark",
     showBackground = true,
-    showSystemUi = true,
+    showSystemUi = false,
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 annotation class DarkPreview

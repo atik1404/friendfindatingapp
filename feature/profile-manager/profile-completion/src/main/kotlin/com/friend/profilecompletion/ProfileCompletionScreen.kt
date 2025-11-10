@@ -36,6 +36,7 @@ import com.friend.ui.components.AppOutlineTextField
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AutoCompleteTextField
 import com.friend.ui.preview.LightDarkPreview
+import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -230,11 +231,38 @@ private fun PersonalDetails() {
                 value = selectedValue
             )
         }
+
+        Spacer(Modifier.height(SpacingToken.medium))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            AutoCompleteTextField(
+                allOptions = items,
+                modifier = Modifier.weight(1f),
+                label = stringResource(Res.string.label_body_type),
+                placeholder = stringResource(Res.string.hint_select_item),
+                onValueChange = { selectedValue = it },
+                value = selectedValue
+            )
+
+            Spacer(modifier = Modifier.width(SpacingToken.medium))
+
+            AutoCompleteTextField(
+                allOptions = items,
+                modifier = Modifier.weight(1f),
+                label = stringResource(Res.string.label_looking_for),
+                placeholder = stringResource(Res.string.hint_select_item),
+                onValueChange = { selectedValue = it },
+                value = selectedValue
+            )
+        }
     }
 }
 
 @Composable
-@LightDarkPreview
+@LightPreview
 private fun ScreenPreview() {
     ProfileCompletionScreen(
         onBackButtonClicked = {},

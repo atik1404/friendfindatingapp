@@ -16,7 +16,6 @@ object MainNavGraph {
     ) = with(builder) {
         entry(MainScreens.HomeNavScreen) {
             HomeScreen(
-                navigateToSearchScreen = {},
                 navigateToChatListScreen = {
                     backStack.add(ChatMessageScreens.ChatListNavScreen)
                 },

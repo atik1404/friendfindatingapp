@@ -17,6 +17,8 @@
     <string name="title_chat">Chat</string>
     <string name="title_overview">Overview</string>
     <string name="title_profile">Profile</string>
+    <string name="title_individual_search">Individual Search</string>
+    <string name="title_report_abuse">Report Abuse</string>
 
     <string name="action_login_with_google">Login with Google</string>
     <string name="action_login">Login</string>
@@ -31,6 +33,7 @@
     <string name="action_report">Report</string>
     <string name="action_forward">Forward</string>
     <string name="action_change_password">Change Password</string>
+    <string name="action_search">Search</string>
 
     <string name="label_or">OR</string>
     <string name="label_username">Username*</string>
@@ -61,6 +64,9 @@
     <string name="label_gender">Gender*</string>
     <string name="label_interested_in">Interested In*</string>
     <string name="label_language">Language</string>
+    <string name="label_age_range">Age Range</string>
+    <string name="label_seeking_for">Who is seeking</string>
+    <string name="label_am_looking_for">I am looking for</string>
 
     <string name="hint_user_name">Enter your Username</string>
     <string name="hint_search_here">Search here....</string>
@@ -76,13 +82,18 @@
     <string name="hint_title">Enter title</string>
     <string name="hint_about_you">Tell us about you</string>
     <string name="hint_whats_up">Describe what are you looking for</string>
-    <string name="hint_write_something_here">"Write something here..."</string>
+    <string name="hint_write_something_here">Write something here...</string>
+    <string name="hint_min">Min</string>
+    <string name="hint_max">Max</string>
+    <string name="hint_to">TO</string>
 
     <string name="msg_image_content_description">Image content description</string>
     <string name="msg_dating_app">The Dating App</string>
     <string name="msg_copyright">\@All rights reserved by FriendFin</string>
     <string name="msg_agree_with_term_condition">I agree to the privacy policy, terms and conditions.</string>
     <string name="msg_report_abuse">Are you sure you want to report this user for abuse? If so, click on the button below</string>
+    <string name="msg_online_user_only">Online user only</string>
+    <string name="msg_photo_required">Photo is required</string>
 
 
     <string name="menu_report_user">Report User</string>

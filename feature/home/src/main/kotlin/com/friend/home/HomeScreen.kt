@@ -61,8 +61,8 @@ fun HomeScreen(
     navigateToChatListScreen: () -> Unit,
     navigateToOverviewScreen: () -> Unit,
     navigateToProfileScreen: (String, String) -> Unit,
-    navigateToSearchScreen: () -> Unit,
 ) {
+    var showFilterBottomSheet by rememberSaveable { mutableStateOf(false) }
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing
     ) { padding ->
@@ -77,7 +77,9 @@ fun HomeScreen(
         ) {
             SearchBar(
                 navigateToOverviewScreen = navigateToOverviewScreen,
-                navigateToSearchScreen = navigateToSearchScreen
+                navigateToSearchScreen = {
+                    showFilterBottomSheet = true
+                }
             )
             Spacer(Modifier.height(SpacingToken.medium))
             ProfileSummary(
@@ -87,18 +89,28 @@ fun HomeScreen(
                 }
             )
             Spacer(Modifier.height(SpacingToken.medium))
-            PersonList{
+            PersonList {
                 navigateToProfileScreen.invoke("", "")//TODO replace with current user data
             }
         }
     }
+
+    if (showFilterBottomSheet)
+        FilterUserBottomSheet(
+            onSearchApply = {
+                showFilterBottomSheet = false
+            },
+            onDismissRequest = {
+                showFilterBottomSheet = false
+            },
+        )
 }
 
 @Composable
 private fun SearchBar(
     navigateToOverviewScreen: () -> Unit,
     navigateToSearchScreen: () -> Unit,
-){
+) {
     var userName by rememberSaveable { mutableStateOf("") }
     AppBaseTextField(
         value = userName,
@@ -119,7 +131,7 @@ private fun SearchBar(
 private fun ProfileSummary(
     navigateToChatListScreen: () -> Unit,
     navigateToProfileScreen: () -> Unit,
-){
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -128,7 +140,7 @@ private fun ProfileSummary(
             "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
             modifier = Modifier
                 .size(IconSizeToken.extraLarge)
-                .clickable{
+                .clickable {
                     navigateToProfileScreen.invoke()
                 },
             shape = CircleShape
@@ -166,7 +178,7 @@ private fun ProfileSummary(
             onClick = {
                 navigateToChatListScreen.invoke()
             }
-        ){
+        ) {
             LocalImageLoader(
                 imageResId = Res.drawable.ic_chat_bubble,
                 modifier = Modifier.size(IconSizeToken.medium)
@@ -178,14 +190,14 @@ private fun ProfileSummary(
 @Composable
 private fun PersonList(
     onPersonClick: (String) -> Unit
-){
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
     ) {
         items(100) {
             PersonCardItem(
                 modifier = Modifier
-                    .clickable{
+                    .clickable {
                         onPersonClick.invoke("")
                     }
             )
@@ -196,7 +208,7 @@ private fun PersonList(
 @Composable
 private fun PersonCardItem(
     modifier: Modifier
-){
+) {
     Box(
         contentAlignment = Alignment.BottomCenter,
         modifier = modifier.appPadding(SpacingToken.micro)
@@ -239,7 +251,6 @@ private fun ScreenPreview() {
     HomeScreen(
         navigateToChatListScreen = {},
         navigateToOverviewScreen = {},
-        navigateToProfileScreen = { _, _ ->},
-        navigateToSearchScreen = {}
+        navigateToProfileScreen = { _, _ -> },
     )
 }

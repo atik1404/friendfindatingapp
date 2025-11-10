@@ -10,6 +10,7 @@ import androidx.compose.ui.unit.dp
 @Immutable
 object SpacingToken {
     val none = 0.dp          // no space
+    val minimum = 2.dp          // no space
     val micro = 4.dp          // very tight space
     val tiny = 8.dp           // small space, text-to-text
     val extraSmall = 10.dp    // uncommon but slightly bigger than tiny

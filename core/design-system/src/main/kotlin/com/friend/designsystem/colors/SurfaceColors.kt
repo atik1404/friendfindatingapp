@@ -10,6 +10,7 @@ data class SurfaceColors(
     val selectedItemColor: Color,
     val grayLight: Color,
     val yellowLight: Color,
+    val greenBase: Color,
 
 )
 
@@ -21,6 +22,7 @@ val LocalSurfaceColors = staticCompositionLocalOf {
         selectedItemColor = ColorPalette.Blue400,
         grayLight = ColorPalette.Gray100,
         yellowLight = ColorPalette.Gold100,
+        greenBase = ColorPalette.Green500,
     )
 }
 
@@ -31,6 +33,7 @@ fun surfaceColorsForLight() = SurfaceColors(
     selectedItemColor = ColorPalette.Blue400,
     grayLight = ColorPalette.Gray100,
     yellowLight = ColorPalette.Gold100,
+    greenBase = ColorPalette.Green500,
 )
 
 fun surfaceColorsForDark() = SurfaceColors(
@@ -40,4 +43,5 @@ fun surfaceColorsForDark() = SurfaceColors(
     selectedItemColor = ColorPalette.Blue400,
     grayLight = ColorPalette.Gray100,
     yellowLight = ColorPalette.Gold100,
+    greenBase = ColorPalette.Green500,
 )

@@ -38,6 +38,7 @@ fun ShowBottomSheet(
     titleColor: Color = MaterialTheme.textColors.primary,
     onDismissRequest: () -> Unit,
     cancellable: Boolean = true,
+    heightRatio: Float = 0.75f,
     content: @Composable () -> Unit
 ) {
     val sheetState = rememberStandardBottomSheetState(
@@ -56,7 +57,7 @@ fun ShowBottomSheet(
         ) {
             // maxHeight here is the full window height in Dp.
             // We'll allow the sheet content to grow up to 60% of that.
-            val maxSheetHeight = maxHeight * 0.75f
+            val maxSheetHeight = maxHeight * heightRatio
 
             Column(
                 modifier = Modifier

@@ -43,7 +43,7 @@ import com.friend.ui.components.AppOutlineTextField
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AutoCompleteTextField
 import com.friend.ui.components.SingleChoiceSegmentsWithIcons
-import com.friend.ui.preview.LightDarkPreview
+import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -223,7 +223,7 @@ fun NameField() {
 }
 
 @Composable
-fun AddressField() {
+private fun AddressField() {
     var zipCode by rememberSaveable { mutableStateOf("") }
     var text by remember { mutableStateOf("") }
 
@@ -292,7 +292,7 @@ fun AddressField() {
 
 
 @Composable
-@LightDarkPreview
+@LightPreview
 private fun ScreenPreview() {
     RegistrationScreen(
         onBackButtonClicked = {},

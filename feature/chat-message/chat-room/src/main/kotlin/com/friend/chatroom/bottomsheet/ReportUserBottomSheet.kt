@@ -26,7 +26,7 @@ fun ReportUserBottomSheet(
 ){
     ShowBottomSheet(
         onDismissRequest = onDismissRequest,
-        title = "Report an abuse",
+        title = stringResource(Res.string.title_report_abuse),
         titleColor = MaterialTheme.textColors.error
     ) {
         Column(
