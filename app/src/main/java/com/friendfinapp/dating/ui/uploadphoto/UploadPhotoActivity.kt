@@ -158,7 +158,7 @@ class UploadPhotoActivity : BaseActivity<ActivityUploadPhotoBinding>() {
                     binding.uploadImage.isEnabled = true
                 })
             } catch (e: Exception) {
-                // showMessage(getString(R.string.failed_message))
+                 showToastMessage("Failed to upload photo, please retry")
             }
         }
 

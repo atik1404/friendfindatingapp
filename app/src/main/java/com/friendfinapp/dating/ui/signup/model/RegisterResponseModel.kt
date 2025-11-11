@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 class RegisterResponseModel {
     @SerializedName("status_code")
     @Expose
-    var status_code = 0
+    var status_code: Int? = 0
 
     @SerializedName("message")
     @Expose
