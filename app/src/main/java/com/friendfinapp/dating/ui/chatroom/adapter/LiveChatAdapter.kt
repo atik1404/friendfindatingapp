@@ -36,10 +36,8 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.friendfinapp.dating.helper.dateparser.DateTimeFormat
 import com.iamkamrul.dateced.DateCed
-import com.iamkamrul.dateced.TimeZoneId
-import com.jerp.common.dateparser.DateTimeParser
-import com.jerp.common.dateparser.DateTimeParser.convertReadableDateTime
-import com.jerp.common.dateparser.parseUtcToLocalCompat
+import com.friendfinapp.dating.DateTimeParser.convertReadableDateTime
+import com.friendfinapp.dating.parseUtcToLocalCompat
 import java.text.SimpleDateFormat
 import java.util.Locale
 
