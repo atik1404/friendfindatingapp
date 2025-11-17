@@ -5,6 +5,8 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
 import com.friend.home.HomeScreen
+import com.friend.membership.MembershipScreen
+import com.friend.policy.PrivacyPolicyScreen
 import com.friendfinapp.dating.navigation.ChatMessageScreens
 import com.friendfinapp.dating.navigation.MainScreens
 import com.friendfinapp.dating.navigation.ProfileScreens
@@ -26,6 +28,12 @@ object MainNavGraph {
                     backStack.add(ProfileScreens.ProfileOverviewNavScreen)
                 }
             )
+        }
+
+        entry(MainScreens.PrivacyPolicyNavScreen) {
+            PrivacyPolicyScreen {
+                backStack.removeLastOrNull()
+            }
         }
     }
 }

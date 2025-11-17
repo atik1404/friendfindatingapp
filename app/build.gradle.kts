@@ -101,7 +101,10 @@ dependencies {
         implementation(profileManager.profileOverview)
         implementation(profileManager.profileCompletion)
         implementation(profileManager.personalSetting)
+        implementation(profileManager.vipMembership)
         implementation(profileManager.changePassword)
+
+        implementation(privacyPolicy)
     }
 
     with(libs){

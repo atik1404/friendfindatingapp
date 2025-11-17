@@ -6,6 +6,7 @@ enum class PersonalMenu {
     SHARE_APP,
     RATE_APP,
     CHANGE_PASSWORD,
+    VIP_MEMBERSHIP,
     CONTACT_US,
-    LOGOUT
+    LOGOUT,
 }

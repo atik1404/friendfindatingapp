@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Policy
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.StarRate
+import androidx.compose.material.icons.filled.Verified
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -114,6 +115,13 @@ private fun MenuCard(
             menu = stringResource(Res.string.menu_change_password)
         ) {
             clickedOnMenu.invoke(PersonalMenu.CHANGE_PASSWORD)
+        }
+
+        MenuItem(
+            icon = Icons.Default.Verified,
+            menu = stringResource(Res.string.menu_vip_membership)
+        ) {
+            clickedOnMenu.invoke(PersonalMenu.VIP_MEMBERSHIP)
         }
 
         MenuItem(

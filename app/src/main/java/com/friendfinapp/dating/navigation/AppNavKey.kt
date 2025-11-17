@@ -22,6 +22,9 @@ sealed interface AuthScreens : AppScreen {
 sealed interface MainScreens : AppScreen {
     @Serializable
     object HomeNavScreen : AppScreen
+
+    @Serializable
+    object PrivacyPolicyNavScreen : AppScreen
 }
 
 sealed interface ChatMessageScreens : AppScreen {
@@ -53,4 +56,6 @@ sealed interface ProfileScreens : AppScreen {
 
     @Serializable
     object ChangePasswordNavScreen : AppScreen
+    @Serializable
+    object MembershipNavScreen : AppScreen
 }

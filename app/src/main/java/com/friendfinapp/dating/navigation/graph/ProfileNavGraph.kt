@@ -6,6 +6,7 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entry
 import com.friend.changepassword.ChangePasswordScreen
 import com.friend.common.constant.PersonalMenu
+import com.friend.membership.MembershipScreen
 import com.friend.overview.ProfileOverviewScreen
 import com.friend.personalsetting.PersonalSettingScreen
 import com.friend.profile.ProfileScreen
@@ -28,11 +29,12 @@ object ProfileNavGraph {
                 clickedOnMenu = { menu ->
                     when (menu) {
                         PersonalMenu.PERSONAL_SETTING -> backStack.add(ProfileScreens.PersonalSettingNavScreen)
-                        PersonalMenu.PRIVACY_POLICY -> {}
+                        PersonalMenu.PRIVACY_POLICY -> backStack.add(MainScreens.PrivacyPolicyNavScreen)
                         PersonalMenu.SHARE_APP -> {}
                         PersonalMenu.RATE_APP -> {}
                         PersonalMenu.CHANGE_PASSWORD -> backStack.add(ProfileScreens.ChangePasswordNavScreen)
                         PersonalMenu.CONTACT_US -> {}
+                        PersonalMenu.VIP_MEMBERSHIP -> backStack.add(ProfileScreens.MembershipNavScreen)
                         PersonalMenu.LOGOUT -> {
                             backStack.clear()
                             backStack.add(AuthScreens.LoginNavScreen)
@@ -55,7 +57,7 @@ object ProfileNavGraph {
         }
         entry(ProfileScreens.ProfileCompletionNavScreen) {
             ProfileCompletionScreen(
-                onBackButtonClicked = {backStack.removeLastOrNull()},
+                onBackButtonClicked = { backStack.removeLastOrNull() },
                 onContinueButtonClicked = {
                     backStack.clear()
                     backStack.add(MainScreens.HomeNavScreen)
@@ -71,6 +73,12 @@ object ProfileNavGraph {
 
         entry(ProfileScreens.ChangePasswordNavScreen) {
             ChangePasswordScreen {
+                backStack.removeLastOrNull()
+            }
+        }
+
+        entry(ProfileScreens.MembershipNavScreen) {
+            MembershipScreen {
                 backStack.removeLastOrNull()
             }
         }
