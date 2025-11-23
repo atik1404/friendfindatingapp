@@ -72,7 +72,7 @@ datePicker = "4.2.3"
 coroutinesVersion = "1.10.2"
 leakcanaryVersion = "2.14"
 
-viewPagerDotIndicatorVersion = "5.1.0"
+viewPagerDotIndicatorVersion = "0.30.1"
 hiltNavigationFragmentVersion = "1.3.0"
 javaxInject = "1"
 
@@ -166,7 +166,7 @@ ssp = { group = "com.intuit.ssp", name = "ssp-android", version.ref = "sdpVersio
 cirlce-imageview = { group = "de.hdodenhof", name = "circleimageview", version.ref = "circleImageViewVersion" }
 kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutinesVersion" }
 leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanaryVersion" }
-dot-indicator = { group = "com.tbuonomo", name = "dotsindicator", version.ref = "viewPagerDotIndicatorVersion" }
+dot-indicator = { group = "com.google.accompanist", name = "accompanist-pager-indicators", version.ref = "viewPagerDotIndicatorVersion" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timberVersion" }
 view-state-layout = { group = "com.github.kamrul3288", name = "viewstatelayout", version.ref = "viewStateLayoutVersion" }
 dateced = { group = "com.github.kamrul3288", name = "dateced", version.ref = "dateced" }
