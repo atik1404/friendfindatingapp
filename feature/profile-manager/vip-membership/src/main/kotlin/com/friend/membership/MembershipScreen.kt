@@ -1,7 +1,6 @@
 package com.friend.membership
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -21,9 +20,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +51,8 @@ import kotlinx.coroutines.delay
 fun MembershipScreen(
     onBackClick: () -> Unit,
 ) {
+
+    var showBottomSheet by rememberSaveable { mutableStateOf(false) }
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
@@ -71,7 +75,7 @@ fun MembershipScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            Pager()
+            BannerPager()
 
             Spacer(modifier = Modifier.height(SpacingToken.huge))
 
@@ -79,15 +83,25 @@ fun MembershipScreen(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(Res.string.action_activate_vip_membership),
                 onClick = {
-
+                    showBottomSheet = true
                 },
             )
+
+            if (showBottomSheet)
+                PackagesBottomSheet(
+                    onClickListener = {
+                        showBottomSheet = false
+                    },
+                    onDismissRequest = {
+                        showBottomSheet = false
+                    },
+                )
         }
     }
 }
 
 @Composable
-private fun Pager() {
+private fun BannerPager() {
     val pageCount = 2
 
     val pagerState = rememberPagerState(

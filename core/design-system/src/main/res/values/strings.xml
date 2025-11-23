@@ -20,6 +20,7 @@
     <string name="title_individual_search">Individual Search</string>
     <string name="title_report_abuse">Report Abuse</string>
     <string name="title_privacy_policy">Privacy Policy</string>
+    <string name="title_member_ship">Membership plan</string>
 
     <string name="action_login_with_google">Login with Google</string>
     <string name="action_login">Login</string>
@@ -36,6 +37,9 @@
     <string name="action_change_password">Change Password</string>
     <string name="action_search">Search</string>
     <string name="action_activate_vip_membership">Activate VIP Membership</string>
+    <string name="action_yearly">Yearly - Popular</string>
+    <string name="action_monthly">1 Month</string>
+    <string name="action_manage_subscription">Manage Subscription</string>
 
     <string name="label_or">OR</string>
     <string name="label_username">Username*</string>
@@ -109,6 +113,7 @@
 
     <string name="msg_search_members_from_other_countries">Search members from other countries!</string>
     <string name="msg_search_members_from_other_countries_description">you can search members not only from your country but also from other countries. There is no limit.</string>
+    <string name="msg_get_more_in_vip">Get more with VIP membership</string>
 
     <string name="msg_advance_filter">Use advanced filter!</string>
     <string name="msg_advance_filter_description">you can use country and distance filter.</string>
