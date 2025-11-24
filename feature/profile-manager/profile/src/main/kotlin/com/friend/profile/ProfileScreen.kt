@@ -67,8 +67,8 @@ fun ProfileScreen(
                                         navigateToReportAbuse.invoke()
                                     }
 
-                                    PopupMenuType.BlockUser -> TODO()
-                                    PopupMenuType.UnblockUser -> TODO()
+                                    PopupMenuType.BlockUser -> {}
+                                    PopupMenuType.UnblockUser -> {}
                                     else -> {}
                                 }
                             }
