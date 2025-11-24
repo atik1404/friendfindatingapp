@@ -55,10 +55,12 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
+import timber.log.Timber
 import java.net.Inet4Address
 import java.net.NetworkInterface
 import java.net.SocketException
@@ -462,44 +464,45 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(), AdapterView.OnItem
         }
 
         binding.lin.setOnClickListener {
+            try {
+                val calendar = Calendar.getInstance()
+                calendar.add(Calendar.YEAR, -18)
 
+                val constraintsBuilder =
+                    CalendarConstraints.Builder()
+                        .setValidator(
+                            DateValidatorPointBackward.before(calendar.timeInMillis)
+                        )
 
-            val calendar = Calendar.getInstance()
-            calendar.add(Calendar.YEAR, -18)
+                //view.setMaxDate(calendar.timeInMillis)
 
-            val constraintsBuilder =
-                CalendarConstraints.Builder()
-                    .setValidator(
-                        DateValidatorPointBackward.before(calendar.timeInMillis)
-                    )
+                datePicker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Select date of birth")
+                    .setCalendarConstraints(constraintsBuilder.build())
+                    .setSelection(calendar.timeInMillis)
+                    .build()
 
-            //view.setMaxDate(calendar.timeInMillis)
+                // datePicker.setMinDate()
 
-            datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date of birth")
-                .setCalendarConstraints(constraintsBuilder.build())
-                .setSelection(calendar.timeInMillis)
-                .build()
+                datePicker.show(supportFragmentManager, "MATERIAL_DATE_PICKER")
+                datePicker.addOnPositiveButtonClickListener { selection: Long ->
 
-            // datePicker.setMinDate()
+                    // if the user clicks on the positive
+                    // button that is ok button update the
+                    // selected date
 
-            datePicker.show(supportFragmentManager, "MATERIAL_DATE_PICKER")
-            datePicker.addOnPositiveButtonClickListener { selection: Long ->
+                    val headerText = datePicker.headerText.toString()
 
-                // if the user clicks on the positive
-                // button that is ok button update the
-                // selected date
+                    binding.dateOfBirth.setText(headerText)
+                    val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+                    utc.timeInMillis = selection
+                    val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+                    formatted = format.format(utc.time)
 
-
-                binding.dateOfBirths.editText!!
-                    .setText("" + datePicker.headerText.toString())
-                val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-                utc.timeInMillis = selection
-                val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-                formatted = format.format(utc.time)
-
+                }
+            } catch (ex: Exception) {
+                FirebaseCrashlytics.getInstance().recordException(ex)
             }
-
         }
 
 //        binding.Countrylin.setOnClickListener {
@@ -723,7 +726,8 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(), AdapterView.OnItem
             eventsSettings
         ).observe(this, {
             customDialog.dismiss()
-            if (it.status_code == 201) {
+            val statusCode = it.status_code ?: 0
+            if (statusCode == 201) {
 
                 sessionManager.login = true
                 USER_INFO = it.data!!
