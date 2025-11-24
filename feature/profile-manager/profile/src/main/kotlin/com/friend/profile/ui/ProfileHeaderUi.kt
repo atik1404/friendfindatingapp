@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import com.friend.designsystem.spacing.IconSizeToken
@@ -38,11 +39,15 @@ import com.friend.ui.components.AppIconButton
 import com.friend.ui.components.AppText
 import com.friend.ui.components.AppTextButton
 import com.friend.ui.components.NetworkImageLoader
+import com.friend.ui.preview.LightDarkPreview
+import com.friend.designsystem.R as Res
 
 @Composable
 fun ProfileHeaderUi(
+    isOtherProfile: Boolean,
     modifier: Modifier = Modifier,
-    onEditClick: () -> Unit
+    onEditClick: () -> Unit,
+    onSendMsgClicked: () -> Unit,
 ) {
     val picSize = ImageSizeToken.profilePictureLarge
 
@@ -118,12 +123,30 @@ fun ProfileHeaderUi(
                 )
             }
 
-            AppTextButton(
-                text = "Edit Profile",
-                onClick = onEditClick,
-                textColor = MaterialTheme.textColors.brand,
-                fontWeight = FontWeight.Light
-            )
+            if (isOtherProfile)
+                AppIconButton(
+                    resourceIcon = Res.drawable.ic_chat_bubble,
+                    onClick = {
+                        onSendMsgClicked.invoke()
+                    },
+                )
+            else
+                AppTextButton(
+                    text = stringResource(Res.string.action_edit_profile),
+                    onClick = onEditClick,
+                    textColor = MaterialTheme.textColors.brand,
+                    fontWeight = FontWeight.Light
+                )
         }
     }
+}
+
+@Composable
+@LightDarkPreview
+private fun ScreenPreview() {
+    ProfileHeaderUi(
+        onEditClick = {},
+        onSendMsgClicked = {},
+        isOtherProfile = false
+    )
 }

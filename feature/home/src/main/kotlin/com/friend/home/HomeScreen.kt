@@ -48,6 +48,7 @@ import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.theme.textFieldColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.ui.components.AppBaseTextField
+import com.friend.ui.components.AppIconButton
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AppText
 import com.friend.ui.components.LocalImageLoader
@@ -90,7 +91,7 @@ fun HomeScreen(
             )
             Spacer(Modifier.height(SpacingToken.medium))
             PersonList {
-                navigateToProfileScreen.invoke("", "")//TODO replace with current user data
+                navigateToProfileScreen.invoke("others", "others")//TODO replace with current user data
             }
         }
     }
@@ -174,22 +175,18 @@ private fun ProfileSummary(
             modifier = Modifier.weight(1f)
         )
 
-        IconButton(
+        AppIconButton(
+            resourceIcon = Res.drawable.ic_chat_bubble,
             onClick = {
                 navigateToChatListScreen.invoke()
-            }
-        ) {
-            LocalImageLoader(
-                imageResId = Res.drawable.ic_chat_bubble,
-                modifier = Modifier.size(IconSizeToken.medium)
-            )
-        }
+            },
+        )
     }
 }
 
 @Composable
 private fun PersonList(
-    onPersonClick: (String) -> Unit
+    onPersonClick: (String) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -198,7 +195,7 @@ private fun PersonList(
             PersonCardItem(
                 modifier = Modifier
                     .clickable {
-                        onPersonClick.invoke("")
+                        onPersonClick.invoke("others")
                     }
             )
         }
@@ -207,7 +204,7 @@ private fun PersonList(
 
 @Composable
 private fun PersonCardItem(
-    modifier: Modifier
+    modifier: Modifier,
 ) {
     Box(
         contentAlignment = Alignment.BottomCenter,

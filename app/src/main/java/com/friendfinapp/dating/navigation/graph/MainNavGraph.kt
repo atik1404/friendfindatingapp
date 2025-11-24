@@ -21,8 +21,8 @@ object MainNavGraph {
                 navigateToChatListScreen = {
                     backStack.add(ChatMessageScreens.ChatListNavScreen)
                 },
-                navigateToProfileScreen = { _, _ ->
-                    backStack.add(ProfileScreens.ProfileNavScreen("", ""))
+                navigateToProfileScreen = { userName, userId ->
+                    backStack.add(ProfileScreens.ProfileNavScreen(userId, userName))
                 },
                 navigateToOverviewScreen = {
                     backStack.add(ProfileScreens.ProfileOverviewNavScreen)

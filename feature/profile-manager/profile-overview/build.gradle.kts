@@ -4,4 +4,7 @@ plugins {
 
 android {
     namespace = "com.friend.overview"
+    buildFeatures {
+        buildConfig = true
+    }
 }

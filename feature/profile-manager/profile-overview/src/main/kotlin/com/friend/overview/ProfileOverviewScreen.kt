@@ -1,5 +1,6 @@
 package com.friend.overview
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -33,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.friend.common.constant.PersonalMenu
 import com.friend.designsystem.spacing.RadiusToken
@@ -78,13 +80,13 @@ fun ProfileOverviewScreen(
 
             ProfileSummaryUi(
                 modifier = Modifier
-            ){
+            ) {
                 navigateToProfileScreen.invoke()
             }
 
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
-            MenuCard{
+            MenuCard {
                 clickedOnMenu.invoke(it)
             }
         }
@@ -93,8 +95,9 @@ fun ProfileOverviewScreen(
 
 @Composable
 private fun MenuCard(
-    clickedOnMenu: (PersonalMenu) -> Unit
+    clickedOnMenu: (PersonalMenu) -> Unit,
 ) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .background(
@@ -135,21 +138,21 @@ private fun MenuCard(
             icon = Icons.Default.Share,
             menu = stringResource(Res.string.menu_share_app)
         ) {
-            clickedOnMenu.invoke(PersonalMenu.SHARE_APP)
+            shareApp(context = context)
         }
 
         MenuItem(
             icon = Icons.Default.StarRate,
             menu = stringResource(Res.string.menu_rate_app)
         ) {
-            clickedOnMenu.invoke(PersonalMenu.RATE_APP)
+            openAppInPlayStore(context)
         }
 
         MenuItem(
             icon = Icons.Default.ContactPage,
             menu = stringResource(Res.string.menu_contact_us)
         ) {
-            clickedOnMenu.invoke(PersonalMenu.CONTACT_US)
+            openMailApp(context)
         }
 
         MenuItem(
@@ -165,13 +168,13 @@ private fun MenuCard(
 private fun MenuItem(
     icon: ImageVector,
     menu: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .appPaddingVertical(SpacingToken.medium)
-            .clickable{
+            .clickable {
                 onClick.invoke()
             },
         verticalAlignment = Alignment.CenterVertically,

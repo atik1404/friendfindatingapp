@@ -40,6 +40,7 @@
     <string name="action_yearly">Yearly - Popular</string>
     <string name="action_monthly">1 Month</string>
     <string name="action_manage_subscription">Manage Subscription</string>
+    <string name="action_edit_profile">Edit Profile</string>
 
     <string name="label_or">OR</string>
     <string name="label_username">Username*</string>
@@ -122,6 +123,8 @@
     <string name="menu_message_forward">Message Forward</string>
     <string name="menu_delete_message">Delete Message(s)</string>
     <string name="menu_message_search">Message Search</string>
+    <string name="menu_block_user">Block this user</string>
+    <string name="menu_unblock_user">Unblock this user</string>
 
     <string name="menu_personal_setting">Personal Setting</string>
     <string name="menu_change_password">Change Password</string>

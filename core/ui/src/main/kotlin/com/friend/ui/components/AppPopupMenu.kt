@@ -57,6 +57,19 @@ val ChatRoomPopupMenu = listOf(
     ),
 )
 
+val ProfilePopupMenu = listOf(
+    PopupMenu(
+        icon = Icons.Default.Report,
+        menu = Res.string.menu_report_user,
+        menuType = PopupMenuType.ReportUser
+    ),
+    PopupMenu(
+        icon = Icons.Default.Search,
+        menu = Res.string.menu_block_user,
+        menuType = PopupMenuType.MessageSearch
+    ),
+)
+
 @Composable
 fun AppPopupMenu(
     modifier: Modifier = Modifier,

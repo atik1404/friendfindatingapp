@@ -1,5 +1,6 @@
 package com.friendfinapp.dating.navigation.graph
 
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation3.runtime.EntryProviderBuilder
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
@@ -12,14 +13,16 @@ import com.friend.personalsetting.PersonalSettingScreen
 import com.friend.profile.ProfileScreen
 import com.friend.profilecompletion.ProfileCompletionScreen
 import com.friendfinapp.dating.navigation.AuthScreens
+import com.friendfinapp.dating.navigation.ChatMessageScreens
 import com.friendfinapp.dating.navigation.MainScreens
 import com.friendfinapp.dating.navigation.ProfileScreens
 
 object ProfileNavGraph {
     fun register(
         backStack: NavBackStack,
-        builder: EntryProviderBuilder<NavKey>
+        builder: EntryProviderBuilder<NavKey>,
     ) = with(builder) {
+
         entry(ProfileScreens.ProfileOverviewNavScreen) {
             ProfileOverviewScreen(
                 onBackButtonClicked = { backStack.removeLastOrNull() },
@@ -30,15 +33,14 @@ object ProfileNavGraph {
                     when (menu) {
                         PersonalMenu.PERSONAL_SETTING -> backStack.add(ProfileScreens.PersonalSettingNavScreen)
                         PersonalMenu.PRIVACY_POLICY -> backStack.add(MainScreens.PrivacyPolicyNavScreen)
-                        PersonalMenu.SHARE_APP -> {}
-                        PersonalMenu.RATE_APP -> {}
                         PersonalMenu.CHANGE_PASSWORD -> backStack.add(ProfileScreens.ChangePasswordNavScreen)
-                        PersonalMenu.CONTACT_US -> {}
                         PersonalMenu.VIP_MEMBERSHIP -> backStack.add(ProfileScreens.MembershipNavScreen)
                         PersonalMenu.LOGOUT -> {
                             backStack.clear()
                             backStack.add(AuthScreens.LoginNavScreen)
                         }
+
+                        else -> {}
                     }
                 }
             )
@@ -52,6 +54,9 @@ object ProfileNavGraph {
                 },
                 onBackButtonClicked = {
                     backStack.removeLastOrNull()
+                },
+                navigateToMessageRoom = {
+                    backStack.add(ChatMessageScreens.ChatRoomNavScreen("", "Tom Cruise"))
                 }
             )
         }

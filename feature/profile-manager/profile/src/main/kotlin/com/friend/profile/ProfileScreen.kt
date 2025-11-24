@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,8 +28,10 @@ import com.friend.designsystem.spacing.appPadding
 import com.friend.designsystem.typography.AppTypography
 import com.friend.profile.ui.ProfileHeaderUi
 import com.friend.ui.common.AppToolbar
+import com.friend.ui.components.AppPopupMenu
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AppText
+import com.friend.ui.components.ProfilePopupMenu
 import com.friend.ui.preview.LightDarkPreview
 import com.friend.designsystem.R as Res
 
@@ -38,7 +42,10 @@ fun ProfileScreen(
     userId: String,
     onBackButtonClicked: () -> Unit,
     navigateToEditProfile: () -> Unit,
+    navigateToMessageRoom: () -> Unit,
 ) {
+    val isOthersProfile = username == "others" || userId == "others"
+
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
@@ -46,7 +53,18 @@ fun ProfileScreen(
                 title = stringResource(Res.string.title_profile),
                 onBackClick = {
                     onBackButtonClicked.invoke()
-                })
+                },
+                actions = {
+                    if (isOthersProfile)
+                        AppPopupMenu(
+                            icon = Icons.Default.MoreVert,
+                            menuItems = ProfilePopupMenu,
+                            onClick = { menu ->
+
+                            }
+                        )
+                }
+            )
         }
     ) { padding ->
         Column(
@@ -61,9 +79,10 @@ fun ProfileScreen(
         ) {
             ProfileHeaderUi(
                 modifier = Modifier,
-            ){
-                navigateToEditProfile.invoke()
-            }
+                onEditClick = { navigateToEditProfile.invoke() },
+                onSendMsgClicked = { navigateToMessageRoom.invoke() },
+                isOtherProfile = isOthersProfile
+            )
 
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
@@ -234,7 +253,7 @@ private fun LabeledValue(
     value: String,
     modifier: Modifier = Modifier,
     alignment: Alignment.Horizontal = Alignment.Start,
-    maxLines: Int = 1
+    maxLines: Int = 1,
 ) {
     Column(
         modifier = modifier,
@@ -261,6 +280,7 @@ private fun ScreenPreview() {
         username = "",
         userId = "",
         onBackButtonClicked = {},
-        navigateToEditProfile = {}
+        navigateToEditProfile = {},
+        navigateToMessageRoom = {},
     )
 }
