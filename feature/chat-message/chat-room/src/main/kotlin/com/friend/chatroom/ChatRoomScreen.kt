@@ -123,7 +123,7 @@ private fun TopbarUi(
         backToChatListScreen = onBackButtonClicked,
         onMenuClicked = {
             when (it) {
-                PopupMenuType.ReportUser -> showReportBottomSheet = true
+                PopupMenuType.ReportAbuse -> showReportBottomSheet = true
                 PopupMenuType.MessageSearch -> isSearchBarEnable = true
                 PopupMenuType.ForwardMessage -> showForwardBottomSheet = true
                 else -> {}

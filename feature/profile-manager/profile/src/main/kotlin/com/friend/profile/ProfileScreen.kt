@@ -31,6 +31,7 @@ import com.friend.ui.common.AppToolbar
 import com.friend.ui.components.AppPopupMenu
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AppText
+import com.friend.ui.components.PopupMenuType
 import com.friend.ui.components.ProfilePopupMenu
 import com.friend.ui.preview.LightDarkPreview
 import com.friend.designsystem.R as Res
@@ -43,6 +44,7 @@ fun ProfileScreen(
     onBackButtonClicked: () -> Unit,
     navigateToEditProfile: () -> Unit,
     navigateToMessageRoom: () -> Unit,
+    navigateToReportAbuse: () -> Unit,
 ) {
     val isOthersProfile = username == "others" || userId == "others"
 
@@ -60,7 +62,15 @@ fun ProfileScreen(
                             icon = Icons.Default.MoreVert,
                             menuItems = ProfilePopupMenu,
                             onClick = { menu ->
+                                when (menu) {
+                                    PopupMenuType.ReportUser -> {
+                                        navigateToReportAbuse.invoke()
+                                    }
 
+                                    PopupMenuType.BlockUser -> TODO()
+                                    PopupMenuType.UnblockUser -> TODO()
+                                    else -> {}
+                                }
                             }
                         )
                 }
@@ -282,5 +292,6 @@ private fun ScreenPreview() {
         onBackButtonClicked = {},
         navigateToEditProfile = {},
         navigateToMessageRoom = {},
+        navigateToReportAbuse = {},
     )
 }

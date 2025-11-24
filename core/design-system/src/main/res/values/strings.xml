@@ -19,6 +19,7 @@
     <string name="title_profile">Profile</string>
     <string name="title_individual_search">Individual Search</string>
     <string name="title_report_abuse">Report Abuse</string>
+    <string name="title_report_user">Report User</string>
     <string name="title_privacy_policy">Privacy Policy</string>
     <string name="title_member_ship">Membership plan</string>
 
@@ -74,6 +75,7 @@
     <string name="label_age_range">Age Range</string>
     <string name="label_seeking_for">Who is seeking</string>
     <string name="label_am_looking_for">I am looking for</string>
+    <string name="label_why_report_user">Tell use why you want to report this user?</string>
 
     <string name="hint_user_name">Enter your Username</string>
     <string name="hint_search_here">Search here....</string>
@@ -93,6 +95,7 @@
     <string name="hint_min">Min</string>
     <string name="hint_max">Max</string>
     <string name="hint_to">TO</string>
+    <string name="hint_write_here">Write here...</string>
 
     <string name="msg_image_content_description">Image content description</string>
     <string name="msg_dating_app">The Dating App</string>
@@ -120,6 +123,7 @@
     <string name="msg_advance_filter_description">you can use country and distance filter.</string>
 
     <string name="menu_report_user">Report User</string>
+    <string name="menu_report_abuse">Report Abuse</string>
     <string name="menu_message_forward">Message Forward</string>
     <string name="menu_delete_message">Delete Message(s)</string>
     <string name="menu_message_search">Message Search</string>

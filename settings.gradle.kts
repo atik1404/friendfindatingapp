@@ -57,3 +57,4 @@ include(":feature:profile-manager:change-password")
 include(":feature:profile-manager:vip-membership")
 
 include(":feature:privacy-policy")
+include(":feature:report-abuse")

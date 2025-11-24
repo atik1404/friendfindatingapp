@@ -105,6 +105,7 @@ dependencies {
         implementation(profileManager.changePassword)
 
         implementation(privacyPolicy)
+        implementation(reportAbuse)
     }
 
     with(libs){

@@ -12,6 +12,7 @@ import com.friend.overview.ProfileOverviewScreen
 import com.friend.personalsetting.PersonalSettingScreen
 import com.friend.profile.ProfileScreen
 import com.friend.profilecompletion.ProfileCompletionScreen
+import com.friend.reportabuse.ReportAbuseScreen
 import com.friendfinapp.dating.navigation.AuthScreens
 import com.friendfinapp.dating.navigation.ChatMessageScreens
 import com.friendfinapp.dating.navigation.MainScreens
@@ -57,6 +58,9 @@ object ProfileNavGraph {
                 },
                 navigateToMessageRoom = {
                     backStack.add(ChatMessageScreens.ChatRoomNavScreen("", "Tom Cruise"))
+                },
+                navigateToReportAbuse = {
+                    backStack.add(ProfileScreens.ReportUserNavScreen)
                 }
             )
         }
@@ -84,6 +88,12 @@ object ProfileNavGraph {
 
         entry(ProfileScreens.MembershipNavScreen) {
             MembershipScreen {
+                backStack.removeLastOrNull()
+            }
+        }
+
+        entry(ProfileScreens.ReportUserNavScreen) {
+            ReportAbuseScreen {
                 backStack.removeLastOrNull()
             }
         }

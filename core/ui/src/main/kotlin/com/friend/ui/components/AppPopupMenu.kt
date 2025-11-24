@@ -22,23 +22,26 @@ import androidx.compose.ui.res.stringResource
 import com.friend.designsystem.R as Res
 
 enum class PopupMenuType {
+    ReportAbuse,
     ReportUser,
     MessageSearch,
     DeleteMessage,
-    ForwardMessage
+    ForwardMessage,
+    BlockUser,
+    UnblockUser
 }
 
 data class PopupMenu(
     val icon: ImageVector,
     val menu: Int,
-    val menuType: PopupMenuType
+    val menuType: PopupMenuType,
 )
 
 val ChatRoomPopupMenu = listOf(
     PopupMenu(
         icon = Icons.Default.Report,
-        menu = Res.string.menu_report_user,
-        menuType = PopupMenuType.ReportUser
+        menu = Res.string.menu_report_abuse,
+        menuType = PopupMenuType.ReportAbuse
     ),
     PopupMenu(
         icon = Icons.Default.Search,
@@ -66,7 +69,7 @@ val ProfilePopupMenu = listOf(
     PopupMenu(
         icon = Icons.Default.Search,
         menu = Res.string.menu_block_user,
-        menuType = PopupMenuType.MessageSearch
+        menuType = PopupMenuType.BlockUser
     ),
 )
 
@@ -75,7 +78,7 @@ fun AppPopupMenu(
     modifier: Modifier = Modifier,
     icon: ImageVector,
     menuItems: List<PopupMenu>,
-    onClick: (PopupMenuType) -> Unit
+    onClick: (PopupMenuType) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
     Box(

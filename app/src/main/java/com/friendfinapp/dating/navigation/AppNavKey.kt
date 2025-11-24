@@ -58,4 +58,7 @@ sealed interface ProfileScreens : AppScreen {
     object ChangePasswordNavScreen : AppScreen
     @Serializable
     object MembershipNavScreen : AppScreen
+
+    @Serializable
+    object ReportUserNavScreen : AppScreen
 }
