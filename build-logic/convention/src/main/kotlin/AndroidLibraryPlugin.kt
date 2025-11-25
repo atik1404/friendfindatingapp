@@ -1,4 +1,3 @@
-
 import com.friendfinapp.AppConfig
 import com.friendfinapp.configureKotlinAndroid
 import com.friendfinapp.libs
@@ -18,16 +17,13 @@ class AndroidLibraryPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig {
-                    testInstrumentationRunner = AppConfig.testInstrumentationRunner
-                    consumerProguardFile("consumer-rules.pro")
-                }
+                defaultConfig.targetSdk = AppConfig.targetSdkVersion
             }
 
             dependencies {
                 add("testImplementation", libs.findLibrary("test.junit").get())
                 add("androidTestImplementation", libs.findLibrary("test.extjunit").get())
-                add( "androidTestImplementation",libs.findLibrary("test.espresso").get())
+                add("androidTestImplementation", libs.findLibrary("test.espresso").get())
             }
         }
     }

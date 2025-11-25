@@ -1,4 +1,3 @@
-
 import com.friendfinapp.AppConfig
 import com.friendfinapp.configureKSP
 import com.friendfinapp.configureKotlinAndroid
@@ -19,10 +18,9 @@ class AndroidApplicationPlugin : Plugin<Project> {
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = AppConfig.targetSdkVersion
-            }
 
-            extensions.configure<ApplicationAndroidComponentsExtension> {
-                configureKSP(this)
+                configureKSP()
+                //configureFlavors(this)
             }
         }
     }

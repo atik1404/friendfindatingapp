@@ -1,9 +1,7 @@
 
-import com.android.build.api.variant.LibraryAndroidComponentsExtension
+import com.android.build.gradle.LibraryExtension
 import com.friendfinapp.AppConfig
 import com.friendfinapp.libs
-import com.android.build.gradle.LibraryExtension
-import com.friendfinapp.configureKSP
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -23,10 +21,6 @@ class AndroidFeaturePlugin : Plugin<Project> {
                 defaultConfig {
                     testInstrumentationRunner = AppConfig.testInstrumentationRunner
                 }
-            }
-
-            extensions.configure<LibraryAndroidComponentsExtension> {
-                configureKSP(this)
             }
 
             dependencies {
