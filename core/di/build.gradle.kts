@@ -8,6 +8,7 @@ dependencies {
     implementation(libs.bundles.network)
     implementation(libs.timber)
 }
+
 android {
     namespace = "com.friend.di"
 }

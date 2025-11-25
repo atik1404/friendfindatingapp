@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.room.common)
+    //implementation(libs.room.common)
 }
 
 android{

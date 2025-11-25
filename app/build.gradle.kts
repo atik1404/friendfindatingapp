@@ -82,6 +82,7 @@ dependencies {
         //implementation(cache)
         implementation(domain)
         implementation(model.entity)
+        implementation(model.apiresponse)
         implementation(sharedpref)
 
         implementation(common)
