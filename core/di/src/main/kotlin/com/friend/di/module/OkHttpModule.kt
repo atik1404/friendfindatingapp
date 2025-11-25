@@ -30,15 +30,12 @@ object OkHttpModule {
     fun provideOkHttpClient(
         loggerInterceptor: HttpLoggingInterceptor,
         helper: SharedPrefHelper,
-        //refreshToken: AuthenticationRefreshToken
     ): OkHttpClient {
         val timeOut = 30
         val httpClient = OkHttpClient().newBuilder()
             .connectTimeout(timeOut.toLong(), TimeUnit.SECONDS)
             .readTimeout(timeOut.toLong(), TimeUnit.SECONDS)
             .writeTimeout(timeOut.toLong(), TimeUnit.SECONDS)
-
-        //httpClient.authenticator(refreshToken)
         httpClient.addInterceptor(loggerInterceptor)
         httpClient.addInterceptor { chain ->
             val original = chain.request()

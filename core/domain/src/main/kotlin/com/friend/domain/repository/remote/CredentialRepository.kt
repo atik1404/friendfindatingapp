@@ -1,5 +1,5 @@
 package com.friend.domain.repository.remote
 
-interface RemoteDemoRepository {
+interface CredentialRepository {
 
 }
