@@ -3,13 +3,12 @@ package com.friend.cache
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.friend.cache.dao.DemoDao
+import com.friend.entity.search.DemoApiEntity
 
 @Database(
     entities =
         [
-            StoppageRoomEntity::class,
-            CityRoomEntity::class,
-            TicketFormatRoomEntity::class
+            DemoApiEntity::class,
         ],
     version = 2, exportSchema = false
 )

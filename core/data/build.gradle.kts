@@ -15,7 +15,7 @@ dependencies {
 
     implementation(projects.core.domain)
     implementation(projects.core.di)
-    implementation(projects.core.cache)
+    //implementation(projects.core.cache)
     implementation(projects.core.common)
 
     implementation(projects.core.model.entity)

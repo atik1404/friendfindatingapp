@@ -1,10 +1,11 @@
-package com.friendfinapp.dating
+package com.friendfinapp.dating.di
 
 import android.content.Context
 import com.friend.common.utils.Utils
 import com.friend.di.qualifier.AppBuildType
 import com.friend.di.qualifier.AppVersion
 import com.friend.sharedpref.SharedPrefHelper
+import com.friendfinapp.dating.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

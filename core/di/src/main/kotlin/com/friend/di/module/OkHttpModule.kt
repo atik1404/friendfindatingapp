@@ -2,7 +2,6 @@ package com.friend.di.module
 
 import com.friend.sharedpref.SharedPrefHelper
 import com.friend.sharedpref.SpKey
-import com.friend.di.authrefresh.AuthenticationRefreshToken
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

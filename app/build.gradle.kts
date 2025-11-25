@@ -78,6 +78,8 @@ android {
 dependencies {
     with(projects.core){
         implementation(di)
+        implementation(data)
+        //implementation(cache)
         implementation(domain)
         implementation(model.entity)
         implementation(sharedpref)
