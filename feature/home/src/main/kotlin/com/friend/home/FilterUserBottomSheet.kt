@@ -55,7 +55,7 @@ fun FilterUserBottomSheet(
         heightRatio = .9f,
         onDismissRequest = onDismissRequest,
         title = stringResource(Res.string.title_individual_search),
-        titleColor = MaterialTheme.textColors.error
+        titleColor = MaterialTheme.textColors.primary
     ) {
         FilterUi(modifier = modifier) {
             onSearchApply.invoke()
