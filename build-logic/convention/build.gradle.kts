@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -10,8 +11,8 @@ java {
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
@@ -26,37 +27,37 @@ gradlePlugin {
     plugins {
         register("androidLibraryCompose") {
             id = "android.library.compose"
-            implementationClass = "AndroidLibraryComposeConventionPlugin"
+            implementationClass = "LibraryComposeConventionPlugin"
         }
 
         register("androidApplicationCompose") {
             id = "android.compose.application"
-            implementationClass = "AndroidApplicationComposeConventionPlugin"
+            implementationClass = "ComposeConventionPlugin"
         }
 
         register("androidApplication"){
             id = "android.application"
-            implementationClass = "AndroidApplicationPlugin"
+            implementationClass = "ApplicationConventionPlugin"
         }
 
         register("androidLibrary"){
             id = "android.library"
-            implementationClass = "AndroidLibraryPlugin"
+            implementationClass = "LibraryConventionPlugin"
         }
 
         register("androidFeatures"){
             id = "android.features"
-            implementationClass = "AndroidFeaturePlugin"
+            implementationClass = "FeatureConventionPlugin"
         }
 
         register("androidFirebase"){
             id = "android.firebase"
-            implementationClass = "AndroidFirebasePlugin"
+            implementationClass = "FirebaseConventionPlugin"
         }
 
         register("androidHilt"){
             id = "android.hilt"
-            implementationClass = "AndroidHiltPlugin"
+            implementationClass = "HiltConventionPlugin"
         }
 
         register("jvmLibrary") {
@@ -66,7 +67,7 @@ gradlePlugin {
 
         register("androidRoom") {
             id = "android.room"
-            implementationClass = "AndroidRoomPlugin"
+            implementationClass = "RoomConventionPlugin"
         }
     }
 }
