@@ -8,7 +8,6 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.toMutableStateList
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
@@ -19,7 +18,7 @@ import com.friendfinapp.dating.navigation.graph.ProfileNavGraph
 
 @Composable
 fun AppNavConfiguration() {
-    val backStack = rememberNavBackStack(AuthScreens.SplashNavScreen).toMutableStateList()
+    val backStack = rememberNavBackStack(AuthScreens.SplashNavScreen)
     val navResults = remember { NavResultManager() }
 
     CompositionLocalProvider(
@@ -29,31 +28,31 @@ fun AppNavConfiguration() {
             backStack = backStack,
             onBack = { backStack.removeLastOrNull() },
             transitionSpec = {
-                val dur = 700
+                val duration = 700
                 (slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Left,
-                    tween(dur)
-                ) + fadeIn(tween(dur)))
+                    tween(duration)
+                ) + fadeIn(tween(duration)))
                     .togetherWith(
                         slideOutOfContainer(
                             AnimatedContentTransitionScope.SlideDirection.Left,
-                            tween(dur)
-                        ) + fadeOut(tween(dur))
+                            tween(duration)
+                        ) + fadeOut(tween(duration))
                     )
             },
 
             // POP (back) animation
             popTransitionSpec = {
-                val dur = 700
+                val duration = 700
                 (slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Right,
-                    tween(dur)
-                ) + fadeIn(tween(dur)))
+                    tween(duration)
+                ) + fadeIn(tween(duration)))
                     .togetherWith(
                         slideOutOfContainer(
                             AnimatedContentTransitionScope.SlideDirection.Right,
-                            tween(dur)
-                        ) + fadeOut(tween(dur))
+                            tween(duration)
+                        ) + fadeOut(tween(duration))
                     )
             },
             entryProvider = entryProvider {

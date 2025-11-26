@@ -1,17 +1,16 @@
 package com.friendfinapp.dating.navigation.graph
 
-import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
-import androidx.navigation3.runtime.entry
 import com.friend.chatlist.ChatListScreen
 import com.friend.chatroom.ChatRoomScreen
 import com.friendfinapp.dating.navigation.ChatMessageScreens
 
 object ChatMessageNavGraph {
     fun register(
-        backStack: NavBackStack,
-        builder: EntryProviderBuilder<NavKey>,
+        backStack: NavBackStack<NavKey>,
+        builder: EntryProviderScope<NavKey>
     ) = with(builder) {
         entry(ChatMessageScreens.ChatListNavScreen) {
             ChatListScreen(

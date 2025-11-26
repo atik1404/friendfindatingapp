@@ -1,10 +1,8 @@
 package com.friendfinapp.dating.navigation.graph
 
-import androidx.compose.ui.platform.LocalContext
-import androidx.navigation3.runtime.EntryProviderBuilder
+import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
-import androidx.navigation3.runtime.entry
 import com.friend.changepassword.ChangePasswordScreen
 import com.friend.common.constant.PersonalMenu
 import com.friend.membership.MembershipScreen
@@ -20,8 +18,8 @@ import com.friendfinapp.dating.navigation.ProfileScreens
 
 object ProfileNavGraph {
     fun register(
-        backStack: NavBackStack,
-        builder: EntryProviderBuilder<NavKey>,
+        backStack: NavBackStack<NavKey>,
+        builder: EntryProviderScope<NavKey>
     ) = with(builder) {
 
         entry(ProfileScreens.ProfileOverviewNavScreen) {
