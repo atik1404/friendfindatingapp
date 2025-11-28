@@ -193,6 +193,7 @@ fun AppBaseTextField(
                 unfocusedLabelColor = colors.labelColor,
                 focusedContainerColor = colors.backgroundColor,
                 unfocusedContainerColor = colors.backgroundColor,
+                errorContainerColor = colors.backgroundColor,
             )
         )
 
@@ -228,6 +229,7 @@ fun AppBaseTextField(
                 focusedLabelColor = colors.labelColor,
                 unfocusedLabelColor = colors.labelColor,
                 focusedContainerColor = colors.backgroundColor,
+                errorContainerColor = colors.backgroundColor,
                 unfocusedContainerColor = colors.backgroundColor,
             )
         )

@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -97,15 +98,15 @@ private fun ButtonContent(
 
 /* Creates a debounced onClick that ignores rapid taps within [debounceMillis]. */
 var lastClickAt = 0L
+
 @Composable
 private fun rememberDebouncedClick(
-    debounceMillis: Long = 1700L,
+    debounceMillis: Long = 1000L,
     onClick: () -> Unit
 ): () -> Unit {
     return {
         val now = System.currentTimeMillis()
         val isClickAllowed = now - lastClickAt > debounceMillis
-        Log.d("buttonClicked", "isClickAllowed: $isClickAllowed")
         if (isClickAllowed) {
             lastClickAt = now
             onClick()
@@ -136,8 +137,14 @@ fun AppElevatedButton(
     val textColor = MaterialTheme.textColors.white
     val debounced = rememberDebouncedClick(onClick = onClick)
 
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     ElevatedButton(
-        onClick = debounced,
+        onClick = {
+            keyboardController?.hide()
+            debounced
+        },
         modifier = modifier,
         enabled = enabled && !isLoading,
         shape = shape,
@@ -146,7 +153,7 @@ fun AppElevatedButton(
         contentPadding = contentPadding,
     ) {
         ButtonContent(
-            text = text,
+            text = if (isLoading) "Please Wait" else text,
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon,
             iconSpacing = iconSpacing,
@@ -282,7 +289,8 @@ fun SingleChoiceSegmentsWithIcons(
                                 bottomEnd = 0.dp
                             )
                         }
-                        options.size -1 -> {
+
+                        options.size - 1 -> {
                             RoundedCornerShape(
                                 topStart = 0.dp,
                                 bottomStart = 0.dp,
@@ -290,6 +298,7 @@ fun SingleChoiceSegmentsWithIcons(
                                 bottomEnd = RadiusToken.large
                             )
                         }
+
                         else -> {
                             RoundedCornerShape(0.dp)
                         }
@@ -366,7 +375,6 @@ fun AppIconButton(
         }
     }
 }
-
 
 
 @Composable

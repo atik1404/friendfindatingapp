@@ -64,8 +64,6 @@ import com.friend.ui.components.LocalImageLoader
 import com.friend.ui.components.MultiColorText
 import com.friend.ui.preview.LightPreview
 import com.friend.ui.showToastMessage
-import kotlinx.coroutines.delay
-import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 /**
@@ -81,8 +79,23 @@ fun LoginScreen(
     navigateToRegistration: () -> Unit,
     navigateToForgotPassword: () -> Unit,
     navigateToHome: () -> Unit,
+    viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val currentContext = LocalContext.current
+
+    // Collect one-time effects
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEffect.collect { effect ->
+            when (effect) {
+                is LoginUiEffect.ShowMessage -> {
+                    currentContext.showToastMessage(effect.message)
+                }
+
+                is LoginUiEffect.NavigateToHome -> navigateToHome.invoke()
+            }
+        }
+    }
+
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
     ) { padding ->
@@ -93,7 +106,7 @@ fun LoginScreen(
                 .consumeWindowInsets(padding)    // prevent double-inset consumption downstream
                 .navigationBarsPadding()         // keep content above system nav bar
                 .imePadding()                    // lift content when keyboard shows
-                .verticalScroll(rememberScrollState()) // simple, contents are small; LazyColumn not necessary
+                .verticalScroll(rememberScrollState())
         ) {
             // Guideline for top banner relative height
             val guideline = createGuidelineFromTop(0.25f)
@@ -152,7 +165,8 @@ fun LoginScreen(
                         width = Dimension.fillToConstraints
                     },
                 onForgotPasswordClick = navigateToForgotPassword,
-                onSignUpClick = navigateToRegistration
+                onSignUpClick = navigateToRegistration,
+                viewModel = viewModel
             )
 
             // Footer: copyright
@@ -250,25 +264,9 @@ fun LoginForm(
     modifier: Modifier = Modifier,
     onForgotPasswordClick: () -> Unit,
     onSignUpClick: () -> Unit,
-    viewModel: LoginViewModel = hiltViewModel(),
+    viewModel: LoginViewModel,
 ) {
     val state by viewModel.uiState.collectAsState()
-    val currentContext = LocalContext.current
-
-    // Collect one-time effects
-    LaunchedEffect(key1 = true) {
-        viewModel.uiEffect.collect { effect ->
-            when (effect) {
-                is LoginUiEffect.ShowMessage -> {
-                    currentContext.showToastMessage(effect.message)
-                }
-
-                is LoginUiEffect.NavigateToHome -> {
-                    Timber.e("Navigate to home")
-                }
-            }
-        }
-    }
 
     Column(
         modifier = modifier
@@ -282,7 +280,8 @@ fun LoginForm(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AppOutlineTextField(
-            text = state.email,
+            text = state.username,
+            error = if (!state.isUsernameValid) stringResource(Res.string.error_invalid_username) else null,
             modifier = Modifier.fillMaxWidth(),
             title = stringResource(Res.string.label_username),
             placeholder = stringResource(Res.string.hint_user_name),
@@ -298,6 +297,7 @@ fun LoginForm(
 
         AppOutlineTextField(
             text = state.password,
+            error = if (!state.isPasswordValid) stringResource(Res.string.error_invalid_password) else null,
             modifier = Modifier.fillMaxWidth(),
             title = stringResource(Res.string.label_password),
             placeholder = stringResource(Res.string.hint_password),
@@ -317,7 +317,7 @@ fun LoginForm(
             text = stringResource(Res.string.action_login),
             isLoading = state.isLoading,
             onClick = {
-                viewModel.action(LoginUiEvent.Submit)
+                viewModel.action(LoginUiEvent.FormValidator)
             },
         )
 
