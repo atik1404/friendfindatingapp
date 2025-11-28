@@ -47,6 +47,7 @@ class FeatureConventionPlugin : Plugin<Project> {
                 add("implementation", libs.findLibrary("androidx.compose.constraintlayout").get())
 
                 add("implementation", libs.findLibrary("kotlin.coroutines").get())
+                add("implementation", libs.findLibrary("hilt.navigation").get())
 
                 add("testImplementation", libs.findLibrary("test.junit").get())
                 add("androidTestImplementation", libs.findLibrary("test.extjunit").get())

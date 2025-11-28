@@ -11,7 +11,7 @@ class PostLoginApiUseCase @Inject constructor(
     private val repository: CredentialRepository,
 ) : ApiUseCaseParams<PostLoginApiUseCase.Params, LoginApiEntity> {
     data class Params(
-        val mobile: String,
+        val username: String,
         val password: String,
     )
 

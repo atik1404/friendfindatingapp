@@ -25,6 +25,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -41,6 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.friend.designsystem.spacing.RadiusToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.StrokeTokens
@@ -60,9 +62,10 @@ import com.friend.ui.components.AppTextButton
 import com.friend.ui.components.ColoredTextSegment
 import com.friend.ui.components.LocalImageLoader
 import com.friend.ui.components.MultiColorText
-import com.friend.ui.preview.LightDarkPreview
+import com.friend.ui.preview.LightPreview
 import com.friend.ui.showToastMessage
 import kotlinx.coroutines.delay
+import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 /**
@@ -148,7 +151,6 @@ fun LoginScreen(
                         end.linkTo(parent.end)
                         width = Dimension.fillToConstraints
                     },
-                onLoginClick = navigateToHome,
                 onForgotPasswordClick = navigateToForgotPassword,
                 onSignUpClick = navigateToRegistration
             )
@@ -246,17 +248,26 @@ fun LoginDivider(
 @Composable
 fun LoginForm(
     modifier: Modifier = Modifier,
-    onLoginClick: () -> Unit,
     onForgotPasswordClick: () -> Unit,
-    onSignUpClick: () -> Unit
+    onSignUpClick: () -> Unit,
+    viewModel: LoginViewModel = hiltViewModel(),
 ) {
-    var userName by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
-    var isLoading by rememberSaveable { mutableStateOf(false) }
+    val state by viewModel.uiState.collectAsState()
+    val currentContext = LocalContext.current
 
-    LaunchedEffect(isLoading) {
-        delay(1000)
-        isLoading = false
+    // Collect one-time effects
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEffect.collect { effect ->
+            when (effect) {
+                is LoginUiEffect.ShowMessage -> {
+                    currentContext.showToastMessage(effect.message)
+                }
+
+                is LoginUiEffect.NavigateToHome -> {
+                    Timber.e("Navigate to home")
+                }
+            }
+        }
     }
 
     Column(
@@ -271,11 +282,13 @@ fun LoginForm(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AppOutlineTextField(
-            text = userName,
+            text = state.email,
             modifier = Modifier.fillMaxWidth(),
             title = stringResource(Res.string.label_username),
             placeholder = stringResource(Res.string.hint_user_name),
-            onValueChange = { userName = it },
+            onValueChange = {
+                viewModel.action(LoginUiEvent.EmailChanged(it))
+            },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next,
             ),
@@ -284,11 +297,13 @@ fun LoginForm(
         Spacer(Modifier.height(SpacingToken.medium))
 
         AppOutlineTextField(
-            text = password,
+            text = state.password,
             modifier = Modifier.fillMaxWidth(),
             title = stringResource(Res.string.label_password),
             placeholder = stringResource(Res.string.hint_password),
-            onValueChange = { password = it },
+            onValueChange = {
+                viewModel.action(LoginUiEvent.PasswordChanged(it))
+            },
             isPassword = true,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
@@ -300,9 +315,9 @@ fun LoginForm(
         AppElevatedButton(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(Res.string.action_login),
-            isLoading = isLoading,
+            isLoading = state.isLoading,
             onClick = {
-                onLoginClick.invoke()
+                viewModel.action(LoginUiEvent.Submit)
             },
         )
 
@@ -375,7 +390,7 @@ fun BannerAds(modifier: Modifier = Modifier) {
 }
 
 @Composable
-@LightDarkPreview
+@LightPreview
 fun LoginScreenPreview() {
     LoginScreen(
         navigateToRegistration = { },
