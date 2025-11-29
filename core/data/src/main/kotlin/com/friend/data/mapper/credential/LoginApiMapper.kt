@@ -1,16 +1,38 @@
 package com.friend.data.mapper.credential
 
 import com.friend.apiresponse.credential.LoginApiResponse
+import com.friend.common.constant.Gender
 import com.friend.data.mapper.Mapper
 import com.friend.entity.credential.LoginApiEntity
+import com.friend.sharedpref.SharedPrefHelper
+import com.friend.sharedpref.SpKey
 import javax.inject.Inject
 
 class LoginApiMapper @Inject constructor() : Mapper<LoginApiResponse, LoginApiEntity> {
-
     override fun mapFromApiResponse(type: LoginApiResponse): LoginApiEntity {
         return LoginApiEntity(
+            message = type.message ?: "",
             accessToken = type.data?.token ?: "",
-            userName = type.data?.username ?: ""
+            userName = type.data?.username ?: "",
+            fullName = type.data?.name ?: "",
+            email = type.data?.email ?: "",
+            gender = if (type.data?.gender == 1) Gender.MALE.name else Gender.FEMALE.name,
+            dateOfBirth = type.data?.birthdate ?: ""
         )
+    }
+}
+
+class CacheProfile @Inject constructor(
+    private val sharedPrefHelper: SharedPrefHelper,
+) {
+    fun cacheProfile(data: LoginApiEntity) {
+        with(data) {
+            sharedPrefHelper.putString(SpKey.authToken, data.accessToken)
+            sharedPrefHelper.putString(SpKey.userName, data.userName)
+            sharedPrefHelper.putString(SpKey.fullName, data.fullName)
+            sharedPrefHelper.putString(SpKey.gender, data.gender)
+            sharedPrefHelper.putString(SpKey.email, data.email)
+            sharedPrefHelper.putString(SpKey.dateOfBirth, data.dateOfBirth)
+        }
     }
 }

@@ -9,7 +9,6 @@ data class LoginUiState(
     val isLoading: Boolean = false,
 )
 
-// One-time UI effects (snackbar, navigation, etc.)
 sealed class LoginUiEffect {
     data class ShowMessage(val message: String) : LoginUiEffect()
     object NavigateToHome : LoginUiEffect()

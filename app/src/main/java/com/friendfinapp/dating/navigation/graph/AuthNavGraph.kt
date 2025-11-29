@@ -4,6 +4,7 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.friend.forgotpassword.ForgotPasswordScreen
+import com.friend.login.LoginRoute
 import com.friend.login.LoginScreen
 import com.friend.registration.RegistrationScreen
 import com.friend.splash.SplashScreen
@@ -29,7 +30,7 @@ object AuthNavGraph {
         }
 
         entry(AuthScreens.LoginNavScreen) {
-            LoginScreen(
+            LoginRoute(
                 navigateToRegistration = {
                     backStack.add(AuthScreens.RegistrationNavScreen)
                 },

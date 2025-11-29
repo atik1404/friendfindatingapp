@@ -123,8 +123,8 @@
     <string name="msg_advance_filter_description">you can use country and distance filter.</string>
 
 
-    <string name="error_invalid_username">Invalid username</string>
-    <string name="error_invalid_password">Invalid password, password must be at least 8 characters</string>
+    <string name="error_invalid_username">Invalid username, Input valid one</string>
+    <string name="error_invalid_password">Password must be at least 8 characters</string>
 
     <string name="menu_report_user">Report User</string>
     <string name="menu_report_abuse">Report Abuse</string>

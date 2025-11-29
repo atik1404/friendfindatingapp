@@ -142,8 +142,8 @@ fun AppElevatedButton(
 
     ElevatedButton(
         onClick = {
+            debounced.invoke()
             keyboardController?.hide()
-            debounced
         },
         modifier = modifier,
         enabled = enabled && !isLoading,

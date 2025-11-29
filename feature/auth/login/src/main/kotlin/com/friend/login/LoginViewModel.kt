@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,7 +40,9 @@ class LoginViewModel @Inject constructor(
             postLoginApiUseCase.execute(params).collect { result ->
                 when (result) {
                     is ApiResult.Success -> {
-                        Timber.e("Login success: ${result.data.userName}")
+                        if (result.data.userName.isNotEmpty())
+                            _uiEffect.send(LoginUiEffect.NavigateToHome)
+                        else handleApiError(result.data.message)
                     }
 
                     is ApiResult.Loading -> onLoading(result.loading)

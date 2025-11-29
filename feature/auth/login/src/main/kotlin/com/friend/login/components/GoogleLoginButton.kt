@@ -1,0 +1,31 @@
+package com.friend.login.components
+
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.friend.designsystem.R as Res
+import com.friend.designsystem.spacing.SpacingToken
+import com.friend.designsystem.spacing.appPaddingHorizontal
+import com.friend.ui.components.AppOutlinedButton
+
+@Composable
+fun GoogleLoginButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    var isLoading by rememberSaveable { mutableStateOf(false) }
+
+    AppOutlinedButton(
+        modifier = modifier
+            .fillMaxWidth()
+            .appPaddingHorizontal(SpacingToken.large),
+        text = stringResource(Res.string.action_login_with_google),
+        onClick = onClick,
+        isLoading = isLoading
+    )
+}
