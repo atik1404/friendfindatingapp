@@ -3,6 +3,7 @@ package com.friendfinapp.dating.navigation.graph
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
+import com.friend.forgotpassword.ForgotPasswordRoute
 import com.friend.forgotpassword.ForgotPasswordScreen
 import com.friend.login.LoginRoute
 import com.friend.login.LoginScreen
@@ -45,9 +46,11 @@ object AuthNavGraph {
         }
 
         entry(AuthScreens.ForgotPasswordNavScreen) {
-            ForgotPasswordScreen {
-                backStack.removeLastOrNull()
-            }
+            ForgotPasswordRoute(
+                onNavigateBack = {
+                    backStack.removeLastOrNull()
+                }
+            )
         }
 
         entry(AuthScreens.RegistrationNavScreen) {

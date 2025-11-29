@@ -118,13 +118,16 @@
     <string name="msg_search_members_from_other_countries">Search members from other countries!</string>
     <string name="msg_search_members_from_other_countries_description">you can search members not only from your country but also from other countries. There is no limit.</string>
     <string name="msg_get_more_in_vip">Get more with VIP membership</string>
+    <string name="msg_forgot_password_instruction">Enter your email address below and we will send you instructions to reset your password.</string>
+    <string name="msg_reset_your_password">Reset your password</string>
 
     <string name="msg_advance_filter">Use advanced filter!</string>
     <string name="msg_advance_filter_description">you can use country and distance filter.</string>
 
 
-    <string name="error_invalid_username">Invalid username, Input valid one</string>
+    <string name="error_invalid_username">Invalid username, input valid one</string>
     <string name="error_invalid_password">Password must be at least 8 characters</string>
+    <string name="error_invalid_email">Invalid email address, input valid one</string>
 
     <string name="menu_report_user">Report User</string>
     <string name="menu_report_abuse">Report Abuse</string>

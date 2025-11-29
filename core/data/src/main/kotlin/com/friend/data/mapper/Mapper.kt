@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 interface Mapper<R,E>{
-    fun mapFromApiResponse(type:R):E
+    fun mapFromApiResponse(response:R):E
 }
 
 fun<R,E> mapFromApiResponse(result: Flow<ApiResult<R>>, mapper: Mapper<R, E>): Flow<ApiResult<E>> {

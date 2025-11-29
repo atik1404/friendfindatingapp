@@ -16,7 +16,7 @@ sealed class LoginUiEffect {
 
 // UI events from the Composable to ViewModel
 sealed class LoginUiEvent {
-    data class EmailChanged(val value: String) : LoginUiEvent()
+    data class UsernameChanged(val value: String) : LoginUiEvent()
     data class PasswordChanged(val value: String) : LoginUiEvent()
     object FormValidator : LoginUiEvent()
 }

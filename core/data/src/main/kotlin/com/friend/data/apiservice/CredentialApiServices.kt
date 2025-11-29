@@ -1,10 +1,12 @@
 package com.friend.data.apiservice
 
+import com.friend.apiresponse.credential.ForgotPasswordApiResponse
 import com.friend.apiresponse.credential.LoginApiResponse
 import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface CredentialApiServices {
     @POST("v1/Login")
@@ -15,6 +17,9 @@ interface CredentialApiServices {
     suspend fun registration()
     suspend fun fetchProfile()
     suspend fun updateProfile()
-    suspend fun forgotPassword()
+    @POST("v1/ForgotPassword")
+    suspend fun forgotPassword(
+        @Query("email") email: String
+    ) : Response<ForgotPasswordApiResponse>
     suspend fun resetPassword()
 }

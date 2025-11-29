@@ -26,7 +26,7 @@ class LoginViewModel @Inject constructor(
 
     val action: (LoginUiEvent) -> Unit = {
         when (it) {
-            is LoginUiEvent.EmailChanged -> onUserNameChanged(it.value)
+            is LoginUiEvent.UsernameChanged -> onUserNameChanged(it.value)
             is LoginUiEvent.PasswordChanged -> onPasswordChanged(it.value)
             LoginUiEvent.FormValidator -> formValidation()
         }

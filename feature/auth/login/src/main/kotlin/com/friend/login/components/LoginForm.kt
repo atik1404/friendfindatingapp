@@ -57,7 +57,7 @@ fun LoginForm(
             modifier = Modifier.fillMaxWidth(),
             title = stringResource(Res.string.label_username),
             placeholder = stringResource(Res.string.hint_user_name),
-            onValueChange = { onEvent(LoginUiEvent.EmailChanged(it)) },
+            onValueChange = { onEvent(LoginUiEvent.UsernameChanged(it)) },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next,
             ),

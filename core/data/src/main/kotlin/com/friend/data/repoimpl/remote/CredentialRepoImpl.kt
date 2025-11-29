@@ -3,6 +3,7 @@ package com.friend.data.repoimpl.remote
 import com.friend.data.NetworkBoundResource
 import com.friend.data.apiservice.CredentialApiServices
 import com.friend.data.mapper.credential.CacheProfile
+import com.friend.data.mapper.credential.ForgotPasswordApiMapper
 import com.friend.data.mapper.credential.LoginApiMapper
 import com.friend.data.mapper.mapFromApiResponse
 import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
@@ -19,6 +20,7 @@ class CredentialRepoImpl @Inject constructor(
     private val networkBoundResources: NetworkBoundResource,
     private val apiServices: CredentialApiServices,
     private val loginApiMapper: LoginApiMapper,
+    private val forgotPasswordApiMapper: ForgotPasswordApiMapper,
     private val cacheProfile: CacheProfile,
     private val sharedPrefHelper: SharedPrefHelper
 ) : CredentialRepository {
@@ -36,5 +38,15 @@ class CredentialRepoImpl @Inject constructor(
             }
             it
         }
+    }
+
+    override suspend fun postForgotPassword(params: String): Flow<ApiResult<String>> {
+        return mapFromApiResponse(
+            result = networkBoundResources.downloadData {
+                apiServices.forgotPassword(
+                    params
+                )
+            }, mapper = forgotPasswordApiMapper
+        )
     }
 }
