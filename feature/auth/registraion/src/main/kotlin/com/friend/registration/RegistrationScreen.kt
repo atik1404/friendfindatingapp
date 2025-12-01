@@ -1,8 +1,6 @@
 package com.friend.registration
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -13,7 +11,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -28,20 +25,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
+import com.friend.registration.component.AddressSection
+import com.friend.registration.component.NameSection
 import com.friend.ui.common.AppDatePickerDialog
 import com.friend.ui.common.AppToolbar
 import com.friend.ui.components.AppCheckbox
 import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppOutlineTextField
 import com.friend.ui.components.AppScaffold
-import com.friend.ui.components.AutoCompleteTextField
 import com.friend.ui.components.SingleChoiceSegmentsWithIcons
 import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
@@ -50,7 +46,6 @@ import com.friend.designsystem.R as Res
 @Composable
 fun RegistrationScreen(
     onBackButtonClicked: () -> Unit,
-    navigateToProfileCompletion: () -> Unit,
 ) {
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
@@ -77,7 +72,7 @@ fun RegistrationScreen(
         ) {
             var email by rememberSaveable { mutableStateOf("") }
 
-            NameField()
+            NameSection()
 
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
@@ -159,7 +154,7 @@ fun RegistrationScreen(
 
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
-            AddressField()
+            AddressSection()
 
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
@@ -178,7 +173,7 @@ fun RegistrationScreen(
                 enabled = checked,
                 text = stringResource(Res.string.action_sign_up),
                 onClick = {
-                    navigateToProfileCompletion.invoke()
+
                 },
             )
         }
@@ -186,116 +181,9 @@ fun RegistrationScreen(
 }
 
 @Composable
-fun NameField() {
-    var userName by rememberSaveable { mutableStateOf("") }
-    var fullName by rememberSaveable { mutableStateOf("") }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        AppOutlineTextField(
-            text = userName,
-            modifier = Modifier.weight(1f),
-            title = stringResource(Res.string.label_username),
-            placeholder = stringResource(Res.string.hint_user_name),
-            onValueChange = { userName = it },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next,
-            ),
-        )
-
-        Spacer(modifier = Modifier.width(SpacingToken.medium))
-
-        AppOutlineTextField(
-            text = fullName,
-            modifier = Modifier.weight(1f),
-            title = stringResource(Res.string.label_full_name),
-            placeholder = stringResource(Res.string.hint_full_name),
-            onValueChange = { fullName = it },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next,
-            ),
-        )
-    }
-}
-
-@Composable
-private fun AddressField() {
-    var zipCode by rememberSaveable { mutableStateOf("") }
-    var text by remember { mutableStateOf("") }
-
-    val cities = listOf(
-        "Dhaka",
-        "Chattogram",
-        "Rajshahi",
-        "Khulna",
-        "Sylhet",
-        "Barishal",
-        "Rangpur",
-        "Mymensingh"
-    )
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            AutoCompleteTextField(
-                allOptions = cities,
-                modifier = Modifier.weight(1f),
-                label = stringResource(Res.string.label_country),
-                placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { text = it },
-                value = text
-            )
-
-            Spacer(modifier = Modifier.width(SpacingToken.medium))
-
-            AutoCompleteTextField(
-                allOptions = cities,
-                modifier = Modifier.weight(1f),
-                label = stringResource(Res.string.label_state),
-                placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { text = it },
-                value = text
-            )
-        }
-
-        Spacer(modifier = Modifier.height(SpacingToken.medium))
-
-        Row {
-            AutoCompleteTextField(
-                allOptions = cities,
-                modifier = Modifier.weight(1f),
-                label = stringResource(Res.string.label_city),
-                placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { text = it },
-                value = text
-            )
-
-            Spacer(modifier = Modifier.width(SpacingToken.medium))
-
-            AppOutlineTextField(
-                text = zipCode,
-                modifier = Modifier.weight(1f),
-                title = stringResource(Res.string.label_zip_code),
-                placeholder = stringResource(Res.string.hint_zip_code),
-                onValueChange = { zipCode = it },
-            )
-        }
-    }
-}
-
-
-@Composable
 @LightPreview
 private fun ScreenPreview() {
     RegistrationScreen(
         onBackButtonClicked = {},
-        navigateToProfileCompletion = {}
     )
 }

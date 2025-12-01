@@ -7,6 +7,7 @@ import com.friend.forgotpassword.ForgotPasswordRoute
 import com.friend.forgotpassword.ForgotPasswordScreen
 import com.friend.login.LoginRoute
 import com.friend.login.LoginScreen
+import com.friend.registration.RegistrationRoute
 import com.friend.registration.RegistrationScreen
 import com.friend.splash.SplashScreen
 import com.friendfinapp.dating.navigation.AuthScreens
@@ -54,7 +55,7 @@ object AuthNavGraph {
         }
 
         entry(AuthScreens.RegistrationNavScreen) {
-            RegistrationScreen(
+            RegistrationRoute(
                 onBackButtonClicked = {
                     backStack.removeLastOrNull()
                 },

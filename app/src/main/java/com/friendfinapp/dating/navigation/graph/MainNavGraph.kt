@@ -3,6 +3,7 @@ package com.friendfinapp.dating.navigation.graph
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
+import com.friend.home.HomeRoute
 import com.friend.home.HomeScreen
 import com.friend.policy.PrivacyPolicyScreen
 import com.friendfinapp.dating.navigation.ChatMessageScreens
@@ -15,7 +16,7 @@ object MainNavGraph {
         builder: EntryProviderScope<NavKey>
     ) = with(builder) {
         entry(MainScreens.HomeNavScreen) {
-            HomeScreen(
+            HomeRoute(
                 navigateToChatListScreen = {
                     backStack.add(ChatMessageScreens.ChatListNavScreen)
                 },
