@@ -1,14 +1,7 @@
 package com.friend.common.extfun
 
-import android.content.Context
-import android.graphics.Typeface
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.style.ForegroundColorSpan
-import android.text.style.StrikethroughSpan
-import android.text.style.StyleSpan
 import android.util.Base64
+import java.time.LocalTime
 
 
 fun String.decode(): String =
@@ -17,3 +10,13 @@ fun String.decode(): String =
 
 fun String.encode(): String =
     Base64.encodeToString(this.toByteArray(charset("UTF-8")), Base64.DEFAULT).replace("/", " ")
+
+fun getGreetingText(now: LocalTime = LocalTime.now()): String {
+    val hour = now.hour  // 0–23
+
+    return when (hour) {
+        in 5..11 -> "Good morning"
+        in 12..16 -> "Good afternoon"
+        else -> "Good evening"
+    }
+}

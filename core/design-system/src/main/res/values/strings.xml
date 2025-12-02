@@ -123,6 +123,10 @@
 
     <string name="msg_advance_filter">Use advanced filter!</string>
     <string name="msg_advance_filter_description">you can use country and distance filter.</string>
+    <string name="msg_greeting_good_morning">Good Morning</string>
+    <string name="msg_greeting_good_afternoon">Good Afternoon</string>
+    <string name="msg_greeting_good_evening">Good Evening</string>
+    <string name="msg_everything_set_for_you">Everything set for you</string>
 
 
     <string name="error_invalid_username">Invalid username, input valid one</string>
@@ -144,6 +148,10 @@
     <string name="menu_share_app">Share App</string>
     <string name="menu_rate_app">Rate App</string>
     <string name="menu_contact_us">Contact Us</string>
+
+
+
+    <string name="placeholder_greeting_message">%s, %s</string>
 
     <!--    String resource naming convention-->
     <!--    https://github.com/leapfrogtechnology/android-guidelines/blob/master/ResourcesGuidelines.md-->

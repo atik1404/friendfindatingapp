@@ -11,6 +11,7 @@ fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     HomeScreen(
+        fullName = viewModel.fullName.value,
         navigateToChatListScreen = {},
         navigateToOverviewScreen = {},
         navigateToProfileScreen = { _, _ ->

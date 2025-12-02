@@ -27,10 +27,12 @@ import com.friend.home.components.ProfileSummarySection
 import com.friend.home.components.SearchBarSection
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.preview.LightDarkPreview
+import com.friend.ui.preview.LightPreview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    fullName: String,
     navigateToChatListScreen: () -> Unit,
     navigateToOverviewScreen: () -> Unit,
     navigateToProfileScreen: (String, String) -> Unit,
@@ -56,6 +58,7 @@ fun HomeScreen(
             )
             Spacer(Modifier.height(SpacingToken.medium))
             ProfileSummarySection(
+                fullName = fullName,
                 navigateToChatListScreen = navigateToChatListScreen,
                 navigateToProfileScreen = {
                     navigateToProfileScreen.invoke("", "")//TODO replace with current user data
@@ -101,9 +104,10 @@ private fun PersonList(
 }
 
 @Composable
-@LightDarkPreview
+@LightPreview
 private fun ScreenPreview() {
     HomeScreen(
+        fullName = "Cruise",
         navigateToChatListScreen = {},
         navigateToOverviewScreen = {},
         navigateToProfileScreen = { _, _ -> },

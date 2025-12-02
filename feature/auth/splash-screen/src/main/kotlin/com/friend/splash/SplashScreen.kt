@@ -11,39 +11,32 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.SpacingToken
+import com.friend.designsystem.spacing.StrokeTokens
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.ui.components.AppText
 import com.friend.ui.components.LocalImageLoader
 import com.friend.ui.preview.LightPreview
-import kotlinx.coroutines.delay
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SplashScreen(
-    navigateToLoginScreen: () -> Unit = {},
-    navigateToHomeScreen: () -> Unit = {},
-) {
-    // navigate to login after 2 seconds
-    LaunchedEffect(Unit) {
-        delay(2000L)
-        navigateToLoginScreen()
-    }
+fun SplashScreen() {
     Scaffold(
         contentWindowInsets = WindowInsets(0)
     ) { padding ->
@@ -76,9 +69,23 @@ fun SplashScreen(
                     alignment = TextAlign.Center,
                     textColor = MaterialTheme.textColors.white
                 )
+
+                Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+                CircularProgressBar()
             }
         }
     }
+}
+
+@Composable
+fun CircularProgressBar(
+    modifier: Modifier = Modifier,
+) {
+    CircularProgressIndicator(
+        modifier = modifier.size(IconSizeToken.extraLarge),
+        strokeWidth = StrokeTokens.thick
+    )
 }
 
 @Composable
@@ -86,7 +93,7 @@ fun AnimatedVisibilityImage(visible: Boolean) {
     AnimatedVisibility(
         visible = visible,
         enter = fadeIn() + scaleIn(initialScale = 0.95f),
-        exit  = fadeOut() + scaleOut(targetScale = 0.95f)
+        exit = fadeOut() + scaleOut(targetScale = 0.95f)
     ) {
         LocalImageLoader(
             imageResId = Res.drawable.friendfin,

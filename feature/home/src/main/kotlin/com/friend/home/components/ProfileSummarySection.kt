@@ -13,7 +13,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.friend.common.extfun.getGreetingText
 import com.friend.designsystem.R as Res
 import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.SpacingToken
@@ -25,6 +27,7 @@ import com.friend.ui.components.NetworkImageLoader
 
 @Composable
 fun ProfileSummarySection(
+    fullName: String,
     navigateToChatListScreen: () -> Unit,
     navigateToProfileScreen: () -> Unit,
 ) {
@@ -48,7 +51,10 @@ fun ProfileSummarySection(
 
         Column {
             AppText(
-                text = "Good Morning, Tom Cruise",
+                text = stringResource(
+                    Res.string.placeholder_greeting_message,
+                    getGreetingText(), fullName
+                ),
                 textStyle = AppTypography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 textColor = MaterialTheme.textColors.primary,
@@ -59,7 +65,7 @@ fun ProfileSummarySection(
             )
 
             AppText(
-                text = "Welcome back to your dashboard",
+                text = stringResource(Res.string.msg_everything_set_for_you),
                 textStyle = AppTypography.bodyMedium,
                 fontWeight = FontWeight.Light,
                 textColor = MaterialTheme.textColors.primary,
