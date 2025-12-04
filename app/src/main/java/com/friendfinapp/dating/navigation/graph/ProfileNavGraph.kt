@@ -7,7 +7,6 @@ import com.friend.changepassword.ChangePasswordScreen
 import com.friend.common.constant.PersonalMenu
 import com.friend.membership.MembershipScreen
 import com.friend.overview.ProfileOverviewRoute
-import com.friend.overview.ProfileOverviewScreen
 import com.friend.personalsetting.PersonalSettingScreen
 import com.friend.profile.ProfileScreen
 import com.friend.profilecompletion.ProfileCompletionScreen
@@ -33,20 +32,10 @@ object ProfileNavGraph {
                 navigateToProfileScreen = {
                     backStack.add(ProfileScreens.ProfileNavScreen("", ""))
                 },
-                clickedOnMenu = { menu ->
-                    when (menu) {
-                        PersonalMenu.PERSONAL_SETTING -> backStack.add(ProfileScreens.PersonalSettingNavScreen)
-                        PersonalMenu.PRIVACY_POLICY -> backStack.add(MainScreens.PrivacyPolicyNavScreen)
-                        PersonalMenu.CHANGE_PASSWORD -> backStack.add(ProfileScreens.ChangePasswordNavScreen)
-                        PersonalMenu.VIP_MEMBERSHIP -> backStack.add(ProfileScreens.MembershipNavScreen)
-                        PersonalMenu.LOGOUT -> {
-                            backStack.clear()
-                            backStack.add(AuthScreens.LoginNavScreen)
-                        }
-
-                        else -> {}
-                    }
-                }
+                navigateToMembershipScreen = { backStack.add(ProfileScreens.MembershipNavScreen) },
+                navigateToPrivacyPolicyScreen = { backStack.add(MainScreens.PrivacyPolicyNavScreen) },
+                navigateToChangePasswordScreen = { backStack.add(ProfileScreens.ChangePasswordNavScreen) },
+                navigateToPersonalSettingScreen = { backStack.add(ProfileScreens.PersonalSettingNavScreen) },
             )
         }
         entry<ProfileScreens.ProfileNavScreen> { key ->

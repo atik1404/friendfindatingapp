@@ -14,7 +14,10 @@ fun ProfileOverviewRoute(
     onBackButtonClicked: () -> Unit,
     navigateToProfileScreen: () -> Unit,
     navigateToLoginScreen: () -> Unit,
-    clickedOnMenu: (PersonalMenu) -> Unit,
+    navigateToChangePasswordScreen: () -> Unit,
+    navigateToPrivacyPolicyScreen: () -> Unit,
+    navigateToPersonalSettingScreen: () -> Unit,
+    navigateToMembershipScreen: () -> Unit,
     viewModel: ProfileOverviewViewModel = hiltViewModel()
 ) {
     val userInfo by viewModel.userInfo.collectAsState()
@@ -33,10 +36,18 @@ fun ProfileOverviewRoute(
 
     ProfileOverviewScreen(
         userInfo,
+        state = state,
         onBackButtonClicked = onBackButtonClicked,
         navigateToProfileScreen = navigateToProfileScreen,
         clickedOnMenu = {
-            clickedOnMenu.invoke(it)
+            when (it) {
+                PersonalMenu.PERSONAL_SETTING -> navigateToPersonalSettingScreen.invoke()
+                PersonalMenu.PRIVACY_POLICY -> navigateToPrivacyPolicyScreen.invoke()
+                PersonalMenu.CHANGE_PASSWORD -> navigateToChangePasswordScreen.invoke()
+                PersonalMenu.VIP_MEMBERSHIP -> navigateToMembershipScreen.invoke()
+                PersonalMenu.LOGOUT -> viewModel.action(UiAction.PerformLogout)
+                else -> {}
+            }
         }
     )
 }

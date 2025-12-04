@@ -40,8 +40,11 @@ import com.friend.ui.components.NetworkImageLoader
 @Composable
 fun ProfileSummaryUi(
     modifier: Modifier,
+    name: String,
+    image: String,
+    email: String,
     onClick: () -> Unit
-){
+) {
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
@@ -63,7 +66,7 @@ fun ProfileSummaryUi(
                 modifier = modifier.size(picSize)
             ) {
                 NetworkImageLoader(
-                    url = "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
+                    url = image,
                     shape = CircleShape,
                     modifier = Modifier.matchParentSize()
                 )
@@ -93,7 +96,7 @@ fun ProfileSummaryUi(
 
             Column {
                 AppText(
-                    text = "Tom Cruise",
+                    text = name,
                     textStyle = AppTypography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     textColor = MaterialTheme.textColors.primary,
@@ -104,7 +107,7 @@ fun ProfileSummaryUi(
                 )
 
                 AppText(
-                    text = "tom@gmail.com",
+                    text = email,
                     textStyle = AppTypography.bodyMedium,
                     fontWeight = FontWeight.Light,
                     textColor = MaterialTheme.textColors.primary,

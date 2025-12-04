@@ -1,8 +1,8 @@
 package com.friend.overview
 
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -46,9 +46,9 @@ import com.friend.designsystem.theme.backgroundColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.overview.ui.ProfileSummaryUi
 import com.friend.ui.common.AppToolbar
+import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AppText
-import com.friend.ui.preview.LightDarkPreview
 import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
@@ -56,6 +56,7 @@ import com.friend.designsystem.R as Res
 @Composable
 fun ProfileOverviewScreen(
     userInfo: UserInfo,
+    state: UiState,
     onBackButtonClicked: () -> Unit,
     navigateToProfileScreen: () -> Unit,
     clickedOnMenu: (PersonalMenu) -> Unit,
@@ -70,26 +71,42 @@ fun ProfileOverviewScreen(
                 })
         }
     ) { padding ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
-                .consumeWindowInsets(padding)
-                .navigationBarsPadding()
-                .imePadding()
-                .appPadding(SpacingToken.medium)
         ) {
-
-            ProfileSummaryUi(
+            Column(
                 modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
+                    .navigationBarsPadding()
+                    .imePadding()
+                    .appPadding(SpacingToken.medium)
             ) {
-                navigateToProfileScreen.invoke()
+                ProfileSummaryUi(
+                    modifier = Modifier,
+                    name = userInfo.username,
+                    image = userInfo.image,
+                    email = userInfo.email,
+                ) {
+                    navigateToProfileScreen.invoke()
+                }
+
+                Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+                MenuCard {
+                    clickedOnMenu.invoke(it)
+                }
             }
 
-            Spacer(modifier = Modifier.height(SpacingToken.medium))
 
-            MenuCard {
-                clickedOnMenu.invoke(it)
+            when (state) {
+                is UiState.Loading -> {
+                    if (state.isLoading) {
+                        LoadingUi()
+                    }
+                }
             }
         }
     }
@@ -195,6 +212,11 @@ private fun ScreenPreview() {
     ProfileOverviewScreen(
         onBackButtonClicked = {},
         navigateToProfileScreen = {}, clickedOnMenu = {},
-        userInfo = UserInfo()
+        userInfo = UserInfo(
+            username = "Atik Faysal",
+            email = "atik@gmail.com",
+            image = "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg"
+        ),
+        state = UiState.Loading(false),
     )
 }
