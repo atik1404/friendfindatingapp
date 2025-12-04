@@ -9,7 +9,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
@@ -29,7 +28,7 @@ fun LocalImageLoader(
         painter = painterResource(id = imageResId),
         contentDescription = contentDescription,
         modifier = modifier,
-        contentScale = contentScale
+        contentScale = contentScale,
     )
 }
 
@@ -37,8 +36,8 @@ fun LocalImageLoader(
 fun NetworkImageLoader(
     url: String,
     modifier: Modifier = Modifier,
-    @DrawableRes placeholderRes: Int? = Res.drawable.friendfin,
-    @DrawableRes errorRes: Int? = Res.drawable.friendfin,
+    @DrawableRes placeholderRes: Int? = Res.drawable.image_loader,
+    @DrawableRes errorRes: Int? = Res.drawable.image_loader,
     shape: Shape = RoundedCornerShape(RadiusToken.none),
     contentScale: ContentScale = ContentScale.Crop,
 ) {

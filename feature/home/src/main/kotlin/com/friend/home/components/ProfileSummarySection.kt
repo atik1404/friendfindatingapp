@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.friend.common.extfun.getGreetingText
@@ -42,7 +43,7 @@ fun ProfileSummarySection(
                 .clickable {
                     navigateToProfileScreen.invoke()
                 },
-            shape = CircleShape
+            shape = CircleShape,
         )
 
         Spacer(
@@ -66,7 +67,7 @@ fun ProfileSummarySection(
 
             AppText(
                 text = stringResource(Res.string.msg_everything_set_for_you),
-                textStyle = AppTypography.bodyMedium,
+                textStyle = AppTypography.bodySmall,
                 fontWeight = FontWeight.Light,
                 textColor = MaterialTheme.textColors.primary,
             )

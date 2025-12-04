@@ -23,6 +23,7 @@ object AuthNavGraph {
                     backStack.add(AuthScreens.LoginNavScreen)
                 },
                 navigateToHomeScreen = {
+                    backStack.clear()
                     backStack.add(MainScreens.HomeNavScreen)
                 }
             )

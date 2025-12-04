@@ -22,6 +22,7 @@
     <string name="title_report_user">Report User</string>
     <string name="title_privacy_policy">Privacy Policy</string>
     <string name="title_member_ship">Membership plan</string>
+    <string name="title_something_wrong">Oops! Something went wrong</string>
 
     <string name="action_login_with_google">Login with Google</string>
     <string name="action_login">Login</string>
@@ -126,12 +127,14 @@
     <string name="msg_greeting_good_morning">Good Morning</string>
     <string name="msg_greeting_good_afternoon">Good Afternoon</string>
     <string name="msg_greeting_good_evening">Good Evening</string>
-    <string name="msg_everything_set_for_you">Everything set for you</string>
+    <string name="msg_everything_set_for_you">Everything’s in place for you</string>
 
 
     <string name="error_invalid_username">Invalid username, input valid one</string>
     <string name="error_invalid_password">Password must be at least 8 characters</string>
     <string name="error_invalid_email">Invalid email address, input valid one</string>
+    <string name="error_network_error">Network error, please check your internet connection</string>
+    <string name="error_no_data_found">Currently no data found, please try again.</string>
 
     <string name="menu_report_user">Report User</string>
     <string name="menu_report_abuse">Report Abuse</string>
@@ -148,7 +151,6 @@
     <string name="menu_share_app">Share App</string>
     <string name="menu_rate_app">Rate App</string>
     <string name="menu_contact_us">Contact Us</string>
-
 
 
     <string name="placeholder_greeting_message">%s, %s</string>

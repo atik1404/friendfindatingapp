@@ -20,19 +20,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
+import com.friend.entity.search.FriendSuggestionApiEntity
 import com.friend.home.components.PersonItemCardSection
 import com.friend.home.components.ProfileSummarySection
 import com.friend.home.components.SearchBarSection
+import com.friend.ui.common.ErrorUi
 import com.friend.ui.components.AppScaffold
-import com.friend.ui.preview.LightDarkPreview
 import com.friend.ui.preview.LightPreview
+import com.friend.ui.shimmer_effect.PersonItemCardShimmerSection
+import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     fullName: String,
+    state: UiState,
+    onEvent: (UiAction) -> Unit,
     navigateToChatListScreen: () -> Unit,
     navigateToOverviewScreen: () -> Unit,
     navigateToProfileScreen: (String, String) -> Unit,
@@ -65,11 +71,30 @@ fun HomeScreen(
                 }
             )
             Spacer(Modifier.height(SpacingToken.medium))
-            PersonList {
-                navigateToProfileScreen.invoke(
-                    "others",
-                    "others"
-                )//TODO replace with current user data
+            when (state) {
+                is UiState.Error -> ErrorSection(
+                    message = state.message
+                ) {
+                    onEvent(UiAction.FetchFriendSuggestion)
+                }
+
+                UiState.Loading -> LoadingSection()
+                UiState.NoDataFound -> ErrorSection(
+                    message = stringResource(Res.string.error_no_data_found)
+                ) {
+                    onEvent(UiAction.FetchFriendSuggestion)
+                }
+
+                is UiState.Success -> {
+                    PersonList(state.data) {
+                        navigateToProfileScreen.invoke(
+                            "others",
+                            "others"
+                        )
+                    }
+                }
+
+                UiState.Idle -> {}
             }
         }
     }
@@ -86,18 +111,42 @@ fun HomeScreen(
 }
 
 @Composable
+private fun ErrorSection(message: String, onRetry: () -> Unit) {
+    ErrorUi(
+        message = message,
+        onRetry = onRetry,
+    )
+}
+
+@Composable
 private fun PersonList(
+    items: List<FriendSuggestionApiEntity>,
     onPersonClick: (String) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
     ) {
-        items(100) {
+        items(items.size) {
+            val person = items[it]
             PersonItemCardSection(
+                person = person,
                 modifier = Modifier
                     .clickable {
-                        onPersonClick.invoke("others")
+                        onPersonClick.invoke(person.username)
                     }
+            )
+        }
+    }
+}
+
+@Composable
+private fun LoadingSection() {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+    ) {
+        items(10) {
+            PersonItemCardShimmerSection(
+                modifier = Modifier
             )
         }
     }
@@ -111,5 +160,17 @@ private fun ScreenPreview() {
         navigateToChatListScreen = {},
         navigateToOverviewScreen = {},
         navigateToProfileScreen = { _, _ -> },
+        onEvent = {},
+        state = UiState.Loading
+        //state = UiState.Error("No data found"),
+//        state = UiState.Success(
+//            listOf(
+//                FriendSuggestionApiEntity("Atik Faysal Atik", ""),
+//                FriendSuggestionApiEntity("Atik", ""),
+//                FriendSuggestionApiEntity("Atik", ""),
+//                FriendSuggestionApiEntity("Atik", ""),
+//                FriendSuggestionApiEntity("Atik", ""),
+//            )
+//        ),
     )
 }
