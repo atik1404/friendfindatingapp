@@ -49,11 +49,13 @@ import com.friend.ui.common.AppToolbar
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AppText
 import com.friend.ui.preview.LightDarkPreview
+import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileOverviewScreen(
+    userInfo: UserInfo,
     onBackButtonClicked: () -> Unit,
     navigateToProfileScreen: () -> Unit,
     clickedOnMenu: (PersonalMenu) -> Unit,
@@ -188,11 +190,11 @@ private fun MenuItem(
 }
 
 @Composable
-@LightDarkPreview
+@LightPreview
 private fun ScreenPreview() {
     ProfileOverviewScreen(
         onBackButtonClicked = {},
-        navigateToProfileScreen = {},
-        clickedOnMenu = {}
+        navigateToProfileScreen = {}, clickedOnMenu = {},
+        userInfo = UserInfo()
     )
 }

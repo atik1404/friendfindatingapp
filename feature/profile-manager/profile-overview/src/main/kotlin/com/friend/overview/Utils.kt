@@ -54,9 +54,6 @@ fun openMailApp(context: Context) {
 
     val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
         data = Uri.parse("mailto:$recipient")
-        // Optional
-        // putExtra(Intent.EXTRA_SUBJECT, "Subject here")
-        // putExtra(Intent.EXTRA_TEXT, "Body here")
     }
 
     try {

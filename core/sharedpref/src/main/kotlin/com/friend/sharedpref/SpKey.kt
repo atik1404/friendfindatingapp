@@ -10,5 +10,6 @@ object SpKey {
     const val userName = "userName"
     const val gender = "gender"
     const val dateOfBirth = "dateOfBirth"
+    const val profilePicture = "profilePicture"
 
 }

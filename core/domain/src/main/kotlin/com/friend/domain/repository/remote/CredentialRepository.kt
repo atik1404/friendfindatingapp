@@ -6,6 +6,8 @@ import com.friend.entity.credential.LoginApiEntity
 import kotlinx.coroutines.flow.Flow
 
 interface CredentialRepository {
-    suspend fun postLoginApi(params: PostLoginApiUseCase.Params): Flow<ApiResult<LoginApiEntity>>
+    suspend fun performLogin(params: PostLoginApiUseCase.Params): Flow<ApiResult<LoginApiEntity>>
     suspend fun postForgotPassword(params: String): Flow<ApiResult<String>>
+
+    suspend fun performLogout(): Flow<ApiResult<String>>
 }

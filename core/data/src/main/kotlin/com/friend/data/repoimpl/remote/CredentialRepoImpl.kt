@@ -5,6 +5,7 @@ import com.friend.data.apiservice.CredentialApiServices
 import com.friend.data.mapper.credential.CacheProfile
 import com.friend.data.mapper.credential.ForgotPasswordApiMapper
 import com.friend.data.mapper.credential.LoginApiMapper
+import com.friend.data.mapper.credential.LogoutApiMapper
 import com.friend.data.mapper.mapFromApiResponse
 import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
 import com.friend.domain.base.ApiResult
@@ -21,10 +22,11 @@ class CredentialRepoImpl @Inject constructor(
     private val apiServices: CredentialApiServices,
     private val loginApiMapper: LoginApiMapper,
     private val forgotPasswordApiMapper: ForgotPasswordApiMapper,
+    private val logoutApiMapper: LogoutApiMapper,
     private val cacheProfile: CacheProfile,
     private val sharedPrefHelper: SharedPrefHelper
 ) : CredentialRepository {
-    override suspend fun postLoginApi(params: PostLoginApiUseCase.Params): Flow<ApiResult<LoginApiEntity>> {
+    override suspend fun performLogin(params: PostLoginApiUseCase.Params): Flow<ApiResult<LoginApiEntity>> {
         return mapFromApiResponse(
             result = networkBoundResources.downloadData {
                 apiServices.login(
@@ -47,6 +49,14 @@ class CredentialRepoImpl @Inject constructor(
                     params
                 )
             }, mapper = forgotPasswordApiMapper
+        )
+    }
+
+    override suspend fun performLogout(): Flow<ApiResult<String>> {
+        return mapFromApiResponse(
+            result = networkBoundResources.downloadData {
+                apiServices.logout()
+            }, mapper = logoutApiMapper
         )
     }
 }

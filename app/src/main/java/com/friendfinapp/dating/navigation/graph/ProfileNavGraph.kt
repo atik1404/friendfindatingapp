@@ -6,6 +6,7 @@ import androidx.navigation3.runtime.NavKey
 import com.friend.changepassword.ChangePasswordScreen
 import com.friend.common.constant.PersonalMenu
 import com.friend.membership.MembershipScreen
+import com.friend.overview.ProfileOverviewRoute
 import com.friend.overview.ProfileOverviewScreen
 import com.friend.personalsetting.PersonalSettingScreen
 import com.friend.profile.ProfileScreen
@@ -23,8 +24,12 @@ object ProfileNavGraph {
     ) = with(builder) {
 
         entry(ProfileScreens.ProfileOverviewNavScreen) {
-            ProfileOverviewScreen(
+            ProfileOverviewRoute(
                 onBackButtonClicked = { backStack.removeLastOrNull() },
+                navigateToLoginScreen = {
+                    backStack.clear()
+                    backStack.add(AuthScreens.LoginNavScreen)
+                },
                 navigateToProfileScreen = {
                     backStack.add(ProfileScreens.ProfileNavScreen("", ""))
                 },

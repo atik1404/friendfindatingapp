@@ -15,5 +15,5 @@ class PostLoginApiUseCase @Inject constructor(
         val password: String,
     )
 
-    override suspend fun execute(params: Params): Flow<ApiResult<LoginApiEntity>> = repository.postLoginApi(params)
+    override suspend fun execute(params: Params): Flow<ApiResult<LoginApiEntity>> = repository.performLogin(params)
 }
