@@ -7,6 +7,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.friend.common.constant.PersonalMenu
+import com.friend.common.extfun.openAppInPlayStore
+import com.friend.common.extfun.openMailApp
+import com.friend.common.extfun.shareApp
 import com.friend.ui.showToastMessage
 
 @Composable
@@ -46,7 +49,9 @@ fun ProfileOverviewRoute(
                 PersonalMenu.CHANGE_PASSWORD -> navigateToChangePasswordScreen.invoke()
                 PersonalMenu.VIP_MEMBERSHIP -> navigateToMembershipScreen.invoke()
                 PersonalMenu.LOGOUT -> viewModel.action(UiAction.PerformLogout)
-                else -> {}
+                PersonalMenu.SHARE_APP -> context.shareApp()
+                PersonalMenu.RATE_APP -> context.openAppInPlayStore()
+                PersonalMenu.CONTACT_US -> context.openMailApp()
             }
         }
     )

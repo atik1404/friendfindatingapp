@@ -34,7 +34,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.friend.common.constant.PersonalMenu
 import com.friend.designsystem.spacing.RadiusToken
@@ -116,7 +115,6 @@ fun ProfileOverviewScreen(
 private fun MenuCard(
     clickedOnMenu: (PersonalMenu) -> Unit,
 ) {
-    val context = LocalContext.current
     Column(
         modifier = Modifier
             .background(
@@ -157,21 +155,21 @@ private fun MenuCard(
             icon = Icons.Default.Share,
             menu = stringResource(Res.string.menu_share_app)
         ) {
-            shareApp(context = context)
+            clickedOnMenu.invoke(PersonalMenu.SHARE_APP)
         }
 
         MenuItem(
             icon = Icons.Default.StarRate,
             menu = stringResource(Res.string.menu_rate_app)
         ) {
-            openAppInPlayStore(context)
+            clickedOnMenu.invoke(PersonalMenu.RATE_APP)
         }
 
         MenuItem(
             icon = Icons.Default.ContactPage,
             menu = stringResource(Res.string.menu_contact_us)
         ) {
-            openMailApp(context)
+            clickedOnMenu.invoke(PersonalMenu.CONTACT_US)
         }
 
         MenuItem(
