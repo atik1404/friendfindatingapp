@@ -21,18 +21,20 @@ import com.friend.designsystem.spacing.SpacingToken
 import com.friend.ui.components.AppOutlineTextField
 
 @Composable
-fun NameSection() {
+fun NameSection(
+    modifier: Modifier = Modifier
+) {
     var userName by rememberSaveable { mutableStateOf("") }
     var fullName by rememberSaveable { mutableStateOf("") }
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AppOutlineTextField(
             text = userName,
-            modifier = Modifier.weight(1f),
+            modifier = modifier.weight(1f),
             title = stringResource(Res.string.label_username),
             placeholder = stringResource(Res.string.hint_user_name),
             onValueChange = { userName = it },
@@ -42,11 +44,11 @@ fun NameSection() {
             ),
         )
 
-        Spacer(modifier = Modifier.width(SpacingToken.medium))
+        Spacer(modifier = modifier.width(SpacingToken.medium))
 
         AppOutlineTextField(
             text = fullName,
-            modifier = Modifier.weight(1f),
+            modifier = modifier.weight(1f),
             title = stringResource(Res.string.label_full_name),
             placeholder = stringResource(Res.string.hint_full_name),
             onValueChange = { fullName = it },

@@ -21,7 +21,9 @@ import com.friend.ui.components.AppOutlineTextField
 import com.friend.ui.components.AutoCompleteTextField
 
 @Composable
-fun AddressSection() {
+fun AddressSection(
+    modifier: Modifier = Modifier
+) {
     var zipCode by rememberSaveable { mutableStateOf("") }
     var text by remember { mutableStateOf("") }
 
@@ -36,26 +38,26 @@ fun AddressSection() {
         "Mymensingh"
     )
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             AutoCompleteTextField(
                 allOptions = cities,
-                modifier = Modifier.weight(1f),
+                modifier = modifier.weight(1f),
                 label = stringResource(Res.string.label_country),
                 placeholder = stringResource(Res.string.hint_select_item),
                 onValueChange = { text = it },
                 value = text
             )
 
-            Spacer(modifier = Modifier.width(SpacingToken.medium))
+            Spacer(modifier = modifier.width(SpacingToken.medium))
 
             AutoCompleteTextField(
                 allOptions = cities,
-                modifier = Modifier.weight(1f),
+                modifier = modifier.weight(1f),
                 label = stringResource(Res.string.label_state),
                 placeholder = stringResource(Res.string.hint_select_item),
                 onValueChange = { text = it },
@@ -63,23 +65,23 @@ fun AddressSection() {
             )
         }
 
-        Spacer(modifier = Modifier.height(SpacingToken.medium))
+        Spacer(modifier = modifier.height(SpacingToken.medium))
 
         Row {
             AutoCompleteTextField(
                 allOptions = cities,
-                modifier = Modifier.weight(1f),
+                modifier = modifier.weight(1f),
                 label = stringResource(Res.string.label_city),
                 placeholder = stringResource(Res.string.hint_select_item),
                 onValueChange = { text = it },
                 value = text
             )
 
-            Spacer(modifier = Modifier.width(SpacingToken.medium))
+            Spacer(modifier = modifier.width(SpacingToken.medium))
 
             AppOutlineTextField(
                 text = zipCode,
-                modifier = Modifier.weight(1f),
+                modifier = modifier.weight(1f),
                 title = stringResource(Res.string.label_zip_code),
                 placeholder = stringResource(Res.string.hint_zip_code),
                 onValueChange = { zipCode = it },

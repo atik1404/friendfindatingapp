@@ -78,7 +78,7 @@
     <string name="label_am_looking_for">I am looking for</string>
     <string name="label_why_report_user">Tell use why you want to report this user?</string>
 
-    <string name="hint_user_name">Enter your Username</string>
+    <string name="hint_user_name">Enter Username</string>
     <string name="hint_search_here">Search here....</string>
     <string name="hint_full_name">Enter Full Name</string>
     <string name="hint_password">Enter your Password</string>
