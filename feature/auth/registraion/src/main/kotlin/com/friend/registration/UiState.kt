@@ -1,7 +1,12 @@
 package com.friend.registration
 
+import com.friend.domain.base.TextInput
+import com.friend.entity.search.CityApiEntity
+import com.friend.entity.search.CountryApiEntity
+import com.friend.entity.search.StateApiEntity
+
 data class FormData(
-    val username: String = "",
+    val username: TextInput = TextInput(),
     val name: String = "",
     val email: String = "",
     val password: String = "",
@@ -13,13 +18,25 @@ data class FormData(
     val city: String = "",
     val postCode: String = "",
     val isAgree: Boolean = false,
-    val isLoading: Boolean = false,
-)
-
-sealed interface UiState {
-    data class Default(val data: FormData) : UiState
-    object Loading : UiState
+) {
+    val isFormValid: Boolean
+        get() = username.isValid
 }
+
+data class UiState(
+    val form: FormData = FormData(),
+
+    // POST loading (submit button)
+    val isSubmitting: Boolean = false,
+
+    // GET loading (for full-screen loader)
+    val isLoading: Boolean = false,
+
+    // API data
+    val countries: List<CountryApiEntity> = emptyList(),
+    val states: List<StateApiEntity> = emptyList(),
+    val cities: List<CityApiEntity> = emptyList(),
+)
 
 sealed interface UiEvent {
     data class ShowToastMessage(val message: String) : UiEvent

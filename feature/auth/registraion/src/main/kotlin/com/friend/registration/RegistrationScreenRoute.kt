@@ -1,6 +1,8 @@
 package com.friend.registration
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 
 @Composable
@@ -9,7 +11,13 @@ fun RegistrationRoute(
     navigateToProfileCompletion: () -> Unit,
     viewModel: RegistrationViewModel = hiltViewModel()
 ) {
-    RegistrationScreen {
-        onBackButtonClicked.invoke()
-    }
+    val state by viewModel.uiState.collectAsState()
+
+    RegistrationScreen(
+        onBackButtonClicked = {},
+        state = state,
+        uiAction = {
+            viewModel.action(it)
+        }
+    )
 }

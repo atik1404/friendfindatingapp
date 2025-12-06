@@ -23,10 +23,10 @@ fun LoginRoute(
     LaunchedEffect(Unit) {
         viewModel.uiEffect.collect { effect ->
             when (effect) {
-                is LoginUiEffect.ShowMessage ->
+                is UiEvent.ShowMessage ->
                     context.showToastMessage(effect.message)
 
-                is LoginUiEffect.NavigateToHome ->
+                is UiEvent.NavigateToHome ->
                     navigateToHome()
             }
         }

@@ -52,8 +52,8 @@ import com.friend.designsystem.R as Res
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    state: LoginUiState,
-    onEvent: (LoginUiEvent) -> Unit,
+    state: UiState,
+    onEvent: (UiAction) -> Unit,
     navigateToRegistration: () -> Unit,
     navigateToForgotPassword: () -> Unit,
     onGoogleLoginClick: () -> Unit,
@@ -157,12 +157,12 @@ fun LoginScreen(
 /**
  * Design-time preview for [LoginScreen].
  *
- * Uses a fake [LoginUiState] to visualize the layout in Android Studio.
+ * Uses a fake [UiState] to visualize the layout in Android Studio.
  */
 @Composable
 @LightPreview
 fun LoginScreenPreview() {
-    val fakeState = LoginUiState(
+    val fakeState = UiState(
         username = "demo@friendfin.com",
         password = "123456",
         isUsernameValid = true,

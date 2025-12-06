@@ -18,17 +18,17 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val postLoginApiUseCase: PostLoginApiUseCase
 ) : BaseViewModel() {
-    private val _uiState = MutableStateFlow(LoginUiState())
-    val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(UiState())
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _uiEffect = Channel<LoginUiEffect>()
+    private val _uiEffect = Channel<UiEvent>()
     val uiEffect = _uiEffect.receiveAsFlow()
 
-    val action: (LoginUiEvent) -> Unit = {
+    val action: (UiAction) -> Unit = {
         when (it) {
-            is LoginUiEvent.UsernameChanged -> onUserNameChanged(it.value)
-            is LoginUiEvent.PasswordChanged -> onPasswordChanged(it.value)
-            LoginUiEvent.FormValidator -> formValidation()
+            is UiAction.UsernameChanged -> onUserNameChanged(it.value)
+            is UiAction.PasswordChanged -> onPasswordChanged(it.value)
+            UiAction.FormValidator -> formValidation()
         }
     }
 
@@ -41,7 +41,7 @@ class LoginViewModel @Inject constructor(
                 when (result) {
                     is ApiResult.Success -> {
                         if (result.data.userName.isNotEmpty())
-                            _uiEffect.send(LoginUiEffect.NavigateToHome)
+                            _uiEffect.send(UiEvent.NavigateToHome)
                         else handleApiError(result.data.message)
                     }
 
@@ -72,7 +72,7 @@ class LoginViewModel @Inject constructor(
 
     private fun handleApiError(message: String) {
         execute {
-            _uiEffect.send(LoginUiEffect.ShowMessage(message))
+            _uiEffect.send(UiEvent.ShowMessage(message))
         }
     }
 

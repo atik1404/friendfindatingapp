@@ -11,31 +11,43 @@ enum class FormStatus {
 
 data class TextInput(
     val value: String = "",
-    val error: String? = null,
+    val isValid: Boolean = true,
     val isDirty: Boolean = false,
 ) {
-    val isValid: Boolean get() = error == null
+    val hasError: Boolean get() = !isValid && isDirty
+
+    fun onChange(newValue: String): TextInput {
+        return copy(value = newValue, isValid = true)
+    }
 
     fun onChange(
         newValue: String,
-        validator: (String) -> String?
+        validator: (String) -> Boolean
     ): TextInput {
+        val valid = if (!isDirty) {
+            // first time typing: don't show error yet
+            true
+        } else {
+            validator(newValue)
+        }
+
         return copy(
             value = newValue,
-            error = if (!isDirty) null else validator(newValue),
+            isValid = valid,
             isDirty = true
         )
     }
 
     fun validate(
-        validator: (String) -> String?
+        validator: (String) -> Boolean
     ): TextInput {
         return copy(
-            error = validator(value),
+            isValid = validator(value),
             isDirty = true
         )
     }
 }
+
 
 data class BoolInput(
     val value: Boolean = false,

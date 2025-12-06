@@ -7,6 +7,10 @@ fun String.isValidEmail(): Boolean {
             Patterns.EMAIL_ADDRESS.matcher(this.trim()).matches()
 }
 
+fun String.isNameValid(): Boolean {
+    return this.isNotBlank() && this.length >= 3
+}
+
 fun String.isUsernameValid(): Boolean {
     return this.isNotBlank() && this.length >= 3
 }
@@ -17,4 +21,9 @@ fun String.isPasswordValid(): Boolean {
 
 fun String.isPasswordMatched(password: String): Boolean {
     return this == password
+}
+
+
+fun userNameValidator(value: String): Boolean {
+    return value.isNotBlank() && value.length >= 3
 }

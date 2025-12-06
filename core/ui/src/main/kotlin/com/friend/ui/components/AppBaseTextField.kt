@@ -321,6 +321,7 @@ fun AppOutlineTextField(
                 fontWeight = FontWeight.Light,
                 textColor = MaterialTheme.textColors.error,
                 modifier = Modifier,
+                maxLines = 2
             )
         }
     }

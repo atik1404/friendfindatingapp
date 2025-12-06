@@ -35,11 +35,14 @@ import com.friend.ui.components.AppCheckbox
 import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.preview.LightPreview
+import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationScreen(
+    state: UiState,
+    uiAction: (UiAction) -> Unit,
     modifier: Modifier = Modifier,
     onBackButtonClicked: () -> Unit,
 ) {
@@ -64,7 +67,18 @@ fun RegistrationScreen(
                 .appPadding(SpacingToken.small),
         ) {
 
-            NameSection(modifier = modifier)
+            NameSection(
+                modifier = modifier,
+                userName = state.form.username.value,
+                fullName = state.form.name,
+                isInvalidUserName = !state.form.username.isValid,
+                onUserNameChange = {
+                    uiAction.invoke(UiAction.OnChangeUserName(it))
+                },
+                onFullNameChange = {
+
+                }
+            )
 
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
@@ -107,7 +121,7 @@ fun RegistrationScreen(
                 enabled = checked,
                 text = stringResource(Res.string.action_sign_up),
                 onClick = {
-
+                    uiAction.invoke(UiAction.FormValidation)
                 },
             )
         }
@@ -119,5 +133,7 @@ fun RegistrationScreen(
 private fun ScreenPreview() {
     RegistrationScreen(
         onBackButtonClicked = {},
+        state = UiState(),
+        uiAction = {}
     )
 }
