@@ -5,6 +5,7 @@ import kotlinx.coroutines.Dispatchers
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
@@ -254,143 +255,153 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(), AdapterView.OnItem
     }
 
     private fun fetchCountries() {
-        val url = "https://countriesnow.space/api/v0.1/countries"
+        val url = "https://friendfin.com/friendfinapi/api/Location/v1/countries"
         val requestQueue = Volley.newRequestQueue(this)
 
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.GET, url, null,
+        val jsonArrayRequest = JsonArrayRequest(
+            Request.Method.GET,
+            url,
+            null,
             { response ->
                 try {
-                    val data = response.getJSONArray("data")
                     val countryList = mutableListOf<String>()
 
-                    for (i in 0 until data.length()) {
-                        val countryObject = data.getJSONObject(i)
-                        countryList.add(countryObject.getString("country"))
+                    // response is a JSONArray like:
+                    // [ { "text": "Afghanistan", "value": "Afghanistan" }, ... ]
+                    for (i in 0 until response.length()) {
+                        val countryObject = response.getJSONObject(i)
+
+                        // You can use either "text" or "value" depending on what you want to show
+                        val countryName = countryObject.getString("value")
+                        // val countryName = countryObject.getString("text")
+
+                        countryList.add(countryName)
                     }
 
                     countryAdapter.clear()
                     countryAdapter.addAll(countryList)
+                    countryAdapter.notifyDataSetChanged()
                 } catch (e: Exception) {
                     e.printStackTrace()
-//                    Toast.makeText(this, "Error parsing countries", Toast.LENGTH_SHORT).show()
+                    // Toast.makeText(this, "Error parsing countries", Toast.LENGTH_SHORT).show()
                 }
             },
             { error ->
                 error.printStackTrace()
-//                Toast.makeText(this, "Error fetching countries: ${error.message}", Toast.LENGTH_SHORT).show()
-            })
+                // Toast.makeText(this, "Error fetching countries: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        )
 
-        requestQueue.add(jsonObjectRequest)
+        requestQueue.add(jsonArrayRequest)
     }
+
 
     private fun fetchStates(country: String) {
 
-        val url = "https://countriesnow.space/api/v0.1/countries/states"
+        val baseUrl = "https://friendfin.com/friendfinapi/api/Location/v1/regions"
+
+        // Build URL with query parameter ?country=...
+        val url = Uri.parse(baseUrl).buildUpon()
+            .appendQueryParameter("country", country)
+            .build()
+            .toString()
+
+        Log.d("fetchStates", "URL: $url")
+
         val requestQueue = Volley.newRequestQueue(this)
 
-        Log.d("Country ", country)
-        val params = JSONObject().apply { put("country", country) }
-        Log.d("Params", params.toString()) // Log the request body
-
-        val jsonObjectRequest = object : JsonObjectRequest(
-            Method.POST, url, params,
+        val jsonArrayRequest = JsonArrayRequest(
+            Request.Method.GET,
+            url,
+            null, // ❗ no body for GET with query params
             { response ->
                 try {
-                    Log.d("Response", response.toString()) // Log the full response
-
-                    val data = response.getJSONObject("data")
-                    val statesArray = data.getJSONArray("states")
+                    Log.d("Response", response.toString())
 
                     val stateList = mutableListOf<String>()
-                    for (i in 0 until statesArray.length()) {
-                        val stateObject = statesArray.getJSONObject(i)
-                        stateList.add(stateObject.getString("name"))
-                    }
 
-//                    Toast.makeText(applicationContext, "States: ${stateList.size}", Toast.LENGTH_SHORT).show()
+                    for (i in 0 until response.length()) {
+                        val state = response.getJSONObject(i)
+                        val stateName = state.getString("text")   // or "text"
+                        stateList.add(stateName)
+                    }
 
                     stateAdapter.clear()
                     stateAdapter.addAll(stateList)
                     binding.spinnerStates.adapter = stateAdapter
+
                 } catch (e: Exception) {
                     e.printStackTrace()
-//                    Toast.makeText(this, "Error parsing states", Toast.LENGTH_SHORT).show()
+                    // Toast.makeText(this, "Error parsing states", Toast.LENGTH_SHORT).show()
                 }
             },
             { error ->
                 error.printStackTrace()
-//                Toast.makeText(this, "Error fetching states: ${error.message}", Toast.LENGTH_SHORT).show()
+                // Toast.makeText(this, "Error fetching states: ${error.message}", Toast.LENGTH_SHORT).show()
             }
-        ) {
-            override fun getHeaders(): MutableMap<String, String> {
-                val headers = HashMap<String, String>()
-                headers["Content-Type"] = "application/json"
-                return headers
-            }
-        }
+        )
 
-        jsonObjectRequest.setShouldCache(false) // Disable caching
-        requestQueue.add(jsonObjectRequest)
+        requestQueue.add(jsonArrayRequest)
     }
 
+
     private fun fetchCities(country: String, state: String) {
-        val url = "https://countriesnow.space/api/v0.1/countries/state/cities"
+        val baseUrl = "https://friendfin.com/friendfinapi/api/Location/v1/cities"
         val requestQueue = Volley.newRequestQueue(this)
         requestQueue.cache.clear()
-        val encodedCountry = URLEncoder.encode(country, "UTF-8")
-        val encodedState = URLEncoder.encode(state, "UTF-8")
-        val params1 = JSONObject().apply {
-            put("country", encodedCountry)
-            put("state", encodedState)
-        }
 
-//        Toast.makeText(applicationContext, params1.toString(), Toast.LENGTH_SHORT).show()
-        Log.d("params cities", params1.toString())
+        // Build URL with query params ?country=...&region=...
+        val url = Uri.parse(baseUrl).buildUpon()
+            .appendQueryParameter("country", country)
+            .appendQueryParameter("region", if(state == "All") "" else state)
+            .build()
+            .toString()
 
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.POST, url, params1,
+        Log.d("fetchCities", "URL: $url")
+
+        val jsonArrayRequest = JsonArrayRequest(
+            Request.Method.GET,
+            url,
+            null, // no body for GET
             { response ->
                 try {
                     Log.d("ResponseCities", response.toString())
 
-                    if (!response.getBoolean("error")) {
-                        val cityList = mutableListOf<String>()
+                    val cityList = mutableListOf<String>()
 
-                        // Directly access the "data" array which contains the list of cities
-                        val cities = response.getJSONArray("data")
+                    // Response is:
+                    // [
+                    //   { "text": "Akhaura", "value": "Akhaura" },
+                    //   { "text": "Barisal", "value": "Barisal" }
+                    // ]
+                    for (i in 0 until response.length()) {
+                        val cityObject = response.getJSONObject(i)
+                        val cityName = cityObject.getString("value") // or "text"
+                        cityList.add(cityName)
+                    }
 
-                        for (i in 0 until cities.length()) {
-                            cityList.add(cities.getString(i))
-                        }
+                    Log.d("citieslist", cityList.toString())
 
-                        Log.d("citieslist", cityList.toString())
-                        if (cityList.isNotEmpty()) {
-                            cityAdapter.clear()
-                            cityAdapter.addAll(cityList)
-                            binding.spinnerCity.adapter = cityAdapter
-//                            Toast.makeText(applicationContext, "set", Toast.LENGTH_SHORT).show()
-                        } else {
-//                            Toast.makeText(this, "No cities found for the selected country", Toast.LENGTH_SHORT).show()
-                        }
+                    if (cityList.isNotEmpty()) {
+                        cityAdapter.clear()
+                        cityAdapter.addAll(cityList)
+                        binding.spinnerCity.adapter = cityAdapter
                     } else {
-//                        Toast.makeText(this, response.getString("msg"), Toast.LENGTH_SHORT).show()
+                        // No cities found for this country/region
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    Log.d("Responsecities", e.toString())
-//                    Toast.makeText(this, "Error parsing cities", Toast.LENGTH_SHORT).show()
+                    Log.d("ResponseCitiesError", e.toString())
                 }
             },
             { error ->
                 error.printStackTrace()
-                Log.d("Responsecities", error.toString())
-//                Toast.makeText(this, "Error fetching cities: ${error.message}", Toast.LENGTH_SHORT).show()
-            })
+                Log.d("ResponseCitiesError", error.toString())
+            }
+        )
 
-        requestQueue.add(jsonObjectRequest)
+        requestQueue.add(jsonArrayRequest)
     }
-
 
     var formatted: String = ""
 
