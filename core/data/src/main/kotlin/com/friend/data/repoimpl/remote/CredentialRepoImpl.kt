@@ -6,11 +6,14 @@ import com.friend.data.mapper.credential.CacheProfile
 import com.friend.data.mapper.credential.ForgotPasswordApiMapper
 import com.friend.data.mapper.credential.LoginApiMapper
 import com.friend.data.mapper.credential.LogoutApiMapper
+import com.friend.data.mapper.credential.RegistrationApiMapper
 import com.friend.data.mapper.mapFromApiResponse
 import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
+import com.friend.domain.apiusecase.credential.PostRegistrationApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.repository.remote.CredentialRepository
 import com.friend.entity.credential.LoginApiEntity
+import com.friend.entity.credential.UserApiEntity
 import com.friend.sharedpref.SharedPrefHelper
 import com.friend.sharedpref.SpKey
 import kotlinx.coroutines.flow.Flow
@@ -24,6 +27,7 @@ class CredentialRepoImpl @Inject constructor(
     private val forgotPasswordApiMapper: ForgotPasswordApiMapper,
     private val logoutApiMapper: LogoutApiMapper,
     private val cacheProfile: CacheProfile,
+    private val registrationApiMapper: RegistrationApiMapper,
     private val sharedPrefHelper: SharedPrefHelper
 ) : CredentialRepository {
     override suspend fun performLogin(params: PostLoginApiUseCase.Params): Flow<ApiResult<LoginApiEntity>> {
@@ -40,6 +44,16 @@ class CredentialRepoImpl @Inject constructor(
             }
             it
         }
+    }
+
+    override suspend fun performRegistration(params: PostRegistrationApiUseCase.Params): Flow<ApiResult<UserApiEntity>> {
+        return mapFromApiResponse(
+            result = networkBoundResources.downloadData {
+                apiServices.registration(
+                    params
+                )
+            }, mapper = registrationApiMapper
+        )
     }
 
     override suspend fun postForgotPassword(params: String): Flow<ApiResult<String>> {

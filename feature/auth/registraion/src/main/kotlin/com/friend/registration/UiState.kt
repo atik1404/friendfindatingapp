@@ -12,13 +12,13 @@ data class FormData(
     val state: String = "",
     val city: String = "",
     val postCode: String = "",
-    val isAgree: Boolean = false
+    val isAgree: Boolean = false,
+    val isLoading: Boolean = false,
 )
 
 sealed interface UiState {
-    object Default : UiState
+    data class Default(val data: FormData) : UiState
     object Loading : UiState
-    object Success : UiState
 }
 
 sealed interface UiEvent {
@@ -26,8 +26,8 @@ sealed interface UiEvent {
 }
 
 sealed class UiAction {
-    object CheckPrivacyPolicy : UiAction()
-    object SelectBirthDate : UiAction()
+    data class CheckPrivacyPolicy(val value: Boolean) : UiAction()
+    data class SelectBirthDate(val value: String) : UiAction()
     object FormValidation : UiAction()
     object FetchCountry : UiAction()
     data class FetchState(val country: String) : UiAction()
