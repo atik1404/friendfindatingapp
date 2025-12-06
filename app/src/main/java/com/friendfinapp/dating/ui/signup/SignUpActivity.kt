@@ -265,16 +265,9 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(), AdapterView.OnItem
             { response ->
                 try {
                     val countryList = mutableListOf<String>()
-
-                    // response is a JSONArray like:
-                    // [ { "text": "Afghanistan", "value": "Afghanistan" }, ... ]
                     for (i in 0 until response.length()) {
                         val countryObject = response.getJSONObject(i)
-
-                        // You can use either "text" or "value" depending on what you want to show
                         val countryName = countryObject.getString("value")
-                        // val countryName = countryObject.getString("text")
-
                         countryList.add(countryName)
                     }
 
@@ -283,12 +276,10 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(), AdapterView.OnItem
                     countryAdapter.notifyDataSetChanged()
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    // Toast.makeText(this, "Error parsing countries", Toast.LENGTH_SHORT).show()
                 }
             },
             { error ->
                 error.printStackTrace()
-                // Toast.makeText(this, "Error fetching countries: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         )
 
@@ -297,16 +288,11 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(), AdapterView.OnItem
 
 
     private fun fetchStates(country: String) {
-
         val baseUrl = "https://friendfin.com/friendfinapi/api/Location/v1/regions"
-
-        // Build URL with query parameter ?country=...
         val url = Uri.parse(baseUrl).buildUpon()
             .appendQueryParameter("country", country)
             .build()
             .toString()
-
-        Log.d("fetchStates", "URL: $url")
 
         val requestQueue = Volley.newRequestQueue(this)
 
@@ -316,28 +302,21 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(), AdapterView.OnItem
             null, // ❗ no body for GET with query params
             { response ->
                 try {
-                    Log.d("Response", response.toString())
-
                     val stateList = mutableListOf<String>()
-
                     for (i in 0 until response.length()) {
                         val state = response.getJSONObject(i)
                         val stateName = state.getString("text")   // or "text"
                         stateList.add(stateName)
                     }
-
                     stateAdapter.clear()
                     stateAdapter.addAll(stateList)
                     binding.spinnerStates.adapter = stateAdapter
-
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    // Toast.makeText(this, "Error parsing states", Toast.LENGTH_SHORT).show()
                 }
             },
             { error ->
                 error.printStackTrace()
-                // Toast.makeText(this, "Error fetching states: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         )
 
@@ -350,14 +329,11 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(), AdapterView.OnItem
         val requestQueue = Volley.newRequestQueue(this)
         requestQueue.cache.clear()
 
-        // Build URL with query params ?country=...&region=...
         val url = Uri.parse(baseUrl).buildUpon()
             .appendQueryParameter("country", country)
             .appendQueryParameter("region", if(state == "All") "" else state)
             .build()
             .toString()
-
-        Log.d("fetchCities", "URL: $url")
 
         val jsonArrayRequest = JsonArrayRequest(
             Request.Method.GET,
@@ -365,38 +341,24 @@ class SignUpActivity : BaseActivity<ActivitySignUpBinding>(), AdapterView.OnItem
             null, // no body for GET
             { response ->
                 try {
-                    Log.d("ResponseCities", response.toString())
-
                     val cityList = mutableListOf<String>()
-
-                    // Response is:
-                    // [
-                    //   { "text": "Akhaura", "value": "Akhaura" },
-                    //   { "text": "Barisal", "value": "Barisal" }
-                    // ]
                     for (i in 0 until response.length()) {
                         val cityObject = response.getJSONObject(i)
                         val cityName = cityObject.getString("value") // or "text"
                         cityList.add(cityName)
                     }
 
-                    Log.d("citieslist", cityList.toString())
-
                     if (cityList.isNotEmpty()) {
                         cityAdapter.clear()
                         cityAdapter.addAll(cityList)
                         binding.spinnerCity.adapter = cityAdapter
-                    } else {
-                        // No cities found for this country/region
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    Log.d("ResponseCitiesError", e.toString())
                 }
             },
             { error ->
                 error.printStackTrace()
-                Log.d("ResponseCitiesError", error.toString())
             }
         )
 
