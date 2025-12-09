@@ -1,5 +1,6 @@
 package com.friend.registration
 
+import com.friend.common.constant.Gender
 import com.friend.domain.base.TextInput
 import com.friend.entity.search.CityApiEntity
 import com.friend.entity.search.CountryApiEntity
@@ -10,13 +11,13 @@ data class FormData(
     val name: TextInput = TextInput(),
     val email: TextInput = TextInput(),
     val password: TextInput = TextInput(),
-    val gender: String = "",
-    val interestedIn: String = "",
     val dateOfBirth: TextInput = TextInput(),
-    val country: String = "",
-    val state: String = "",
-    val city: String = "",
     val postCode: TextInput = TextInput(),
+    val gender: Gender = Gender.MALE,
+    val interestedIn: Gender = Gender.FEMALE,
+    val country: CountryApiEntity? = null,
+    val state: StateApiEntity? = null,
+    val city: CityApiEntity? = null,
     val isAgree: Boolean = false,
 ) {
     val isFormValid: Boolean
@@ -49,14 +50,14 @@ sealed class UiAction {
     object FetchCountry : UiAction()
     data class FetchState(val country: String) : UiAction()
     data class FetchCity(val country: String, val state: String) : UiAction()
-    data class SelectGender(val value: String) : UiAction()
-    data class SelectInterestedIn(val value: String) : UiAction()
+    data class SelectGender(val value: Gender) : UiAction()
+    data class SelectInterestedIn(val value: Gender) : UiAction()
     data class OnChangeUserName(val value: String) : UiAction()
     data class OnChangeName(val value: String) : UiAction()
     data class OnChangeEmail(val value: String) : UiAction()
     data class OnChangePassword(val value: String) : UiAction()
-    data class OnSelectCountry(val value: String) : UiAction()
-    data class OnSelectState(val value: String) : UiAction()
-    data class OnSelectCity(val value: String) : UiAction()
+    data class OnSelectCountry(val value: CountryApiEntity) : UiAction()
+    data class OnSelectState(val value: StateApiEntity) : UiAction()
+    data class OnSelectCity(val value: CityApiEntity) : UiAction()
     data class OnChangePostCode(val value: String) : UiAction()
 }

@@ -7,6 +7,13 @@ import com.friend.domain.apiusecase.search.FetchCityApiUseCase
 import com.friend.domain.apiusecase.search.FetchCountriesUseCase
 import com.friend.domain.apiusecase.search.FetchStateApiUseCase
 import com.friend.domain.base.ApiResult
+import com.friend.entity.search.CityApiEntity
+import com.friend.entity.search.CountryApiEntity
+import com.friend.entity.search.StateApiEntity
+import com.friend.ui.validator.emailValidator
+import com.friend.ui.validator.nameValidator
+import com.friend.ui.validator.passwordValidator
+import com.friend.ui.validator.textEmptyValidator
 import com.friend.ui.validator.userNameValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -38,18 +45,17 @@ class RegistrationViewModel @Inject constructor(
             is UiAction.FetchState -> fetchStates()
             UiAction.FormValidation -> performRegistration()
             is UiAction.OnChangeUserName -> onChangeUserName(it.value)
-//            is UiAction.OnChangeEmail -> onChangeEmail(it.value)
-//            is UiAction.OnChangeName -> onChangeName(it.value)
-//            is UiAction.OnChangePassword -> onChangePassword(it.value)
-//            is UiAction.OnChangePostCode -> onChangePostCode(it.value)
-//            is UiAction.OnSelectCity -> onChangeCity(it.value)
-//            is UiAction.OnSelectCountry -> onChangeCountry(it.value)
-//            is UiAction.OnSelectState -> onChangeState(it.value)
-//            is UiAction.SelectBirthDate -> onChangeBirthDate(it.value)
-//            is UiAction.SelectGender -> onChangeGender(it.value)
-//            is UiAction.SelectInterestedIn -> onChangeInterest(it.value)
-//            is UiAction.CheckPrivacyPolicy -> onAgreedPolicy(it.value)
-            else -> {}
+            is UiAction.OnChangeEmail -> onChangeEmail(it.value)
+            is UiAction.OnChangeName -> onChangeName(it.value)
+            is UiAction.OnChangePassword -> onChangePassword(it.value)
+            is UiAction.OnChangePostCode -> onChangePostCode(it.value)
+            is UiAction.OnSelectCity -> onChangeCity(it.value)
+            is UiAction.OnSelectCountry -> onChangeCountry(it.value)
+            is UiAction.OnSelectState -> onChangeState(it.value)
+            is UiAction.SelectBirthDate -> onChangeBirthDate(it.value)
+            is UiAction.SelectGender -> onChangeGender(it.value)
+            is UiAction.SelectInterestedIn -> onChangeInterest(it.value)
+            is UiAction.CheckPrivacyPolicy -> onAgreedPolicy(it.value)
         }
     }
 
@@ -68,7 +74,8 @@ class RegistrationViewModel @Inject constructor(
     private fun fetchStates() {
         execute {
             val current = _formUiState.value
-            fetchStateApiUseCase.execute(current.form.country).collect { result ->
+            val selectedCountry = current.form.country?.value ?: ""
+            fetchStateApiUseCase.execute(selectedCountry).collect { result ->
                 when (result) {
                     is ApiResult.Error -> _uiEvent.send(UiEvent.ShowToastMessage(result.message))
                     is ApiResult.Loading -> isLoading(result.loading)
@@ -81,10 +88,13 @@ class RegistrationViewModel @Inject constructor(
     private fun fetchCities() {
         execute {
             val current = _formUiState.value
+            val selectedCountry = current.form.country?.value ?: ""
+            val selectedState = current.form.state?.value ?: ""
+
             fetchCityApiUseCase.execute(
                 FetchCityApiUseCase.Params(
-                    current.form.country,
-                    current.form.state
+                    selectedCountry,
+                    selectedState
                 )
             )
                 .collect { result ->
@@ -103,7 +113,11 @@ class RegistrationViewModel @Inject constructor(
                 val form = state.form
 
                 val validatedForm = form.copy(
-                    username = form.username.validate(::userNameValidator)
+                    username = form.username.validate(::userNameValidator),
+                    name = form.username.validate(::nameValidator),
+                    email = form.username.validate(::emailValidator),
+                    password = form.username.validate(::passwordValidator),
+                    dateOfBirth = form.username.validate(::textEmptyValidator),
                 )
 
                 state.copy(form = validatedForm)
@@ -120,14 +134,14 @@ class RegistrationViewModel @Inject constructor(
                 password = current.form.password.value,
                 email = current.form.email.value,
                 name = current.form.name.value,
-                gender = Gender.toValue(current.form.gender),
-                interestedIn = Gender.toValue(current.form.interestedIn),
+                zipCode = current.form.postCode.value,
+                gender = current.form.gender.value,
+                interestedIn = current.form.interestedIn.value,
                 birthdate = current.form.dateOfBirth.value,
                 birthdate2 = current.form.dateOfBirth.value,
-                country = current.form.country,
-                state = current.form.state,
-                zipCode = current.form.postCode.value,
-                city = current.form.city,
+                country = current.form.country?.value ?: "",
+                state = current.form.state?.value ?: "",
+                city = current.form.city?.value ?: "",
             )
 
             postRegistrationApiUseCase.execute(params).collect { result ->
@@ -163,66 +177,115 @@ class RegistrationViewModel @Inject constructor(
             )
         }
     }
-//
-//    private fun onChangeEmail(value: String) {
-//        _formUiState.update {
-//            it.copy(email = value)
-//        }
-//    }
-//
-//    private fun onChangePassword(value: String) {
-//        _formUiState.update {
-//            it.copy(password = value)
-//        }
-//    }
-//
-//    private fun onChangePostCode(value: String) {
-//        _formUiState.update {
-//            it.copy(postCode = value)
-//        }
-//    }
-//
-//    private fun onChangeCity(value: String) {
-//        _formUiState.update {
-//            it.copy(city = value)
-//        }
-//    }
-//
-//    private fun onChangeState(value: String) {
-//        _formUiState.update {
-//            it.copy(state = value)
-//        }
-//    }
-//
-//    private fun onChangeCountry(value: String) {
-//        _formUiState.update {
-//            it.copy(country = value)
-//        }
-//    }
-//
-//    private fun onChangeBirthDate(value: String) {
-//        _formUiState.update {
-//            it.copy(dateOfBirth = value)
-//        }
-//    }
-//
-//    private fun onChangeGender(value: String) {
-//        _formUiState.update {
-//            it.copy(gender = value)
-//        }
-//    }
-//
-//    private fun onChangeInterest(value: String) {
-//        _formUiState.update {
-//            it.copy(interestedIn = value)
-//        }
-//    }
-//
-//    private fun onAgreedPolicy(value: Boolean) {
-//        _formUiState.update {
-//            it.copy(isAgree = value)
-//        }
-//    }
+
+
+    private fun onChangeEmail(value: String) {
+        _formUiState.update { state ->
+            state.copy(
+                form = state.form.copy(
+                    email = state.form.email.onChange(
+                        newValue = value
+                    )
+                )
+            )
+        }
+    }
+
+    private fun onChangePassword(value: String) {
+        _formUiState.update { state ->
+            state.copy(
+                form = state.form.copy(
+                    password = state.form.password.onChange(
+                        newValue = value
+                    )
+                )
+            )
+        }
+    }
+
+    private fun onChangePostCode(value: String) {
+        _formUiState.update { state ->
+            state.copy(
+                form = state.form.copy(
+                    postCode = state.form.postCode.onChange(
+                        newValue = value
+                    )
+                )
+            )
+        }
+    }
+
+    private fun onChangeCity(value: CityApiEntity) {
+        _formUiState.update { state ->
+            state.copy(
+                form = state.form.copy(
+                    city = value
+                )
+            )
+        }
+    }
+
+    private fun onChangeState(value: StateApiEntity) {
+        _formUiState.update { state ->
+            state.copy(
+                form = state.form.copy(
+                    state = value
+                )
+            )
+        }
+    }
+
+    private fun onChangeCountry(value: CountryApiEntity) {
+        _formUiState.update { state ->
+            state.copy(
+                form = state.form.copy(
+                    country = value
+                )
+            )
+        }
+    }
+
+    private fun onChangeBirthDate(value: String) {
+        _formUiState.update { state ->
+            state.copy(
+                form = state.form.copy(
+                    dateOfBirth = state.form.dateOfBirth.onChange(
+                        newValue = value
+                    )
+                )
+            )
+        }
+    }
+
+    private fun onChangeGender(value: Gender) {
+        _formUiState.update { state ->
+            state.copy(
+                form = state.form.copy(
+                    gender = value
+                )
+            )
+        }
+    }
+
+    private fun onChangeInterest(value: Gender) {
+        _formUiState.update { state ->
+            state.copy(
+                form = state.form.copy(
+                    interestedIn = value
+                )
+            )
+        }
+    }
+
+    private fun onAgreedPolicy(value: Boolean) {
+        _formUiState.update { state ->
+            state.copy(
+                form = state.form.copy(
+                    isAgree = value
+                )
+            )
+        }
+    }
 
     private fun isLoading(value: Boolean) {
         _formUiState.update {

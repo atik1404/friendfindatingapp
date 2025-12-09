@@ -70,8 +70,9 @@ fun RegistrationScreen(
             NameSection(
                 modifier = modifier,
                 userName = state.form.username.value,
-                fullName = state.form.name,
+                fullName = state.form.name.value,
                 isInvalidUserName = !state.form.username.isValid,
+                isInvalidName = !state.form.name.isValid,
                 onUserNameChange = {
                     uiAction.invoke(UiAction.OnChangeUserName(it))
                 },

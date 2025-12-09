@@ -131,6 +131,7 @@
 
 
     <string name="error_invalid_username">Invalid username, input valid one</string>
+    <string name="error_invalid_name">Invalid name, input valid one</string>
     <string name="error_invalid_password">Password must be at least 8 characters</string>
     <string name="error_invalid_email">Invalid email address, input valid one</string>
     <string name="error_network_error">Network error, please check your internet connection</string>

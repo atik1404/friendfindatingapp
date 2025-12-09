@@ -21,6 +21,7 @@ fun NameSection(
     fullName: String,
     userName: String,
     isInvalidUserName: Boolean,
+    isInvalidName: Boolean,
     onFullNameChange: (String) -> Unit,
     onUserNameChange: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -48,6 +49,7 @@ fun NameSection(
 
         AppOutlineTextField(
             text = fullName,
+            error = if(isInvalidName) stringResource(Res.string.error_invalid_name) else null,
             modifier = modifier.weight(1f),
             title = stringResource(Res.string.label_full_name),
             placeholder = stringResource(Res.string.hint_full_name),
