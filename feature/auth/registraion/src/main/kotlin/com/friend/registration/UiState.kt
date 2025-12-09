@@ -7,16 +7,16 @@ import com.friend.entity.search.StateApiEntity
 
 data class FormData(
     val username: TextInput = TextInput(),
-    val name: String = "",
-    val email: String = "",
-    val password: String = "",
+    val name: TextInput = TextInput(),
+    val email: TextInput = TextInput(),
+    val password: TextInput = TextInput(),
     val gender: String = "",
     val interestedIn: String = "",
-    val dateOfBirth: String = "",
+    val dateOfBirth: TextInput = TextInput(),
     val country: String = "",
     val state: String = "",
     val city: String = "",
-    val postCode: String = "",
+    val postCode: TextInput = TextInput(),
     val isAgree: Boolean = false,
 ) {
     val isFormValid: Boolean

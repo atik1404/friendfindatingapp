@@ -7,11 +7,6 @@ import com.friend.domain.apiusecase.search.FetchCityApiUseCase
 import com.friend.domain.apiusecase.search.FetchCountriesUseCase
 import com.friend.domain.apiusecase.search.FetchStateApiUseCase
 import com.friend.domain.base.ApiResult
-import com.friend.domain.base.TextInput
-import com.friend.entity.search.CityApiEntity
-import com.friend.entity.search.CountryApiEntity
-import com.friend.entity.search.StateApiEntity
-import com.friend.ui.validator.isUsernameValid
 import com.friend.ui.validator.userNameValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -116,22 +111,22 @@ class RegistrationViewModel @Inject constructor(
 
             val current = _formUiState.value
 
-            if(!current.form.isFormValid){
+            if (!current.form.isFormValid) {
                 return@execute
             }
 
             val params = PostRegistrationApiUseCase.Params(
                 username = current.form.username.value,
-                password = current.form.password,
-                email = current.form.email,
-                name = current.form.name,
+                password = current.form.password.value,
+                email = current.form.email.value,
+                name = current.form.name.value,
                 gender = Gender.toValue(current.form.gender),
                 interestedIn = Gender.toValue(current.form.interestedIn),
-                birthdate = current.form.dateOfBirth,
-                birthdate2 = current.form.dateOfBirth,
+                birthdate = current.form.dateOfBirth.value,
+                birthdate2 = current.form.dateOfBirth.value,
                 country = current.form.country,
                 state = current.form.state,
-                zipCode = current.form.postCode,
+                zipCode = current.form.postCode.value,
                 city = current.form.city,
             )
 
@@ -156,12 +151,18 @@ class RegistrationViewModel @Inject constructor(
             )
         }
     }
-//
-//    private fun onChangeName(value: String) {
-//        _formUiState.update {
-//            it.copy(name = value)
-//        }
-//    }
+
+    private fun onChangeName(value: String) {
+        _formUiState.update { state ->
+            state.copy(
+                form = state.form.copy(
+                    name = state.form.name.onChange(
+                        newValue = value
+                    )
+                )
+            )
+        }
+    }
 //
 //    private fun onChangeEmail(value: String) {
 //        _formUiState.update {
