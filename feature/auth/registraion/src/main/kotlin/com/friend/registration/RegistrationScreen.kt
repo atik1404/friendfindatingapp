@@ -35,7 +35,6 @@ import com.friend.ui.components.AppCheckbox
 import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.preview.LightPreview
-import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,41 +70,67 @@ fun RegistrationScreen(
                 modifier = modifier,
                 userName = state.form.username.value,
                 fullName = state.form.name.value,
-                isInvalidUserName = !state.form.username.isValid,
-                isInvalidName = !state.form.name.isValid,
+                isValidUsername = !state.form.username.isValid,
+                isValidName = !state.form.name.isValid,
                 onUserNameChange = {
                     uiAction.invoke(UiAction.OnChangeUserName(it))
                 },
                 onFullNameChange = {
-
+                    uiAction.invoke(UiAction.OnChangeName(it))
                 }
             )
 
-            Spacer(modifier = Modifier.height(SpacingToken.medium))
+            Spacer(modifier = modifier.height(SpacingToken.medium))
 
-            EmailSection(modifier = modifier)
+            EmailSection(
+                text = state.form.email.value,
+                isInvalid = !state.form.email.isValid,
+                onValueChange = {
+                    uiAction.invoke(UiAction.OnChangeEmail(it))
+                },
+                modifier = modifier,
+            )
 
-            Spacer(modifier = Modifier.height(SpacingToken.medium))
+            Spacer(modifier = modifier.height(SpacingToken.medium))
 
-            PasswordSection(modifier = modifier)
+            PasswordSection(
+                text = state.form.password.value,
+                isInvalid = !state.form.password.isValid,
+                onValueChange = {
+                    uiAction.invoke(UiAction.OnChangeEmail(it))
+                },
+                modifier = modifier
+            )
 
-            Spacer(modifier = Modifier.height(SpacingToken.medium))
+            Spacer(modifier = modifier.height(SpacingToken.medium))
 
-            GenderSelection(modifier = modifier)
+            GenderSelection(
+                modifier = modifier,
+                selectedGender = state.form.gender.name,
+                onSelected = {
+                    uiAction.invoke(UiAction.SelectGender(it))
+                }
+            )
 
-            Spacer(modifier = Modifier.height(SpacingToken.medium))
+            Spacer(modifier = modifier.height(SpacingToken.medium))
 
-            InterestedInSelection(modifier = modifier)
+            InterestedInSelection(
+                modifier = modifier,
+                selectedGender = state.form.interestedIn.name,
+                onSelected = {
+                    uiAction.invoke(UiAction.SelectInterestedIn(it))
+                }
+            )
 
-            Spacer(modifier = Modifier.height(SpacingToken.medium))
+            Spacer(modifier = modifier.height(SpacingToken.medium))
 
             BirthDateSelection(modifier = modifier)
 
-            Spacer(modifier = Modifier.height(SpacingToken.medium))
+            Spacer(modifier = modifier.height(SpacingToken.medium))
 
             AddressSection(modifier = modifier)
 
-            Spacer(modifier = Modifier.height(SpacingToken.medium))
+            Spacer(modifier = modifier.height(SpacingToken.medium))
 
             var checked by rememberSaveable { mutableStateOf(false) }
 

@@ -6,49 +6,60 @@ import androidx.compose.material.icons.rounded.Female
 import androidx.compose.material.icons.rounded.Male
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.friend.common.constant.Gender
 import com.friend.ui.common.AppDatePickerDialog
 import com.friend.ui.components.AppOutlineTextField
-import com.friend.designsystem.R as Res
 import com.friend.ui.components.SingleChoiceSegmentsWithIcons
+import com.friend.designsystem.R as Res
+
+val genders = listOf(
+    Pair(Icons.Rounded.Male, Gender.MALE.name),
+    Pair(Icons.Rounded.Female, Gender.FEMALE.name),
+)
 
 @Composable
 fun GenderSelection(
+    selectedGender: String,
+    onSelected: (Gender) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var segIndex by remember { mutableIntStateOf(0) }
+    val selectedIndex = genders.indexOfFirst { it.second == selectedGender }
+        .let { if (it == -1) 0 else it } // fallback to 0 if not found
+
     SingleChoiceSegmentsWithIcons(
         modifier = modifier,
         title = stringResource(Res.string.label_gender),
-        options = listOf(
-            Pair(Icons.Rounded.Male, "Male"),
-            Pair(Icons.Rounded.Female, "Female"),
-        ),
-        selectedIndex = segIndex.coerceIn(0, 1),
-        onSelected = { segIndex = it }
+        options = genders,
+        selectedIndex = selectedIndex,
+        onSelected = {
+            onSelected.invoke(Gender.toEnum(genders[it].second))
+        }
     )
 }
 
 @Composable
 fun InterestedInSelection(
+    selectedGender: String,
+    onSelected: (Gender) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var segIndex by remember { mutableIntStateOf(0) }
+    val selectedIndex = genders.indexOfFirst { it.second == selectedGender }
+        .let { if (it == -1) 0 else it } // fallback to 0 if not found
+
     SingleChoiceSegmentsWithIcons(
         modifier = modifier,
         title = stringResource(Res.string.label_interested_in),
-        options = listOf(
-            Pair(Icons.Rounded.Male, "Male"),
-            Pair(Icons.Rounded.Female, "Female"),
-        ),
-        selectedIndex = 1,
-        onSelected = { segIndex = it }
+        options = genders,
+        selectedIndex = selectedIndex,
+        onSelected = {
+            onSelected.invoke(Gender.toEnum(genders[it].second))
+        }
     )
 }
 

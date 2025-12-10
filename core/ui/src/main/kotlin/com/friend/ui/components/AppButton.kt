@@ -1,6 +1,5 @@
 package com.friend.ui.components
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -52,6 +51,7 @@ import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.ui.preview.LightDarkPreview
 import com.friend.designsystem.R as Res
+
 
 /* -------------------------------------------------------------------------- */
 /*  Shared internal content for all buttons                                   */

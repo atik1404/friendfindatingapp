@@ -11,14 +11,18 @@ import com.friend.ui.components.AppOutlineTextField
 
 @Composable
 fun EmailSection(
+    text: String,
+    isInvalid: Boolean = false,
+    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     AppOutlineTextField(
-        text = "",
+        text = text,
         modifier = modifier.fillMaxWidth(),
+        error = if (isInvalid) stringResource(Res.string.error_invalid_email) else null,
         title = stringResource(Res.string.label_email),
         placeholder = stringResource(Res.string.hint_email),
-        onValueChange = { },
+        onValueChange = onValueChange,
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Next,
         ),

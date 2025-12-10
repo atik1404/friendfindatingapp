@@ -11,14 +11,18 @@ import com.friend.ui.components.AppOutlineTextField
 
 @Composable
 fun PasswordSection(
+    text: String,
+    isInvalid: Boolean = false,
+    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     AppOutlineTextField(
-        text = "",
+        text = text,
+        error = if (isInvalid) stringResource(Res.string.error_invalid_password) else null,
         modifier = modifier.fillMaxWidth(),
         title = stringResource(Res.string.label_password),
         placeholder = stringResource(Res.string.hint_password),
-        onValueChange = { },
+        onValueChange = onValueChange,
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Next,
         ),

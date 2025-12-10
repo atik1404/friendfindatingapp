@@ -6,6 +6,8 @@ plugins {
 dependencies {
     implementation(libs.kotlin.coroutines)
     api(projects.core.model.entity)
+
+    implementation(libs.timber)
 }
 android {
     namespace = "com.friend.domain"

@@ -1,9 +1,12 @@
 package com.friend.registration
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.friend.ui.showToastMessage
 
 @Composable
 fun RegistrationRoute(
@@ -12,9 +15,19 @@ fun RegistrationRoute(
     viewModel: RegistrationViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEvent.collect { event ->
+            when (event) {
+                is UiEvent.ShowToastMessage ->
+                    context.showToastMessage(event.message)
+            }
+        }
+    }
 
     RegistrationScreen(
-        onBackButtonClicked = {},
+        onBackButtonClicked = onBackButtonClicked,
         state = state,
         uiAction = {
             viewModel.action(it)

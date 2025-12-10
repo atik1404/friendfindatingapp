@@ -3,7 +3,7 @@ package com.friend.forgotpassword
 import com.friend.common.base.BaseViewModel
 import com.friend.domain.apiusecase.credential.PostForgotPasswordApiUseCase
 import com.friend.domain.base.ApiResult
-import com.friend.ui.validator.isUsernameValid
+import com.friend.domain.validator.isUsernameValid
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

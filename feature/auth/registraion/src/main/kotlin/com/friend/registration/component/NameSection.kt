@@ -20,8 +20,8 @@ import com.friend.designsystem.R as Res
 fun NameSection(
     fullName: String,
     userName: String,
-    isInvalidUserName: Boolean,
-    isInvalidName: Boolean,
+    isValidUsername: Boolean,
+    isValidName: Boolean,
     onFullNameChange: (String) -> Unit,
     onUserNameChange: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -34,7 +34,7 @@ fun NameSection(
     ) {
         AppOutlineTextField(
             text = userName,
-            error = if(isInvalidUserName) stringResource(Res.string.error_invalid_username) else null,
+            error = if(isValidUsername) stringResource(Res.string.error_invalid_username) else null,
             modifier = modifier.weight(1f),
             title = stringResource(Res.string.label_username),
             placeholder = stringResource(Res.string.hint_user_name),
@@ -49,7 +49,7 @@ fun NameSection(
 
         AppOutlineTextField(
             text = fullName,
-            error = if(isInvalidName) stringResource(Res.string.error_invalid_name) else null,
+            error = if(isValidName) stringResource(Res.string.error_invalid_name) else null,
             modifier = modifier.weight(1f),
             title = stringResource(Res.string.label_full_name),
             placeholder = stringResource(Res.string.hint_full_name),

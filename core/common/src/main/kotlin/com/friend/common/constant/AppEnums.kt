@@ -20,5 +20,13 @@ enum class Gender(val value: Int) {
                 "female" -> FEMALE.value // 0
                 else -> throw IllegalArgumentException("Unknown gender name: $name")
             }
+
+        // "Male" / "Female" -> 1 / 0
+        fun toEnum(name: String): Gender =
+            when (name.trim().lowercase()) {
+                "male" -> MALE
+                "female" -> FEMALE
+                else -> throw IllegalArgumentException("Unknown gender name: $name")
+            }
     }
 }
