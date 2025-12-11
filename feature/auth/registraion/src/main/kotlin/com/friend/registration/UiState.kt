@@ -29,6 +29,7 @@ data class UiState(
 
     // POST loading (submit button)
     val isSubmitting: Boolean = false,
+    val showDatePicker: Boolean = false,
 
     // GET loading (for full-screen loader)
     val isLoading: Boolean = false,
@@ -46,6 +47,7 @@ sealed interface UiEvent {
 sealed class UiAction {
     data class CheckPrivacyPolicy(val value: Boolean) : UiAction()
     data class SelectBirthDate(val value: String) : UiAction()
+    data class ShowDatePicker(val isVisible: Boolean) : UiAction()
     object FormValidation : UiAction()
     object FetchCountry : UiAction()
     data class FetchState(val country: String) : UiAction()

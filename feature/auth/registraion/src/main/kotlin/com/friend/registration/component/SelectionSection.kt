@@ -13,9 +13,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.friend.common.constant.Gender
+import com.friend.common.dateparser.DateTimeParser
+import com.friend.common.dateparser.DateTimePatterns
 import com.friend.ui.common.AppDatePickerDialog
 import com.friend.ui.components.AppOutlineTextField
 import com.friend.ui.components.SingleChoiceSegmentsWithIcons
+import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 val genders = listOf(
@@ -65,30 +68,32 @@ fun InterestedInSelection(
 
 @Composable
 fun BirthDateSelection(
+    selectedDate: String,
+    onSelected: (String) -> Unit,
+    showDatePicker: Boolean,
+    setShowDatePicker: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var dateOfBirth by rememberSaveable { mutableStateOf("") }
-    var showDatePicker by remember { mutableStateOf(false) }
     AppOutlineTextField(
-        text = dateOfBirth,
-        modifier = Modifier.fillMaxWidth(),
+        text = DateTimeParser.parseToPattern(selectedDate, DateTimePatterns.DMY_TEXT),
+        modifier = modifier.fillMaxWidth(),
         title = stringResource(Res.string.label_date_of_birth),
         placeholder = stringResource(Res.string.hint_dob),
-        onValueChange = { dateOfBirth = it },
+        onValueChange = onSelected,
         isReadOnly = true,
         onClickListener = {
-            showDatePicker = true
+            setShowDatePicker(true)
         }
     )
 
     if (showDatePicker) {
         AppDatePickerDialog(
             onDismissRequest = {
-                showDatePicker = false
+                setShowDatePicker(false)
             },
             onConfirm = {
-                dateOfBirth = it
-                showDatePicker = false
+                onSelected.invoke(it)
+                setShowDatePicker(false)
             }
         )
     }

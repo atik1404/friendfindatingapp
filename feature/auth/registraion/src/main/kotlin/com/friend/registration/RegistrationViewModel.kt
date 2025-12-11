@@ -54,6 +54,7 @@ class RegistrationViewModel @Inject constructor(
             is UiAction.SelectGender -> onChangeGender(it.value)
             is UiAction.SelectInterestedIn -> onChangeInterest(it.value)
             is UiAction.CheckPrivacyPolicy -> onAgreedPolicy(it.value)
+            is UiAction.ShowDatePicker -> onShowDatePicker(it.isVisible)
         }
     }
 
@@ -170,6 +171,14 @@ class RegistrationViewModel @Inject constructor(
     private fun onChangeInterest(value: Gender) = updateForm { it.copy(interestedIn = value) }
     private fun onAgreedPolicy(value: Boolean) = updateForm { it.copy(isAgree = value) }
 
+    private fun onShowDatePicker(value: Boolean) {
+        execute {
+            _formUiState.update { state ->
+                state.copy(showDatePicker = value)
+            }
+        }
+    }
+
 
     private fun setLoading(value: Boolean) {
         _formUiState.update { it.copy(isLoading = value) }
@@ -179,21 +188,68 @@ class RegistrationViewModel @Inject constructor(
     private inline fun updateForm(transform: (FormData) -> FormData) {
         _formUiState.update { state -> state.copy(form = transform(state.form)) }
     }
+
     private fun validation() {
         execute {
             ioError.collect { error ->
-                when (error)  {
-                    RegistrationIoResult.InvalidName -> updateForm { it.copy(name = it.name.copy(isValid = false)) }
-                    RegistrationIoResult.InvalidUsername -> updateForm { it.copy(username = it.username.copy(isValid = false)) }
-                    RegistrationIoResult.InvalidEmail -> updateForm { it.copy(email = it.email.copy(isValid = false)) }
-                    RegistrationIoResult.InvalidPassword -> updateForm { it.copy(password = it.password.copy(isValid = false)) }
+                when (error) {
+                    RegistrationIoResult.InvalidName -> updateForm {
+                        it.copy(
+                            name = it.name.copy(
+                                isValid = false
+                            )
+                        )
+                    }
+
+                    RegistrationIoResult.InvalidUsername -> updateForm {
+                        it.copy(
+                            username = it.username.copy(
+                                isValid = false
+                            )
+                        )
+                    }
+
+                    RegistrationIoResult.InvalidEmail -> updateForm {
+                        it.copy(
+                            email = it.email.copy(
+                                isValid = false
+                            )
+                        )
+                    }
+
+                    RegistrationIoResult.InvalidPassword -> updateForm {
+                        it.copy(
+                            password = it.password.copy(
+                                isValid = false
+                            )
+                        )
+                    }
+
                     RegistrationIoResult.InvalidGender -> _uiEvent.send(UiEvent.ShowToastMessage("Invalid Gender"))
-                    RegistrationIoResult.InvalidInterested -> _uiEvent.send(UiEvent.ShowToastMessage("Invalid interested in"))
-                    RegistrationIoResult.InvalidBirthDate -> updateForm { it.copy(dateOfBirth = it.dateOfBirth.copy(isValid = false)) }
+                    RegistrationIoResult.InvalidInterested -> _uiEvent.send(
+                        UiEvent.ShowToastMessage(
+                            "Invalid interested in"
+                        )
+                    )
+
+                    RegistrationIoResult.InvalidBirthDate -> updateForm {
+                        it.copy(
+                            dateOfBirth = it.dateOfBirth.copy(
+                                isValid = false
+                            )
+                        )
+                    }
+
                     RegistrationIoResult.InvalidCountry -> _uiEvent.send(UiEvent.ShowToastMessage("Invalid country"))
                     RegistrationIoResult.InvalidState -> _uiEvent.send(UiEvent.ShowToastMessage("Invalid state"))
                     RegistrationIoResult.InvalidCity -> _uiEvent.send(UiEvent.ShowToastMessage("Invalid city"))
-                    RegistrationIoResult.InvalidPostCode -> updateForm { it.copy(postCode = it.postCode.copy(isValid = false)) }
+                    RegistrationIoResult.InvalidPostCode -> updateForm {
+                        it.copy(
+                            postCode = it.postCode.copy(
+                                isValid = false
+                            )
+                        )
+                    }
                 }
             }
         }

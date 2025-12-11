@@ -124,7 +124,17 @@ fun RegistrationScreen(
 
             Spacer(modifier = modifier.height(SpacingToken.medium))
 
-            BirthDateSelection(modifier = modifier)
+            BirthDateSelection(
+                modifier = modifier,
+                selectedDate = state.form.dateOfBirth.value,
+                onSelected = {
+                    uiAction.invoke(UiAction.SelectBirthDate(it))
+                },
+                showDatePicker = state.showDatePicker,
+                setShowDatePicker = {
+                    uiAction.invoke(UiAction.ShowDatePicker(it))
+                }
+            )
 
             Spacer(modifier = modifier.height(SpacingToken.medium))
 
