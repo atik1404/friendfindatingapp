@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import com.friend.common.constant.Gender
 import com.friend.common.dateparser.DateTimeParser
 import com.friend.common.dateparser.DateTimePatterns
+import com.friend.common.dateparser.DateTimeUtils
 import com.friend.ui.common.AppDatePickerDialog
 import com.friend.ui.components.AppOutlineTextField
 import com.friend.ui.components.SingleChoiceSegmentsWithIcons
@@ -75,7 +76,7 @@ fun BirthDateSelection(
     modifier: Modifier = Modifier
 ) {
     AppOutlineTextField(
-        text = DateTimeParser.parseToPattern(selectedDate, DateTimePatterns.DMY_TEXT),
+        text = DateTimeUtils.parseToPattern(selectedDate, DateTimePatterns.DMY_TEXT),
         modifier = modifier.fillMaxWidth(),
         title = stringResource(Res.string.label_date_of_birth),
         placeholder = stringResource(Res.string.hint_dob),

@@ -99,30 +99,58 @@ object DateTimePatterns {
     /** 2025-12-05T14:30:45.123+06:00 */
     const val ISO_YMD_THMS_MILLIS_OFFSET_XXX = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
 
-    val inputFormatters = listOf(
+
+    // ... your existing const val patterns ...
+
+    // Date + time (no offset)
+    val dateTimeFormatters = listOf(
+        DateTimeFormatter.ofPattern(SQL_YMD_HMS),
+        DateTimeFormatter.ofPattern(SQL_YMD_HM),
+
+        DateTimeFormatter.ofPattern(DMY_DASH_HMS),
+        DateTimeFormatter.ofPattern(DMY_DASH_HM),
+
+        DateTimeFormatter.ofPattern(DMY_SLASH_HMS),
+        DateTimeFormatter.ofPattern(DMY_SLASH_HM),
+
+        DateTimeFormatter.ofPattern(DMY_TEXT_HMS),
+        DateTimeFormatter.ofPattern(DMY_TEXT_HM),
+
+        DateTimeFormatter.ofPattern(MDY_TEXT_COMMA_HMS),
+        DateTimeFormatter.ofPattern(MDY_TEXT_COMMA_HM),
+    )
+
+    // Date-only
+    val dateOnlyFormatters = listOf(
+        DateTimeFormatter.ofPattern(SQL_YMD),
+        DateTimeFormatter.ofPattern(DMY_DASH),
+        DateTimeFormatter.ofPattern(DMY_SLASH),
+        DateTimeFormatter.ofPattern(DMY_TEXT),
+        DateTimeFormatter.ofPattern(MDY_TEXT_COMMA),
+    )
+
+    // Time-only
+    val timeOnlyFormatters = listOf(
+        DateTimeFormatter.ofPattern(TIME_24_HMS),
+        DateTimeFormatter.ofPattern(TIME_24_HM),
+        DateTimeFormatter.ofPattern(TIME_12_HMS_AMPM),
+        DateTimeFormatter.ofPattern(TIME_12_HM_AMPM),
+    )
+
+    // Offset / ISO-like
+    val offsetOrIsoFormatters = listOf(
         DateTimeFormatter.ISO_INSTANT,
         DateTimeFormatter.ISO_OFFSET_DATE_TIME,
-
-        DateTimeFormatter.ofPattern(DateTimePatterns.SQL_YMD_HMS_OFFSET_Z),
-        DateTimeFormatter.ofPattern(DateTimePatterns.SQL_YMD_HMS_OFFSET_XXX),
-
-        DateTimeFormatter.ofPattern(DateTimePatterns.SQL_YMD_HMS),
-        DateTimeFormatter.ofPattern(DateTimePatterns.SQL_YMD_HM),
-
-        DateTimeFormatter.ofPattern(DateTimePatterns.DMY_DASH_HMS),
-        DateTimeFormatter.ofPattern(DateTimePatterns.DMY_DASH_HM),
-
-        DateTimeFormatter.ofPattern(DateTimePatterns.DMY_SLASH_HMS),
-        DateTimeFormatter.ofPattern(DateTimePatterns.DMY_SLASH_HM),
-
-        DateTimeFormatter.ofPattern(DateTimePatterns.DMY_TEXT_HMS),
-        DateTimeFormatter.ofPattern(DateTimePatterns.DMY_TEXT_HM),
-        DateTimeFormatter.ofPattern(DateTimePatterns.DMY_TEXT),
-
-        DateTimeFormatter.ofPattern(DateTimePatterns.MDY_TEXT_COMMA_HM),
-        DateTimeFormatter.ofPattern(DateTimePatterns.MDY_TEXT_COMMA)
+        DateTimeFormatter.ofPattern(SQL_YMD_HMS_OFFSET_Z),
+        DateTimeFormatter.ofPattern(SQL_YMD_HMS_OFFSET_XXX),
+        DateTimeFormatter.ofPattern(ISO_YMD_THMS_MILLIS_OFFSET_XXX),
+        DateTimeFormatter.ofPattern(ISO_YMD_THMS_MILLIS_Z),
+        DateTimeFormatter.ofPattern(ISO_YMD_THMS_MILLIS),
+        DateTimeFormatter.ofPattern(ISO_YMD_THMS),
     )
+
+    // If you still want a single list:
+    val inputFormatters: List<DateTimeFormatter> =
+        offsetOrIsoFormatters + dateTimeFormatters + dateOnlyFormatters + timeOnlyFormatters
+
 }
-
-
-

@@ -2,19 +2,147 @@ package com.friend.common.dateparser
 
 import timber.log.Timber
 import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.OffsetDateTime
 import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-fun convertMillisToDate(millis: Long, dateFormat: String): String {
-    val formatter = DateTimeFormatter.ofPattern(dateFormat)
-        .withZone(ZoneId.systemDefault())
-    return formatter.format(Instant.ofEpochMilli(millis))
-}
+object DateTimeUtils {
 
-object DateTimeParser {
+    // -------------------------
+    // Current device date & time
+    // -------------------------
+
+    /** Current device date-time as LocalDateTime (no zone attached) */
+    fun nowLocalDateTime(): LocalDateTime =
+        LocalDateTime.now()
+
+    /** Current device date-time with zone info */
+    fun nowDeviceZoned(zoneId: ZoneId = ZoneId.systemDefault()): ZonedDateTime =
+        ZonedDateTime.now(zoneId)
+
+    /** Current UTC date-time */
+    fun nowUtc(): ZonedDateTime =
+        ZonedDateTime.now(ZoneOffset.UTC)
+
+
+    // -------------------------
+    // Local <-> UTC conversion
+    // -------------------------
+
+    /**
+     * Convert a local date-time (in [zoneId]) to UTC time.
+     */
+    fun localToUtc(
+        localDateTime: LocalDateTime,
+        zoneId: ZoneId = ZoneId.systemDefault()
+    ): ZonedDateTime {
+        return localDateTime
+            .atZone(zoneId)                // local time with device zone
+            .withZoneSameInstant(ZoneOffset.UTC) // same instant in UTC
+    }
+
+    /**
+     * Convert a UTC date-time to local time in [zoneId].
+     *
+     * @param utcDateTime a date-time that should be interpreted as UTC
+     */
+    fun utcToLocal(
+        utcDateTime: LocalDateTime,
+        zoneId: ZoneId = ZoneId.systemDefault()
+    ): ZonedDateTime {
+        return utcDateTime
+            .atZone(ZoneOffset.UTC)        // treat as UTC
+            .withZoneSameInstant(zoneId)   // convert to device/local zone
+    }
+
+    /**
+     * Overload using Instant -> local.
+     */
+    fun utcInstantToLocal(
+        instant: Instant,
+        zoneId: ZoneId = ZoneId.systemDefault()
+    ): ZonedDateTime {
+        return instant.atZone(zoneId)
+    }
+
+
+    // -------------------------
+    // Add / subtract days
+    // -------------------------
+
+    /** Add [days] to a LocalDateTime */
+    fun addDays(
+        dateTime: LocalDateTime,
+        days: Long
+    ): LocalDateTime = dateTime.plusDays(days)
+
+    /** Subtract [days] from a LocalDateTime */
+    fun subtractDays(
+        dateTime: LocalDateTime,
+        days: Long
+    ): LocalDateTime = dateTime.minusDays(days)
+
+    /** Add [days] to a LocalDate */
+    fun addDays(
+        date: LocalDate,
+        days: Long
+    ): LocalDate = date.plusDays(days)
+
+    /** Subtract [days] from a LocalDate */
+    fun subtractDays(
+        date: LocalDate,
+        days: Long
+    ): LocalDate = date.minusDays(days)
+
+
+    // -------------------------
+    // String helpers (optional)
+    // -------------------------
+
+    /**
+     * Convert a **local** time string (in [inputPattern]) to **UTC string** in [outputPattern].
+     */
+    fun localStringToUtcString(
+        rawLocal: String,
+        inputPattern: String,
+        outputPattern: String,
+        zoneId: ZoneId = ZoneId.systemDefault(),
+        locale: Locale = Locale.getDefault()
+    ): String {
+        val inFormatter = DateTimeFormatter.ofPattern(inputPattern, locale)
+        val outFormatter = DateTimeFormatter.ofPattern(outputPattern, locale)
+
+        val local = LocalDateTime.parse(rawLocal, inFormatter)
+        val utcZoned = localToUtc(local, zoneId)
+
+        return utcZoned.format(outFormatter)
+    }
+
+    /**
+     * Convert a **UTC** time string (in [inputPattern]) to **local string** in [outputPattern].
+     */
+    fun utcStringToLocalString(
+        rawUtc: String,
+        inputPattern: String,
+        outputPattern: String,
+        zoneId: ZoneId = ZoneId.systemDefault(),
+        locale: Locale = Locale.getDefault()
+    ): String {
+        val inFormatter = DateTimeFormatter.ofPattern(inputPattern, locale)
+        val outFormatter = DateTimeFormatter.ofPattern(outputPattern, locale)
+
+        val utc = LocalDateTime.parse(rawUtc, inFormatter)
+        val localZoned = utcToLocal(utc, zoneId)
+
+        return localZoned.format(outFormatter)
+    }
+
     /**
      * Try to parse any supported date-time string and format it to [outputPattern].
      *
@@ -22,7 +150,6 @@ object DateTimeParser {
      * @param outputPattern Target output pattern (e.g. "dd MMM yyyy, hh:mm a")
      * @param zoneId        Zone used when converting Instant/Offset types to local
      * @param locale        Locale for month names etc.
-     *
      * @return Formatted date string if parsing succeeds, otherwise original [raw].
      */
     fun parseToPattern(
@@ -61,23 +188,46 @@ object DateTimeParser {
         zoneId: ZoneId
     ): LocalDateTime? {
         return try {
-            // Some formatters may include zone/offset, others not.
-            return when {
+            when {
+                // ISO instant
                 formatter == DateTimeFormatter.ISO_INSTANT -> {
                     Instant.parse(raw).atZone(zoneId).toLocalDateTime()
                 }
 
+                // ISO offset
                 formatter == DateTimeFormatter.ISO_OFFSET_DATE_TIME -> {
-                    OffsetDateTime.parse(raw, formatter).atZoneSameInstant(zoneId).toLocalDateTime()
+                    OffsetDateTime.parse(raw, formatter)
+                        .atZoneSameInstant(zoneId)
+                        .toLocalDateTime()
                 }
 
-                raw.contains('+') || raw.endsWith("Z", ignoreCase = true) -> {
-                    // crude guess: treat as offset date-time
-                    OffsetDateTime.parse(raw, formatter).atZoneSameInstant(zoneId).toLocalDateTime()
+                // Our "offset" style patterns (with +… or Z)
+                formatter in DateTimePatterns.offsetOrIsoFormatters &&
+                        (raw.contains('+') || raw.endsWith("Z", ignoreCase = true)) -> {
+                    OffsetDateTime.parse(raw, formatter)
+                        .atZoneSameInstant(zoneId)
+                        .toLocalDateTime()
+                }
+
+                // Date + time (no offset)
+                formatter in DateTimePatterns.dateTimeFormatters -> {
+                    LocalDateTime.parse(raw, formatter)
+                }
+
+                // Date-only -> assume start of day
+                formatter in DateTimePatterns.dateOnlyFormatters -> {
+                    val date = LocalDate.parse(raw, formatter)
+                    date.atStartOfDay()
+                }
+
+                // Time-only -> attach to "today" (or any default date)
+                formatter in DateTimePatterns.timeOnlyFormatters -> {
+                    val time = LocalTime.parse(raw, formatter)
+                    LocalDate.now(zoneId).atTime(time)
                 }
 
                 else -> {
-                    // No zone info -> plain LocalDateTime
+                    // Fallback: try as LocalDateTime
                     LocalDateTime.parse(raw, formatter)
                 }
             }
