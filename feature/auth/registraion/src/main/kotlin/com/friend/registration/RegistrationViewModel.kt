@@ -57,7 +57,7 @@ class RegistrationViewModel @Inject constructor(
     }
 
     init {
-        validation()
+        bindIoError()
     }
 
     private fun fetchCountries() {
@@ -133,7 +133,6 @@ class RegistrationViewModel @Inject constructor(
                 gender = current.form.gender.value,
                 interestedIn = current.form.interestedIn.value,
                 birthdate = current.form.dateOfBirth.value,
-                birthdate2 = current.form.dateOfBirth.value,
                 country = current.form.country?.value ?: "",
                 state = current.form.state?.value ?: "",
                 city = current.form.city?.value ?: "",
@@ -142,8 +141,8 @@ class RegistrationViewModel @Inject constructor(
             postRegistrationApiUseCase.execute(params).collect { result ->
                 when (result) {
                     is ApiResult.Error -> _uiEvent.send(UiEvent.ShowToastMessage(result.message))
-                    is ApiResult.Loading -> setLoading(result.loading)
-                    is ApiResult.Success -> {}
+                    is ApiResult.Loading -> _formUiState.update { it.copy(isSubmitting = result.loading) }
+                    is ApiResult.Success -> _uiEvent.send(UiEvent.ShowToastMessage(result.data.message))
                 }
             }
         }
@@ -174,6 +173,7 @@ class RegistrationViewModel @Inject constructor(
         updateForm { it.copy(state = value, city = null) }
         fetchCities()
     }
+
     private fun onChangeCountry(value: CountryApiEntity) {
         updateForm { it.copy(country = value, state = null, city = null) }
         fetchStates()
@@ -204,7 +204,7 @@ class RegistrationViewModel @Inject constructor(
         _formUiState.update { state -> state.copy(form = transform(state.form)) }
     }
 
-    private fun validation() {
+    private fun bindIoError() {
         execute {
             ioError.collect { error ->
                 when (error) {
@@ -247,13 +247,11 @@ class RegistrationViewModel @Inject constructor(
                         )
                     )
 
-                    RegistrationIoResult.InvalidBirthDate -> updateForm {
-                        it.copy(
-                            dateOfBirth = it.dateOfBirth.copy(
-                                isValid = false
-                            )
+                    RegistrationIoResult.InvalidBirthDate -> _uiEvent.send(
+                        UiEvent.ShowToastMessage(
+                            "Invalid birthdate, select a date"
                         )
-                    }
+                    )
 
                     RegistrationIoResult.InvalidCountry -> _uiEvent.send(UiEvent.ShowToastMessage("Invalid country"))
                     RegistrationIoResult.InvalidState -> _uiEvent.send(UiEvent.ShowToastMessage("Invalid state"))

@@ -66,10 +66,8 @@ fun RegistrationScreen(
 
             NameSection(
                 modifier = modifier,
-                userName = state.form.username.value,
-                fullName = state.form.name.value,
-                isValidUsername = !state.form.username.isValid,
-                isValidName = !state.form.name.isValid,
+                userName = state.form.username,
+                fullName = state.form.name,
                 onUserNameChange = {
                     uiAction.invoke(UiAction.OnChangeUserName(it))
                 },
@@ -95,7 +93,7 @@ fun RegistrationScreen(
                 text = state.form.password.value,
                 isInvalid = !state.form.password.isValid,
                 onValueChange = {
-                    uiAction.invoke(UiAction.OnChangeEmail(it))
+                    uiAction.invoke(UiAction.OnChangePassword(it))
                 },
                 modifier = modifier
             )
@@ -138,7 +136,7 @@ fun RegistrationScreen(
 
             AddressSection(
                 modifier = modifier,
-                postCode = state.form.postCode.value,
+                postCode = state.form.postCode,
                 selectedCountry = state.form.country?.value ?: "",
                 selectedState = state.form.state?.value ?: "",
                 selectedCity = state.form.city?.value ?: "",
@@ -175,6 +173,7 @@ fun RegistrationScreen(
                 modifier = modifier.fillMaxWidth(),
                 enabled = state.form.isAgree,
                 text = stringResource(Res.string.action_sign_up),
+                isLoading = state.isSubmitting,
                 onClick = {
                     uiAction.invoke(UiAction.FormValidation)
                 },

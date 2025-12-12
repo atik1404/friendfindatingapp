@@ -30,7 +30,7 @@ class PostRegistrationApiUseCase @Inject constructor(
         val gender: Int = -1,
         val interestedIn: Int = -1,
         val birthdate: String,
-        val birthdate2: String,
+        val birthdate2: String = birthdate,
         val country: String,
         val state: String,
         val zipCode: String,

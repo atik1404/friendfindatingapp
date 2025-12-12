@@ -11,10 +11,10 @@ import com.friend.ui.components.AppOutlineTextField
 
 @Composable
 fun EmailSection(
+    modifier: Modifier = Modifier,
     text: String,
     isInvalid: Boolean = false,
     onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     AppOutlineTextField(
         text = text,

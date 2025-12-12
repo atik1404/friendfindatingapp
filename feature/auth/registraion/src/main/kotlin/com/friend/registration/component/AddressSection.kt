@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.friend.designsystem.spacing.SpacingToken
+import com.friend.domain.base.TextInput
 import com.friend.entity.search.CityApiEntity
 import com.friend.entity.search.CountryApiEntity
 import com.friend.entity.search.StateApiEntity
@@ -20,7 +21,7 @@ import com.friend.designsystem.R as Res
 
 @Composable
 fun AddressSection(
-    postCode: String,
+    postCode: TextInput,
     selectedCountry: String,
     selectedState: String,
     selectedCity: String,
@@ -83,7 +84,8 @@ fun AddressSection(
             Spacer(modifier = modifier.width(SpacingToken.medium))
 
             AppOutlineTextField(
-                text = postCode,
+                text = postCode.value,
+                error = if (postCode.isDirty) stringResource(Res.string.error_invalid_post_code) else null,
                 modifier = modifier.weight(1f),
                 title = stringResource(Res.string.label_zip_code),
                 placeholder = stringResource(Res.string.hint_zip_code),

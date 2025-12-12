@@ -12,9 +12,9 @@ enum class FormStatus {
 data class TextInput(
     val value: String = "",
     val isValid: Boolean = true,
-    val isDirty: Boolean = false,
 ) {
     val hasError: Boolean get() = !isValid && isDirty
+    val isDirty = !isValid
 
     fun onChange(newValue: String): TextInput {
         return copy(value = newValue, isValid = true)
@@ -34,7 +34,6 @@ data class TextInput(
         return copy(
             value = newValue,
             isValid = valid,
-            isDirty = true
         )
     }
 
@@ -43,7 +42,6 @@ data class TextInput(
     ): TextInput {
         return copy(
             isValid = validator(value),
-            isDirty = true
         )
     }
 }

@@ -134,6 +134,10 @@
     <string name="error_invalid_name">Invalid name, input valid one</string>
     <string name="error_invalid_password">Password must be at least 8 characters</string>
     <string name="error_invalid_email">Invalid email address, input valid one</string>
+    <string name="error_invalid_post_code">Invalid post code, input valid one</string>
+    <string name="error_invalid_birth_date">Invalid birthdate, select a date</string>
+
+
     <string name="error_network_error">Network error, please check your internet connection</string>
     <string name="error_no_data_found">Currently no data found, please try again.</string>
 
