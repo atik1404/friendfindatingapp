@@ -8,35 +8,32 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.friend.designsystem.R as Res
 import com.friend.designsystem.spacing.SpacingToken
+import com.friend.entity.search.CityApiEntity
+import com.friend.entity.search.CountryApiEntity
+import com.friend.entity.search.StateApiEntity
 import com.friend.ui.components.AppOutlineTextField
 import com.friend.ui.components.AutoCompleteTextField
+import com.friend.designsystem.R as Res
 
 @Composable
 fun AddressSection(
+    postCode: String,
+    selectedCountry: String,
+    selectedState: String,
+    selectedCity: String,
+    countries: List<CountryApiEntity>,
+    states: List<StateApiEntity>,
+    cities: List<CityApiEntity>,
+    onPostCodeChange: (String) -> Unit,
+    onCountryChange: (CountryApiEntity) -> Unit,
+    onStateChange: (StateApiEntity) -> Unit,
+    onCityChange: (CityApiEntity) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var zipCode by rememberSaveable { mutableStateOf("") }
-    var text by remember { mutableStateOf("") }
 
-    val cities = listOf(
-        "Dhaka",
-        "Chattogram",
-        "Rajshahi",
-        "Khulna",
-        "Sylhet",
-        "Barishal",
-        "Rangpur",
-        "Mymensingh"
-    )
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
@@ -45,23 +42,27 @@ fun AddressSection(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             AutoCompleteTextField(
-                allOptions = cities,
+                allOptions = countries,
                 modifier = modifier.weight(1f),
                 label = stringResource(Res.string.label_country),
                 placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { text = it },
-                value = text
+                value = selectedCountry,
+                onOptionSelected = {
+                    onCountryChange.invoke(it)
+                }
             )
 
             Spacer(modifier = modifier.width(SpacingToken.medium))
 
             AutoCompleteTextField(
-                allOptions = cities,
+                allOptions = states,
                 modifier = modifier.weight(1f),
                 label = stringResource(Res.string.label_state),
                 placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { text = it },
-                value = text
+                value = selectedState,
+                onOptionSelected = {
+                    onStateChange.invoke(it)
+                }
             )
         }
 
@@ -73,18 +74,20 @@ fun AddressSection(
                 modifier = modifier.weight(1f),
                 label = stringResource(Res.string.label_city),
                 placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { text = it },
-                value = text
+                onOptionSelected = {
+                    onCityChange.invoke(it)
+                },
+                value = selectedCity
             )
 
             Spacer(modifier = modifier.width(SpacingToken.medium))
 
             AppOutlineTextField(
-                text = zipCode,
+                text = postCode,
                 modifier = modifier.weight(1f),
                 title = stringResource(Res.string.label_zip_code),
                 placeholder = stringResource(Res.string.hint_zip_code),
-                onValueChange = { zipCode = it },
+                onValueChange = onPostCodeChange,
             )
         }
     }

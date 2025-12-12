@@ -10,7 +10,7 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.friend.common.dateparser.DateTimePatterns
-import com.friend.common.dateparser.convertMillisToDate
+import com.friend.common.dateparser.DateTimeUtils
 import java.util.Calendar
 import java.util.TimeZone
 
@@ -44,8 +44,12 @@ fun AppDatePickerDialog(
         confirmButton = {
             TextButton(
                 onClick = {
-                    onConfirm(convertMillisToDate(datePickerState.selectedDateMillis ?: 0L,
-                        DateTimePatterns.SQL_YMD))
+                    onConfirm(
+                        DateTimeUtils.convertMillisToDate(
+                            datePickerState.selectedDateMillis ?: 0L,
+                            DateTimePatterns.SQL_YMD
+                        )
+                    )
                 }
             ) { Text(confirmText) }
         },

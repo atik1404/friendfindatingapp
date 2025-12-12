@@ -80,8 +80,17 @@ fun BirthDateSelection(
         }
     )
 
+    val maxSelectableDates = DateTimeUtils.yearsAgoFromTodayUtcMillis(18)
+    val selectedDateTime = DateTimeUtils.parseToDateTime(selectedDate)
+
+    val selectedDateTimeInMillis = if(selectedDate.isNotEmpty())
+        DateTimeUtils.dateTimeToMillis(selectedDateTime)
+    else maxSelectableDates
+
     if (showDatePicker) {
         AppDatePickerDialog(
+            maxDateMillis = maxSelectableDates,
+            startSelectedDateMillis = selectedDateTimeInMillis,
             onDismissRequest = {
                 setShowDatePicker(false)
             },

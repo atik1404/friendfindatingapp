@@ -50,8 +50,6 @@ sealed class UiAction {
     data class ShowDatePicker(val isVisible: Boolean) : UiAction()
     object FormValidation : UiAction()
     object FetchCountry : UiAction()
-    data class FetchState(val country: String) : UiAction()
-    data class FetchCity(val country: String, val state: String) : UiAction()
     data class SelectGender(val value: Gender) : UiAction()
     data class SelectInterestedIn(val value: Gender) : UiAction()
     data class OnChangeUserName(val value: String) : UiAction()
@@ -62,4 +60,5 @@ sealed class UiAction {
     data class OnSelectState(val value: StateApiEntity) : UiAction()
     data class OnSelectCity(val value: CityApiEntity) : UiAction()
     data class OnChangePostCode(val value: String) : UiAction()
+    object ResetState : UiAction()
 }

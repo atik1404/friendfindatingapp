@@ -61,16 +61,6 @@ object DateTimeUtils {
             .withZoneSameInstant(zoneId)   // convert to device/local zone
     }
 
-    /**
-     * Overload using Instant -> local.
-     */
-    fun utcInstantToLocal(
-        instant: Instant,
-        zoneId: ZoneId = ZoneId.systemDefault()
-    ): ZonedDateTime {
-        return instant.atZone(zoneId)
-    }
-
 
     // -------------------------
     // Add / subtract days
@@ -150,6 +140,7 @@ object DateTimeUtils {
      * @param outputPattern Target output pattern (e.g. "dd MMM yyyy, hh:mm a")
      * @param zoneId        Zone used when converting Instant/Offset types to local
      * @param locale        Locale for month names etc.
+     *
      * @return Formatted date string if parsing succeeds, otherwise original [raw].
      */
     fun parseToPattern(
@@ -180,6 +171,33 @@ object DateTimeUtils {
 
         // 3) Fallback: give back original if nothing matched
         return raw
+    }
+
+    fun parseToDateTime(
+        raw: String,
+        zoneId: ZoneId = ZoneId.systemDefault()
+    ): LocalDateTime? {
+
+        // 1) Try strict ISO instant (e.g. 2025-12-05T08:12:34Z)
+        runCatching {
+            val instant = Instant.parse(raw)
+            return instant.atZone(zoneId).toLocalDateTime()
+        }
+
+        // 2) Try all known patterns
+        for (formatter in DateTimePatterns.inputFormatters) {
+            try {
+                val result = tryParseWithFormatter(raw, formatter, zoneId)
+                if (result != null) {
+                    return result
+                }
+            } catch (ex: Exception) {
+                Timber.e("Exception while parsing with $formatter: ${ex.message}")
+            }
+        }
+
+        // 3) Nothing matched
+        return null
     }
 
     private fun tryParseWithFormatter(
@@ -234,5 +252,35 @@ object DateTimeUtils {
         } catch (e: Exception) {
             null
         }
+    }
+
+    fun convertMillisToDate(millis: Long, dateFormat: String): String {
+        val formatter = DateTimeFormatter.ofPattern(dateFormat)
+            .withZone(ZoneId.systemDefault())
+        return formatter.format(Instant.ofEpochMilli(millis))
+    }
+
+    fun yearsAgoFromTodayUtcMillis(years: Long): Long {
+        val todayUtc = LocalDate.now(ZoneOffset.UTC)
+        val targetDate = todayUtc.minusYears(years)
+        return targetDate
+            .atStartOfDay(ZoneOffset.UTC)
+            .toInstant()
+            .toEpochMilli()
+    }
+
+    /**
+     * Convert a LocalDateTime to epoch millis in [zoneId].
+     */
+    fun dateTimeToMillis(
+        dateTime: LocalDateTime?,
+        zoneId: ZoneId = ZoneOffset.UTC
+    ): Long {
+        if(dateTime == null) return 0L
+
+        return dateTime
+            .atZone(zoneId)
+            .toInstant()
+            .toEpochMilli()
     }
 }

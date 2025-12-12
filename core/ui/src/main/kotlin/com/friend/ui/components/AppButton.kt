@@ -10,9 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Female
-import androidx.compose.material.icons.rounded.Male
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
@@ -56,7 +53,6 @@ import com.friend.designsystem.R as Res
 /* -------------------------------------------------------------------------- */
 /*  Shared internal content for all buttons                                   */
 /* -------------------------------------------------------------------------- */
-
 @Composable
 private fun ButtonContent(
     modifier: Modifier,
@@ -145,7 +141,7 @@ fun AppElevatedButton(
             debounced.invoke()
             keyboardController?.hide()
         },
-        modifier = modifier,
+        modifier = modifier.height(SpacingToken.huge),
         enabled = enabled && !isLoading,
         shape = shape,
         colors = colors,
@@ -190,7 +186,7 @@ fun AppOutlinedButton(
 
     OutlinedButton(
         onClick = debounced,
-        modifier = modifier,
+        modifier = modifier.height(SpacingToken.huge),
         enabled = enabled && !isLoading,
         shape = shape,
         colors = colors,
@@ -256,11 +252,11 @@ fun AppTextButton(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SingleChoiceSegmentsWithIcons(
+    modifier: Modifier = Modifier,
     title: String? = null,
     options: List<Pair<ImageVector, String>>,
     selectedIndex: Int = -1,
     onSelected: (Int) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
         title?.let {
@@ -379,14 +375,5 @@ fun AppIconButton(
 
 @Composable
 @LightDarkPreview
-fun LoginScreenPreview() {
-    SingleChoiceSegmentsWithIcons(
-        title = "Interested In*",
-        options = listOf(
-            Pair(Icons.Rounded.Male, "Male"),
-            Pair(Icons.Rounded.Female, "Female"),
-        ),
-        selectedIndex = 1,
-        onSelected = { }
-    )
+fun ComponentPreview() {
 }

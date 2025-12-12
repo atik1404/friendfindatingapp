@@ -329,16 +329,17 @@ fun AppOutlineTextField(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AutoCompleteTextField(
+fun <T>AutoCompleteTextField(
     modifier: Modifier = Modifier,
     label: String = "",
     placeholder: String = "",
-    allOptions: List<String>,
+    allOptions: List<T>,
     value: String,
-    onValueChange: (String) -> Unit,
-    onOptionSelected: (String) -> Unit = {},
+    onValueChange: (String) -> Unit = {},
+    onOptionSelected: (T) -> Unit = {},
     enabled: Boolean = true,
     isError: Boolean = false,
+    getOptionLabel: (T) -> String = { it.toString() },
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -390,10 +391,12 @@ fun AutoCompleteTextField(
                 onDismissRequest = { expanded = false },
             ) {
                 allOptions.forEach { option ->
+                    val labelText = getOptionLabel(option)
+
                     DropdownMenuItem(
-                        text = { Text(option) },
+                        text = { Text(labelText) },
                         onClick = {
-                            onValueChange(option)
+                            onValueChange(labelText)
                             onOptionSelected(option)
                             expanded = false
                         },

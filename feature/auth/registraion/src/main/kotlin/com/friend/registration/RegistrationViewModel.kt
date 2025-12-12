@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,9 +37,7 @@ class RegistrationViewModel @Inject constructor(
 
     val action: (UiAction) -> Unit = {
         when (it) {
-            is UiAction.FetchCity -> fetchCities()
             UiAction.FetchCountry -> fetchCountries()
-            is UiAction.FetchState -> fetchStates()
             UiAction.FormValidation -> performRegistration()
             is UiAction.OnChangeUserName -> onChangeUserName(it.value)
             is UiAction.OnChangeEmail -> onChangeEmail(it.value)
@@ -55,6 +52,7 @@ class RegistrationViewModel @Inject constructor(
             is UiAction.SelectInterestedIn -> onChangeInterest(it.value)
             is UiAction.CheckPrivacyPolicy -> onAgreedPolicy(it.value)
             is UiAction.ShowDatePicker -> onShowDatePicker(it.isVisible)
+            UiAction.ResetState -> _formUiState.value = UiState()
         }
     }
 
@@ -68,7 +66,11 @@ class RegistrationViewModel @Inject constructor(
                 when (result) {
                     is ApiResult.Error -> _uiEvent.send(UiEvent.ShowToastMessage(result.message))
                     is ApiResult.Loading -> setLoading(result.loading)
-                    is ApiResult.Success -> {}
+                    is ApiResult.Success -> {
+                        _formUiState.update {
+                            it.copy(countries = result.data)
+                        }
+                    }
                 }
             }
         }
@@ -82,7 +84,11 @@ class RegistrationViewModel @Inject constructor(
                 when (result) {
                     is ApiResult.Error -> _uiEvent.send(UiEvent.ShowToastMessage(result.message))
                     is ApiResult.Loading -> setLoading(result.loading)
-                    is ApiResult.Success -> {}
+                    is ApiResult.Success -> {
+                        _formUiState.update {
+                            it.copy(states = result.data)
+                        }
+                    }
                 }
             }
         }
@@ -104,7 +110,11 @@ class RegistrationViewModel @Inject constructor(
                     when (result) {
                         is ApiResult.Error -> _uiEvent.send(UiEvent.ShowToastMessage(result.message))
                         is ApiResult.Loading -> setLoading(result.loading)
-                        is ApiResult.Success -> {}
+                        is ApiResult.Success -> {
+                            _formUiState.update {
+                                it.copy(cities = result.data)
+                            }
+                        }
                     }
                 }
         }
@@ -160,8 +170,14 @@ class RegistrationViewModel @Inject constructor(
     }
 
     private fun onChangeCity(value: CityApiEntity) = updateForm { it.copy(city = value) }
-    private fun onChangeState(value: StateApiEntity) = updateForm { it.copy(state = value) }
-    private fun onChangeCountry(value: CountryApiEntity) = updateForm { it.copy(country = value) }
+    private fun onChangeState(value: StateApiEntity) {
+        updateForm { it.copy(state = value, city = null) }
+        fetchCities()
+    }
+    private fun onChangeCountry(value: CountryApiEntity) {
+        updateForm { it.copy(country = value, state = null, city = null) }
+        fetchStates()
+    }
 
     private fun onChangeBirthDate(value: String) = updateForm {
         it.copy(dateOfBirth = it.dateOfBirth.onChange(newValue = value))
@@ -178,7 +194,6 @@ class RegistrationViewModel @Inject constructor(
             }
         }
     }
-
 
     private fun setLoading(value: Boolean) {
         _formUiState.update { it.copy(isLoading = value) }

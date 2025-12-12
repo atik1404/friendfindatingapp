@@ -18,10 +18,12 @@ fun RegistrationRoute(
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
+        viewModel.action(UiAction.ResetState)
+        viewModel.action(UiAction.FetchCountry)
+
         viewModel.uiEvent.collect { event ->
             when (event) {
-                is UiEvent.ShowToastMessage ->
-                    context.showToastMessage(event.message)
+                is UiEvent.ShowToastMessage -> context.showToastMessage(event.message)
             }
         }
     }

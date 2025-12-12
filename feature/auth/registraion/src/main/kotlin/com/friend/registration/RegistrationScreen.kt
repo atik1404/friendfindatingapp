@@ -15,10 +15,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.friend.designsystem.spacing.SpacingToken
@@ -31,6 +27,7 @@ import com.friend.registration.component.InterestedInSelection
 import com.friend.registration.component.NameSection
 import com.friend.registration.component.PasswordSection
 import com.friend.ui.common.AppToolbar
+import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppCheckbox
 import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppScaffold
@@ -55,6 +52,7 @@ fun RegistrationScreen(
                 })
         }
     ) { padding ->
+
         Column(
             modifier = modifier
                 .fillMaxSize()              // from Scaffold
@@ -138,15 +136,36 @@ fun RegistrationScreen(
 
             Spacer(modifier = modifier.height(SpacingToken.medium))
 
-            AddressSection(modifier = modifier)
+            AddressSection(
+                modifier = modifier,
+                postCode = state.form.postCode.value,
+                selectedCountry = state.form.country?.value ?: "",
+                selectedState = state.form.state?.value ?: "",
+                selectedCity = state.form.city?.value ?: "",
+                countries = state.countries,
+                states = state.states,
+                cities = state.cities,
+                onPostCodeChange = {
+                    uiAction.invoke(UiAction.OnChangePostCode(it))
+                },
+                onCountryChange = {
+                    uiAction.invoke(UiAction.OnSelectCountry(it))
+                },
+                onStateChange = {
+                    uiAction.invoke(UiAction.OnSelectState(it))
+                },
+                onCityChange = {
+                    uiAction.invoke(UiAction.OnSelectCity(it))
+                }
+            )
 
             Spacer(modifier = modifier.height(SpacingToken.medium))
 
-            var checked by rememberSaveable { mutableStateOf(false) }
-
             AppCheckbox(
-                checked = checked,
-                onCheckedChange = { checked = it },
+                checked = state.form.isAgree,
+                onCheckedChange = {
+                    uiAction.invoke(UiAction.CheckPrivacyPolicy(it))
+                },
                 label = stringResource(Res.string.msg_agree_with_term_condition)
             )
 
@@ -154,13 +173,15 @@ fun RegistrationScreen(
 
             AppElevatedButton(
                 modifier = modifier.fillMaxWidth(),
-                enabled = checked,
+                enabled = state.form.isAgree,
                 text = stringResource(Res.string.action_sign_up),
                 onClick = {
                     uiAction.invoke(UiAction.FormValidation)
                 },
             )
         }
+        if (state.isLoading)
+            LoadingUi()
     }
 }
 
