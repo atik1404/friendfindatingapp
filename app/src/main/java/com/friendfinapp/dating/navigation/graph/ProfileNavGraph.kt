@@ -10,6 +10,7 @@ import com.friend.overview.ProfileOverviewRoute
 import com.friend.personalsetting.PersonalSettingScreen
 import com.friend.profile.ProfileScreen
 import com.friend.profilecompletion.ProfileCompletionScreen
+import com.friend.profilecompletion.ProfileCompletionScreenRoute
 import com.friend.reportabuse.ReportAbuseScreen
 import com.friendfinapp.dating.navigation.AuthScreens
 import com.friendfinapp.dating.navigation.ChatMessageScreens
@@ -57,7 +58,7 @@ object ProfileNavGraph {
             )
         }
         entry(ProfileScreens.ProfileCompletionNavScreen) {
-            ProfileCompletionScreen(
+            ProfileCompletionScreenRoute(
                 onBackButtonClicked = { backStack.removeLastOrNull() },
                 onContinueButtonClicked = {
                     backStack.clear()

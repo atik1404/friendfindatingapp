@@ -1,8 +1,6 @@
 package com.friend.profilecompletion
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -13,7 +11,6 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -29,13 +26,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
+import com.friend.profilecompletion.components.PersonalDetails
 import com.friend.ui.common.AppToolbar
 import com.friend.ui.components.AppChipMultiWithTitle
 import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppOutlineTextField
 import com.friend.ui.components.AppScaffold
-import com.friend.ui.components.AutoCompleteTextField
-import com.friend.ui.preview.LightDarkPreview
 import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
@@ -115,7 +111,8 @@ fun ProfileCompletionScreen(
                 ),
             )
 
-            val interests = listOf("Computer", "Music", "Nature", "Adventures", "Sports", "Movies", "Chat")
+            val interests =
+                listOf("Computer", "Music", "Nature", "Adventures", "Sports", "Movies", "Chat")
             var multi by remember { mutableStateOf(emptySet<Int>()) }
             Spacer(modifier = Modifier.height(SpacingToken.medium))
             AppChipMultiWithTitle(
@@ -131,131 +128,6 @@ fun ProfileCompletionScreen(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(Res.string.action_save),
                 onClick = onContinueButtonClicked,
-            )
-        }
-    }
-}
-
-@Composable
-private fun PersonalDetails() {
-    var selectedValue by rememberSaveable { mutableStateOf("") }
-
-    val items = listOf(
-        "Item1",
-        "Item2",
-        "Item3",
-        "Item4",
-        "Item5",
-        "Item6",
-        "Item7",
-        "Item8"
-    )
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            AutoCompleteTextField(
-                allOptions = items,
-                modifier = Modifier.weight(1f),
-                label = stringResource(Res.string.label_height),
-                placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { selectedValue = it },
-                value = selectedValue
-            )
-
-            Spacer(modifier = Modifier.width(SpacingToken.medium))
-
-            AutoCompleteTextField(
-                allOptions = items,
-                modifier = Modifier.weight(1f),
-                label = stringResource(Res.string.label_weight),
-                placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { selectedValue = it },
-                value = selectedValue
-            )
-        }
-
-        Spacer(Modifier.height(SpacingToken.medium))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            AutoCompleteTextField(
-                allOptions = items,
-                modifier = Modifier.weight(1f),
-                label = stringResource(Res.string.label_eyes),
-                placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { selectedValue = it },
-                value = selectedValue
-            )
-
-            Spacer(modifier = Modifier.width(SpacingToken.medium))
-
-            AutoCompleteTextField(
-                allOptions = items,
-                modifier = Modifier.weight(1f),
-                label = stringResource(Res.string.label_hair),
-                placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { selectedValue = it },
-                value = selectedValue
-            )
-        }
-
-        Spacer(Modifier.height(SpacingToken.medium))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            AutoCompleteTextField(
-                allOptions = items,
-                modifier = Modifier.weight(1f),
-                label = stringResource(Res.string.label_smoking),
-                placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { selectedValue = it },
-                value = selectedValue
-            )
-
-            Spacer(modifier = Modifier.width(SpacingToken.medium))
-
-            AutoCompleteTextField(
-                allOptions = items,
-                modifier = Modifier.weight(1f),
-                label = stringResource(Res.string.label_drinking),
-                placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { selectedValue = it },
-                value = selectedValue
-            )
-        }
-
-        Spacer(Modifier.height(SpacingToken.medium))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            AutoCompleteTextField(
-                allOptions = items,
-                modifier = Modifier.weight(1f),
-                label = stringResource(Res.string.label_body_type),
-                placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { selectedValue = it },
-                value = selectedValue
-            )
-
-            Spacer(modifier = Modifier.width(SpacingToken.medium))
-
-            AutoCompleteTextField(
-                allOptions = items,
-                modifier = Modifier.weight(1f),
-                label = stringResource(Res.string.label_looking_for),
-                placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { selectedValue = it },
-                value = selectedValue
             )
         }
     }
