@@ -1,11 +1,11 @@
 package com.friend.login
 
+import com.friend.domain.base.TextInput
+
 // UI state for the Login screen
 data class UiState(
-    val username: String = "",
-    val password: String = "",
-    val isUsernameValid: Boolean = true,
-    val isPasswordValid: Boolean = true,
+    val username: TextInput = TextInput(),
+    val password: TextInput = TextInput(),
     val isLoading: Boolean = false,
 )
 
@@ -14,9 +14,9 @@ sealed class UiEvent {
     object NavigateToHome : UiEvent()
 }
 
-// UI events from the Composable to ViewModel
 sealed class UiAction {
     data class UsernameChanged(val value: String) : UiAction()
     data class PasswordChanged(val value: String) : UiAction()
-    object FormValidator : UiAction()
+    object PerformLogin : UiAction()
+    object ResetState : UiAction()
 }

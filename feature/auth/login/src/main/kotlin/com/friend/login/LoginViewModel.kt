@@ -3,8 +3,7 @@ package com.friend.login
 import com.friend.common.base.BaseViewModel
 import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
 import com.friend.domain.base.ApiResult
-import com.friend.domain.validator.isPasswordValid
-import com.friend.domain.validator.isUsernameValid
+import com.friend.domain.validator.LoginIoResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,23 +17,32 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val postLoginApiUseCase: PostLoginApiUseCase
 ) : BaseViewModel() {
+    val ioError get() = postLoginApiUseCase.ioError.receiveAsFlow()
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private val _uiEffect = Channel<UiEvent>()
     val uiEffect = _uiEffect.receiveAsFlow()
 
+    init {
+        formValidation()
+    }
+
     val action: (UiAction) -> Unit = {
         when (it) {
             is UiAction.UsernameChanged -> onUserNameChanged(it.value)
             is UiAction.PasswordChanged -> onPasswordChanged(it.value)
-            UiAction.FormValidator -> formValidation()
+            UiAction.PerformLogin -> performLoginApi()
+            UiAction.ResetState -> _uiState.value = UiState()
         }
     }
 
     private fun performLoginApi() {
         val current = _uiState.value
-        val params = PostLoginApiUseCase.Params(current.username, current.password)
+        val params = PostLoginApiUseCase.Params(
+            current.username.value,
+            current.password.value
+        )
 
         execute {
             postLoginApiUseCase.execute(params).collect { result ->
@@ -59,14 +67,14 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun onUserNameChanged(value: String) {
-        _uiState.update {
-            it.copy(username = value, isUsernameValid = true)
+        _uiState.update { state ->
+            state.copy(username = state.username.onChange(value))
         }
     }
 
     private fun onPasswordChanged(value: String) {
-        _uiState.update {
-            it.copy(password = value, isPasswordValid = true)
+        _uiState.update { state ->
+            state.copy(password = state.password.onChange(value))
         }
     }
 
@@ -78,20 +86,26 @@ class LoginViewModel @Inject constructor(
 
     // Validate, update error flags, and only then call API if valid.
     private fun formValidation() {
-        val current = _uiState.value
-        val usernameValid = current.username.isUsernameValid()
-        val passwordValid = current.password.isPasswordValid()
-        val formValid = usernameValid && passwordValid
+        execute {
+            ioError.collect { error ->
+                when (error) {
+                    LoginIoResult.InvalidPassword -> _uiState.update { state ->
+                        state.copy(
+                            password = state.password.copy(
+                                isValid = false
+                            )
+                        )
+                    }
 
-        _uiState.update {
-            it.copy(
-                isUsernameValid = usernameValid,
-                isPasswordValid = passwordValid,
-            )
-        }
-
-        if (formValid) {
-            performLoginApi()
+                    LoginIoResult.InvalidUsername -> _uiState.update { state ->
+                        state.copy(
+                            username = state.username.copy(
+                                isValid = false
+                            )
+                        )
+                    }
+                }
+            }
         }
     }
 }

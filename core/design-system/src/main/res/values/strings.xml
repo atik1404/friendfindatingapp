@@ -132,7 +132,7 @@
 
     <string name="error_invalid_username">Invalid username, input valid one</string>
     <string name="error_invalid_name">Invalid name, input valid one</string>
-    <string name="error_invalid_password">Password must be at least 8 characters</string>
+    <string name="error_invalid_password">Password must be at least 10 characters</string>
     <string name="error_invalid_email">Invalid email address, input valid one</string>
     <string name="error_invalid_post_code">Invalid post code, input valid one</string>
     <string name="error_invalid_birth_date">Invalid birthdate, select a date</string>

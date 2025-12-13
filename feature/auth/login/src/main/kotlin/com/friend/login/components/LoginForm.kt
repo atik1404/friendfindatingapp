@@ -22,8 +22,7 @@ import com.friend.designsystem.spacing.appPadding
 import com.friend.designsystem.theme.strokeColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
-import com.friend.login.UiAction
-import com.friend.login.UiState
+import com.friend.domain.base.TextInput
 import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppOutlineTextField
 import com.friend.ui.components.AppTextButton
@@ -34,10 +33,14 @@ import com.friend.designsystem.R as Res
 @Composable
 fun LoginForm(
     modifier: Modifier = Modifier,
-    state: UiState,
-    onEvent: (UiAction) -> Unit,
+    username: TextInput,
+    password: TextInput,
+    isFormSubmitting: Boolean,
+    onUsernameChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
     onForgotPasswordClick: () -> Unit,
     onSignUpClick: () -> Unit,
+    onFormSubmit: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -51,13 +54,13 @@ fun LoginForm(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AppOutlineTextField(
-            text = state.username,
-            error = if (!state.isUsernameValid)
+            text = username.value,
+            error = if (username.isDirty)
                 stringResource(Res.string.error_invalid_username) else null,
             modifier = Modifier.fillMaxWidth(),
             title = stringResource(Res.string.label_username),
             placeholder = stringResource(Res.string.hint_user_name),
-            onValueChange = { onEvent(UiAction.UsernameChanged(it)) },
+            onValueChange = onUsernameChange,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next,
             ),
@@ -66,26 +69,26 @@ fun LoginForm(
         Spacer(Modifier.height(SpacingToken.medium))
 
         AppOutlineTextField(
-            text = state.password,
-            error = if (!state.isPasswordValid)
+            text = password.value,
+            error = if (password.isDirty)
                 stringResource(Res.string.error_invalid_password) else null,
             modifier = Modifier.fillMaxWidth(),
             title = stringResource(Res.string.label_password),
             placeholder = stringResource(Res.string.hint_password),
-            onValueChange = { onEvent(UiAction.PasswordChanged(it)) },
+            onValueChange = onPasswordChange,
             isPassword = true,
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
             ),
         )
 
-        Spacer(modifier = Modifier.height(SpacingToken.medium))
+        Spacer(modifier = Modifier.height(SpacingToken.extraLarge))
 
         AppElevatedButton(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(Res.string.action_login),
-            isLoading = state.isLoading,
-            onClick = { onEvent(UiAction.FormValidator) },
+            isLoading = isFormSubmitting,
+            onClick = onFormSubmit,
         )
 
         AppTextButton(

@@ -21,6 +21,7 @@ fun LoginRoute(
     val state by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
+        viewModel.action(UiAction.ResetState)
         viewModel.uiEffect.collect { effect ->
             when (effect) {
                 is UiEvent.ShowMessage ->

@@ -5,6 +5,11 @@ sealed class DataValidationResult {
     data class Failure<T>(val ioErrorResult: T) : DataValidationResult()
 }
 
+sealed interface LoginIoResult {
+    data object InvalidUsername : LoginIoResult
+    data object InvalidPassword : LoginIoResult
+}
+
 sealed interface RegistrationIoResult {
     data object InvalidUsername : RegistrationIoResult
     data object InvalidName : RegistrationIoResult

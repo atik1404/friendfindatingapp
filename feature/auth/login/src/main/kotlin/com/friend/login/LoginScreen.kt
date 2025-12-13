@@ -17,6 +17,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingOnly
+import com.friend.domain.base.TextInput
 import com.friend.login.components.BannerAds
 import com.friend.login.components.CopyrightText
 import com.friend.login.components.GoogleLoginButton
@@ -123,10 +124,14 @@ fun LoginScreen(
                     end.linkTo(parent.end)
                     width = Dimension.fillToConstraints
                 },
-                state = state,
-                onEvent = onEvent,
+                username = state.username,
+                password = state.password,
+                isFormSubmitting = state.isLoading,
                 onForgotPasswordClick = navigateToForgotPassword,
                 onSignUpClick = navigateToRegistration,
+                onUsernameChange = { onEvent(UiAction.UsernameChanged(it)) },
+                onPasswordChange = { onEvent(UiAction.PasswordChanged(it)) },
+                onFormSubmit = { onEvent(UiAction.PerformLogin) }
             )
 
             // Copyright text shown above banner ads
@@ -161,12 +166,10 @@ fun LoginScreen(
  */
 @Composable
 @LightPreview
-fun LoginScreenPreview() {
+fun ScreenPreview() {
     val fakeState = UiState(
-        username = "demo@friendfin.com",
-        password = "123456",
-        isUsernameValid = true,
-        isPasswordValid = true,
+        username = TextInput(),
+        password = TextInput(),
         isLoading = false,
     )
 
