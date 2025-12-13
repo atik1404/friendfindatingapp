@@ -2,6 +2,7 @@ package com.friend.registration
 
 import com.friend.common.base.BaseViewModel
 import com.friend.common.constant.Gender
+import com.friend.common.extfun.getLocalIpAddress
 import com.friend.domain.apiusecase.credential.PostRegistrationApiUseCase
 import com.friend.domain.apiusecase.search.FetchCityApiUseCase
 import com.friend.domain.apiusecase.search.FetchCountriesUseCase
@@ -11,6 +12,7 @@ import com.friend.domain.validator.RegistrationIoResult
 import com.friend.entity.search.CityApiEntity
 import com.friend.entity.search.CountryApiEntity
 import com.friend.entity.search.StateApiEntity
+import com.friend.ui.common.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+import com.friend.designsystem.R as Res
 
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
@@ -64,7 +67,7 @@ class RegistrationViewModel @Inject constructor(
         execute {
             fetchCountryApiUseCase.execute().collect { result ->
                 when (result) {
-                    is ApiResult.Error -> _uiEvent.send(UiEvent.ShowToastMessage(result.message))
+                    is ApiResult.Error -> setToastMessage(UiText.Dynamic(result.message))
                     is ApiResult.Loading -> setLoading(result.loading)
                     is ApiResult.Success -> {
                         _formUiState.update {
@@ -82,7 +85,7 @@ class RegistrationViewModel @Inject constructor(
             val selectedCountry = current.form.country?.value ?: ""
             fetchStateApiUseCase.execute(selectedCountry).collect { result ->
                 when (result) {
-                    is ApiResult.Error -> _uiEvent.send(UiEvent.ShowToastMessage(result.message))
+                    is ApiResult.Error -> setToastMessage(UiText.Dynamic(result.message))
                     is ApiResult.Loading -> setLoading(result.loading)
                     is ApiResult.Success -> {
                         _formUiState.update {
@@ -108,7 +111,7 @@ class RegistrationViewModel @Inject constructor(
             )
                 .collect { result ->
                     when (result) {
-                        is ApiResult.Error -> _uiEvent.send(UiEvent.ShowToastMessage(result.message))
+                        is ApiResult.Error -> setToastMessage(UiText.Dynamic(result.message))
                         is ApiResult.Loading -> setLoading(result.loading)
                         is ApiResult.Success -> {
                             _formUiState.update {
@@ -130,19 +133,48 @@ class RegistrationViewModel @Inject constructor(
                 email = current.form.email.value,
                 name = current.form.name.value,
                 zipCode = current.form.postCode.value,
-                gender = current.form.gender.value,
-                interestedIn = current.form.interestedIn.value,
+                gender = current.form.gender?.value ?: -1,
+                interestedIn = current.form.interestedIn?.value ?: -1,
                 birthdate = current.form.dateOfBirth.value,
-                country = current.form.country?.value ?: "",
-                state = current.form.state?.value ?: "",
-                city = current.form.city?.value ?: "",
+                country = current.form.country?.value ?: "-1",
+                state = current.form.state?.value ?: "-1",
+                city = current.form.city?.value ?: "-1",
+                userIP = getLocalIpAddress()
             )
+
+//            val params = PostRegistrationApiUseCase.Params(
+//                username = "Atik009",
+//                password = "31231312312312312",
+//                email = "user@gmail.com",
+//                name = "User full name",
+//                zipCode = "2323",
+//                gender = 1,
+//                interestedIn = 2,
+//                birthdate = "2004-12-12",
+//                country = "Bangladesh",
+//                state = "Dhaka",
+//                city = "Dhaka",
+//                userIP = getLocalIpAddress()
+//            )
 
             postRegistrationApiUseCase.execute(params).collect { result ->
                 when (result) {
-                    is ApiResult.Error -> _uiEvent.send(UiEvent.ShowToastMessage(result.message))
+                    is ApiResult.Error -> _uiEvent.send(
+                        UiEvent.ShowToastMessage(
+                            UiText.Dynamic(
+                                result.message
+                            )
+                        )
+                    )
+
                     is ApiResult.Loading -> _formUiState.update { it.copy(isSubmitting = result.loading) }
-                    is ApiResult.Success -> _uiEvent.send(UiEvent.ShowToastMessage(result.data.message))
+                    is ApiResult.Success -> _uiEvent.send(
+                        UiEvent.ShowToastMessage(
+                            UiText.Dynamic(
+                                result.data.message
+                            )
+                        )
+                    )
                 }
             }
         }
@@ -240,22 +272,12 @@ class RegistrationViewModel @Inject constructor(
                         )
                     }
 
-                    RegistrationIoResult.InvalidGender -> _uiEvent.send(UiEvent.ShowToastMessage("Invalid Gender"))
-                    RegistrationIoResult.InvalidInterested -> _uiEvent.send(
-                        UiEvent.ShowToastMessage(
-                            "Invalid interested in"
-                        )
-                    )
-
-                    RegistrationIoResult.InvalidBirthDate -> _uiEvent.send(
-                        UiEvent.ShowToastMessage(
-                            "Invalid birthdate, select a date"
-                        )
-                    )
-
-                    RegistrationIoResult.InvalidCountry -> _uiEvent.send(UiEvent.ShowToastMessage("Invalid country"))
-                    RegistrationIoResult.InvalidState -> _uiEvent.send(UiEvent.ShowToastMessage("Invalid state"))
-                    RegistrationIoResult.InvalidCity -> _uiEvent.send(UiEvent.ShowToastMessage("Invalid city"))
+                    RegistrationIoResult.InvalidGender -> setToastMessage(UiText.StringRes(Res.string.error_invalid_gender))
+                    RegistrationIoResult.InvalidInterested -> setToastMessage(UiText.StringRes(Res.string.error_invalid_interest_in))
+                    RegistrationIoResult.InvalidBirthDate -> setToastMessage(UiText.StringRes(Res.string.error_invalid_birth_date))
+                    RegistrationIoResult.InvalidCountry -> setToastMessage(UiText.StringRes(Res.string.error_invalid_country))
+                    RegistrationIoResult.InvalidState -> setToastMessage(UiText.StringRes(Res.string.error_invalid_state))
+                    RegistrationIoResult.InvalidCity -> setToastMessage(UiText.StringRes(Res.string.error_invalid_city))
                     RegistrationIoResult.InvalidPostCode -> updateForm {
                         it.copy(
                             postCode = it.postCode.copy(
@@ -265,6 +287,12 @@ class RegistrationViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    private fun setToastMessage(message: UiText) {
+        execute {
+            _uiEvent.send(UiEvent.ShowToastMessage(message))
         }
     }
 }

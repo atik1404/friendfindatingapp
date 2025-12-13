@@ -137,6 +137,12 @@
     <string name="error_invalid_post_code">Invalid post code, input valid one</string>
     <string name="error_invalid_birth_date">Invalid birthdate, select a date</string>
 
+    <string name="error_invalid_gender">Choose a valid gender</string>
+    <string name="error_invalid_interest_in">Choose interested in</string>
+    <string name="error_invalid_country">Choose a valid country</string>
+    <string name="error_invalid_state">Choose a valid state</string>
+    <string name="error_invalid_city">Choose a valid city</string>
+
 
     <string name="error_network_error">Network error, please check your internet connection</string>
     <string name="error_no_data_found">Currently no data found, please try again.</string>

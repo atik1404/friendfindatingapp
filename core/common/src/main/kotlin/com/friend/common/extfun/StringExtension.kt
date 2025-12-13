@@ -1,6 +1,9 @@
 package com.friend.common.extfun
 
 import android.util.Base64
+import java.net.Inet4Address
+import java.net.NetworkInterface
+import java.net.SocketException
 import java.time.LocalTime
 
 
@@ -19,4 +22,23 @@ fun getGreetingText(now: LocalTime = LocalTime.now()): String {
         in 12..16 -> "Good afternoon"
         else -> "Good evening"
     }
+}
+
+fun getLocalIpAddress(): String? {
+    try {
+        val en = NetworkInterface.getNetworkInterfaces()
+        while (en.hasMoreElements()) {
+            val intf = en.nextElement()
+            val enumIpAddr = intf.inetAddresses
+            while (enumIpAddr.hasMoreElements()) {
+                val inetAddress = enumIpAddr.nextElement()
+                if (!inetAddress.isLoopbackAddress && inetAddress is Inet4Address) {
+                    return inetAddress.hostAddress
+                }
+            }
+        }
+    } catch (ex: SocketException) {
+        ex.printStackTrace()
+    }
+    return null
 }

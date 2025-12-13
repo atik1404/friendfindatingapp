@@ -13,7 +13,6 @@ import com.friend.entity.credential.UserApiEntity
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
-import timber.log.Timber
 import javax.inject.Inject
 
 class PostRegistrationApiUseCase @Inject constructor(
@@ -37,7 +36,7 @@ class PostRegistrationApiUseCase @Inject constructor(
         val city: String,
         val active: Int = 1,
         val receiveEmails: Int = 1,
-        val userIP: String = "",
+        val userIP: String ?= null,
         val messageVerificationsLeft: Int = 5,
         val languageId: Int = 1,
         val billingDetails: String? = null,
@@ -63,15 +62,11 @@ class PostRegistrationApiUseCase @Inject constructor(
     override suspend fun execute(params: Params): Flow<ApiResult<UserApiEntity>> {
         return when (val validationResult = validation(params)) {
             is DataValidationResult.Failure<*> -> {
-                Timber.e("Validation failed")
                 ioError.send(validationResult.ioErrorResult as RegistrationIoResult)
                 emptyFlow()
             }
 
-            DataValidationResult.Success -> {
-                Timber.e("Validation success")
-                repository.performRegistration(params)
-            }
+            DataValidationResult.Success -> repository.performRegistration(params)
         }
     }
 
@@ -97,13 +92,13 @@ class PostRegistrationApiUseCase @Inject constructor(
         if (params.birthdate.isEmpty())
             return DataValidationResult.Failure(RegistrationIoResult.InvalidBirthDate)
 
-        if (params.country.isEmpty())
+        if (params.country == "-1")
             return DataValidationResult.Failure(RegistrationIoResult.InvalidCountry)
 
-        if (params.state.isEmpty())
+        if (params.state == "-1")
             return DataValidationResult.Failure(RegistrationIoResult.InvalidState)
 
-        if (params.city.isEmpty())
+        if (params.city  == "-1")
             return DataValidationResult.Failure(RegistrationIoResult.InvalidCity)
 
         if (params.zipCode.isEmpty())

@@ -27,7 +27,6 @@ fun GenderSelection(
     modifier: Modifier = Modifier
 ) {
     val selectedIndex = genders.indexOfFirst { it.second == selectedGender }
-        .let { if (it == -1) 0 else it } // fallback to 0 if not found
 
     SingleChoiceSegmentsWithIcons(
         modifier = modifier,
@@ -47,7 +46,6 @@ fun InterestedInSelection(
     modifier: Modifier = Modifier
 ) {
     val selectedIndex = genders.indexOfFirst { it.second == selectedGender }
-        .let { if (it == -1) 0 else it } // fallback to 0 if not found
 
     SingleChoiceSegmentsWithIcons(
         modifier = modifier,

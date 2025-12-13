@@ -6,6 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.friend.ui.common.asString
 import com.friend.ui.showToastMessage
 
 @Composable
@@ -23,7 +24,11 @@ fun RegistrationRoute(
 
         viewModel.uiEvent.collect { event ->
             when (event) {
-                is UiEvent.ShowToastMessage -> context.showToastMessage(event.message)
+                is UiEvent.ShowToastMessage -> context.showToastMessage(
+                    event.message.asString(
+                        context
+                    )
+                )
             }
         }
     }

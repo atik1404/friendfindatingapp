@@ -5,6 +5,7 @@ import com.friend.domain.base.TextInput
 import com.friend.entity.search.CityApiEntity
 import com.friend.entity.search.CountryApiEntity
 import com.friend.entity.search.StateApiEntity
+import com.friend.ui.common.UiText
 
 data class FormData(
     val username: TextInput = TextInput(),
@@ -13,8 +14,8 @@ data class FormData(
     val password: TextInput = TextInput(),
     val dateOfBirth: TextInput = TextInput(),
     val postCode: TextInput = TextInput(),
-    val gender: Gender = Gender.MALE,
-    val interestedIn: Gender = Gender.FEMALE,
+    val gender: Gender ? = null,
+    val interestedIn: Gender ? = null,
     val country: CountryApiEntity? = null,
     val state: StateApiEntity? = null,
     val city: CityApiEntity? = null,
@@ -41,7 +42,7 @@ data class UiState(
 )
 
 sealed interface UiEvent {
-    data class ShowToastMessage(val message: String) : UiEvent
+    data class ShowToastMessage(val message: UiText) : UiEvent
 }
 
 sealed class UiAction {

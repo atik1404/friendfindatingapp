@@ -16,7 +16,7 @@ class LoginApiMapper @Inject constructor() : Mapper<LoginApiResponse, LoginApiEn
             userName = response.data?.username ?: "",
             fullName = response.data?.name ?: "",
             email = response.data?.email ?: "",
-            gender = Gender.fromValue(response.data?.gender ?: 1).name,
+            gender = Gender.fromValue(response.data?.gender ?: -1).name,
             dateOfBirth = response.data?.birthdate ?: ""
         )
     }

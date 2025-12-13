@@ -102,7 +102,7 @@ fun RegistrationScreen(
 
             GenderSelection(
                 modifier = modifier,
-                selectedGender = state.form.gender.name,
+                selectedGender = state.form.gender?.name ?: "",
                 onSelected = {
                     uiAction.invoke(UiAction.SelectGender(it))
                 }
@@ -112,7 +112,7 @@ fun RegistrationScreen(
 
             InterestedInSelection(
                 modifier = modifier,
-                selectedGender = state.form.interestedIn.name,
+                selectedGender = state.form.interestedIn?.name ?: "",
                 onSelected = {
                     uiAction.invoke(UiAction.SelectInterestedIn(it))
                 }
@@ -137,9 +137,9 @@ fun RegistrationScreen(
             AddressSection(
                 modifier = modifier,
                 postCode = state.form.postCode,
-                selectedCountry = state.form.country?.value ?: "",
-                selectedState = state.form.state?.value ?: "",
-                selectedCity = state.form.city?.value ?: "",
+                selectedCountry = state.form.country?.name ?: "",
+                selectedState = state.form.state?.name ?: "",
+                selectedCity = state.form.city?.name ?: "",
                 countries = state.countries,
                 states = state.states,
                 cities = state.cities,
