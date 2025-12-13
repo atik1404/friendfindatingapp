@@ -10,6 +10,10 @@ sealed interface LoginIoResult {
     data object InvalidPassword : LoginIoResult
 }
 
+sealed interface ForgotPasswordIoResult {
+    data object InvalidEmail : ForgotPasswordIoResult
+}
+
 sealed interface RegistrationIoResult {
     data object InvalidUsername : RegistrationIoResult
     data object InvalidName : RegistrationIoResult

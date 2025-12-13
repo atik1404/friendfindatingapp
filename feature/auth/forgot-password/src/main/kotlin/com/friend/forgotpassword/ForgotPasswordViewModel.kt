@@ -3,7 +3,7 @@ package com.friend.forgotpassword
 import com.friend.common.base.BaseViewModel
 import com.friend.domain.apiusecase.credential.PostForgotPasswordApiUseCase
 import com.friend.domain.base.ApiResult
-import com.friend.domain.validator.isUsernameValid
+import com.friend.domain.validator.ForgotPasswordIoResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,29 +17,34 @@ import javax.inject.Inject
 class ForgotPasswordViewModel @Inject constructor(
     private val forgotPasswordUseCase: PostForgotPasswordApiUseCase
 ) : BaseViewModel() {
-
+    val ioError get() = forgotPasswordUseCase.ioError.receiveAsFlow()
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _uiEffect = Channel<UiEffect>()
-    val uiEffect = _uiEffect.receiveAsFlow()
+    private val _uiEvent = Channel<UiEvent>()
+    val uiEffect = _uiEvent.receiveAsFlow()
 
-    val action: (UiEvent) -> Unit = {
+    init {
+        formValidation()
+    }
+
+    val action: (UiAction) -> Unit = {
         when (it) {
-            is UiEvent.EmailChanged -> onEmailChanged(it.value)
-            UiEvent.FormValidator -> formValidation()
+            is UiAction.EmailChanged -> onEmailChanged(it.value)
+            UiAction.SendLinkToEmail -> forgotPassword()
+            UiAction.ResetState -> _uiState.value = UiState()
         }
     }
 
     private fun forgotPassword() {
         execute {
-            forgotPasswordUseCase.execute(_uiState.value.email).collect { result ->
+            forgotPasswordUseCase.execute(_uiState.value.email.value).collect { result ->
                 when (result) {
                     is ApiResult.Error -> showMessage(result.message)
                     is ApiResult.Loading -> onLoading(result.loading)
                     is ApiResult.Success -> {
                         showMessage(result.data)
-                        _uiEffect.send(UiEffect.BackToPreviousScreen)
+                        _uiEvent.send(UiEvent.BackToPreviousScreen)
                     }
                 }
             }
@@ -54,30 +59,26 @@ class ForgotPasswordViewModel @Inject constructor(
 
     private fun onEmailChanged(value: String) {
         _uiState.update {
-            it.copy(email = value, isEmailValid = true)
+            it.copy(email = it.email.onChange(newValue = value))
         }
     }
 
     private fun showMessage(message: String) {
         execute {
-            _uiEffect.send(UiEffect.ShowMessage(message))
+            _uiEvent.send(UiEvent.ShowMessage(message))
         }
     }
 
     // Validate, update error flags, and only then call API if valid.
     private fun formValidation() {
-        val current = _uiState.value
-        val isEmailValid = current.email.isUsernameValid()
-
-        _uiState.update {
-            it.copy(
-                email = current.email,
-                isEmailValid = isEmailValid,
-            )
-        }
-
-        if (isEmailValid) {
-            forgotPassword()
+        execute {
+            ioError.collect { error ->
+                when (error) {
+                    ForgotPasswordIoResult.InvalidEmail -> _uiState.update {
+                        it.copy(email = it.email.copy(isValid = false))
+                    }
+                }
+            }
         }
     }
 }

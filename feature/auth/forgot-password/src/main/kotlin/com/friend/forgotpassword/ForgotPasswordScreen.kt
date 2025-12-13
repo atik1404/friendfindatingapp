@@ -44,7 +44,7 @@ import com.friend.designsystem.R as Res
 @Composable
 fun ForgotPasswordScreen(
     state: UiState,
-    onEvent: (UiEvent) -> Unit,
+    onEvent: (UiAction) -> Unit,
     onNavigateBack: () -> Unit
 ) {
 
@@ -97,12 +97,12 @@ fun ForgotPasswordScreen(
 
             Spacer(Modifier.height(SpacingToken.large))
             AppOutlineTextField(
-                text = state.email,
-                error = if (!state.isEmailValid) stringResource(Res.string.error_invalid_email) else null,
+                text = state.email.value,
+                error = if (state.email.isDirty) stringResource(Res.string.error_invalid_email) else null,
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(Res.string.label_email),
                 placeholder = stringResource(Res.string.hint_email),
-                onValueChange = { onEvent(UiEvent.EmailChanged(it)) },
+                onValueChange = { onEvent(UiAction.EmailChanged(it)) },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
                     keyboardType = KeyboardType.Email
@@ -116,7 +116,7 @@ fun ForgotPasswordScreen(
                 text = stringResource(Res.string.action_send_link),
                 isLoading = state.isLoading,
                 onClick = {
-                    onEvent(UiEvent.FormValidator)
+                    onEvent(UiAction.SendLinkToEmail)
                 },
             )
 

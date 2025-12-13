@@ -19,12 +19,13 @@ fun ForgotPasswordRoute(
     val state by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
+        viewModel.action(UiAction.ResetState)
         viewModel.uiEffect.collect { effect ->
             when (effect) {
-                is UiEffect.ShowMessage ->
+                is UiEvent.ShowMessage ->
                     context.showToastMessage(effect.message)
 
-                is UiEffect.BackToPreviousScreen -> onNavigateBack.invoke()
+                is UiEvent.BackToPreviousScreen -> onNavigateBack.invoke()
             }
         }
     }
