@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +28,7 @@ import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.StrokeTokens
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
+import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AppText
 import com.friend.ui.components.LocalImageLoader
 import com.friend.ui.preview.LightPreview
@@ -37,7 +37,7 @@ import com.friend.designsystem.R as Res
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SplashScreen() {
-    Scaffold(
+    AppScaffold(
         contentWindowInsets = WindowInsets(0)
     ) { padding ->
         Box(
@@ -103,6 +103,6 @@ fun AnimatedVisibilityImage(visible: Boolean) {
 
 @Composable
 @LightPreview
-fun SplashScreenPreview() {
+fun ScreenPreview() {
     SplashScreen()
 }

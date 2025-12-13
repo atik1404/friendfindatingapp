@@ -79,8 +79,7 @@ fun RegistrationScreen(
             Spacer(modifier = modifier.height(SpacingToken.medium))
 
             EmailSection(
-                text = state.form.email.value,
-                isInvalid = !state.form.email.isValid,
+                text = state.form.email,
                 onValueChange = {
                     uiAction.invoke(UiAction.OnChangeEmail(it))
                 },
@@ -90,8 +89,7 @@ fun RegistrationScreen(
             Spacer(modifier = modifier.height(SpacingToken.medium))
 
             PasswordSection(
-                text = state.form.password.value,
-                isInvalid = !state.form.password.isValid,
+                text = state.form.password,
                 onValueChange = {
                     uiAction.invoke(UiAction.OnChangePassword(it))
                 },
