@@ -13,6 +13,7 @@ data class SelectionData(
     val drinking: List<String> = AppConstants.Drinking,
     val bodyType: List<String> = AppConstants.BodyTypes,
     val lookingFor: List<String> = AppConstants.LookingFor,
+    val interests : List<String> = AppConstants.interest,
 )
 
 data class UiState(
@@ -34,6 +35,7 @@ data class UiState(
 
 sealed interface UiEvent {
     data class ShowToastMessage(val message: UiText) : UiEvent
+    data object NavigateToHome : UiEvent
 }
 
 sealed interface UiAction {
@@ -47,6 +49,8 @@ sealed interface UiAction {
     data class LookingForChanged(val value: String) : UiAction
     data class TitleChanged(val value: String) : UiAction
     data class AboutYouChanged(val value: String) : UiAction
-    data class InterestsChanged(val value: List<String>) : UiAction
+    data class WhatsUpChanged(val value: String) : UiAction
+    data class InterestsChanged(val value: Set<String>) : UiAction
     object ResetState : UiAction
+    object FormSubmit : UiAction
 }

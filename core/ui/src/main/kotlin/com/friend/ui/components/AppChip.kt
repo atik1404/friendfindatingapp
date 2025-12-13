@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -152,26 +153,33 @@ fun SingleSelectChipGroup(
 }
 
 @Composable
-fun MultiSelectChipGroup(
-    items: List<String>,
-    selected: Set<Int>,
-    onSelectionChange: (Set<Int>) -> Unit,
+fun <T> MultiSelectChipGroup(
+    items: List<T>,
+    selected: Set<T>,
+    onSelectionChange: (Set<T>) -> Unit,
     modifier: Modifier = Modifier,
     hGap: Dp = SpacingToken.tiny,
     vGap: Dp = SpacingToken.none,
+    label: (T) -> String, // how to show each item
 ) {
     FlowRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(hGap),
         verticalArrangement = Arrangement.spacedBy(vGap)
     ) {
-        items.forEachIndexed { index, label ->
-            val isSelected = index in selected
+        items.forEach { item ->
+            val isSelected = item in selected
+
             FilterChip(
-                label = label,
+                label = label(item),
                 selected = isSelected,
                 onSelectedChange = {
-                    onSelectionChange(if (isSelected) selected - index else selected + index)
+                    val newSelection = if (isSelected) {
+                        selected - item
+                    } else {
+                        selected + item
+                    }
+                    onSelectionChange(newSelection)
                 }
             )
         }
@@ -179,14 +187,15 @@ fun MultiSelectChipGroup(
 }
 
 @Composable
-fun AppChipMultiWithTitle(
+fun <T> AppChipMultiWithTitle(
     title: String,
-    items: List<String>,
-    selected: Set<Int>,
-    onSelectionChange: (Set<Int>) -> Unit,
+    items: List<T>,
+    selected: Set<T>,
+    onSelectionChange: (Set<T>) -> Unit,
     modifier: Modifier = Modifier,
     hGap: Dp = SpacingToken.tiny,
     vGap: Dp = SpacingToken.none,
+    label: (T) -> String,
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -195,78 +204,47 @@ fun AppChipMultiWithTitle(
             text = title,
             textStyle = AppTypography.bodySmall,
             fontWeight = FontWeight.Light,
-            modifier = Modifier,
             textColor = MaterialTheme.textColors.secondary
         )
+
+        Spacer(Modifier.height(SpacingToken.micro))
 
         MultiSelectChipGroup(
             items = items,
             selected = selected,
-            onSelectionChange = {
-                onSelectionChange(it)
-            },
+            onSelectionChange = onSelectionChange,
             hGap = hGap,
-            vGap = vGap
+            vGap = vGap,
+            label = label
         )
     }
 }
 
+
 @Composable
-fun AppChipSingleWithTitle() {
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+fun <T> SingleSelectChipGroup(
+    items: List<T>,
+    selected: T?,
+    onSelectedChange: (T) -> Unit,
+    modifier: Modifier = Modifier,
+    hGap: Dp = SpacingToken.tiny,
+    vGap: Dp = SpacingToken.none,
+    label: (T) -> String,
+) {
+    FlowRow(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(hGap),
+        verticalArrangement = Arrangement.spacedBy(vGap)
     ) {
-        var single by remember { mutableIntStateOf(0) }
-        var multi by remember { mutableStateOf(setOf(1, 3)) }
+        items.forEach { item ->
+            val isSelected = item == selected
 
-        Text("Single Select")
-        SingleSelectChipGroup(
-            items = listOf("Bus", "Train", "Launch"),
-            selectedIndex = single,
-            onSelectedIndexChange = { single = it }
-        )
-
-        Text("Multi Select")
-        MultiSelectChipGroup(
-            items = listOf("AC", "Sleeper", "Seater", "Economy", "Family"),
-            selected = multi,
-            onSelectionChange = { multi = it }
-        )
-    }
-}
-
-/* =========================
-   Preview / Usage
-   ========================= */
-
-@Preview(showBackground = true)
-@Composable
-private fun Preview_BaseChip_Usage() {
-    MaterialTheme {
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            var single by remember { mutableIntStateOf(0) }
-            var multi by remember { mutableStateOf(setOf(1, 3)) }
-
-            Text("Single Select")
-            SingleSelectChipGroup(
-                items = listOf("Bus", "Train", "Launch"),
-                selectedIndex = single,
-                onSelectedIndexChange = { single = it }
-            )
-
-            Text("Multi Select")
-            MultiSelectChipGroup(
-                items = listOf("AC", "Sleeper", "Seater", "Economy", "Family"),
-                selected = multi,
-                onSelectionChange = { multi = it }
+            FilterChip(
+                label = label(item),
+                selected = isSelected,
+                onSelectedChange = {
+                    onSelectedChange(item)
+                }
             )
         }
     }

@@ -4,7 +4,9 @@ import com.friend.apiresponse.credential.ForgotPasswordApiResponse
 import com.friend.apiresponse.credential.LoginApiResponse
 import com.friend.apiresponse.credential.LogoutApiResponse
 import com.friend.apiresponse.credential.RegistrationApiResponse
+import com.friend.apiresponse.search.CommonApiResponse
 import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
+import com.friend.domain.apiusecase.credential.PostProfileCompletionApiUseCase
 import com.friend.domain.apiusecase.credential.PostRegistrationApiUseCase
 import retrofit2.Response
 import retrofit2.http.Body
@@ -22,8 +24,15 @@ interface CredentialApiServices {
         @Body params: PostRegistrationApiUseCase.Params
     ): Response<RegistrationApiResponse>
 
-    suspend fun registration()
+    @POST("v1/SaveProfile")
+    suspend fun profileCompletion(
+        @Body params: PostProfileCompletionApiUseCase.Params
+    ): Response<CommonApiResponse>
+
+
     suspend fun fetchProfile()
+
+
     suspend fun updateProfile()
 
     @POST("v1/ForgotPassword")

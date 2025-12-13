@@ -43,6 +43,7 @@ data class UiState(
 
 sealed interface UiEvent {
     data class ShowToastMessage(val message: UiText) : UiEvent
+    data object NavigateToProfileCompletion : UiEvent
 }
 
 sealed class UiAction {

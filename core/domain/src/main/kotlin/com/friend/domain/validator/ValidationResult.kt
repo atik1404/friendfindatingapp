@@ -27,3 +27,18 @@ sealed interface RegistrationIoResult {
     data object InvalidState : RegistrationIoResult
     data object InvalidPostCode : RegistrationIoResult
 }
+
+sealed interface ProfileCompletionIoResult {
+    data object InvalidHeight : ProfileCompletionIoResult
+    data object InvalidWeight : ProfileCompletionIoResult
+    data object InvalidEyes : ProfileCompletionIoResult
+    data object InvalidHair : ProfileCompletionIoResult
+    data object InvalidBodyType : ProfileCompletionIoResult
+    data object InvalidLookingFor : ProfileCompletionIoResult
+    data object InvalidSmoking : ProfileCompletionIoResult
+    data object InvalidDrinking : ProfileCompletionIoResult
+    data object InvalidAboutYou : ProfileCompletionIoResult
+    data object InvalidTitle : ProfileCompletionIoResult
+    data object InvalidWhatsUp : ProfileCompletionIoResult
+    data object InvalidInterestedIn : ProfileCompletionIoResult
+}

@@ -142,21 +142,6 @@ class RegistrationViewModel @Inject constructor(
                 userIP = getLocalIpAddress()
             )
 
-//            val params = PostRegistrationApiUseCase.Params(
-//                username = "Atik009",
-//                password = "31231312312312312",
-//                email = "user@gmail.com",
-//                name = "User full name",
-//                zipCode = "2323",
-//                gender = 1,
-//                interestedIn = 2,
-//                birthdate = "2004-12-12",
-//                country = "Bangladesh",
-//                state = "Dhaka",
-//                city = "Dhaka",
-//                userIP = getLocalIpAddress()
-//            )
-
             postRegistrationApiUseCase.execute(params).collect { result ->
                 when (result) {
                     is ApiResult.Error -> _uiEvent.send(
@@ -168,13 +153,14 @@ class RegistrationViewModel @Inject constructor(
                     )
 
                     is ApiResult.Loading -> _formUiState.update { it.copy(isSubmitting = result.loading) }
-                    is ApiResult.Success -> _uiEvent.send(
-                        UiEvent.ShowToastMessage(
+                    is ApiResult.Success -> {
+                        setToastMessage(
                             UiText.Dynamic(
                                 result.data.message
                             )
                         )
-                    )
+                        _uiEvent.send(UiEvent.NavigateToProfileCompletion)
+                    }
                 }
             }
         }

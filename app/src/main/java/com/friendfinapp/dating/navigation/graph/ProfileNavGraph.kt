@@ -4,12 +4,10 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.friend.changepassword.ChangePasswordScreen
-import com.friend.common.constant.PersonalMenu
 import com.friend.membership.MembershipScreen
 import com.friend.overview.ProfileOverviewRoute
 import com.friend.personalsetting.PersonalSettingScreen
 import com.friend.profile.ProfileScreen
-import com.friend.profilecompletion.ProfileCompletionScreen
 import com.friend.profilecompletion.ProfileCompletionScreenRoute
 import com.friend.reportabuse.ReportAbuseScreen
 import com.friendfinapp.dating.navigation.AuthScreens
@@ -60,7 +58,7 @@ object ProfileNavGraph {
         entry(ProfileScreens.ProfileCompletionNavScreen) {
             ProfileCompletionScreenRoute(
                 onBackButtonClicked = { backStack.removeLastOrNull() },
-                onContinueButtonClicked = {
+                navigateToHomeScreen = {
                     backStack.clear()
                     backStack.add(MainScreens.HomeNavScreen)
                 }

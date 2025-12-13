@@ -16,11 +16,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -38,13 +33,10 @@ import com.friend.designsystem.R as Res
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileCompletionScreen(
+    state: UiState,
+    onEvent: (UiAction) -> Unit,
     onBackButtonClicked: () -> Unit,
-    onContinueButtonClicked: () -> Unit
 ) {
-    var title by rememberSaveable { mutableStateOf("") }
-    var aboutYou by rememberSaveable { mutableStateOf("") }
-    var lookingFor by rememberSaveable { mutableStateOf("") }
-
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
@@ -65,16 +57,53 @@ fun ProfileCompletionScreen(
                 .verticalScroll(rememberScrollState()) // simple, contents are small; LazyColumn not necessary
                 .appPadding(SpacingToken.small),
         ) {
-            PersonalDetails()
+            PersonalDetails(
+                initialSelectionData = state.selectionData,
+                height = state.height,
+                weight = state.weight,
+                eyes = state.eyes,
+                hair = state.hair,
+                smoking = state.smoking,
+                drinking = state.drinking,
+                bodyType = state.bodyType,
+                lookingFor = state.lookingFor,
+                onHeightChange = {
+                    onEvent(UiAction.HeightChanged(it))
+                },
+                onWeightChange = {
+                    onEvent(UiAction.WeightChanged(it))
+                },
+                onEyesChange = {
+                    onEvent(UiAction.EyesChanged(it))
+                },
+                onHairChange = {
+                    onEvent(UiAction.HairChanged(it))
+                },
+                onSmokingChange = {
+                    onEvent(UiAction.SmokingChanged(it))
+                },
+                onDrinkingChange = {
+                    onEvent(UiAction.DrinkingChanged(it))
+                },
+                onBodyTypeChange = {
+                    onEvent(UiAction.BodyTypeChanged(it))
+                },
+                onLookingForChange = {
+                    onEvent(UiAction.LookingForChanged(it))
+                },
+            )
 
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
             AppOutlineTextField(
-                text = title,
+                text = state.title.value,
+                error = if (state.title.isDirty) stringResource(Res.string.error_invalid_title) else null,
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(Res.string.label_title),
                 placeholder = stringResource(Res.string.hint_title),
-                onValueChange = { title = it },
+                onValueChange = {
+                    onEvent(UiAction.TitleChanged(it))
+                },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
                     autoCorrectEnabled = false,
@@ -84,12 +113,15 @@ fun ProfileCompletionScreen(
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
             AppOutlineTextField(
-                text = aboutYou,
+                text = state.aboutYou.value,
+                error = if (state.aboutYou.isDirty) stringResource(Res.string.error_invalid_about_you) else null,
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 3,
                 title = stringResource(Res.string.label_about_yourself),
                 placeholder = stringResource(Res.string.hint_about_you),
-                onValueChange = { aboutYou = it },
+                onValueChange = {
+                    onEvent(UiAction.AboutYouChanged(it))
+                },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
                     autoCorrectEnabled = false,
@@ -99,27 +131,32 @@ fun ProfileCompletionScreen(
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
             AppOutlineTextField(
-                text = lookingFor,
+                text = state.whatsUp.value,
+                error = if (state.whatsUp.isDirty) stringResource(Res.string.error_invalid_whats_up) else null,
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 3,
                 title = stringResource(Res.string.label_whats_up),
                 placeholder = stringResource(Res.string.hint_whats_up),
-                onValueChange = { lookingFor = it },
+                onValueChange = {
+                    onEvent(UiAction.WhatsUpChanged(it))
+                },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
                     autoCorrectEnabled = false,
                 ),
             )
 
-            val interests =
-                listOf("Computer", "Music", "Nature", "Adventures", "Sports", "Movies", "Chat")
-            var multi by remember { mutableStateOf(emptySet<Int>()) }
+
             Spacer(modifier = Modifier.height(SpacingToken.medium))
+
             AppChipMultiWithTitle(
                 title = stringResource(Res.string.label_interest),
-                items = interests,
-                selected = multi,
-                onSelectionChange = { multi = it }
+                items = state.selectionData.interests,
+                selected = state.interests.toSet(),
+                label = { it },
+                onSelectionChange = {
+                    onEvent(UiAction.InterestsChanged(it))
+                }
             )
 
             Spacer(modifier = Modifier.height(SpacingToken.medium))
@@ -127,7 +164,10 @@ fun ProfileCompletionScreen(
             AppElevatedButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(Res.string.action_save),
-                onClick = onContinueButtonClicked,
+                isLoading = state.isSubmitting,
+                onClick = {
+                    onEvent(UiAction.FormSubmit)
+                }
             )
         }
     }
@@ -138,6 +178,7 @@ fun ProfileCompletionScreen(
 private fun ScreenPreview() {
     ProfileCompletionScreen(
         onBackButtonClicked = {},
-        onContinueButtonClicked = {}
+        state = UiState(),
+        onEvent = {}
     )
 }

@@ -58,7 +58,7 @@ object AuthNavGraph {
                     backStack.removeLastOrNull()
                 },
                 navigateToProfileCompletion = {
-                    backStack.remove(AuthScreens.RegistrationNavScreen)
+                    backStack.clear()
                     backStack.add(ProfileScreens.ProfileCompletionNavScreen)
                 }
             )

@@ -29,6 +29,8 @@ fun RegistrationRoute(
                         context
                     )
                 )
+
+                UiEvent.NavigateToProfileCompletion -> navigateToProfileCompletion.invoke()
             }
         }
     }

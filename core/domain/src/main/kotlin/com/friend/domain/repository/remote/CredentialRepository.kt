@@ -1,6 +1,7 @@
 package com.friend.domain.repository.remote
 
 import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
+import com.friend.domain.apiusecase.credential.PostProfileCompletionApiUseCase
 import com.friend.domain.apiusecase.credential.PostRegistrationApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.entity.credential.LoginApiEntity
@@ -12,6 +13,8 @@ interface CredentialRepository {
 
     suspend fun performRegistration(params: PostRegistrationApiUseCase.Params): Flow<ApiResult<UserApiEntity>>
     suspend fun postForgotPassword(params: String): Flow<ApiResult<String>>
+
+    suspend fun postProfileCompletion(params: PostProfileCompletionApiUseCase.Params): Flow<ApiResult<String>>
 
     suspend fun performLogout(): Flow<ApiResult<String>>
 }

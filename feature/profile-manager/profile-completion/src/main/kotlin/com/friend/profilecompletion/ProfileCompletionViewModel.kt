@@ -1,6 +1,9 @@
 package com.friend.profilecompletion
 
 import com.friend.common.base.BaseViewModel
+import com.friend.domain.apiusecase.credential.PostProfileCompletionApiUseCase
+import com.friend.domain.base.ApiResult
+import com.friend.domain.validator.ProfileCompletionIoResult
 import com.friend.ui.common.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -10,10 +13,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+import com.friend.designsystem.R as Res
 
 @HiltViewModel
-class ProfileCompletionViewModel @Inject constructor() : BaseViewModel() {
-    //val ioError get() = postRegistrationApiUseCase.ioError.receiveAsFlow()
+class ProfileCompletionViewModel @Inject constructor(
+    private val profileCompletionApiUseCase: PostProfileCompletionApiUseCase
+) : BaseViewModel() {
+    val ioError get() = profileCompletionApiUseCase.ioError.receiveAsFlow()
 
     private val _formUiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _formUiState.asStateFlow()
@@ -24,17 +30,54 @@ class ProfileCompletionViewModel @Inject constructor() : BaseViewModel() {
     val action: (UiAction) -> Unit = {
         when (it) {
             UiAction.ResetState -> _formUiState.value = UiState()
+            UiAction.FormSubmit -> performProfileCompletion()
             is UiAction.AboutYouChanged -> onAboutYouChange(it.value)
             is UiAction.BodyTypeChanged -> onBodyTypeChange(it.value)
             is UiAction.DrinkingChanged -> onDrinkingChange(it.value)
             is UiAction.EyesChanged -> onEyesChange(it.value)
-            is UiAction.HairChanged -> onHeightChange(it.value)
+            is UiAction.HairChanged -> onHairChange(it.value)
             is UiAction.HeightChanged -> onHeightChange(it.value)
-            is UiAction.InterestsChanged -> {}
+            is UiAction.InterestsChanged -> onInterestedInChange(it.value)
             is UiAction.LookingForChanged -> onLookingForChange(it.value)
             is UiAction.SmokingChanged -> onSmokingChange(it.value)
             is UiAction.TitleChanged -> onTitleChange(it.value)
             is UiAction.WeightChanged -> onWeightChange(it.value)
+            is UiAction.WhatsUpChanged -> onWhatsUpChange(it.value)
+        }
+    }
+
+    init {
+        bindIoError()
+    }
+
+    private fun performProfileCompletion() {
+        execute {
+            val current = _formUiState.value
+            val params = PostProfileCompletionApiUseCase.Params(
+                height = current.height,
+                weight = current.weight,
+                eyes = current.eyes,
+                hair = current.hair,
+                smoking = current.smoking,
+                drinking = current.drinking,
+                bodyType = current.bodyType,
+                lookingFor = current.lookingFor,
+                aboutYou = current.aboutYou.value,
+                title = current.title.value,
+                whatsUp = current.whatsUp.value,
+                interestedIn = current.interests
+            )
+
+            profileCompletionApiUseCase.execute(params).collect { result ->
+                when (result) {
+                    is ApiResult.Error -> setToastMessage(UiText.Dynamic(result.message))
+                    is ApiResult.Loading -> setLoading(result.loading)
+                    is ApiResult.Success -> {
+                        setToastMessage(UiText.Dynamic(result.data))
+                        _uiEvent.send(UiEvent.NavigateToHome)
+                    }
+                }
+            }
         }
     }
 
@@ -104,6 +147,12 @@ class ProfileCompletionViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 
+    private fun onInterestedInChange(value: Set<String>) {
+        updateForm { state ->
+            state.copy(interests = value.toList())
+        }
+    }
+
     private fun setLoading(value: Boolean) {
         updateForm { state ->
             state.copy(isSubmitting = value)
@@ -117,7 +166,63 @@ class ProfileCompletionViewModel @Inject constructor() : BaseViewModel() {
 
     private fun bindIoError() {
         execute {
+            ioError.collect { error ->
+                when (error) {
+                    ProfileCompletionIoResult.InvalidAboutYou -> updateForm {
+                        it.copy(
+                            aboutYou = it.aboutYou.copy(
+                                isValid = false
+                            )
+                        )
+                    }
 
+                    ProfileCompletionIoResult.InvalidTitle -> updateForm {
+                        it.copy(
+                            title = it.title.copy(
+                                isValid = false
+                            )
+                        )
+                    }
+
+                    ProfileCompletionIoResult.InvalidWhatsUp -> updateForm {
+                        it.copy(
+                            whatsUp = it.whatsUp.copy(
+                                isValid = false
+                            )
+                        )
+                    }
+
+                    ProfileCompletionIoResult.InvalidBodyType -> setToastMessage(
+                        UiText.StringRes(
+                            Res.string.error_invalid_body_type
+                        )
+                    )
+
+                    ProfileCompletionIoResult.InvalidDrinking -> setToastMessage(
+                        UiText.StringRes(
+                            Res.string.error_invalid_drinking
+                        )
+                    )
+
+                    ProfileCompletionIoResult.InvalidEyes -> setToastMessage(UiText.StringRes(Res.string.error_invalid_eyes))
+                    ProfileCompletionIoResult.InvalidHair -> setToastMessage(UiText.StringRes(Res.string.error_invalid_hair))
+                    ProfileCompletionIoResult.InvalidHeight -> setToastMessage(UiText.StringRes(Res.string.error_invalid_height))
+                    ProfileCompletionIoResult.InvalidInterestedIn -> setToastMessage(
+                        UiText.StringRes(
+                            Res.string.error_invalid_interest_in
+                        )
+                    )
+
+                    ProfileCompletionIoResult.InvalidLookingFor -> setToastMessage(
+                        UiText.StringRes(
+                            Res.string.error_invalid_looking_for
+                        )
+                    )
+
+                    ProfileCompletionIoResult.InvalidSmoking -> setToastMessage(UiText.StringRes(Res.string.error_invalid_smoking))
+                    ProfileCompletionIoResult.InvalidWeight -> setToastMessage(UiText.StringRes(Res.string.error_invalid_weight))
+                }
+            }
         }
     }
 

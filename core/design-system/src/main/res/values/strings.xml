@@ -143,6 +143,19 @@
     <string name="error_invalid_state">Choose a valid state</string>
     <string name="error_invalid_city">Choose a valid city</string>
 
+    <string name="error_invalid_height">Invalid height, choose height</string>
+    <string name="error_invalid_weight">Invalid weight, choose weight</string>
+    <string name="error_invalid_eyes">Invalid eyes, choose eyes</string>
+    <string name="error_invalid_hair">Invalid hair, choose hair</string>
+    <string name="error_invalid_smoking">Invalid smoking, choose smoking</string>
+    <string name="error_invalid_drinking">Invalid drinking, choose drinking</string>
+    <string name="error_invalid_body_type">Invalid body type, choose body type</string>
+    <string name="error_invalid_looking_for">Invalid looking for, choose looking for</string>
+    <string name="error_invalid_title">Invalid title, input title</string>
+    <string name="error_invalid_about_you">Invalid about you, input about you</string>
+    <string name="error_invalid_whats_up">Invalid whats up, input whats up</string>
+    <string name="error_invalid_interests">Invalid interests, choose interests</string>
+
 
     <string name="error_network_error">Network error, please check your internet connection</string>
     <string name="error_no_data_found">Currently no data found, please try again.</string>
