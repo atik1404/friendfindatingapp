@@ -66,8 +66,6 @@ fun ChatListScreen(
                     action.invoke(UiAction.FetchChatList)
                 }
 
-                UiState.Idle -> {}
-                UiState.Loading -> LoadingUi()
                 UiState.NoDataFound -> ErrorUi(
                     message = stringResource(Res.string.error_no_data_found)
                 ) {
@@ -75,10 +73,16 @@ fun ChatListScreen(
                 }
 
                 is UiState.Success -> ChatListSection(
-                    items = uiState.data
-                ) { toUsername ->
-                    navigateToChatRoom.invoke(toUsername)
-                }
+                    items = uiState.data,
+                    onLoadMore = {
+                        action.invoke(UiAction.LoadMore)
+                    },
+                    onItemClicked = { toUsername ->
+                        navigateToChatRoom.invoke(toUsername)
+                    }
+                )
+
+                UiState.Loading -> LoadingUi()
             }
         }
     }
@@ -90,7 +94,53 @@ private fun ScreenPreview() {
     ChatListScreen(
         onBackButtonClicked = {},
         navigateToChatRoom = { _ -> },
-        uiState = UiState.NoDataFound,
+        uiState = UiState.Success(
+            listOf(
+                ChatListItemApiEntity(
+                    toUsername = "Tom Cruise",
+                    notificationToken = "",
+                    userImage = "",
+                    fullName = "Tom Cruise",
+                    lastMessage = "Hi, How are you?",
+                    dateTime = "2025-12-16T10:25:47Z"
+                ), ChatListItemApiEntity(
+                    toUsername = "Tom Cruise",
+                    notificationToken = "",
+                    userImage = "",
+                    fullName = "Tom Cruise",
+                    lastMessage = "Hi, How are you?",
+                    dateTime = "2025-12-16T10:25:47Z"
+                ), ChatListItemApiEntity(
+                    toUsername = "Tom Cruise",
+                    notificationToken = "",
+                    userImage = "",
+                    fullName = "Tom Cruise",
+                    lastMessage = "Hi, How are you?",
+                    dateTime = "2025-12-16T10:25:47Z"
+                ), ChatListItemApiEntity(
+                    toUsername = "Tom Cruise",
+                    notificationToken = "",
+                    userImage = "",
+                    fullName = "Tom Cruise",
+                    lastMessage = "Hi, How are you?",
+                    dateTime = "2025-12-16T10:25:47Z"
+                ), ChatListItemApiEntity(
+                    toUsername = "Tom Cruise",
+                    notificationToken = "",
+                    userImage = "",
+                    fullName = "Tom Cruise",
+                    lastMessage = "Hi, How are you?",
+                    dateTime = "2025-12-16T10:25:47Z"
+                ), ChatListItemApiEntity(
+                    toUsername = "Tom Cruise",
+                    notificationToken = "",
+                    userImage = "",
+                    fullName = "Tom Cruise",
+                    lastMessage = "Hi, How are you?",
+                    dateTime = "2025-12-16T10:25:47Z"
+                )
+            )
+        ),
         action = {}
     )
 }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -126,8 +127,11 @@ private fun PersonList(
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
     ) {
-        items(items.size) {
-            val person = items[it]
+        items(
+            items = items,
+            key = { it.username }
+        )
+        { person ->
             PersonItemCardSection(
                 person = person,
                 modifier = Modifier

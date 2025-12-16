@@ -42,3 +42,11 @@ fun getLocalIpAddress(): String? {
     }
     return null
 }
+
+fun String.initialsOf(): String {
+    val cleaned = this.trim()
+    if (cleaned.isEmpty()) return "?"
+
+    // first two visible chars (works fine for normal latin names)
+    return cleaned.take(2).uppercase()
+}

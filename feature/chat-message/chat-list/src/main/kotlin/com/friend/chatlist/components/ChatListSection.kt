@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -31,23 +32,28 @@ import com.friend.designsystem.typography.AppTypography
 import com.friend.entity.chatmessage.ChatListItemApiEntity
 import com.friend.ui.components.AppText
 import com.friend.ui.components.NetworkImageLoader
+import com.friend.ui.preview.LightPreview
 
 @Composable
 fun ChatListSection(
     modifier: Modifier = Modifier,
     items: List<ChatListItemApiEntity>,
-    onItemClicked: (ChatListItemApiEntity) -> Unit
+    onItemClicked: (ChatListItemApiEntity) -> Unit,
+    onLoadMore: () -> Unit
 ) {
     LazyColumn(
         modifier = modifier.fillMaxWidth()
     ) {
-        items(items.size, key = { it }) {
+        items(
+            items = items,
+            key = { it.toUsername }
+        ) { item ->
             ChatListItem(
-                item = items[it],
+                item = item,
                 modifier = modifier
                     .fillMaxWidth()
                     .clickable {
-                        onItemClicked.invoke(items[it])
+                        onItemClicked.invoke(item)
                     }
             )
         }
@@ -56,7 +62,7 @@ fun ChatListSection(
 
 @Composable
 private fun ChatListItem(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     item: ChatListItemApiEntity
 ) {
     Row(
@@ -75,13 +81,14 @@ private fun ChatListItem(
     ) {
         NetworkImageLoader(
             item.userImage,
-            modifier = modifier
+            name = item.toUsername,
+            modifier = Modifier
                 .size(50.dp),
             shape = CircleShape
         )
 
         Spacer(
-            modifier = modifier.width(SpacingToken.medium)
+            modifier = Modifier.width(SpacingToken.medium)
         )
 
         Column {
@@ -93,7 +100,7 @@ private fun ChatListItem(
             )
 
             Spacer(
-                modifier = modifier.height(SpacingToken.micro)
+                modifier = Modifier.height(SpacingToken.micro)
             )
 
             AppText(
@@ -106,7 +113,7 @@ private fun ChatListItem(
         }
 
         Spacer(
-            modifier = modifier.weight(1f)
+            modifier = Modifier.weight(1f)
         )
 
         AppText(
@@ -116,4 +123,30 @@ private fun ChatListItem(
             textColor = MaterialTheme.textColors.primary,
         )
     }
+}
+
+@Composable
+@LightPreview
+private fun ScreenPreview() {
+    ChatListSection(
+        items = listOf(
+            ChatListItemApiEntity(
+                toUsername = "Tom Cruise",
+                notificationToken = "",
+                userImage = "",
+                fullName = "Tom Cruise",
+                lastMessage = "Hi, How are you?",
+                dateTime = "2025-12-16T10:25:47Z"
+            ), ChatListItemApiEntity(
+                toUsername = "Tom Cruise",
+                notificationToken = "",
+                userImage = "",
+                fullName = "Tom Cruise",
+                lastMessage = "Hi, How are you?",
+                dateTime = "2025-12-16T10:25:47Z"
+            )
+        ),
+        onItemClicked = {},
+        onLoadMore = {},
+    )
 }

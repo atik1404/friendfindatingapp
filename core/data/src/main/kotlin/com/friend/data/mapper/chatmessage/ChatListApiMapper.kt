@@ -16,7 +16,7 @@ class ChatListApiMapper @Inject constructor() :
             ChatListItemApiEntity(
                 toUsername = item.toUsername.orEmpty(),
                 notificationToken = item.notificationToken.orEmpty(),
-                userImage = "$imageBaseUrl${item.userimage.orEmpty()}",
+                userImage = if (item.userimage != null) "$imageBaseUrl${item.userimage.orEmpty()}" else "",
                 fullName = item.fullName ?: "Tom Cruise",
                 lastMessage = item.lastMessage ?: "Hi, How are you?",
                 dateTime = item.dateTime ?: "2025-12-16T10:25:47Z"

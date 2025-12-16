@@ -13,11 +13,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.friend.common.extfun.getGreetingText
-import com.friend.designsystem.R as Res
 import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.theme.textColors
@@ -25,6 +23,7 @@ import com.friend.designsystem.typography.AppTypography
 import com.friend.ui.components.AppIconButton
 import com.friend.ui.components.AppText
 import com.friend.ui.components.NetworkImageLoader
+import com.friend.designsystem.R as Res
 
 @Composable
 fun ProfileSummarySection(

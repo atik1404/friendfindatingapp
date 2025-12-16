@@ -1,7 +1,7 @@
 package com.friend.common.constant
 
 object AppConstants {
-    const val DATA_PER_PAGE = 50
+    const val DATA_PER_PAGE = 5
 
     var BodyTypes = listOf("Slim", "Athletic", "Normal", "Few extra pounds")
     var LookingFor = listOf(

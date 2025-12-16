@@ -84,13 +84,12 @@ fun ErrorUi(
         AppText(
             text = message,
             modifier = Modifier
-                .fillMaxWidth()
                 .appPaddingHorizontal(SpacingToken.medium),
             fontWeight = FontWeight.Light,
             textStyle = AppTypography.bodyMedium,
             textColor = MaterialTheme.textColors.secondary,
             maxLines = 3,
-            alignment = TextAlign.Center
+            alignment = TextAlign.Center,
         )
 
         Spacer(modifier = Modifier.height(SpacingToken.huge))
