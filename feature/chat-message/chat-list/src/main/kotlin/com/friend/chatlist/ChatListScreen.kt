@@ -1,60 +1,38 @@
 package com.friend.chatlist
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import com.friend.designsystem.spacing.RadiusToken
+import com.friend.chatlist.components.ChatListSection
+import com.friend.chatlist.components.SearchBarSection
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingSymmetric
-import com.friend.designsystem.theme.backgroundColors
-import com.friend.designsystem.theme.textColors
-import com.friend.designsystem.theme.textFieldColors
-import com.friend.designsystem.typography.AppTypography
+import com.friend.entity.chatmessage.ChatListItemApiEntity
 import com.friend.ui.common.AppToolbar
-import com.friend.ui.components.AppBaseTextField
+import com.friend.ui.common.ErrorUi
+import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppScaffold
-import com.friend.ui.components.AppText
-import com.friend.ui.components.NetworkImageLoader
-import com.friend.ui.preview.LightDarkPreview
-import timber.log.Timber
+import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatListScreen(
+    uiState: UiState,
+    action: (UiAction) -> Unit,
     onBackButtonClicked: () -> Unit,
-    navigateToChatRoom: (String, String) -> Unit
+    navigateToChatRoom: (ChatListItemApiEntity) -> Unit
 ) {
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
@@ -78,113 +56,41 @@ fun ChatListScreen(
                     vertical = SpacingToken.medium
                 )
         ) {
-            SearchMenu()
+            SearchBarSection()
             Spacer(modifier = Modifier.height(SpacingToken.medium))
-            ChatList{
-                navigateToChatRoom.invoke("Tom Cruise","1232344")
+
+            when (uiState) {
+                is UiState.Error -> ErrorUi(
+                    message = uiState.message
+                ) {
+                    action.invoke(UiAction.FetchChatList)
+                }
+
+                UiState.Idle -> {}
+                UiState.Loading -> LoadingUi()
+                UiState.NoDataFound -> ErrorUi(
+                    message = stringResource(Res.string.error_no_data_found)
+                ) {
+                    action.invoke(UiAction.FetchChatList)
+                }
+
+                is UiState.Success -> ChatListSection(
+                    items = uiState.data
+                ) { toUsername ->
+                    navigateToChatRoom.invoke(toUsername)
+                }
             }
         }
     }
 }
 
 @Composable
-private fun SearchMenu() {
-    var searchKeyword by rememberSaveable { mutableStateOf("") }
-    AppBaseTextField(
-        value = searchKeyword,
-        modifier = Modifier.fillMaxWidth(),
-        placeholder = stringResource(Res.string.hint_search_here),
-        onValueChange = { searchKeyword = it },
-        colors = MaterialTheme.textFieldColors.outlinedTextField,
-        shape = RoundedCornerShape(SpacingToken.medium),
-        trailingIcon = Icons.Default.Search,
-    )
-}
-
-@Composable
-private fun ChatListItem(modifier: Modifier) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = SpacingToken.micro)
-            .background(
-                MaterialTheme.backgroundColors.white,
-                shape = RoundedCornerShape(RadiusToken.medium)
-            )
-            .appPaddingSymmetric(
-                horizontal = SpacingToken.tiny,
-                vertical = SpacingToken.medium
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        NetworkImageLoader(
-            "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
-            modifier = Modifier
-                .size(50.dp),
-            shape = CircleShape
-        )
-
-        Spacer(
-            modifier = Modifier.width(SpacingToken.medium)
-        )
-
-        Column {
-            AppText(
-                text = "Tom Cruise",
-                textStyle = AppTypography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                textColor = MaterialTheme.textColors.primary,
-            )
-
-            Spacer(
-                modifier = Modifier.height(SpacingToken.micro)
-            )
-
-            AppText(
-                text = "Hey, How are you Tom?",
-                textStyle = AppTypography.bodyMedium,
-                fontWeight = FontWeight.Light,
-                textColor = MaterialTheme.textColors.primary,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-
-        Spacer(
-            modifier = Modifier.weight(1f)
-        )
-
-        AppText(
-            text = "10:15 PM",
-            textStyle = AppTypography.bodySmall,
-            fontWeight = FontWeight.Medium,
-            textColor = MaterialTheme.textColors.primary,
-        )
-    }
-}
-
-@Composable
-private fun ChatList(
-    onItemClicked: (String) -> Unit
-) {
-    LazyColumn {
-        items(100, key = { it }) {
-            ChatListItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable{
-                        onItemClicked.invoke("")
-                        Timber.e("item clicked")
-                    }
-            )
-        }
-    }
-}
-
-@Composable
-@LightDarkPreview
+@LightPreview
 private fun ScreenPreview() {
     ChatListScreen(
         onBackButtonClicked = {},
-        navigateToChatRoom = { _, _ -> }
+        navigateToChatRoom = { _ -> },
+        uiState = UiState.NoDataFound,
+        action = {}
     )
 }

@@ -1,5 +1,5 @@
 [versions]
-androidGradlePlugin = "8.13.1"
+androidGradlePlugin = "8.13.2"
 kotlin = "2.2.21"
 ksp = "2.2.20-2.0.4"
 
@@ -82,6 +82,7 @@ localisation = "1.0.5"
 multidex = "2.0.1"
 photoview = "2.3.0"
 workRuntime = "2.11.0"
+lottieVersion = "6.6.6"
 
 playServicesAds = "24.8.0"
 playServicesAuth = "21.4.0"
@@ -203,6 +204,8 @@ android-image-cropper = { module = "com.vanniktech:android-image-cropper", versi
 android-spinkit = { module = "com.github.ybq:Android-SpinKit", version.ref = "androidSpinkit" }
 
 dexter = { module = "com.karumi:dexter", version.ref = "dexter" }
+
+lottie-animation = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottieVersion" }
 
 exoplayer = { module = "com.google.android.exoplayer:exoplayer", version.ref = "exoplayer" }
 exoplayer-core = { module = "com.google.android.exoplayer:exoplayer-core", version.ref = "exoplayer" }
