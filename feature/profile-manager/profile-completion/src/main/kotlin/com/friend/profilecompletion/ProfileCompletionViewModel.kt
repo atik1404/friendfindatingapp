@@ -2,6 +2,7 @@ package com.friend.profilecompletion
 
 import com.friend.common.base.BaseViewModel
 import com.friend.domain.apiusecase.credential.PostProfileCompletionApiUseCase
+import com.friend.domain.apiusecase.profilemanager.FetchProfileApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.validator.ProfileCompletionIoResult
 import com.friend.ui.common.UiText
@@ -17,7 +18,8 @@ import com.friend.designsystem.R as Res
 
 @HiltViewModel
 class ProfileCompletionViewModel @Inject constructor(
-    private val profileCompletionApiUseCase: PostProfileCompletionApiUseCase
+    private val profileCompletionApiUseCase: PostProfileCompletionApiUseCase,
+    private val fetchProfileApiUseCase: FetchProfileApiUseCase
 ) : BaseViewModel() {
     val ioError get() = profileCompletionApiUseCase.ioError.receiveAsFlow()
 
@@ -31,6 +33,7 @@ class ProfileCompletionViewModel @Inject constructor(
         when (it) {
             UiAction.ResetState -> _formUiState.value = UiState()
             UiAction.FormSubmit -> performProfileCompletion()
+            UiAction.FetchProfile -> fetchProfile()
             is UiAction.AboutYouChanged -> onAboutYouChange(it.value)
             is UiAction.BodyTypeChanged -> onBodyTypeChange(it.value)
             is UiAction.DrinkingChanged -> onDrinkingChange(it.value)
@@ -74,8 +77,30 @@ class ProfileCompletionViewModel @Inject constructor(
                     is ApiResult.Loading -> setLoading(result.loading)
                     is ApiResult.Success -> {
                         setToastMessage(UiText.Dynamic(result.data))
-                        _uiEvent.send(UiEvent.NavigateToHome)
+                        fetchProfile()
                     }
+                }
+            }
+        }
+    }
+
+    private fun fetchProfile() {
+        execute {
+            fetchProfileApiUseCase.execute("atik121").collect { result ->
+                when (result) {
+                    is ApiResult.Error -> updateForm { state ->
+                        state.copy(isFailedToFetchProfile = true, apiErrorMessage = result.message)
+                    }
+
+                    is ApiResult.Loading -> updateForm { state ->
+                        state.copy(
+                            isLoading = result.loading,
+                            isFailedToFetchProfile = false,
+                            apiErrorMessage = ""
+                        )
+                    }
+
+                    is ApiResult.Success -> _uiEvent.send(UiEvent.NavigateToHome)
                 }
             }
         }

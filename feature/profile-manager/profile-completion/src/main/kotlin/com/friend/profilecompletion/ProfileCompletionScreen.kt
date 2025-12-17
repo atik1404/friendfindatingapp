@@ -23,6 +23,8 @@ import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
 import com.friend.profilecompletion.components.PersonalDetails
 import com.friend.ui.common.AppToolbar
+import com.friend.ui.common.ErrorUi
+import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppChipMultiWithTitle
 import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppOutlineTextField
@@ -170,6 +172,14 @@ fun ProfileCompletionScreen(
                 }
             )
         }
+
+        if (state.isLoading)
+            LoadingUi()
+
+        if (state.isFailedToFetchProfile)
+            ErrorUi(message = state.apiErrorMessage) {
+                onEvent(UiAction.FetchProfile)
+            }
     }
 }
 

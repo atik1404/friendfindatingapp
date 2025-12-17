@@ -13,7 +13,7 @@ data class SelectionData(
     val drinking: List<String> = AppConstants.Drinking,
     val bodyType: List<String> = AppConstants.BodyTypes,
     val lookingFor: List<String> = AppConstants.LookingFor,
-    val interests : List<String> = AppConstants.interest,
+    val interests: List<String> = AppConstants.interest,
 )
 
 data class UiState(
@@ -30,7 +30,10 @@ data class UiState(
     val whatsUp: TextInput = TextInput(),
     val interests: List<String> = emptyList(),
     val selectionData: SelectionData = SelectionData(),
-    val isSubmitting: Boolean = false
+    val isSubmitting: Boolean = false,
+    val isLoading: Boolean = false,
+    val isFailedToFetchProfile: Boolean = false,
+    val apiErrorMessage: String = ""
 )
 
 sealed interface UiEvent {
@@ -53,4 +56,5 @@ sealed interface UiAction {
     data class InterestsChanged(val value: Set<String>) : UiAction
     object ResetState : UiAction
     object FormSubmit : UiAction
+    object FetchProfile : UiAction
 }
