@@ -6,6 +6,8 @@
     <string name="BannerAdsUnitId">ca-app-pub-3432824199077306/3324531097</string>
     <string name="Interestitial_Ads_ID">ca-app-pub-3432824199077306/96983677501234</string>
     <string name="AppOpenAdId">ca-app-pub-3432824199077306/6994471618</string>
+    <string name="default_web_client_ids">176628957073-lll0macf6raivbvguuic9m9aoiuop4tn.apps.googleusercontent.com</string>
+    <string name="google_oath_key">176628957073-6p3h6emi054meff8g7o35r5573dvq72c.apps.googleusercontent.com</string>
 
     <string name="CHANNEL_ID">com.friendfinapp.dating</string>
     <string name="fcmlink">https://fcm.googleapis.com</string>

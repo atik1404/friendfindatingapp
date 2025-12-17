@@ -5,21 +5,21 @@ ksp = "2.2.20-2.0.4"
 
 firebasecrashlyticsplugin = "3.0.6"
 firebasePerfplugin = "2.0.2"
-firebaseBomVersion = "34.6.0"
+firebaseBomVersion = "34.7.0"
 
 googleServices = "4.4.4"
 
-billing = "8.1.0"
+billing = "8.2.1"
 
-androidxComposeActivity = "1.12.0"
-androidxComposeBom = "2025.11.01"
+androidxComposeActivity = "1.12.1"
+androidxComposeBom = "2025.12.00"
 runtimeComposeVersion = "2.6.0-beta01"
 androidxComposeCompiler = "1.5.15"
 material3 = "1.4.0"
 material = "1.10.0"
-androidxComposeFoundation = "1.9.5"
+androidxComposeFoundation = "1.10.0"
 constraintlayout = "1.1.1"
-runtime = "1.9.5"
+runtime = "1.10.0"
 
 androidxComposeNavigation = "2.9.6"
 nav3Core = "1.0.0"
@@ -32,7 +32,7 @@ appcompatVersion = "1.7.1"
 coreKtxVersion = "1.17.0"
 materialVersion = "1.13.0"
 recyclerViewVersion = "1.4.0"
-activityVersion = "1.12.0"
+activityVersion = "1.12.1"
 fragmentVersion = "1.8.9"
 constraintLayoutVersion = "2.2.1"
 cardViewVersion = "1.0.0"
@@ -41,7 +41,7 @@ desugar = "2.1.5"
 
 preferenceVersion = "1.2.1"
 
-swipeLayoutVersion = "1.1.0"
+swipeLayoutVersion = "1.2.0"
 
 customViewVersion = "1.1.2"
 
@@ -54,11 +54,10 @@ androidSpinkit = "1.4.0"
 picassoVersion = "2.71828"
 coil = "2.7.0"
 circleImageViewVersion = "3.1.0"
-androidImageCropper = "4.6.0"
+androidImageCropper = "4.7.0"
 
 hiltVersion = "2.57.1"
 timberVersion = "5.0.1"
-viewStateLayoutVersion = "1.1.1"
 dateced = "1.1.1"
 rxJava3Version = "3.1.12"
 rxAndroid3Version = "3.0.2"
@@ -82,13 +81,15 @@ localisation = "1.0.5"
 multidex = "2.0.1"
 photoview = "2.3.0"
 workRuntime = "2.11.0"
-lottieVersion = "6.6.6"
+lottieVersion = "6.7.1"
 
-playServicesAds = "24.8.0"
+playServicesAds = "24.9.0"
 playServicesAuth = "21.4.0"
 playServicesRecaptcha = "17.1.0"
 playServicesSafetynet = "18.1.0"
 playAppUpdateVersionVersion = "2.0.1"
+googleCredential = "1.6.0-rc01"
+googleAuthId = "1.1.1"
 
 espressoVersion = "3.7.0"
 junitVersion = "4.13.2"
@@ -108,7 +109,6 @@ androidx-compose-activity = { group = "androidx.activity", name = "activity-comp
 androidx-compose-materialicon = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "androidxComposeFoundation" }
 androidx-compose-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "constraintlayout" }
-
 
 # Core Navigation 3 libraries
 androidx-compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxComposeNavigation" }
@@ -197,6 +197,10 @@ play-services-ads = { module = "com.google.android.gms:play-services-ads", versi
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 play-services-recaptcha = { module = "com.google.android.gms:play-services-recaptcha", version.ref = "playServicesRecaptcha" }
 play-services-safetynet = { module = "com.google.android.gms:play-services-safetynet", version.ref = "playServicesSafetynet" }
+
+androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "googleCredential" }
+androidx-credentials-service-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "googleCredential" }
+androidx-credentials-googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleAuthId" }
 
 billing = { module = "com.android.billingclient:billing-ktx", version.ref = "billing" }
 
@@ -364,6 +368,13 @@ debug-tools = [
 ui-helpers = [
     "sdp",
     "ssp"
+]
+
+# ---- Google login ----
+google-login = [
+    "androidx-credentials",
+    "androidx-credentials-service-auth",
+    "androidx-credentials-googleid",
 ]
 
 # ---- Testing ----
