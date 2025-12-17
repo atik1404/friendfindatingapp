@@ -2,7 +2,9 @@ package com.friend.splash
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
 fun SplashRoute(
@@ -10,9 +12,10 @@ fun SplashRoute(
     navigateToHomeScreen: () -> Unit = {},
     viewModel: SplashViewModel = hiltViewModel(),
 ) {
-    viewModel.action(UiEvent.CheckLoginStatus)
+    val state by viewModel.uiSate.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
+        viewModel.action(UiEvent.CheckLoginStatus)
         viewModel.uiEffect.collect { effect ->
             when (effect) {
                 is UiEffect.NavigateToLogin -> navigateToLoginScreen()
@@ -21,5 +24,9 @@ fun SplashRoute(
         }
     }
 
-    SplashScreen()
+    SplashScreen(
+        uiState = state
+    ) {
+        viewModel.action(it)
+    }
 }

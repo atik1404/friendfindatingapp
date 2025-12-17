@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -23,11 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.SpacingToken
-import com.friend.designsystem.spacing.StrokeTokens
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
+import com.friend.ui.common.ErrorUi
+import com.friend.ui.common.LoadingAnimation
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AppText
 import com.friend.ui.components.LocalImageLoader
@@ -36,56 +34,57 @@ import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SplashScreen() {
+fun SplashScreen(
+    uiState: UiState,
+    onEvent: (UiEvent) -> Unit
+) {
     AppScaffold(
         contentWindowInsets = WindowInsets(0)
     ) { padding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            LocalImageLoader(
-                imageResId = Res.drawable.img_splash_background,
-                modifier = Modifier
-                    .fillMaxSize()
-            )
+        when (uiState) {
+            is UiState.Error -> ErrorUi(message = uiState.message) {
+                onEvent.invoke(UiEvent.FetchProfile)
+            }
 
-            Column(
-                modifier = Modifier
-                    .padding(padding)
-                    .align(Alignment.Center),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                AnimatedVisibilityImage(true)
+            UiState.Idle -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                ) {
+                    LocalImageLoader(
+                        imageResId = Res.drawable.img_splash_background,
+                        modifier = Modifier
+                            .fillMaxSize()
+                    )
 
-                Spacer(modifier = Modifier.height(SpacingToken.medium))
+                    Column(
+                        modifier = Modifier
+                            .padding(padding)
+                            .align(Alignment.Center),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        AnimatedVisibilityImage(true)
 
-                AppText(
-                    stringResource(Res.string.msg_dating_app),
-                    fontWeight = FontWeight.Bold,
-                    textStyle = AppTypography.titleLarge,
-                    alignment = TextAlign.Center,
-                    textColor = MaterialTheme.textColors.white
-                )
+                        Spacer(modifier = Modifier.height(SpacingToken.medium))
 
-                Spacer(modifier = Modifier.height(SpacingToken.medium))
+                        AppText(
+                            stringResource(Res.string.msg_dating_app),
+                            fontWeight = FontWeight.Bold,
+                            textStyle = AppTypography.titleLarge,
+                            alignment = TextAlign.Center,
+                            textColor = MaterialTheme.textColors.white
+                        )
 
-                CircularProgressBar()
+                        Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+                        LoadingAnimation()
+                    }
+                }
             }
         }
     }
-}
-
-@Composable
-fun CircularProgressBar(
-    modifier: Modifier = Modifier,
-) {
-    CircularProgressIndicator(
-        modifier = modifier.size(IconSizeToken.extraLarge),
-        strokeWidth = StrokeTokens.thick
-    )
 }
 
 @Composable
@@ -104,5 +103,5 @@ fun AnimatedVisibilityImage(visible: Boolean) {
 @Composable
 @LightPreview
 fun ScreenPreview() {
-    SplashScreen()
+    SplashScreen(uiState = UiState.Idle) {}
 }

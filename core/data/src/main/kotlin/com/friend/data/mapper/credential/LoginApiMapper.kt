@@ -12,27 +12,9 @@ class LoginApiMapper @Inject constructor() : Mapper<LoginApiResponse, LoginApiEn
     override fun mapFromApiResponse(response: LoginApiResponse): LoginApiEntity {
         return LoginApiEntity(
             message = response.message ?: "",
-            accessToken = response.data?.token ?: "",
-            userName = response.data?.username ?: "",
-            fullName = response.data?.name ?: "",
-            email = response.data?.email ?: "",
-            gender = Gender.fromValue(response.data?.gender ?: -1).name,
-            dateOfBirth = response.data?.birthdate ?: ""
+            accessToken = response.data?.authToken ?: "",
+            refreshToken = response.data?.refreshToken ?: "",
+            expireAt = response.data?.expireAt ?: "",
         )
-    }
-}
-
-class CacheProfile @Inject constructor(
-    private val sharedPrefHelper: SharedPrefHelper,
-) {
-    fun cacheProfile(data: LoginApiEntity) {
-        with(data) {
-            sharedPrefHelper.putString(SpKey.authToken, data.accessToken)
-            sharedPrefHelper.putString(SpKey.userName, data.userName)
-            sharedPrefHelper.putString(SpKey.fullName, data.fullName)
-            sharedPrefHelper.putString(SpKey.gender, data.gender)
-            sharedPrefHelper.putString(SpKey.email, data.email)
-            sharedPrefHelper.putString(SpKey.dateOfBirth, data.dateOfBirth)
-        }
     }
 }

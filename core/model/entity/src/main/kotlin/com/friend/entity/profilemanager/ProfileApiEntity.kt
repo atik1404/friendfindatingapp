@@ -1,6 +1,6 @@
-package com.friend.entity.credential
+package com.friend.entity.profilemanager
 
-data class UserApiEntity(
+data class ProfileApiEntity(
     val message: String,
     val userName: String,
     val fullName: String,

@@ -23,6 +23,7 @@ import com.friend.login.components.CopyrightText
 import com.friend.login.components.GoogleLoginButton
 import com.friend.login.components.LoginForm
 import com.friend.login.components.LoginOptionDivider
+import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.LocalImageLoader
 import com.friend.ui.preview.LightPreview
@@ -126,7 +127,7 @@ fun LoginScreen(
                 },
                 username = state.username,
                 password = state.password,
-                isFormSubmitting = state.isLoading,
+                isFormSubmitting = state.isSubmitting,
                 onForgotPasswordClick = navigateToForgotPassword,
                 onSignUpClick = navigateToRegistration,
                 onUsernameChange = { onEvent(UiAction.UsernameChanged(it)) },
@@ -156,6 +157,9 @@ fun LoginScreen(
                 }
             )
         }
+
+        if (state.isLoading)
+            LoadingUi()
     }
 }
 

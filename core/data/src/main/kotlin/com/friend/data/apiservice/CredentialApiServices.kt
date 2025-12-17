@@ -14,13 +14,13 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface CredentialApiServices {
-    @POST("v1/Login")
-    suspend fun login(
+    @POST("api/Auth/v1/Login")
+    suspend fun performLogin(
         @Body params: PostLoginApiUseCase.Params
     ): Response<LoginApiResponse>
 
-    @POST("v1/Register")
-    suspend fun registration(
+    @POST("api/Auth/v1/Register")
+    suspend fun performRegistration(
         @Body params: PostRegistrationApiUseCase.Params
     ): Response<RegistrationApiResponse>
 

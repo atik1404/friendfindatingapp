@@ -2,6 +2,7 @@ package com.friend.login
 
 import com.friend.common.base.BaseViewModel
 import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
+import com.friend.domain.apiusecase.profilemanager.FetchProfileApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.validator.LoginIoResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val postLoginApiUseCase: PostLoginApiUseCase
+    private val postLoginApiUseCase: PostLoginApiUseCase,
+    private val fetchProfileApiUseCase: FetchProfileApiUseCase
 ) : BaseViewModel() {
     val ioError get() = postLoginApiUseCase.ioError.receiveAsFlow()
     private val _uiState = MutableStateFlow(UiState())
@@ -47,14 +49,24 @@ class LoginViewModel @Inject constructor(
         execute {
             postLoginApiUseCase.execute(params).collect { result ->
                 when (result) {
-                    is ApiResult.Success -> {
-                        if (result.data.userName.isNotEmpty())
-                            _uiEffect.send(UiEvent.NavigateToHome)
-                        else handleApiError(result.data.message)
+                    is ApiResult.Success -> fetchProfile()
+                    is ApiResult.Loading -> _uiState.update {
+                        it.copy(isSubmitting = result.loading)
                     }
 
-                    is ApiResult.Loading -> onLoading(result.loading)
                     is ApiResult.Error -> handleApiError(result.message)
+                }
+            }
+        }
+    }
+
+    private fun fetchProfile() {
+        execute {
+            fetchProfileApiUseCase.execute("atik121").collect { result ->
+                when (result) {
+                    is ApiResult.Error -> handleApiError(result.message)
+                    is ApiResult.Loading -> onLoading(result.loading)
+                    is ApiResult.Success -> _uiEffect.send(UiEvent.NavigateToHome)
                 }
             }
         }

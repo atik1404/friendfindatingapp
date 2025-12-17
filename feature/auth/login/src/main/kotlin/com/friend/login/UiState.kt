@@ -7,6 +7,7 @@ data class UiState(
     val username: TextInput = TextInput(),
     val password: TextInput = TextInput(),
     val isLoading: Boolean = false,
+    val isSubmitting: Boolean = false,
 )
 
 sealed class UiEvent {

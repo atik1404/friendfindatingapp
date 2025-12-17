@@ -39,18 +39,27 @@ fun LoadingUi(
                 interactionSource = remember { MutableInteractionSource() }
             ) { /* no-op, just block */ }
     ) {
-        val composition by rememberLottieComposition(
-            LottieCompositionSpec.RawRes(Res.raw.loading)
-        )
-
-        LottieAnimation(
-            composition = composition,
-            iterations = LottieConstants.IterateForever,
-            modifier = Modifier
-                .size(100.dp)
+        LoadingAnimation(
+            modifier = modifier
                 .align(Alignment.Center)
         )
     }
+}
+
+@Composable
+fun LoadingAnimation(
+    modifier: Modifier = Modifier
+) {
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(Res.raw.loading)
+    )
+
+    LottieAnimation(
+        composition = composition,
+        iterations = LottieConstants.IterateForever,
+        modifier = modifier
+            .size(100.dp)
+    )
 }
 
 @Composable

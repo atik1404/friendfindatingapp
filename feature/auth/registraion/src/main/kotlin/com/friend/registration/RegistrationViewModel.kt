@@ -3,6 +3,7 @@ package com.friend.registration
 import com.friend.common.base.BaseViewModel
 import com.friend.common.constant.Gender
 import com.friend.common.extfun.getLocalIpAddress
+import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
 import com.friend.domain.apiusecase.credential.PostRegistrationApiUseCase
 import com.friend.domain.apiusecase.search.FetchCityApiUseCase
 import com.friend.domain.apiusecase.search.FetchCountriesUseCase
@@ -29,6 +30,7 @@ class RegistrationViewModel @Inject constructor(
     private val fetchStateApiUseCase: FetchStateApiUseCase,
     private val fetchCountryApiUseCase: FetchCountriesUseCase,
     private val postRegistrationApiUseCase: PostRegistrationApiUseCase,
+    private val postLoginApiUseCase: PostLoginApiUseCase,
 ) : BaseViewModel() {
     val ioError get() = postRegistrationApiUseCase.ioError.receiveAsFlow()
 
@@ -41,7 +43,8 @@ class RegistrationViewModel @Inject constructor(
     val action: (UiAction) -> Unit = {
         when (it) {
             UiAction.FetchCountry -> fetchCountries()
-            UiAction.FormValidation -> performRegistration()
+            UiAction.PerformRegistration -> performRegistration()
+            UiAction.PerformLogin -> performLoginApi()
             is UiAction.OnChangeUserName -> onChangeUserName(it.value)
             is UiAction.OnChangeEmail -> onChangeEmail(it.value)
             is UiAction.OnChangeName -> onChangeName(it.value)
@@ -144,22 +147,36 @@ class RegistrationViewModel @Inject constructor(
 
             postRegistrationApiUseCase.execute(params).collect { result ->
                 when (result) {
-                    is ApiResult.Error -> _uiEvent.send(
-                        UiEvent.ShowToastMessage(
-                            UiText.Dynamic(
-                                result.message
-                            )
-                        )
-                    )
-
+                    is ApiResult.Error -> setToastMessage(UiText.Dynamic(result.message))
                     is ApiResult.Loading -> _formUiState.update { it.copy(isSubmitting = result.loading) }
                     is ApiResult.Success -> {
-                        setToastMessage(
-                            UiText.Dynamic(
-                                result.data.message
+                        performLoginApi()
+                        setToastMessage(UiText.Dynamic(result.data))
+                    }
+                }
+            }
+        }
+    }
+
+    private fun performLoginApi() {
+        val current = _formUiState.value
+        val params = PostLoginApiUseCase.Params(
+            username = current.form.username.value,
+            password = current.form.password.value,
+        )
+
+        execute {
+            postLoginApiUseCase.execute(params).collect { result ->
+                when (result) {
+                    is ApiResult.Success -> _uiEvent.send(UiEvent.NavigateToProfileCompletion)
+                    is ApiResult.Loading -> setLoading(result.loading)
+                    is ApiResult.Error -> {
+                        _formUiState.update {
+                            it.copy(
+                                isLoginFailed = true,
+                                loginFailedMessage = result.message
                             )
-                        )
-                        _uiEvent.send(UiEvent.NavigateToProfileCompletion)
+                        }
                     }
                 }
             }
@@ -214,7 +231,13 @@ class RegistrationViewModel @Inject constructor(
     }
 
     private fun setLoading(value: Boolean) {
-        _formUiState.update { it.copy(isLoading = value) }
+        _formUiState.update {
+            it.copy(
+                isLoading = value,
+                isLoginFailed = false,
+                loginFailedMessage = ""
+            )
+        }
     }
 
     /** Update only the form part of the UiState in a single place to reduce repetition. */

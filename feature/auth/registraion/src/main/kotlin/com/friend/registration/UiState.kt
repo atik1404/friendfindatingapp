@@ -14,16 +14,13 @@ data class FormData(
     val password: TextInput = TextInput(),
     val dateOfBirth: TextInput = TextInput(),
     val postCode: TextInput = TextInput(),
-    val gender: Gender ? = null,
-    val interestedIn: Gender ? = null,
+    val gender: Gender? = null,
+    val interestedIn: Gender? = null,
     val country: CountryApiEntity? = null,
     val state: StateApiEntity? = null,
     val city: CityApiEntity? = null,
     val isAgree: Boolean = false,
-) {
-    val isFormValid: Boolean
-        get() = username.isValid
-}
+)
 
 data class UiState(
     val form: FormData = FormData(),
@@ -31,6 +28,8 @@ data class UiState(
     // POST loading (submit button)
     val isSubmitting: Boolean = false,
     val showDatePicker: Boolean = false,
+    val isLoginFailed: Boolean = false,
+    val loginFailedMessage: String = "",
 
     // GET loading (for full-screen loader)
     val isLoading: Boolean = false,
@@ -50,7 +49,8 @@ sealed class UiAction {
     data class CheckPrivacyPolicy(val value: Boolean) : UiAction()
     data class SelectBirthDate(val value: String) : UiAction()
     data class ShowDatePicker(val isVisible: Boolean) : UiAction()
-    object FormValidation : UiAction()
+    object PerformRegistration : UiAction()
+    object PerformLogin : UiAction()
     object FetchCountry : UiAction()
     data class SelectGender(val value: Gender) : UiAction()
     data class SelectInterestedIn(val value: Gender) : UiAction()

@@ -9,7 +9,6 @@ import com.friend.domain.validator.isEmailValid
 import com.friend.domain.validator.isNameValid
 import com.friend.domain.validator.isPasswordValid
 import com.friend.domain.validator.isUsernameValid
-import com.friend.entity.credential.UserApiEntity
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
@@ -17,7 +16,7 @@ import javax.inject.Inject
 
 class PostRegistrationApiUseCase @Inject constructor(
     private val repository: CredentialRepository,
-) : ApiUseCaseParams<PostRegistrationApiUseCase.Params, UserApiEntity> {
+) : ApiUseCaseParams<PostRegistrationApiUseCase.Params, String> {
 
     val ioError = Channel<RegistrationIoResult>()
 
@@ -29,37 +28,14 @@ class PostRegistrationApiUseCase @Inject constructor(
         val gender: Int = -1,
         val interestedIn: Int = -1,
         val birthdate: String,
-        val birthdate2: String = birthdate,
         val country: String,
         val state: String,
         val zipCode: String,
         val city: String,
-        val active: Int = 1,
-        val receiveEmails: Int = 1,
-        val userIP: String ?= null,
-        val messageVerificationsLeft: Int = 5,
-        val languageId: Int = 1,
-        val billingDetails: String? = null,
-        val invitedBy: String = "",
-        val incomingMessagesRestrictions: String? = null,
-        val affiliateID: Int = 0,
-        val options: Int = 0,
-        val longitude: Int = 0,
-        val latitude: Int = 0,
-        val tokenUniqueId: String = "",
-        val credits: Int = 0,
-        val moderationScore: Int = 0,
-        val spamSuspected: Int = 0,
-        val faceControlApproved: Int = 0,
-        val profileSkin: String = "",
-        val statusText: String = "",
-        val featuredMember: Int = 0,
-        val mySpaceID: String = "",
-        val facebookID: Int = 0,
-        val eventsSettings: Int = 0,
+        val userIP: String? = null,
     )
 
-    override suspend fun execute(params: Params): Flow<ApiResult<UserApiEntity>> {
+    override suspend fun execute(params: Params): Flow<ApiResult<String>> {
         return when (val validationResult = validation(params)) {
             is DataValidationResult.Failure<*> -> {
                 ioError.send(validationResult.ioErrorResult as RegistrationIoResult)
@@ -98,7 +74,7 @@ class PostRegistrationApiUseCase @Inject constructor(
         if (params.state == "-1")
             return DataValidationResult.Failure(RegistrationIoResult.InvalidState)
 
-        if (params.city  == "-1")
+        if (params.city == "-1")
             return DataValidationResult.Failure(RegistrationIoResult.InvalidCity)
 
         if (params.zipCode.isEmpty())

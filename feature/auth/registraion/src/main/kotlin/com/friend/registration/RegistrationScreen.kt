@@ -27,6 +27,7 @@ import com.friend.registration.component.InterestedInSelection
 import com.friend.registration.component.NameSection
 import com.friend.registration.component.PasswordSection
 import com.friend.ui.common.AppToolbar
+import com.friend.ui.common.ErrorUi
 import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppCheckbox
 import com.friend.ui.components.AppElevatedButton
@@ -173,12 +174,18 @@ fun RegistrationScreen(
                 text = stringResource(Res.string.action_sign_up),
                 isLoading = state.isSubmitting,
                 onClick = {
-                    uiAction.invoke(UiAction.FormValidation)
+                    uiAction.invoke(UiAction.PerformRegistration)
                 },
             )
         }
+
         if (state.isLoading)
             LoadingUi()
+
+        if (state.isLoginFailed)
+            ErrorUi(message = state.loginFailedMessage) {
+                uiAction.invoke(UiAction.PerformLogin)
+            }
     }
 }
 
