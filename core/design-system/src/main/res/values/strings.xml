@@ -32,7 +32,10 @@
     <string name="title_report_user">Report User</string>
     <string name="title_privacy_policy">Privacy Policy</string>
     <string name="title_member_ship">Membership plan</string>
-    <string name="title_something_wrong">Oops! Something went wrong</string>
+
+    <string name="title_something_wrong">Request failed</string>
+    <string name="title_data_empty">Try a different search</string>
+    <string name="title_network_error">Unable to connect server</string>
 
     <string name="action_login_with_google">Login with Google</string>
     <string name="action_login">Login</string>
@@ -53,6 +56,7 @@
     <string name="action_monthly">1 Month</string>
     <string name="action_manage_subscription">Manage Subscription</string>
     <string name="action_edit_profile">Edit Profile</string>
+    <string name="action_retry">Try again</string>
 
     <string name="label_or">OR</string>
     <string name="label_username">Username*</string>
@@ -102,11 +106,11 @@
     <string name="hint_title">Enter title</string>
     <string name="hint_about_you">Tell us about you</string>
     <string name="hint_whats_up">Describe what are you looking for</string>
-    <string name="hint_write_something_here">Write something here...</string>
+    <string name="hint_write_something_here">Write something here…</string>
     <string name="hint_min">Min</string>
     <string name="hint_max">Max</string>
     <string name="hint_to">TO</string>
-    <string name="hint_write_here">Write here...</string>
+    <string name="hint_write_here">Write here…</string>
 
     <string name="msg_image_content_description">Image content description</string>
     <string name="msg_dating_app">The Dating App</string>
@@ -166,9 +170,8 @@
     <string name="error_invalid_whats_up">Invalid whats up, input whats up</string>
     <string name="error_invalid_interests">Invalid interests, choose interests</string>
 
-
-    <string name="error_network_error">Network error, please check your internet connection</string>
-    <string name="error_no_data_found">Currently no data found, please try again.</string>
+    <string name="error_network_error">It looks like you’re offline. Please check your internet connection and try again.</string>
+    <string name="error_no_data_found">No data found right now. Please refresh or try again in a moment.</string>
 
     <string name="menu_report_user">Report User</string>
     <string name="menu_report_abuse">Report Abuse</string>

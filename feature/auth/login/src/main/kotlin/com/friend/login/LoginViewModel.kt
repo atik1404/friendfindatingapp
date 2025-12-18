@@ -62,7 +62,7 @@ class LoginViewModel @Inject constructor(
 
     private fun fetchProfile() {
         execute {
-            fetchProfileApiUseCase.execute("atik121").collect { result ->
+            fetchProfileApiUseCase.execute().collect { result ->
                 when (result) {
                     is ApiResult.Error -> handleApiError(result.message)
                     is ApiResult.Loading -> onLoading(result.loading)

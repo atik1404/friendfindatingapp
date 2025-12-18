@@ -20,6 +20,7 @@ import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingSymmetric
 import com.friend.entity.chatmessage.ChatListItemApiEntity
 import com.friend.ui.common.AppToolbar
+import com.friend.ui.common.ErrorType
 import com.friend.ui.common.ErrorUi
 import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppScaffold
@@ -67,6 +68,7 @@ fun ChatListScreen(
                 }
 
                 UiState.NoDataFound -> ErrorUi(
+                    errorType = ErrorType.EMPTY_DATA,
                     message = stringResource(Res.string.error_no_data_found)
                 ) {
                     action.invoke(UiAction.FetchChatList)

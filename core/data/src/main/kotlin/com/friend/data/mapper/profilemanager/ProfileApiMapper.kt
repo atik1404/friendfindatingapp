@@ -12,13 +12,32 @@ class ProfileApiMapper @Inject constructor() :
     Mapper<ProfileApiResponse, ProfileApiEntity> {
 
     override fun mapFromApiResponse(response: ProfileApiResponse): ProfileApiEntity {
+        val profileData = response.data?.firstOrNull()
+
         return ProfileApiEntity(
-            message = response.message.orEmpty(),
-            userName = "",//response.data?.username.orEmpty(),
-            fullName = "Atik Faysal",//response.data?.name.orEmpty(),
-            email = "atik@gmail.com",//response.data?.email.orEmpty(),
-            gender = Gender.fromValue(1).name,//Gender.fromValue(response.data?.gender ?: -1).name,
-            dateOfBirth = "1995-01-01"//response.data?.birthdate.orEmpty(),
+            userName = profileData?.username.orEmpty(),
+            fullName = profileData?.name.orEmpty(),
+            email = profileData?.email.orEmpty(),
+            gender = Gender.fromValue(profileData?.gender ?: -1).name,
+            birthdate = profileData?.birthdate.orEmpty(),
+            interestedIn = Gender.fromValue(profileData?.interestedIn ?: -1).name,
+            country = profileData?.country.orEmpty(),
+            state = profileData?.state.orEmpty(),
+            city = profileData?.city.orEmpty(),
+            zipCode = profileData?.zipCode.orEmpty(),
+            image = profileData?.image.orEmpty(),
+            bodyType = profileData?.body_type.orEmpty(),
+            drinking = profileData?.drinking.orEmpty(),
+            eyes = profileData?.eyes.orEmpty(),
+            hair = profileData?.hair.orEmpty(),
+            height = profileData?.height.orEmpty(),
+            interests = profileData?.interests.orEmpty(),
+            lookingFor = profileData?.looking_for.orEmpty(),
+            smoking = profileData?.smoking.orEmpty(),
+            aboutYou = profileData?.tell_us_about_you.orEmpty(),
+            title = profileData?.title.orEmpty(),
+            weight = profileData?.weight.orEmpty(),
+            whatsUp = profileData?.what_are_you_looking_for.orEmpty(),
         )
     }
 }
@@ -28,13 +47,29 @@ class CacheProfile @Inject constructor(
 ) {
     fun cacheProfile(data: ProfileApiEntity) {
         with(data) {
-            sharedPrefHelper.putString(
-                SpKey.userName,
-                data.userName.ifEmpty { "atik121" })//TODO remove this static name
-            sharedPrefHelper.putString(SpKey.fullName, data.fullName)
-            sharedPrefHelper.putString(SpKey.gender, data.gender)
-            sharedPrefHelper.putString(SpKey.email, data.email)
-            sharedPrefHelper.putString(SpKey.dateOfBirth, data.dateOfBirth)
+            sharedPrefHelper.putString(SpKey.userName, userName)
+            sharedPrefHelper.putString(SpKey.fullName, fullName)
+            sharedPrefHelper.putString(SpKey.gender, gender)
+            sharedPrefHelper.putString(SpKey.email, email)
+            sharedPrefHelper.putString(SpKey.dateOfBirth, birthdate)
+            sharedPrefHelper.putString(SpKey.interestedIn, interestedIn)
+            sharedPrefHelper.putString(SpKey.country, country)
+            sharedPrefHelper.putString(SpKey.state, state)
+            sharedPrefHelper.putString(SpKey.city, city)
+            sharedPrefHelper.putString(SpKey.zipCode, zipCode)
+            sharedPrefHelper.putString(SpKey.profilePicture, image)
+            sharedPrefHelper.putString(SpKey.bodyType, bodyType)
+            sharedPrefHelper.putString(SpKey.drinking, drinking)
+            sharedPrefHelper.putString(SpKey.eyes, eyes)
+            sharedPrefHelper.putString(SpKey.hair, hair)
+            sharedPrefHelper.putString(SpKey.height, height)
+            sharedPrefHelper.putString(SpKey.interests, interests)
+            sharedPrefHelper.putString(SpKey.lookingFor, lookingFor)
+            sharedPrefHelper.putString(SpKey.smoking, smoking)
+            sharedPrefHelper.putString(SpKey.aboutYou, aboutYou)
+            sharedPrefHelper.putString(SpKey.title, title)
+            sharedPrefHelper.putString(SpKey.weight, weight)
+            sharedPrefHelper.putString(SpKey.whatsUp, whatsUp)
         }
     }
 }

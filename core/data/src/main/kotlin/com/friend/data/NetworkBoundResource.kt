@@ -12,27 +12,34 @@ import java.io.IOException
 import java.net.SocketTimeoutException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.net.UnknownHostException
 import javax.inject.Inject
+import javax.net.ssl.SSLHandshakeException
 
-class NetworkBoundResource @Inject constructor(){
+class NetworkBoundResource @Inject constructor() {
 
-    private  val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 
-    suspend fun<ResultType> downloadData(api : suspend () -> Response<ResultType>): Flow<ApiResult<ResultType>> {
+    suspend fun <ResultType> downloadData(api: suspend () -> Response<ResultType>): Flow<ApiResult<ResultType>> {
         return withContext(ioDispatcher) {
             flow {
                 try {
                     emit(ApiResult.Loading(true))
-                    val response:Response<ResultType> = api()
+                    val response: Response<ResultType> = api()
                     emit(ApiResult.Loading(false))
-                    if (response.isSuccessful){
+                    if (response.isSuccessful) {
                         response.body()?.let {
                             emit(ApiResult.Success(data = it))
-                        }?: emit(ApiResult.Error(message = "Unknown error occurred", code = 0))
-                    }else{
-                        emit(ApiResult.Error(message = parserErrorBody(response.errorBody()), code = response.code()))
+                        } ?: emit(ApiResult.Error(message = "Unknown error occurred", code = 0))
+                    } else {
+                        emit(
+                            ApiResult.Error(
+                                message = parserErrorBody(response.errorBody()),
+                                code = response.code()
+                            )
+                        )
                     }
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     emit(ApiResult.Loading(false))
                     emit(ApiResult.Error(message = message(e), code = code(e)))
                 }
@@ -40,30 +47,33 @@ class NetworkBoundResource @Inject constructor(){
         }
     }
 
-    private fun parserErrorBody(response: ResponseBody?):String{
+    private fun parserErrorBody(response: ResponseBody?): String {
         return response?.let {
             val errorMessage = JsonParser.parseString(it.string()).asJsonObject["message"].asString
             errorMessage.ifEmpty { "Whoops! Something went wrong" }
             errorMessage
-        }?:"Unknown error occur, please try again"
+        } ?: "Unknown error occur, please try again"
     }
 
-    private fun message(throwable: Throwable?):String{
+    private fun message(throwable: Throwable?): String {
         when (throwable) {
-            is SocketTimeoutException -> return "Whoops! connection time out, try again!"
-            is IOException -> return "No internet connection, try again!"
+            is SocketTimeoutException -> return "Whoops! The connection timed out. Please try again."
+            is SSLHandshakeException -> return "Secure connection failed. Please try again."
+            is UnknownHostException -> return "No internet connection. Please check your network and try again."
+            is IOException -> return "No internet connection. Please check your network and try again."
             is HttpException -> return try {
                 val errorJsonString = throwable.response()?.errorBody()?.string()
-                val errorMessage = JsonParser.parseString(errorJsonString).asJsonObject["message"].asString
-                errorMessage.ifEmpty { "Whoops! Something went wrong" }
-            }catch (e:Exception){
+                val errorMessage =
+                    JsonParser.parseString(errorJsonString).asJsonObject["message"].asString
+                errorMessage.ifEmpty { "Something went wrong. Please try again." }
+            } catch (e: Exception) {
                 "Unknown error occur, please try again!"
             }
         }
         return "Unknown error occur, please try again!!!"
     }
 
-    private fun code(throwable: Throwable?):Int{
+    private fun code(throwable: Throwable?): Int {
         return when (throwable) {
             is HttpException -> (throwable).code()
             is IOException -> 100

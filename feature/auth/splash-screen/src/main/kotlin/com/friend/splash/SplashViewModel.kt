@@ -41,7 +41,7 @@ class SplashViewModel @Inject constructor(
 
     private fun fetchProfile() {
         execute {
-            fetchProfileApiUseCase.execute("atik121").collect { result ->
+            fetchProfileApiUseCase.execute().collect { result ->
                 when (result) {
                     is ApiResult.Error -> handleApiError(result.code, result.message)
                     is ApiResult.Loading -> _uiState.value = UiState.Idle

@@ -18,12 +18,10 @@ class ProfileManagerRepoImpl @Inject constructor(
     private val cacheProfile: CacheProfile,
     private val profileApiMapper: ProfileApiMapper,
 ) : ProfileManageRepository {
-    override suspend fun fetchProfile(userName: String): Flow<ApiResult<ProfileApiEntity>> {
+    override suspend fun fetchProfile(): Flow<ApiResult<ProfileApiEntity>> {
         return mapFromApiResponse(
             result = networkBoundResources.downloadData {
-                apiServices.fetchProfile(
-                    userName
-                )
+                apiServices.fetchProfile()
             }, mapper = profileApiMapper
         ).map {
             if (it is ApiResult.Success) {

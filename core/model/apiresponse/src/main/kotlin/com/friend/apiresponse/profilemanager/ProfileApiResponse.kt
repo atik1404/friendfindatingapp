@@ -4,44 +4,37 @@ package com.friend.apiresponse.profilemanager
 data class ProfileApiResponse(
     val status_code: Int?,
     val message: String?,
-    //val data: ProfileDetailsResponse?,
-    val data: List<ProfileDetails>?,
-)
-
-data class ProfileDetails(
-    val questionID: Int?,
-    val value: String?,
-    val approved: Int?,
+    val data: List<ProfileDetailsResponse>?,
+    val blockedUser: List<BlockedUser>?,
 )
 
 data class ProfileDetailsResponse(
-    val token: String?,
-    val message: String?,
     val username: String?,
-    val email: String?,
     val name: String?,
     val gender: Int?,
-    val active: Int?,
-    val receiveEmails: Int?,
-    val interestedIn: Int?,
     val birthdate: String?,
+    val email: String?,
+    val interestedIn: Int?,
     val country: String?,
     val state: String?,
-    val zipCode: String?,
     val city: String?,
-    val userIP: String?,
-    val messageVerificationsLeft: Int?,
-    val languageId: Int?,
-    val affiliateID: Int?,
-    val options: Int?,
-    val longitude: Int?,
-    val latitude: Int?,
-    val tokenUniqueId: String?,
-    val credits: Int?,
-    val moderationScore: Int?,
-    val spamSuspected: Int?,
-    val faceControlApproved: Int?,
-    val profileSkin: String?,
-    val featuredMember: Int?,
-    val eventsSettings: Int?
+    val zipCode: String?,
+    val image: String?,
+    val body_type: String?,
+    val drinking: String?,
+    val eyes: String?,
+    val hair: String?,
+    val height: String?,
+    val interests: String?,
+    val looking_for: String?,
+    val smoking: String?,
+    val tell_us_about_you: String?,
+    val title: String?,
+    val weight: String?,
+    val what_are_you_looking_for: String?
+)
+
+data class BlockedUser(
+    val userBlocker: String?,
+    val blockedUser: String?
 )

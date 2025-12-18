@@ -28,6 +28,7 @@ import com.friend.entity.search.FriendSuggestionApiEntity
 import com.friend.home.components.PersonItemCardSection
 import com.friend.home.components.ProfileSummarySection
 import com.friend.home.components.SearchBarSection
+import com.friend.ui.common.ErrorType
 import com.friend.ui.common.ErrorUi
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.preview.LightPreview
@@ -81,6 +82,7 @@ fun HomeScreen(
 
                 UiState.Loading -> LoadingSection()
                 UiState.NoDataFound -> ErrorSection(
+                    error = ErrorType.EMPTY_DATA,
                     message = stringResource(Res.string.error_no_data_found)
                 ) {
                     onEvent(UiAction.FetchFriendSuggestion)
@@ -112,10 +114,15 @@ fun HomeScreen(
 }
 
 @Composable
-private fun ErrorSection(message: String, onRetry: () -> Unit) {
+private fun ErrorSection(
+    message: String,
+    error: ErrorType = ErrorType.API_ERROR,
+    onRetry: () -> Unit,
+) {
     ErrorUi(
         message = message,
         onRetry = onRetry,
+        errorType = error
     )
 }
 

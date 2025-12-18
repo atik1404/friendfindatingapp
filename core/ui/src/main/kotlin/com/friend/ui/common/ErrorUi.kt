@@ -1,5 +1,6 @@
 package com.friend.ui.common
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieCompositionSpec.RawRes
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.friend.designsystem.spacing.SpacingToken
@@ -33,11 +34,18 @@ import com.friend.ui.components.AppText
 import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
+enum class ErrorType {
+    EMPTY_DATA,
+    API_ERROR,
+    NETWORK_ERROR,
+}
+
+@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun ErrorUi(
     modifier: Modifier = Modifier,
+    errorType: ErrorType = ErrorType.API_ERROR,
     message: String,
-    title: String = stringResource(Res.string.title_something_wrong),
     onRetry: () -> Unit,
 ) {
     val configuration = LocalConfiguration.current
@@ -45,6 +53,15 @@ fun ErrorUi(
 
     // responsive lottie height (min 220dp, max 380dp, ~35% of screen height)
     val lottieHeight = (screenHeightDp * 0.35f).coerceIn(220.dp, 380.dp)
+
+    val isNetworkError = message.contains("internet")
+
+    val networkErrorMessage = stringResource(Res.string.error_network_error)
+
+    val errorAnimation =
+        RawRes(getErrorAnimation(if (isNetworkError) ErrorType.NETWORK_ERROR else errorType))
+    val title =
+        stringResource(getErrorTitle(if (isNetworkError) ErrorType.NETWORK_ERROR else errorType))
 
     Column(
         modifier = modifier
@@ -54,12 +71,9 @@ fun ErrorUi(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-
         Spacer(modifier = Modifier.weight(.2f))
 
-        val composition by rememberLottieComposition(
-            LottieCompositionSpec.RawRes(Res.raw.no_data)
-        )
+        val composition by rememberLottieComposition(errorAnimation)
 
         LottieAnimation(
             composition = composition,
@@ -82,7 +96,7 @@ fun ErrorUi(
         Spacer(modifier = Modifier.height(SpacingToken.medium))
 
         AppText(
-            text = message,
+            text = if (isNetworkError) networkErrorMessage else message,
             modifier = Modifier
                 .appPaddingHorizontal(SpacingToken.medium),
             fontWeight = FontWeight.Light,
@@ -95,7 +109,7 @@ fun ErrorUi(
         Spacer(modifier = Modifier.height(SpacingToken.huge))
 
         AppOutlinedButton(
-            text = "Retry",
+            text = stringResource(Res.string.action_retry),
             modifier = Modifier.fillMaxWidth(),
             onClick = onRetry
         )
@@ -104,12 +118,27 @@ fun ErrorUi(
     }
 }
 
+private fun getErrorAnimation(errorType: ErrorType): Int {
+    return when (errorType) {
+        ErrorType.EMPTY_DATA -> Res.raw.anim_data_empty
+        ErrorType.API_ERROR -> Res.raw.anim_api_error
+        ErrorType.NETWORK_ERROR -> Res.raw.anim_network_error
+    }
+}
+
+private fun getErrorTitle(errorType: ErrorType): Int {
+    return when (errorType) {
+        ErrorType.EMPTY_DATA -> Res.string.title_data_empty
+        ErrorType.API_ERROR -> Res.string.title_something_wrong
+        ErrorType.NETWORK_ERROR -> Res.string.title_network_error
+    }
+}
+
 
 @Composable
 @LightPreview
 private fun ScreenPreview() {
     ErrorUi(
-        title = "No internet connection",
         message = "Please check your internet connection and try again",
         onRetry = {}
     )
