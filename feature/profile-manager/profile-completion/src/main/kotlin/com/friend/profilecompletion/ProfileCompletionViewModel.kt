@@ -2,8 +2,8 @@ package com.friend.profilecompletion
 
 import com.friend.common.base.BaseViewModel
 import com.friend.common.constant.Gender
-import com.friend.domain.apiusecase.profilemanager.PostProfileUpdateApiUseCase
 import com.friend.domain.apiusecase.profilemanager.FetchProfileApiUseCase
+import com.friend.domain.apiusecase.profilemanager.PostProfileUpdateApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.validator.ProfileCompletionIoResult
 import com.friend.sharedpref.SharedPrefHelper
@@ -36,6 +36,7 @@ class ProfileCompletionViewModel @Inject constructor(
     val action: (UiAction) -> Unit = {
         when (it) {
             UiAction.ResetState -> _formUiState.value = UiState()
+            UiAction.SetDefaultData -> defaultValue()
             UiAction.FormSubmit -> performProfileCompletion()
             UiAction.FetchProfile -> fetchProfile()
             is UiAction.AboutYouChanged -> onAboutYouChange(it.value)
@@ -55,6 +56,26 @@ class ProfileCompletionViewModel @Inject constructor(
 
     init {
         bindIoError()
+    }
+
+    private fun defaultValue() {
+        val interests = sharedPrefHelper.getString(SpKey.interests).split(":")
+        updateForm { state ->
+            state.copy(
+                height = sharedPrefHelper.getString(SpKey.height),
+                weight = sharedPrefHelper.getString(SpKey.weight),
+                hair = sharedPrefHelper.getString(SpKey.hair),
+                eyes = sharedPrefHelper.getString(SpKey.eyes),
+                smoking = sharedPrefHelper.getString(SpKey.smoking),
+                drinking = sharedPrefHelper.getString(SpKey.drinking),
+                bodyType = sharedPrefHelper.getString(SpKey.bodyType),
+                lookingFor = sharedPrefHelper.getString(SpKey.lookingFor),
+                title = state.title.onChange(sharedPrefHelper.getString(SpKey.title)),
+                aboutYou = state.aboutYou.onChange(sharedPrefHelper.getString(SpKey.aboutYou)),
+                whatsUp = state.whatsUp.onChange(sharedPrefHelper.getString(SpKey.whatsUp)),
+                interests = interests,
+            )
+        }
     }
 
     private fun performProfileCompletion() {
@@ -82,7 +103,7 @@ class ProfileCompletionViewModel @Inject constructor(
                 aboutYou = current.aboutYou.value,
                 title = current.title.value,
                 whatsUp = current.whatsUp.value,
-                interests = current.interests
+                interests = current.interests.joinToString(":")
             )
 
             profileCompletionApiUseCase.execute(params).collect { result ->

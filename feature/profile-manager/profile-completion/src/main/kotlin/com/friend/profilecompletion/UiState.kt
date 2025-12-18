@@ -55,6 +55,7 @@ sealed interface UiAction {
     data class WhatsUpChanged(val value: String) : UiAction
     data class InterestsChanged(val value: Set<String>) : UiAction
     object ResetState : UiAction
+    object SetDefaultData : UiAction
     object FormSubmit : UiAction
     object FetchProfile : UiAction
 }

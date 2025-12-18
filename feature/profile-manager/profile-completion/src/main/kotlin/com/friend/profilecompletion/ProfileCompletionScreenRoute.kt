@@ -20,6 +20,7 @@ fun ProfileCompletionScreenRoute(
 
     LaunchedEffect(Unit) {
         viewModel.action(UiAction.ResetState)
+        viewModel.action(UiAction.SetDefaultData)
         viewModel.uiEvent.collect { event ->
             when (event) {
                 UiEvent.NavigateToHome -> navigateToHomeScreen.invoke()

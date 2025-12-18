@@ -42,8 +42,7 @@ class PostProfileUpdateApiUseCase @Inject constructor(
         val title: String,
         @SerializedName("what_are_you_looking_for")
         val whatsUp: String,
-        @SerializedName("interests")
-        val interests: List<String>,
+        val interests: String,
     )
 
     override suspend fun execute(params: Params): Flow<ApiResult<String>> {
