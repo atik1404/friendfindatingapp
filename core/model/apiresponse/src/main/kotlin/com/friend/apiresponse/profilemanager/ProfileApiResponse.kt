@@ -31,7 +31,8 @@ data class ProfileDetailsResponse(
     val tell_us_about_you: String?,
     val title: String?,
     val weight: String?,
-    val what_are_you_looking_for: String?
+    val what_are_you_looking_for: String?,
+    val is_profile_complete: Boolean?,
 )
 
 data class BlockedUser(

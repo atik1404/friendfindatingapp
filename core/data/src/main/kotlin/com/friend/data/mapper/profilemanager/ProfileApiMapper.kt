@@ -38,6 +38,8 @@ class ProfileApiMapper @Inject constructor() :
             title = profileData?.title.orEmpty(),
             weight = profileData?.weight.orEmpty(),
             whatsUp = profileData?.what_are_you_looking_for.orEmpty(),
+            isProfileComplete = (profileData != null && profileData.height != null),
+            //isProfileComplete = profileData?.is_profile_complete ?: false
         )
     }
 }

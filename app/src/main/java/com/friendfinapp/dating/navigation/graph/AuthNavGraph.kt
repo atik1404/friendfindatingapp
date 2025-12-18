@@ -25,6 +25,10 @@ object AuthNavGraph {
                 navigateToHomeScreen = {
                     backStack.clear()
                     backStack.add(MainScreens.HomeNavScreen)
+                },
+                navigateToProfileComplete = {
+                    backStack.clear()
+                    backStack.add(ProfileScreens.ProfileCompletionNavScreen)
                 }
             )
         }

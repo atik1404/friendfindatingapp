@@ -8,6 +8,7 @@ dependencies {
     api(projects.core.model.entity)
 
     implementation(libs.timber)
+    implementation(libs.gson)
 }
 android {
     namespace = "com.friend.domain"

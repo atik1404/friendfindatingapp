@@ -24,7 +24,7 @@ class PostForgotPasswordApiUseCase @Inject constructor(
                 emptyFlow()
             }
 
-            DataValidationResult.Success -> repository.postForgotPassword(params)
+            DataValidationResult.Success -> repository.performForgotPassword(params)
         }
     }
 

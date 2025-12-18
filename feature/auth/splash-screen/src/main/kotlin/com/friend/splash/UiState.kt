@@ -8,6 +8,7 @@ sealed interface UiState {
 sealed class UiEffect {
     object NavigateToHome : UiEffect()
     object NavigateToLogin : UiEffect()
+    object NavigateToProfileComplete : UiEffect()
 }
 
 sealed class UiEvent {

@@ -144,31 +144,31 @@
     <string name="msg_everything_set_for_you">Everything’s in place for you</string>
 
 
-    <string name="error_invalid_username">Invalid username, input valid one</string>
-    <string name="error_invalid_name">Invalid name, input valid one</string>
-    <string name="error_invalid_password">Password must be at least 10 characters</string>
-    <string name="error_invalid_email">Invalid email address, input valid one</string>
-    <string name="error_invalid_post_code">Invalid post code, input valid one</string>
-    <string name="error_invalid_birth_date">Invalid birthdate, select a date</string>
+    <string name="error_invalid_username">Please enter a valid username.</string>
+    <string name="error_invalid_name">Please enter your name.</string>
+    <string name="error_invalid_password">Password must be at least 10 characters long.</string>
+    <string name="error_invalid_email">Please enter a valid email address.</string>
+    <string name="error_invalid_post_code">Please enter a valid post code.</string>
+    <string name="error_invalid_birth_date">Please select your birth date.</string>
 
-    <string name="error_invalid_gender">Choose a valid gender</string>
-    <string name="error_invalid_interest_in">Choose interested in</string>
-    <string name="error_invalid_country">Choose a valid country</string>
-    <string name="error_invalid_state">Choose a valid state</string>
-    <string name="error_invalid_city">Choose a valid city</string>
+    <string name="error_invalid_gender">Please select your gender.</string>
+    <string name="error_invalid_interest_in">Please select who you’re interested in.</string>
+    <string name="error_invalid_country">Please select a country.</string>
+    <string name="error_invalid_state">Please select a state.</string>
+    <string name="error_invalid_city">Please select a city.</string>
 
-    <string name="error_invalid_height">Invalid height, choose height</string>
-    <string name="error_invalid_weight">Invalid weight, choose weight</string>
-    <string name="error_invalid_eyes">Invalid eyes, choose eyes</string>
-    <string name="error_invalid_hair">Invalid hair, choose hair</string>
-    <string name="error_invalid_smoking">Invalid smoking, choose smoking</string>
-    <string name="error_invalid_drinking">Invalid drinking, choose drinking</string>
-    <string name="error_invalid_body_type">Invalid body type, choose body type</string>
-    <string name="error_invalid_looking_for">Invalid looking for, choose looking for</string>
-    <string name="error_invalid_title">Invalid title, input title</string>
-    <string name="error_invalid_about_you">Invalid about you, input about you</string>
-    <string name="error_invalid_whats_up">Invalid whats up, input whats up</string>
-    <string name="error_invalid_interests">Invalid interests, choose interests</string>
+    <string name="error_invalid_height">Please select your height.</string>
+    <string name="error_invalid_weight">Please select your weight.</string>
+    <string name="error_invalid_eyes">Please select your eye color.</string>
+    <string name="error_invalid_hair">Please select your hair color.</string>
+    <string name="error_invalid_smoking">Please select your smoking preference.</string>
+    <string name="error_invalid_drinking">Please select your drinking preference.</string>
+    <string name="error_invalid_body_type">Please select your body type.</string>
+    <string name="error_invalid_looking_for">Please select what you’re looking for.</string>
+    <string name="error_invalid_title">Please select a title.</string>
+    <string name="error_invalid_about_you">Please write something about yourself.</string>
+    <string name="error_invalid_whats_up">Please write what you’re looking for.</string>
+    <string name="error_invalid_interests">Please select at least one interest.</string>
 
     <string name="error_network_error">It looks like you’re offline. Please check your internet connection and try again.</string>
     <string name="error_no_data_found">No data found right now. Please refresh or try again in a moment.</string>

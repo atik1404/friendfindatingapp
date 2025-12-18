@@ -1,10 +1,13 @@
 package com.friend.profilecompletion
 
 import com.friend.common.base.BaseViewModel
-import com.friend.domain.apiusecase.credential.PostProfileCompletionApiUseCase
+import com.friend.common.constant.Gender
+import com.friend.domain.apiusecase.profilemanager.PostProfileUpdateApiUseCase
 import com.friend.domain.apiusecase.profilemanager.FetchProfileApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.validator.ProfileCompletionIoResult
+import com.friend.sharedpref.SharedPrefHelper
+import com.friend.sharedpref.SpKey
 import com.friend.ui.common.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -18,8 +21,9 @@ import com.friend.designsystem.R as Res
 
 @HiltViewModel
 class ProfileCompletionViewModel @Inject constructor(
-    private val profileCompletionApiUseCase: PostProfileCompletionApiUseCase,
-    private val fetchProfileApiUseCase: FetchProfileApiUseCase
+    private val profileCompletionApiUseCase: PostProfileUpdateApiUseCase,
+    private val fetchProfileApiUseCase: FetchProfileApiUseCase,
+    private val sharedPrefHelper: SharedPrefHelper,
 ) : BaseViewModel() {
     val ioError get() = profileCompletionApiUseCase.ioError.receiveAsFlow()
 
@@ -56,7 +60,17 @@ class ProfileCompletionViewModel @Inject constructor(
     private fun performProfileCompletion() {
         execute {
             val current = _formUiState.value
-            val params = PostProfileCompletionApiUseCase.Params(
+            val params = PostProfileUpdateApiUseCase.Params(
+                username = sharedPrefHelper.getString(SpKey.userName),
+                name = sharedPrefHelper.getString(SpKey.fullName),
+                gender = Gender.toValue(sharedPrefHelper.getString(SpKey.gender)),
+                interestedIn = Gender.toValue(sharedPrefHelper.getString(SpKey.interestedIn)),
+                birthdate = sharedPrefHelper.getString(SpKey.dateOfBirth),
+                email = sharedPrefHelper.getString(SpKey.email),
+                country = sharedPrefHelper.getString(SpKey.country),
+                state = sharedPrefHelper.getString(SpKey.state),
+                city = sharedPrefHelper.getString(SpKey.city),
+                zipCode = sharedPrefHelper.getString(SpKey.zipCode),
                 height = current.height,
                 weight = current.weight,
                 eyes = current.eyes,
@@ -68,7 +82,7 @@ class ProfileCompletionViewModel @Inject constructor(
                 aboutYou = current.aboutYou.value,
                 title = current.title.value,
                 whatsUp = current.whatsUp.value,
-                interestedIn = current.interests
+                interests = current.interests
             )
 
             profileCompletionApiUseCase.execute(params).collect { result ->

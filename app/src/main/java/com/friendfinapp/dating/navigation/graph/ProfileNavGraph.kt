@@ -57,7 +57,10 @@ object ProfileNavGraph {
         }
         entry(ProfileScreens.ProfileCompletionNavScreen) {
             ProfileCompletionScreenRoute(
-                onBackButtonClicked = { backStack.removeLastOrNull() },
+                onBackButtonClicked = {
+                    if (backStack.isNotEmpty())
+                        backStack.removeLastOrNull()
+                },
                 navigateToHomeScreen = {
                     backStack.clear()
                     backStack.add(MainScreens.HomeNavScreen)

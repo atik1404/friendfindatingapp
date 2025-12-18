@@ -10,7 +10,7 @@ enum class Gender(val value: Int) {
             when (value) {
                 1 -> MALE
                 2 -> FEMALE
-                else -> throw IllegalArgumentException("Unknown gender value: $value")
+                else -> MALE
             }
 
         // "Male" / "Female" -> 1 / 2
@@ -18,7 +18,7 @@ enum class Gender(val value: Int) {
             when (name.trim().lowercase()) {
                 "male" -> MALE.value   // 1
                 "female" -> FEMALE.value // 2
-                else -> throw IllegalArgumentException("Unknown gender name: $name")
+                else -> -1
             }
 
         // "Male" / "Female" -> 1 / 2
@@ -26,7 +26,7 @@ enum class Gender(val value: Int) {
             when (name.trim().lowercase()) {
                 "male" -> MALE
                 "female" -> FEMALE
-                else -> throw IllegalArgumentException("Unknown gender name: $name")
+                else -> MALE
             }
     }
 }

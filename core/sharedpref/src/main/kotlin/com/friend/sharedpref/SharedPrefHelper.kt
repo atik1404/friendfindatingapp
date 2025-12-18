@@ -3,7 +3,7 @@ package com.friend.sharedpref
 import android.content.Context
 
 class SharedPrefHelper(application: Context) {
-    private var sharedPreferences = application.getSharedPreferences("co.jatri.intercity.v.0", 0)
+    private var sharedPreferences = application.getSharedPreferences("friend_fin_cache", 0)
     fun putString(key: String, value: String) {
         val editor = sharedPreferences.edit()
         editor.putString(key, value)

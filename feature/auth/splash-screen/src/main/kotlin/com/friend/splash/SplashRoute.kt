@@ -8,8 +8,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
 fun SplashRoute(
-    navigateToLoginScreen: () -> Unit = {},
-    navigateToHomeScreen: () -> Unit = {},
+    navigateToLoginScreen: () -> Unit,
+    navigateToHomeScreen: () -> Unit,
+    navigateToProfileComplete: () -> Unit,
     viewModel: SplashViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiSate.collectAsStateWithLifecycle()
@@ -20,6 +21,7 @@ fun SplashRoute(
             when (effect) {
                 is UiEffect.NavigateToLogin -> navigateToLoginScreen()
                 is UiEffect.NavigateToHome -> navigateToHomeScreen()
+                is UiEffect.NavigateToProfileComplete -> navigateToProfileComplete()
             }
         }
     }

@@ -13,6 +13,8 @@ import com.friend.domain.validator.RegistrationIoResult
 import com.friend.entity.search.CityApiEntity
 import com.friend.entity.search.CountryApiEntity
 import com.friend.entity.search.StateApiEntity
+import com.friend.sharedpref.SharedPrefHelper
+import com.friend.sharedpref.SpKey
 import com.friend.ui.common.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -31,6 +33,7 @@ class RegistrationViewModel @Inject constructor(
     private val fetchCountryApiUseCase: FetchCountriesUseCase,
     private val postRegistrationApiUseCase: PostRegistrationApiUseCase,
     private val postLoginApiUseCase: PostLoginApiUseCase,
+    private val sharedPrefHelper: SharedPrefHelper
 ) : BaseViewModel() {
     val ioError get() = postRegistrationApiUseCase.ioError.receiveAsFlow()
 
@@ -168,7 +171,11 @@ class RegistrationViewModel @Inject constructor(
         execute {
             postLoginApiUseCase.execute(params).collect { result ->
                 when (result) {
-                    is ApiResult.Success -> _uiEvent.send(UiEvent.NavigateToProfileCompletion)
+                    is ApiResult.Success -> {
+                        cacheUserData()
+                        _uiEvent.send(UiEvent.NavigateToProfileCompletion)
+                    }
+
                     is ApiResult.Loading -> setLoading(result.loading)
                     is ApiResult.Error -> {
                         _formUiState.update {
@@ -180,6 +187,22 @@ class RegistrationViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    private fun cacheUserData() {
+        val current = _formUiState.value
+        with(sharedPrefHelper) {
+            putString(SpKey.userName, current.form.username.value)
+            putString(SpKey.fullName, current.form.name.value)
+            putString(SpKey.email, current.form.email.value)
+            putString(SpKey.zipCode, current.form.postCode.value)
+            putString(SpKey.gender, current.form.gender?.name ?: "")
+            putString(SpKey.interestedIn, current.form.interestedIn?.name ?: "")
+            putString(SpKey.dateOfBirth, current.form.dateOfBirth.value)
+            putString(SpKey.country, current.form.country?.value ?: "")
+            putString(SpKey.state, current.form.state?.value ?: "")
+            putString(SpKey.city, current.form.city?.value ?: "")
         }
     }
 

@@ -2,14 +2,12 @@ package com.friend.data.repoimpl.remote
 
 import com.friend.data.NetworkBoundResource
 import com.friend.data.apiservice.CredentialApiServices
-import com.friend.data.mapper.credential.CommonApiMapper
 import com.friend.data.mapper.credential.ForgotPasswordApiMapper
 import com.friend.data.mapper.credential.LoginApiMapper
 import com.friend.data.mapper.credential.LogoutApiMapper
 import com.friend.data.mapper.credential.RegistrationApiMapper
 import com.friend.data.mapper.mapFromApiResponse
 import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
-import com.friend.domain.apiusecase.credential.PostProfileCompletionApiUseCase
 import com.friend.domain.apiusecase.credential.PostRegistrationApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.repository.remote.CredentialRepository
@@ -26,7 +24,6 @@ class CredentialRepoImpl @Inject constructor(
     private val loginApiMapper: LoginApiMapper,
     private val forgotPasswordApiMapper: ForgotPasswordApiMapper,
     private val logoutApiMapper: LogoutApiMapper,
-    private val commonApiMapper: CommonApiMapper,
     private val registrationApiMapper: RegistrationApiMapper,
     private val sharedPrefHelper: SharedPrefHelper
 ) : CredentialRepository {
@@ -43,7 +40,6 @@ class CredentialRepoImpl @Inject constructor(
                 sharedPrefHelper.putString(SpKey.authToken, it.data.accessToken)
                 sharedPrefHelper.putString(SpKey.refreshToken, it.data.refreshToken)
                 sharedPrefHelper.putString(SpKey.tokenExpireAt, it.data.expireAt)
-                //cacheProfile.cacheProfile(it.data)
             }
             it
         }
@@ -59,30 +55,20 @@ class CredentialRepoImpl @Inject constructor(
         )
     }
 
-    override suspend fun postForgotPassword(params: String): Flow<ApiResult<String>> {
+    override suspend fun performForgotPassword(params: String): Flow<ApiResult<String>> {
         return mapFromApiResponse(
             result = networkBoundResources.downloadData {
-                apiServices.forgotPassword(
+                apiServices.performForgotPassword(
                     params
                 )
             }, mapper = forgotPasswordApiMapper
         )
     }
 
-    override suspend fun postProfileCompletion(params: PostProfileCompletionApiUseCase.Params): Flow<ApiResult<String>> {
-        return mapFromApiResponse(
-            result = networkBoundResources.downloadData {
-                apiServices.profileCompletion(
-                    params
-                )
-            }, mapper = commonApiMapper
-        )
-    }
-
     override suspend fun performLogout(): Flow<ApiResult<String>> {
         return mapFromApiResponse(
             result = networkBoundResources.downloadData {
-                apiServices.logout()
+                apiServices.performLogout()
             }, mapper = logoutApiMapper
         )
     }

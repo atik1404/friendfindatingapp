@@ -23,5 +23,6 @@ data class ProfileApiEntity(
     val aboutYou: String,
     val title: String,
     val weight: String,
-    val whatsUp: String
+    val whatsUp: String,
+    val isProfileComplete: Boolean
 )

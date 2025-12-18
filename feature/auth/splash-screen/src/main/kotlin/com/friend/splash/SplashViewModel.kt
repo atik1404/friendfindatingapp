@@ -45,7 +45,11 @@ class SplashViewModel @Inject constructor(
                 when (result) {
                     is ApiResult.Error -> handleApiError(result.code, result.message)
                     is ApiResult.Loading -> _uiState.value = UiState.Idle
-                    is ApiResult.Success -> _uiEffect.send(UiEffect.NavigateToHome)
+                    is ApiResult.Success -> {
+                        if (result.data.isProfileComplete)
+                            _uiEffect.send(UiEffect.NavigateToHome)
+                        else _uiEffect.send(UiEffect.NavigateToProfileComplete)
+                    }
                 }
             }
         }

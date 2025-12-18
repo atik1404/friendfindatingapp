@@ -1,33 +1,49 @@
-package com.friend.domain.apiusecase.credential
+package com.friend.domain.apiusecase.profilemanager
 
 import com.friend.domain.base.ApiResult
-import com.friend.domain.repository.remote.CredentialRepository
+import com.friend.domain.repository.remote.ProfileManageRepository
 import com.friend.domain.usecase.ApiUseCaseParams
 import com.friend.domain.validator.DataValidationResult
 import com.friend.domain.validator.ProfileCompletionIoResult
+import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
-class PostProfileCompletionApiUseCase @Inject constructor(
-    private val repository: CredentialRepository,
-) : ApiUseCaseParams<PostProfileCompletionApiUseCase.Params, String> {
+class PostProfileUpdateApiUseCase @Inject constructor(
+    private val repository: ProfileManageRepository,
+) : ApiUseCaseParams<PostProfileUpdateApiUseCase.Params, String> {
     val ioError = Channel<ProfileCompletionIoResult>()
 
     data class Params(
+        val username: String,
+        val name: String,
+        val gender: Int,
+        val interestedIn: Int,
+        val birthdate: String,
+        val email: String,
+        val country: String,
+        val state: String,
+        val city: String,
+        val zipCode: String,
         val height: String,
         val weight: String,
         val eyes: String,
         val hair: String,
         val smoking: String,
         val drinking: String,
+        @SerializedName("body_type")
         val bodyType: String,
+        @SerializedName("looking_for")
         val lookingFor: String,
+        @SerializedName("tell_us_about_you")
         val aboutYou: String,
         val title: String,
+        @SerializedName("what_are_you_looking_for")
         val whatsUp: String,
-        val interestedIn: List<String>,
+        @SerializedName("interests")
+        val interests: List<String>,
     )
 
     override suspend fun execute(params: Params): Flow<ApiResult<String>> {
@@ -37,7 +53,7 @@ class PostProfileCompletionApiUseCase @Inject constructor(
                 emptyFlow()
             }
 
-            DataValidationResult.Success -> repository.postProfileCompletion(params)
+            DataValidationResult.Success -> repository.performProfileUpdate(params)
         }
     }
 
@@ -75,7 +91,7 @@ class PostProfileCompletionApiUseCase @Inject constructor(
         if (params.whatsUp.isEmpty())
             return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidWhatsUp)
 
-        if (params.interestedIn.isEmpty())
+        if (params.interests.isEmpty())
             return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidInterestedIn)
 
         return DataValidationResult.Success
