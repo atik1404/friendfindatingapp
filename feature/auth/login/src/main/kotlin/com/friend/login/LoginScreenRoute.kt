@@ -38,9 +38,5 @@ fun LoginRoute(
         onEvent = viewModel.action,
         navigateToRegistration = navigateToRegistration,
         navigateToForgotPassword = navigateToForgotPassword,
-        onGoogleLoginClick = {
-            // you can move this into ViewModel later if needed
-            context.showToastMessage("This is toast message")
-        },
     )
 }

@@ -9,6 +9,14 @@
     <string name="default_web_client_ids">176628957073-lll0macf6raivbvguuic9m9aoiuop4tn.apps.googleusercontent.com</string>
     <string name="google_oath_key">176628957073-6p3h6emi054meff8g7o35r5573dvq72c.apps.googleusercontent.com</string>
 
+    <string name="default_web_client_id" translatable="false">176628957073-h3mhuhk2d35h35j9aba9jjabnkg35sp9.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">176628957073</string>
+    <string name="google_api_key" translatable="false">AIzaSyDl7aZzfcGaux-hxtd6Gu-bBBdqJg7cn_g</string>
+    <string name="google_app_id" translatable="false">1:176628957073:android:1f34ba3e97e55cd36ee430</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDl7aZzfcGaux-hxtd6Gu-bBBdqJg7cn_g</string>
+    <string name="google_storage_bucket" translatable="false">friendfin-a43ac.appspot.com</string>
+    <string name="project_id" translatable="false">friendfin-a43ac</string>
+
     <string name="CHANNEL_ID">com.friendfinapp.dating</string>
     <string name="fcmlink">https://fcm.googleapis.com</string>
 

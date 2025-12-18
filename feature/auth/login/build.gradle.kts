@@ -5,3 +5,7 @@ plugins {
 android {
     namespace = "com.friend.login"
 }
+
+dependencies{
+    implementation(libs.bundles.google.login)
+}
