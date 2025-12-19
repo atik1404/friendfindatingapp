@@ -4,14 +4,14 @@ import com.friend.domain.base.ApiResult
 import com.google.gson.JsonParser
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import retrofit2.HttpException
 import retrofit2.Response
 import java.io.IOException
 import java.net.SocketTimeoutException
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.net.ssl.SSLHandshakeException
@@ -77,7 +77,7 @@ class NetworkBoundResource @Inject constructor() {
         return when (throwable) {
             is HttpException -> (throwable).code()
             is IOException -> 100
-            else -> 0
+            else -> 4001
         }
     }
 }

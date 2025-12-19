@@ -100,7 +100,8 @@ dependencies {
         implementation(chatMessage.chatList)
         implementation(chatMessage.chatRoom)
 
-        implementation(profileManager.profile)
+        implementation(profileManager.myProfile)
+        implementation(profileManager.otherProfile)
         implementation(profileManager.profileOverview)
         implementation(profileManager.profileCompletion)
         implementation(profileManager.personalSetting)

@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -57,7 +58,7 @@ class SplashViewModel @Inject constructor(
 
     private fun handleApiError(statusCode: Int, message: String) {
         execute {
-            if (statusCode == 401) {
+            if (statusCode == 401 || statusCode == 4001) {
                 _uiEffect.send(UiEffect.NavigateToLogin)
             } else _uiState.value = UiState.Error(message)
         }

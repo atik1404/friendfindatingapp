@@ -1,4 +1,4 @@
-package com.friend.profile.ui
+package com.friend.profile.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -44,10 +44,11 @@ import com.friend.designsystem.R as Res
 
 @Composable
 fun ProfileHeaderUi(
-    isOtherProfile: Boolean,
     modifier: Modifier = Modifier,
+    fullName: String,
+    email: String,
+    profilePicture: String,
     onEditClick: () -> Unit,
-    onSendMsgClicked: () -> Unit,
 ) {
     val picSize = ImageSizeToken.profilePictureLarge
 
@@ -72,7 +73,7 @@ fun ProfileHeaderUi(
                 modifier = modifier.size(picSize)
             ) {
                 NetworkImageLoader(
-                    url = "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
+                    url = profilePicture,
                     shape = CircleShape,
                     modifier = Modifier.matchParentSize()
                 )
@@ -102,7 +103,7 @@ fun ProfileHeaderUi(
                 modifier = modifier.weight(1f)
             ) {
                 AppText(
-                    text = "Tom Cruise",
+                    text = fullName,
                     textStyle = AppTypography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     textColor = MaterialTheme.textColors.primary,
@@ -115,7 +116,7 @@ fun ProfileHeaderUi(
                 )
 
                 AppText(
-                    text = "tom@gmail.com",
+                    text = email,
                     textStyle = AppTypography.bodyMedium,
                     fontWeight = FontWeight.Light,
                     textColor = MaterialTheme.textColors.primary,
@@ -123,20 +124,13 @@ fun ProfileHeaderUi(
                 )
             }
 
-            if (isOtherProfile)
-                AppIconButton(
-                    resourceIcon = Res.drawable.ic_chat_bubble,
-                    onClick = {
-                        onSendMsgClicked.invoke()
-                    },
-                )
-            else
-                AppTextButton(
-                    text = stringResource(Res.string.action_edit_profile),
-                    onClick = onEditClick,
-                    textColor = MaterialTheme.textColors.brand,
-                    fontWeight = FontWeight.Light
-                )
+            AppTextButton(
+                text = stringResource(Res.string.action_edit_profile),
+                onClick = onEditClick,
+                textColor = MaterialTheme.textColors.brand,
+                fontWeight = FontWeight.Light
+            )
+
         }
     }
 }
@@ -145,8 +139,9 @@ fun ProfileHeaderUi(
 @LightDarkPreview
 private fun ScreenPreview() {
     ProfileHeaderUi(
+        fullName = "Tom Cruise",
+        email = "tom@gmail.com",
+        profilePicture = "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
         onEditClick = {},
-        onSendMsgClicked = {},
-        isOtherProfile = false
     )
 }

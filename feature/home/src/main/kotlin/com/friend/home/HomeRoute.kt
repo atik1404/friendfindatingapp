@@ -9,7 +9,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 fun HomeRoute(
     navigateToChatListScreen: () -> Unit,
     navigateToOverviewScreen: () -> Unit,
-    navigateToProfileScreen: (String, String) -> Unit,
+    navigateToProfileScreen: () -> Unit,
+    navigateToOtherProfileScreen: (String) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
 
@@ -26,8 +27,7 @@ fun HomeRoute(
         onEvent = {
             viewModel.action
         },
-        navigateToProfileScreen = { userId, username ->
-            navigateToProfileScreen.invoke(userId, username)
-        },
+        navigateToProfileScreen = navigateToProfileScreen,
+        navigateToOtherProfileScreen = { navigateToOtherProfileScreen.invoke(it) },
     )
 }

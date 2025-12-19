@@ -43,9 +43,11 @@ sealed interface ProfileScreens : AppScreen {
     object ProfileOverviewNavScreen : AppScreen
 
     @Serializable
-    data class ProfileNavScreen(
-        val userId: String,
-        val userName: String
+    data object ProfileNavScreen : AppScreen
+
+    @Serializable
+    data class OtherProfileNavScreen(
+        val username: String,
     ) : AppScreen
 
     @Serializable
@@ -56,6 +58,7 @@ sealed interface ProfileScreens : AppScreen {
 
     @Serializable
     object ChangePasswordNavScreen : AppScreen
+
     @Serializable
     object MembershipNavScreen : AppScreen
 

@@ -44,7 +44,8 @@ fun HomeScreen(
     onEvent: (UiAction) -> Unit,
     navigateToChatListScreen: () -> Unit,
     navigateToOverviewScreen: () -> Unit,
-    navigateToProfileScreen: (String, String) -> Unit,
+    navigateToProfileScreen: () -> Unit,
+    navigateToOtherProfileScreen: (String) -> Unit,
 ) {
     var showFilterBottomSheet by rememberSaveable { mutableStateOf(false) }
     AppScaffold(
@@ -71,7 +72,7 @@ fun HomeScreen(
                 profilePicture = profilePicture,
                 navigateToChatListScreen = navigateToChatListScreen,
                 navigateToProfileScreen = {
-                    navigateToProfileScreen.invoke("", "")//TODO replace with current user data
+                    navigateToProfileScreen.invoke()//TODO replace with current user data
                 }
             )
             Spacer(Modifier.height(SpacingToken.medium))
@@ -91,11 +92,8 @@ fun HomeScreen(
                 }
 
                 is UiState.Success -> {
-                    PersonList(state.data) {
-                        navigateToProfileScreen.invoke(
-                            "others",
-                            "others"
-                        )
+                    PersonList(state.data) { username->
+                        navigateToOtherProfileScreen.invoke(username)
                     }
                 }
 
@@ -173,7 +171,8 @@ private fun ScreenPreview() {
         profilePicture = "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
         navigateToChatListScreen = {},
         navigateToOverviewScreen = {},
-        navigateToProfileScreen = { _, _ -> },
+        navigateToProfileScreen = { },
+        navigateToOtherProfileScreen = { },
         onEvent = {},
         state = UiState.Loading
         //state = UiState.Error("No data found"),

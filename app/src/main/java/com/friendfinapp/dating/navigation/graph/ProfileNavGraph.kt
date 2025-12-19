@@ -5,9 +5,10 @@ import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.friend.changepassword.ChangePasswordScreen
 import com.friend.membership.MembershipScreen
+import com.friend.otherprofile.OtherProfileScreenRouter
 import com.friend.overview.ProfileOverviewRoute
 import com.friend.personalsetting.PersonalSettingScreen
-import com.friend.profile.ProfileScreen
+import com.friend.profile.ProfileScreenRouter
 import com.friend.profilecompletion.ProfileCompletionScreenRoute
 import com.friend.reportabuse.ReportAbuseScreen
 import com.friendfinapp.dating.navigation.AuthScreens
@@ -29,7 +30,7 @@ object ProfileNavGraph {
                     backStack.add(AuthScreens.LoginNavScreen)
                 },
                 navigateToProfileScreen = {
-                    backStack.add(ProfileScreens.ProfileNavScreen("", ""))
+                    backStack.add(ProfileScreens.ProfileNavScreen)
                 },
                 navigateToMembershipScreen = { backStack.add(ProfileScreens.MembershipNavScreen) },
                 navigateToPrivacyPolicyScreen = { backStack.add(MainScreens.PrivacyPolicyNavScreen) },
@@ -38,23 +39,31 @@ object ProfileNavGraph {
             )
         }
         entry<ProfileScreens.ProfileNavScreen> { key ->
-            ProfileScreen(
-                username = key.userName,
-                userId = key.userId,
+            ProfileScreenRouter(
                 navigateToEditProfile = {
                     backStack.add(ProfileScreens.ProfileCompletionNavScreen)
                 },
                 onBackButtonClicked = {
                     backStack.removeLastOrNull()
                 },
-                navigateToMessageRoom = {
-                    backStack.add(ChatMessageScreens.ChatRoomNavScreen("", "Tom Cruise"))
+            )
+        }
+
+        entry<ProfileScreens.OtherProfileNavScreen> { key ->
+            OtherProfileScreenRouter(
+                username = key.username,
+                onBackButtonClicked = {
+                    backStack.removeLastOrNull()
+                },
+                onNavigateToMessageRoom = {
+                    backStack.add(ChatMessageScreens.ChatListNavScreen)
                 },
                 navigateToReportAbuse = {
                     backStack.add(ProfileScreens.ReportUserNavScreen)
                 }
             )
         }
+
         entry(ProfileScreens.ProfileCompletionNavScreen) {
             ProfileCompletionScreenRoute(
                 onBackButtonClicked = {

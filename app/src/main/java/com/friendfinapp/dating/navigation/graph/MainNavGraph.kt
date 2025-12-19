@@ -20,11 +20,14 @@ object MainNavGraph {
                 navigateToChatListScreen = {
                     backStack.add(ChatMessageScreens.ChatListNavScreen)
                 },
-                navigateToProfileScreen = { userName, userId ->
-                    backStack.add(ProfileScreens.ProfileNavScreen(userId, userName))
+                navigateToProfileScreen = {
+                    backStack.add(ProfileScreens.ProfileNavScreen)
                 },
                 navigateToOverviewScreen = {
                     backStack.add(ProfileScreens.ProfileOverviewNavScreen)
+                },
+                navigateToOtherProfileScreen = { username ->
+                    backStack.add(ProfileScreens.OtherProfileNavScreen(username))
                 }
             )
         }

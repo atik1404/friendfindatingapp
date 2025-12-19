@@ -36,7 +36,7 @@ fun LoadingUi(
             ) { /* no-op, just block */ }
     ) {
         LoadingAnimation(
-            modifier = modifier
+            modifier = Modifier
                 .align(Alignment.Center)
         )
     }
