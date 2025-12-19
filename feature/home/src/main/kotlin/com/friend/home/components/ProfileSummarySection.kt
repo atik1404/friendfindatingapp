@@ -38,6 +38,7 @@ fun ProfileSummarySection(
     ) {
         NetworkImageLoader(
             profilePicture,
+            name = fullName,
             modifier = Modifier
                 .size(IconSizeToken.extraLarge)
                 .clickable {
