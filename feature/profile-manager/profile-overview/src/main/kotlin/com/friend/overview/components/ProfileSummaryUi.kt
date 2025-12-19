@@ -1,4 +1,4 @@
-package com.friend.overview.ui
+package com.friend.overview.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -67,6 +67,7 @@ fun ProfileSummaryUi(
             ) {
                 NetworkImageLoader(
                     url = image,
+                    name = name,
                     shape = CircleShape,
                     modifier = Modifier.matchParentSize()
                 )
