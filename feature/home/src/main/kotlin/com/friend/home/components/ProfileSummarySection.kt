@@ -28,6 +28,7 @@ import com.friend.designsystem.R as Res
 @Composable
 fun ProfileSummarySection(
     fullName: String,
+    profilePicture: String,
     navigateToChatListScreen: () -> Unit,
     navigateToProfileScreen: () -> Unit,
 ) {
@@ -36,7 +37,7 @@ fun ProfileSummarySection(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         NetworkImageLoader(
-            "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
+            profilePicture,
             modifier = Modifier
                 .size(IconSizeToken.extraLarge)
                 .clickable {

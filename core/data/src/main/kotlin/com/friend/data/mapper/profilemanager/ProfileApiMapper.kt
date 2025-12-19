@@ -3,6 +3,7 @@ package com.friend.data.mapper.profilemanager
 import com.friend.apiresponse.profilemanager.ProfileApiResponse
 import com.friend.common.constant.Gender
 import com.friend.data.mapper.Mapper
+import com.friend.di.qualifier.AppImageBaseUrl
 import com.friend.entity.profilemanager.ProfileApiEntity
 import com.friend.sharedpref.SharedPrefHelper
 import com.friend.sharedpref.SpKey
@@ -10,6 +11,11 @@ import javax.inject.Inject
 
 class ProfileApiMapper @Inject constructor() :
     Mapper<ProfileApiResponse, ProfileApiEntity> {
+
+
+    @Inject
+    @AppImageBaseUrl
+    lateinit var imageBaseUrl: String
 
     override fun mapFromApiResponse(response: ProfileApiResponse): ProfileApiEntity {
         val profileData = response.data?.firstOrNull()
@@ -25,7 +31,7 @@ class ProfileApiMapper @Inject constructor() :
             state = profileData?.state.orEmpty(),
             city = profileData?.city.orEmpty(),
             zipCode = profileData?.zipCode.orEmpty(),
-            image = profileData?.image.orEmpty(),
+            profilePicture = "${imageBaseUrl}${profileData?.image.orEmpty()}",
             bodyType = profileData?.body_type.orEmpty(),
             drinking = profileData?.drinking.orEmpty(),
             eyes = profileData?.eyes.orEmpty(),
@@ -59,7 +65,7 @@ class CacheProfile @Inject constructor(
             sharedPrefHelper.putString(SpKey.state, state)
             sharedPrefHelper.putString(SpKey.city, city)
             sharedPrefHelper.putString(SpKey.zipCode, zipCode)
-            sharedPrefHelper.putString(SpKey.profilePicture, image)
+            sharedPrefHelper.putString(SpKey.profilePicture, profilePicture)
             sharedPrefHelper.putString(SpKey.bodyType, bodyType)
             sharedPrefHelper.putString(SpKey.drinking, drinking)
             sharedPrefHelper.putString(SpKey.eyes, eyes)

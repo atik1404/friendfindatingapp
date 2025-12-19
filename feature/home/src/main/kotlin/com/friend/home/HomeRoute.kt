@@ -14,10 +14,12 @@ fun HomeRoute(
 ) {
 
     val fullName by viewModel.fullName.collectAsState()
+    val profilePicture by viewModel.profilePicture.collectAsState()
     val uiSate by viewModel.uiState.collectAsState()
 
     HomeScreen(
         fullName = fullName,
+        profilePicture = profilePicture,
         state = uiSate,
         navigateToChatListScreen = navigateToChatListScreen,
         navigateToOverviewScreen = navigateToOverviewScreen,

@@ -20,6 +20,9 @@ class HomeViewModel @Inject constructor(
     private val _fullName = MutableStateFlow("")
     val fullName: StateFlow<String> = _fullName.asStateFlow()
 
+    private val _profilePicture = MutableStateFlow("")
+    val profilePicture: StateFlow<String> = _profilePicture.asStateFlow()
+
     private val _uiState =
         MutableStateFlow<UiState>(UiState.Idle)
     val uiState: StateFlow<UiState> = _uiState
@@ -32,6 +35,7 @@ class HomeViewModel @Inject constructor(
 
     init {
         _fullName.value = sharedPrefHelper.getString(SpKey.fullName)
+        _profilePicture.value = sharedPrefHelper.getString(SpKey.profilePicture)
 
         fetchFriendSuggestions()
     }

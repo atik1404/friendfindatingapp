@@ -11,7 +11,7 @@ data class ProfileApiEntity(
     val state: String,
     val city: String,
     val zipCode: String,
-    val image: String,
+    val profilePicture: String,
     val bodyType: String,
     val drinking: String,
     val eyes: String,

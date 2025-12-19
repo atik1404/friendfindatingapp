@@ -39,6 +39,7 @@ import com.friend.designsystem.R as Res
 @Composable
 fun HomeScreen(
     fullName: String,
+    profilePicture: String,
     state: UiState,
     onEvent: (UiAction) -> Unit,
     navigateToChatListScreen: () -> Unit,
@@ -67,6 +68,7 @@ fun HomeScreen(
             Spacer(Modifier.height(SpacingToken.medium))
             ProfileSummarySection(
                 fullName = fullName,
+                profilePicture = profilePicture,
                 navigateToChatListScreen = navigateToChatListScreen,
                 navigateToProfileScreen = {
                     navigateToProfileScreen.invoke("", "")//TODO replace with current user data
@@ -168,6 +170,7 @@ private fun LoadingSection() {
 private fun ScreenPreview() {
     HomeScreen(
         fullName = "Cruise",
+        profilePicture = "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
         navigateToChatListScreen = {},
         navigateToOverviewScreen = {},
         navigateToProfileScreen = { _, _ -> },
