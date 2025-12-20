@@ -73,7 +73,7 @@ class PostProfileUpdateApiUseCase @Inject constructor(
             return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidGender)
 
         if (params.interestedIn == -1)
-            return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidInterested)
+            return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidInterestedIn)
 
         if (params.birthdate.isEmpty())
             return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidBirthDate)
@@ -124,7 +124,7 @@ class PostProfileUpdateApiUseCase @Inject constructor(
             return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidWhatsUp)
 
         if (params.interests.isEmpty())
-            return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidInterestedIn)
+            return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidInterests)
 
         return DataValidationResult.Success
     }

@@ -33,7 +33,7 @@ sealed interface ProfileCompletionIoResult {
     data object InvalidName : ProfileCompletionIoResult
     data object InvalidEmail : ProfileCompletionIoResult
     data object InvalidGender : ProfileCompletionIoResult
-    data object InvalidInterested : ProfileCompletionIoResult
+    data object InvalidInterestedIn : ProfileCompletionIoResult
     data object InvalidBirthDate : ProfileCompletionIoResult
     data object InvalidCity : ProfileCompletionIoResult
     data object InvalidCountry : ProfileCompletionIoResult
@@ -50,7 +50,7 @@ sealed interface ProfileCompletionIoResult {
     data object InvalidAboutYou : ProfileCompletionIoResult
     data object InvalidTitle : ProfileCompletionIoResult
     data object InvalidWhatsUp : ProfileCompletionIoResult
-    data object InvalidInterestedIn : ProfileCompletionIoResult
+    data object InvalidInterests : ProfileCompletionIoResult
 }
 
 sealed interface PasswordChangeIoResult {

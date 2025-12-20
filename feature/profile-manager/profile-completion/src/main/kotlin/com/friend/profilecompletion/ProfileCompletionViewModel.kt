@@ -267,9 +267,9 @@ class ProfileCompletionViewModel @Inject constructor(
                     ProfileCompletionIoResult.InvalidEyes -> setToastMessage(UiText.StringRes(Res.string.error_invalid_eyes))
                     ProfileCompletionIoResult.InvalidHair -> setToastMessage(UiText.StringRes(Res.string.error_invalid_hair))
                     ProfileCompletionIoResult.InvalidHeight -> setToastMessage(UiText.StringRes(Res.string.error_invalid_height))
-                    ProfileCompletionIoResult.InvalidInterestedIn -> setToastMessage(
+                    ProfileCompletionIoResult.InvalidInterests -> setToastMessage(
                         UiText.StringRes(
-                            Res.string.error_invalid_interest_in
+                            Res.string.error_invalid_interests
                         )
                     )
 

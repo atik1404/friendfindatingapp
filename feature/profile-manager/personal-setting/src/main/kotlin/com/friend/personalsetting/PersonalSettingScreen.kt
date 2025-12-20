@@ -63,6 +63,7 @@ fun PersonalSettingScreen(
         ) {
             AppOutlineTextField(
                 text = state.form.name.value,
+                error = if (state.form.name.isDirty) stringResource(Res.string.error_invalid_name) else null,
                 modifier = modifier.fillMaxWidth(),
                 title = stringResource(Res.string.label_full_name),
                 placeholder = stringResource(Res.string.hint_full_name),
@@ -76,6 +77,7 @@ fun PersonalSettingScreen(
 
             AppOutlineTextField(
                 text = state.form.email.value,
+                error = if (state.form.email.isDirty) stringResource(Res.string.error_invalid_email) else null,
                 modifier = modifier.fillMaxWidth(),
                 title = stringResource(Res.string.label_email),
                 placeholder = stringResource(Res.string.hint_email),

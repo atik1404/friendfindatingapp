@@ -292,7 +292,7 @@ class PersonalSettingViewmodel @Inject constructor(
                     }
 
                     ProfileCompletionIoResult.InvalidGender -> setToastMessage(UiText.StringRes(Res.string.error_invalid_gender))
-                    ProfileCompletionIoResult.InvalidInterested -> setToastMessage(UiText.StringRes(Res.string.error_invalid_interest_in))
+                    ProfileCompletionIoResult.InvalidInterestedIn -> setToastMessage(UiText.StringRes(Res.string.error_invalid_interest_in))
                     ProfileCompletionIoResult.InvalidBirthDate -> setToastMessage(UiText.StringRes(Res.string.error_invalid_birth_date))
                     ProfileCompletionIoResult.InvalidCountry -> setToastMessage(UiText.StringRes(Res.string.error_invalid_country))
                     ProfileCompletionIoResult.InvalidState -> setToastMessage(UiText.StringRes(Res.string.error_invalid_state))
