@@ -29,6 +29,16 @@ sealed interface RegistrationIoResult {
 }
 
 sealed interface ProfileCompletionIoResult {
+    data object InvalidUsername : ProfileCompletionIoResult
+    data object InvalidName : ProfileCompletionIoResult
+    data object InvalidEmail : ProfileCompletionIoResult
+    data object InvalidGender : ProfileCompletionIoResult
+    data object InvalidInterested : ProfileCompletionIoResult
+    data object InvalidBirthDate : ProfileCompletionIoResult
+    data object InvalidCity : ProfileCompletionIoResult
+    data object InvalidCountry : ProfileCompletionIoResult
+    data object InvalidState : ProfileCompletionIoResult
+    data object InvalidPostCode : ProfileCompletionIoResult
     data object InvalidHeight : ProfileCompletionIoResult
     data object InvalidWeight : ProfileCompletionIoResult
     data object InvalidEyes : ProfileCompletionIoResult

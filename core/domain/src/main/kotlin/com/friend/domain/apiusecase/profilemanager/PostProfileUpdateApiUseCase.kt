@@ -5,10 +5,8 @@ import com.friend.domain.repository.remote.ProfileManageRepository
 import com.friend.domain.usecase.ApiUseCaseParams
 import com.friend.domain.validator.DataValidationResult
 import com.friend.domain.validator.ProfileCompletionIoResult
-import com.friend.domain.validator.RegistrationIoResult
 import com.friend.domain.validator.isEmailValid
 import com.friend.domain.validator.isNameValid
-import com.friend.domain.validator.isPasswordValid
 import com.friend.domain.validator.isUsernameValid
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.channels.Channel
@@ -63,34 +61,34 @@ class PostProfileUpdateApiUseCase @Inject constructor(
 
     private fun validation(params: Params): DataValidationResult {
         if (!params.username.isUsernameValid())
-            return DataValidationResult.Failure(RegistrationIoResult.InvalidUsername)
+            return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidUsername)
 
         if (!params.name.isNameValid())
-            return DataValidationResult.Failure(RegistrationIoResult.InvalidName)
+            return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidName)
 
         if (!params.email.isEmailValid())
-            return DataValidationResult.Failure(RegistrationIoResult.InvalidEmail)
+            return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidEmail)
 
         if (params.gender == -1)
-            return DataValidationResult.Failure(RegistrationIoResult.InvalidGender)
+            return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidGender)
 
         if (params.interestedIn == -1)
-            return DataValidationResult.Failure(RegistrationIoResult.InvalidInterested)
+            return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidInterested)
 
         if (params.birthdate.isEmpty())
-            return DataValidationResult.Failure(RegistrationIoResult.InvalidBirthDate)
+            return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidBirthDate)
 
         if (params.country == "-1")
-            return DataValidationResult.Failure(RegistrationIoResult.InvalidCountry)
+            return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidCountry)
 
         if (params.state == "-1")
-            return DataValidationResult.Failure(RegistrationIoResult.InvalidState)
+            return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidState)
 
         if (params.city == "-1")
-            return DataValidationResult.Failure(RegistrationIoResult.InvalidCity)
+            return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidCity)
 
         if (params.zipCode.isEmpty())
-            return DataValidationResult.Failure(RegistrationIoResult.InvalidPostCode)
+            return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidPostCode)
 
         if (params.height.isEmpty())
             return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidHeight)

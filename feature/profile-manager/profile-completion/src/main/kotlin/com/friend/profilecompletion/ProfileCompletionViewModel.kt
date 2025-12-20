@@ -281,6 +281,7 @@ class ProfileCompletionViewModel @Inject constructor(
 
                     ProfileCompletionIoResult.InvalidSmoking -> setToastMessage(UiText.StringRes(Res.string.error_invalid_smoking))
                     ProfileCompletionIoResult.InvalidWeight -> setToastMessage(UiText.StringRes(Res.string.error_invalid_weight))
+                    else -> {}
                 }
             }
         }

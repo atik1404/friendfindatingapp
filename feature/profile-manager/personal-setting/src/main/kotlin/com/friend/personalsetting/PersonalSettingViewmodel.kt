@@ -10,7 +10,7 @@ import com.friend.domain.apiusecase.search.FetchCityApiUseCase
 import com.friend.domain.apiusecase.search.FetchCountriesUseCase
 import com.friend.domain.apiusecase.search.FetchStateApiUseCase
 import com.friend.domain.base.ApiResult
-import com.friend.domain.validator.RegistrationIoResult
+import com.friend.domain.validator.ProfileCompletionIoResult
 import com.friend.sharedpref.SharedPrefHelper
 import com.friend.sharedpref.SpKey
 import com.friend.ui.common.UiText
@@ -77,9 +77,9 @@ class PersonalSettingViewmodel @Inject constructor(
         onChangeName(sharedPrefHelper.getString(SpKey.fullName))
         onChangeEmail(sharedPrefHelper.getString(SpKey.email))
         onChangePostCode(sharedPrefHelper.getString(SpKey.zipCode))
-        onChangeCity(sharedPrefHelper.getString(SpKey.city))
-        onChangeState(sharedPrefHelper.getString(SpKey.state))
         onChangeCountry(sharedPrefHelper.getString(SpKey.country))
+        onChangeState(sharedPrefHelper.getString(SpKey.state))
+        onChangeCity(sharedPrefHelper.getString(SpKey.city))
         onChangeBirthDate(
             DateTimeUtils.parseToPattern(
                 sharedPrefHelper.getString(SpKey.dateOfBirth),
@@ -88,6 +88,10 @@ class PersonalSettingViewmodel @Inject constructor(
         )
         onChangeGender(Gender.toEnum(sharedPrefHelper.getString(SpKey.gender)))
         onChangeInterest(Gender.toEnum(sharedPrefHelper.getString(SpKey.interestedIn)))
+
+        fetchCountries()
+        fetchStates()
+        fetchCities()
     }
 
     private fun fetchCountries() {
@@ -205,7 +209,6 @@ class PersonalSettingViewmodel @Inject constructor(
     }
 
     private fun onChangeName(value: String) {
-        val current = _formUiState.value
         updateForm {
             it.copy(name = it.name.onChange(newValue = value))
         }
@@ -272,7 +275,7 @@ class PersonalSettingViewmodel @Inject constructor(
         execute {
             ioError.collect { error ->
                 when (error) {
-                    RegistrationIoResult.InvalidName -> updateForm {
+                    ProfileCompletionIoResult.InvalidName -> updateForm {
                         it.copy(
                             name = it.name.copy(
                                 isValid = false
@@ -280,7 +283,7 @@ class PersonalSettingViewmodel @Inject constructor(
                         )
                     }
 
-                    RegistrationIoResult.InvalidEmail -> updateForm {
+                    ProfileCompletionIoResult.InvalidEmail -> updateForm {
                         it.copy(
                             email = it.email.copy(
                                 isValid = false
@@ -288,13 +291,13 @@ class PersonalSettingViewmodel @Inject constructor(
                         )
                     }
 
-                    RegistrationIoResult.InvalidGender -> setToastMessage(UiText.StringRes(Res.string.error_invalid_gender))
-                    RegistrationIoResult.InvalidInterested -> setToastMessage(UiText.StringRes(Res.string.error_invalid_interest_in))
-                    RegistrationIoResult.InvalidBirthDate -> setToastMessage(UiText.StringRes(Res.string.error_invalid_birth_date))
-                    RegistrationIoResult.InvalidCountry -> setToastMessage(UiText.StringRes(Res.string.error_invalid_country))
-                    RegistrationIoResult.InvalidState -> setToastMessage(UiText.StringRes(Res.string.error_invalid_state))
-                    RegistrationIoResult.InvalidCity -> setToastMessage(UiText.StringRes(Res.string.error_invalid_city))
-                    RegistrationIoResult.InvalidPostCode -> updateForm {
+                    ProfileCompletionIoResult.InvalidGender -> setToastMessage(UiText.StringRes(Res.string.error_invalid_gender))
+                    ProfileCompletionIoResult.InvalidInterested -> setToastMessage(UiText.StringRes(Res.string.error_invalid_interest_in))
+                    ProfileCompletionIoResult.InvalidBirthDate -> setToastMessage(UiText.StringRes(Res.string.error_invalid_birth_date))
+                    ProfileCompletionIoResult.InvalidCountry -> setToastMessage(UiText.StringRes(Res.string.error_invalid_country))
+                    ProfileCompletionIoResult.InvalidState -> setToastMessage(UiText.StringRes(Res.string.error_invalid_state))
+                    ProfileCompletionIoResult.InvalidCity -> setToastMessage(UiText.StringRes(Res.string.error_invalid_city))
+                    ProfileCompletionIoResult.InvalidPostCode -> updateForm {
                         it.copy(
                             postCode = it.postCode.copy(
                                 isValid = false
