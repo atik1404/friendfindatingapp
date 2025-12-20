@@ -7,15 +7,15 @@ fun String.isUsernameValid(): Boolean {
 }
 
 fun String.isNameValid(): Boolean {
-    return this.trim().isNotBlank() && this.length >= 3
+    return this.trim().isNotBlank() && this.trim().length >= 3
 }
 
 fun String.isPasswordValid(): Boolean {
-    return this.isNotBlank() && this.length >= 10
+    return this.isNotBlank() && this.trim().length >= 10
 }
 
 fun String.isPasswordMatched(password: String): Boolean {
-    return this == password
+    return this.trim() == password.trim()
 }
 
 fun String.isEmailValid(): Boolean {

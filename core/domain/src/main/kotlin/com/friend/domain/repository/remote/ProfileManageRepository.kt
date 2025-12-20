@@ -1,5 +1,6 @@
 package com.friend.domain.repository.remote
 
+import com.friend.domain.apiusecase.profilemanager.PostPasswordChangeApiUseCase
 import com.friend.domain.apiusecase.profilemanager.PostProfileUpdateApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.entity.profilemanager.OtherProfileApiEntity
@@ -12,4 +13,6 @@ interface ProfileManageRepository {
     suspend fun otherProfile(username: String): Flow<ApiResult<OtherProfileApiEntity>>
 
     suspend fun performProfileUpdate(params: PostProfileUpdateApiUseCase.Params): Flow<ApiResult<String>>
+
+    suspend fun performPasswordChange(params: PostPasswordChangeApiUseCase.Params): Flow<ApiResult<String>>
 }

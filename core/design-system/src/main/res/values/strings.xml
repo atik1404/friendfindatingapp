@@ -147,6 +147,7 @@
     <string name="error_invalid_username">Please enter a valid username.</string>
     <string name="error_invalid_name">Please enter your name.</string>
     <string name="error_invalid_password">Password must be at least 10 characters long.</string>
+    <string name="error_password_not_matched">Password and confirm password does not match.</string>
     <string name="error_invalid_email">Please enter a valid email address.</string>
     <string name="error_invalid_post_code">Please enter a valid post code.</string>
     <string name="error_invalid_birth_date">Please select your birth date.</string>

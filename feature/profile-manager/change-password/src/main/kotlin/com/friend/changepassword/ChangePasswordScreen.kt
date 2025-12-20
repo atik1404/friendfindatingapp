@@ -16,10 +16,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -30,12 +26,14 @@ import com.friend.ui.common.AppToolbar
 import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppOutlineTextField
 import com.friend.ui.components.AppScaffold
-import com.friend.ui.preview.LightDarkPreview
+import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChangePasswordScreen(
+    uiState: UiState,
+    onAction: (UiAction) -> Unit,
     onBackButtonClicked: () -> Unit,
 ) {
     AppScaffold(
@@ -48,9 +46,6 @@ fun ChangePasswordScreen(
                 })
         }
     ) { padding ->
-        var currentPassword by rememberSaveable { mutableStateOf("") }
-        var newPassword by rememberSaveable { mutableStateOf("") }
-        var confirmPassword by rememberSaveable { mutableStateOf("") }
         Column(
             modifier = Modifier
                 .fillMaxSize()              // from Scaffold
@@ -63,39 +58,42 @@ fun ChangePasswordScreen(
                 .appPadding(SpacingToken.medium),
         ) {
             AppOutlineTextField(
-                text = currentPassword,
+                text = uiState.oldPassword.value,
+                error = if (uiState.oldPassword.isDirty) stringResource(Res.string.error_invalid_password) else null,
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(Res.string.label_current_password),
                 placeholder = stringResource(Res.string.hint_current_password),
-                onValueChange = { currentPassword = it },
+                onValueChange = { onAction.invoke(UiAction.OnOldPasswordChange(it)) },
                 isPassword = true,
                 keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done,
+                    imeAction = ImeAction.Next,
                 ),
             )
 
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
             AppOutlineTextField(
-                text = newPassword,
+                text = uiState.newPassword.value,
+                error = if (uiState.newPassword.isDirty) stringResource(Res.string.error_invalid_password) else null,
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(Res.string.label_new_password),
                 placeholder = stringResource(Res.string.hint_new_password),
-                onValueChange = { newPassword = it },
+                onValueChange = { onAction.invoke(UiAction.OnNewPasswordChange(it)) },
                 isPassword = true,
                 keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done,
+                    imeAction = ImeAction.Next,
                 ),
             )
 
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
             AppOutlineTextField(
-                text = confirmPassword,
+                text = uiState.confirmPassword.value,
+                error = if (uiState.confirmPassword.isDirty) stringResource(Res.string.error_invalid_password) else null,
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(Res.string.label_confirm_password),
                 placeholder = stringResource(Res.string.hint_confirm_password),
-                onValueChange = { confirmPassword = it },
+                onValueChange = { onAction.invoke(UiAction.OnConfirmPasswordChange(it)) },
                 isPassword = true,
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
@@ -105,10 +103,11 @@ fun ChangePasswordScreen(
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
             AppElevatedButton(
+                isLoading = uiState.isFormSubmitting,
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(Res.string.action_change_password),
                 onClick = {
-                    onBackButtonClicked.invoke()
+                    onAction.invoke(UiAction.PerformPasswordChanged)
                 },
             )
         }
@@ -116,9 +115,11 @@ fun ChangePasswordScreen(
 }
 
 @Composable
-@LightDarkPreview
+@LightPreview
 private fun ScreenPreview() {
     ChangePasswordScreen(
+        uiState = UiState(),
+        onAction = {},
         onBackButtonClicked = {}
     )
 }

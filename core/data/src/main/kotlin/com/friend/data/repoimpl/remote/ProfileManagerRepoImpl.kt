@@ -7,6 +7,7 @@ import com.friend.data.mapper.mapFromApiResponse
 import com.friend.data.mapper.profilemanager.CacheProfile
 import com.friend.data.mapper.profilemanager.OtherProfileApiMapper
 import com.friend.data.mapper.profilemanager.ProfileApiMapper
+import com.friend.domain.apiusecase.profilemanager.PostPasswordChangeApiUseCase
 import com.friend.domain.apiusecase.profilemanager.PostProfileUpdateApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.repository.remote.ProfileManageRepository
@@ -51,6 +52,16 @@ class ProfileManagerRepoImpl @Inject constructor(
         return mapFromApiResponse(
             result = networkBoundResources.downloadData {
                 apiServices.performProfileUpdate(
+                    params
+                )
+            }, mapper = commonApiMapper
+        )
+    }
+
+    override suspend fun performPasswordChange(params: PostPasswordChangeApiUseCase.Params): Flow<ApiResult<String>> {
+        return mapFromApiResponse(
+            result = networkBoundResources.downloadData {
+                apiServices.performPasswordChanged(
                     params
                 )
             }, mapper = commonApiMapper

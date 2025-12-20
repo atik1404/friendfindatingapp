@@ -52,3 +52,10 @@ sealed interface ProfileCompletionIoResult {
     data object InvalidWhatsUp : ProfileCompletionIoResult
     data object InvalidInterestedIn : ProfileCompletionIoResult
 }
+
+sealed interface PasswordChangeIoResult {
+    data object InvalidOldPassword : PasswordChangeIoResult
+    data object InvalidNewPassword : PasswordChangeIoResult
+    data object InvalidConfirmPassword : PasswordChangeIoResult
+    data object PasswordNotMatched : PasswordChangeIoResult
+}
