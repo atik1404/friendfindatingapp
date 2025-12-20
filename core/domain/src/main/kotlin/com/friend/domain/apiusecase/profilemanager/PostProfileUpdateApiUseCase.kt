@@ -5,6 +5,11 @@ import com.friend.domain.repository.remote.ProfileManageRepository
 import com.friend.domain.usecase.ApiUseCaseParams
 import com.friend.domain.validator.DataValidationResult
 import com.friend.domain.validator.ProfileCompletionIoResult
+import com.friend.domain.validator.RegistrationIoResult
+import com.friend.domain.validator.isEmailValid
+import com.friend.domain.validator.isNameValid
+import com.friend.domain.validator.isPasswordValid
+import com.friend.domain.validator.isUsernameValid
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -57,6 +62,36 @@ class PostProfileUpdateApiUseCase @Inject constructor(
     }
 
     private fun validation(params: Params): DataValidationResult {
+        if (!params.username.isUsernameValid())
+            return DataValidationResult.Failure(RegistrationIoResult.InvalidUsername)
+
+        if (!params.name.isNameValid())
+            return DataValidationResult.Failure(RegistrationIoResult.InvalidName)
+
+        if (!params.email.isEmailValid())
+            return DataValidationResult.Failure(RegistrationIoResult.InvalidEmail)
+
+        if (params.gender == -1)
+            return DataValidationResult.Failure(RegistrationIoResult.InvalidGender)
+
+        if (params.interestedIn == -1)
+            return DataValidationResult.Failure(RegistrationIoResult.InvalidInterested)
+
+        if (params.birthdate.isEmpty())
+            return DataValidationResult.Failure(RegistrationIoResult.InvalidBirthDate)
+
+        if (params.country == "-1")
+            return DataValidationResult.Failure(RegistrationIoResult.InvalidCountry)
+
+        if (params.state == "-1")
+            return DataValidationResult.Failure(RegistrationIoResult.InvalidState)
+
+        if (params.city == "-1")
+            return DataValidationResult.Failure(RegistrationIoResult.InvalidCity)
+
+        if (params.zipCode.isEmpty())
+            return DataValidationResult.Failure(RegistrationIoResult.InvalidPostCode)
+
         if (params.height.isEmpty())
             return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidHeight)
 

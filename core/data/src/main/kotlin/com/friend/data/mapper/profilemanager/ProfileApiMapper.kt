@@ -25,7 +25,7 @@ class ProfileApiMapper @Inject constructor() :
             fullName = profileData?.name.orEmpty(),
             email = profileData?.email.orEmpty(),
             gender = Gender.fromValue(profileData?.gender ?: -1).name,
-            birthdate = profileData?.birthdate.orEmpty(),
+            birthdate = profileData?.birthDate.orEmpty(),
             interestedIn = Gender.fromValue(profileData?.interestedIn ?: -1).name,
             country = profileData?.country.orEmpty(),
             state = profileData?.state.orEmpty(),
@@ -44,8 +44,7 @@ class ProfileApiMapper @Inject constructor() :
             title = profileData?.title.orEmpty(),
             weight = profileData?.weight.orEmpty(),
             whatsUp = profileData?.what_are_you_looking_for.orEmpty(),
-            isProfileComplete = (profileData != null && profileData.height != null),
-            //isProfileComplete = profileData?.is_profile_complete ?: false
+            isProfileComplete = profileData?.is_profile_complete == 1
         )
     }
 }

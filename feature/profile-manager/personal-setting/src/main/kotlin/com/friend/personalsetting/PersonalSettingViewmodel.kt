@@ -1,18 +1,16 @@
-package com.friend.registration
+package com.friend.personalsetting
 
 import com.friend.common.base.BaseViewModel
 import com.friend.common.constant.Gender
-import com.friend.common.extfun.getLocalIpAddress
-import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
-import com.friend.domain.apiusecase.credential.PostRegistrationApiUseCase
+import com.friend.common.dateparser.DateTimePatterns
+import com.friend.common.dateparser.DateTimeUtils
+import com.friend.domain.apiusecase.profilemanager.FetchProfileApiUseCase
+import com.friend.domain.apiusecase.profilemanager.PostProfileUpdateApiUseCase
 import com.friend.domain.apiusecase.search.FetchCityApiUseCase
 import com.friend.domain.apiusecase.search.FetchCountriesUseCase
 import com.friend.domain.apiusecase.search.FetchStateApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.validator.RegistrationIoResult
-import com.friend.entity.search.CityApiEntity
-import com.friend.entity.search.CountryApiEntity
-import com.friend.entity.search.StateApiEntity
 import com.friend.sharedpref.SharedPrefHelper
 import com.friend.sharedpref.SpKey
 import com.friend.ui.common.UiText
@@ -27,15 +25,15 @@ import javax.inject.Inject
 import com.friend.designsystem.R as Res
 
 @HiltViewModel
-class RegistrationViewModel @Inject constructor(
+class PersonalSettingViewmodel @Inject constructor(
+    private val updateProfileUseCase: PostProfileUpdateApiUseCase,
     private val fetchCityApiUseCase: FetchCityApiUseCase,
     private val fetchStateApiUseCase: FetchStateApiUseCase,
     private val fetchCountryApiUseCase: FetchCountriesUseCase,
-    private val postRegistrationApiUseCase: PostRegistrationApiUseCase,
-    private val postLoginApiUseCase: PostLoginApiUseCase,
+    private val fetchProfileApiUseCase: FetchProfileApiUseCase,
     private val sharedPrefHelper: SharedPrefHelper
 ) : BaseViewModel() {
-    val ioError get() = postRegistrationApiUseCase.ioError.receiveAsFlow()
+    val ioError get() = updateProfileUseCase.ioError.receiveAsFlow()
 
     private val _formUiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _formUiState.asStateFlow()
@@ -46,20 +44,26 @@ class RegistrationViewModel @Inject constructor(
     val action: (UiAction) -> Unit = {
         when (it) {
             UiAction.FetchCountry -> fetchCountries()
-            UiAction.PerformRegistration -> performRegistration()
-            UiAction.PerformLogin -> performLoginApi()
-            is UiAction.OnChangeUserName -> onChangeUserName(it.value)
+            UiAction.PerformProfileUpdate -> performProfileUpdate()
+            UiAction.SetDefaultData -> setDefaultValue()
             is UiAction.OnChangeEmail -> onChangeEmail(it.value)
             is UiAction.OnChangeName -> onChangeName(it.value)
             is UiAction.OnChangePassword -> onChangePassword(it.value)
             is UiAction.OnChangePostCode -> onChangePostCode(it.value)
             is UiAction.OnSelectCity -> onChangeCity(it.value)
-            is UiAction.OnSelectCountry -> onChangeCountry(it.value)
-            is UiAction.OnSelectState -> onChangeState(it.value)
+            is UiAction.OnSelectCountry -> {
+                onChangeCountry(it.value)
+                fetchStates()
+            }
+
+            is UiAction.OnSelectState -> {
+                onChangeState(it.value)
+                fetchCities()
+            }
+
             is UiAction.SelectBirthDate -> onChangeBirthDate(it.value)
             is UiAction.SelectGender -> onChangeGender(it.value)
             is UiAction.SelectInterestedIn -> onChangeInterest(it.value)
-            is UiAction.CheckPrivacyPolicy -> onAgreedPolicy(it.value)
             is UiAction.ShowDatePicker -> onShowDatePicker(it.isVisible)
             UiAction.ResetState -> _formUiState.value = UiState()
         }
@@ -67,6 +71,23 @@ class RegistrationViewModel @Inject constructor(
 
     init {
         bindIoError()
+    }
+
+    private fun setDefaultValue() {
+        onChangeName(sharedPrefHelper.getString(SpKey.fullName))
+        onChangeEmail(sharedPrefHelper.getString(SpKey.email))
+        onChangePostCode(sharedPrefHelper.getString(SpKey.zipCode))
+        onChangeCity(sharedPrefHelper.getString(SpKey.city))
+        onChangeState(sharedPrefHelper.getString(SpKey.state))
+        onChangeCountry(sharedPrefHelper.getString(SpKey.country))
+        onChangeBirthDate(
+            DateTimeUtils.parseToPattern(
+                sharedPrefHelper.getString(SpKey.dateOfBirth),
+                DateTimePatterns.SQL_YMD
+            )
+        )
+        onChangeGender(Gender.toEnum(sharedPrefHelper.getString(SpKey.gender)))
+        onChangeInterest(Gender.toEnum(sharedPrefHelper.getString(SpKey.interestedIn)))
     }
 
     private fun fetchCountries() {
@@ -88,7 +109,7 @@ class RegistrationViewModel @Inject constructor(
     private fun fetchStates() {
         execute {
             val current = _formUiState.value
-            val selectedCountry = current.form.country?.value ?: ""
+            val selectedCountry = current.form.country ?: ""
             fetchStateApiUseCase.execute(selectedCountry).collect { result ->
                 when (result) {
                     is ApiResult.Error -> setToastMessage(UiText.Dynamic(result.message))
@@ -106,8 +127,8 @@ class RegistrationViewModel @Inject constructor(
     private fun fetchCities() {
         execute {
             val current = _formUiState.value
-            val selectedCountry = current.form.country?.value ?: ""
-            val selectedState = current.form.state?.value ?: ""
+            val selectedCountry = current.form.country ?: ""
+            val selectedState = current.form.state ?: ""
 
             fetchCityApiUseCase.execute(
                 FetchCityApiUseCase.Params(
@@ -129,89 +150,65 @@ class RegistrationViewModel @Inject constructor(
         }
     }
 
-    private fun performRegistration() {
+    private fun performProfileUpdate() {
         execute {
             val current = _formUiState.value
 
-            val params = PostRegistrationApiUseCase.Params(
-                username = current.form.username.value,
-                password = current.form.password.value,
+            val params = PostProfileUpdateApiUseCase.Params(
+                username = sharedPrefHelper.getString(SpKey.userName),
                 email = current.form.email.value,
                 name = current.form.name.value,
                 zipCode = current.form.postCode.value,
                 gender = current.form.gender?.value ?: -1,
                 interestedIn = current.form.interestedIn?.value ?: -1,
                 birthdate = current.form.dateOfBirth.value,
-                country = current.form.country?.value ?: "-1",
-                state = current.form.state?.value ?: "-1",
-                city = current.form.city?.value ?: "-1",
-                userIP = getLocalIpAddress()
+                country = current.form.country ?: "-1",
+                state = current.form.state ?: "-1",
+                city = current.form.city ?: "-1",
+                height = sharedPrefHelper.getString(SpKey.height),
+                weight = sharedPrefHelper.getString(SpKey.weight),
+                eyes = sharedPrefHelper.getString(SpKey.eyes),
+                hair = sharedPrefHelper.getString(SpKey.hair),
+                smoking = sharedPrefHelper.getString(SpKey.smoking),
+                drinking = sharedPrefHelper.getString(SpKey.drinking),
+                bodyType = sharedPrefHelper.getString(SpKey.bodyType),
+                lookingFor = sharedPrefHelper.getString(SpKey.lookingFor),
+                aboutYou = sharedPrefHelper.getString(SpKey.aboutYou),
+                title = sharedPrefHelper.getString(SpKey.title),
+                whatsUp = sharedPrefHelper.getString(SpKey.whatsUp),
+                interests = sharedPrefHelper.getString(SpKey.interests)
             )
 
-            postRegistrationApiUseCase.execute(params).collect { result ->
+            updateProfileUseCase.execute(params).collect { result ->
                 when (result) {
                     is ApiResult.Error -> setToastMessage(UiText.Dynamic(result.message))
                     is ApiResult.Loading -> _formUiState.update { it.copy(isSubmitting = result.loading) }
                     is ApiResult.Success -> {
-                        performLoginApi()
                         setToastMessage(UiText.Dynamic(result.data))
+                        fetchProfile()
                     }
                 }
             }
         }
     }
 
-    private fun performLoginApi() {
-        val current = _formUiState.value
-        val params = PostLoginApiUseCase.Params(
-            username = current.form.username.value,
-            password = current.form.password.value,
-        )
-
+    private fun fetchProfile() {
         execute {
-            postLoginApiUseCase.execute(params).collect { result ->
+            fetchProfileApiUseCase.execute().collect { result ->
                 when (result) {
-                    is ApiResult.Success -> {
-                        cacheUserData()
-                        _uiEvent.send(UiEvent.NavigateToProfileCompletion)
-                    }
-
+                    is ApiResult.Error -> setToastMessage(UiText.Dynamic(result.message))
                     is ApiResult.Loading -> setLoading(result.loading)
-                    is ApiResult.Error -> {
-                        _formUiState.update {
-                            it.copy(
-                                isLoginFailed = true,
-                                loginFailedMessage = result.message
-                            )
-                        }
-                    }
+                    is ApiResult.Success -> _uiEvent.send(UiEvent.FinishScreen)
                 }
             }
         }
     }
 
-    private fun cacheUserData() {
+    private fun onChangeName(value: String) {
         val current = _formUiState.value
-        with(sharedPrefHelper) {
-            putString(SpKey.userName, current.form.username.value)
-            putString(SpKey.fullName, current.form.name.value)
-            putString(SpKey.email, current.form.email.value)
-            putString(SpKey.zipCode, current.form.postCode.value)
-            putString(SpKey.gender, current.form.gender?.name ?: "")
-            putString(SpKey.interestedIn, current.form.interestedIn?.name ?: "")
-            putString(SpKey.dateOfBirth, current.form.dateOfBirth.value)
-            putString(SpKey.country, current.form.country?.value ?: "")
-            putString(SpKey.state, current.form.state?.value ?: "")
-            putString(SpKey.city, current.form.city?.value ?: "")
+        updateForm {
+            it.copy(name = it.name.onChange(newValue = value))
         }
-    }
-
-    private fun onChangeUserName(value: String) = updateForm {
-        it.copy(username = it.username.onChange(newValue = value))
-    }
-
-    private fun onChangeName(value: String) = updateForm {
-        it.copy(name = it.name.onChange(newValue = value))
     }
 
     private fun onChangeEmail(value: String) = updateForm {
@@ -226,16 +223,14 @@ class RegistrationViewModel @Inject constructor(
         it.copy(postCode = it.postCode.onChange(newValue = value))
     }
 
-    private fun onChangeCity(value: CityApiEntity) = updateForm { it.copy(city = value) }
+    private fun onChangeCity(value: String) = updateForm { it.copy(city = value) }
 
-    private fun onChangeState(value: StateApiEntity) {
+    private fun onChangeState(value: String) {
         updateForm { it.copy(state = value, city = null) }
-        fetchCities()
     }
 
-    private fun onChangeCountry(value: CountryApiEntity) {
+    private fun onChangeCountry(value: String) {
         updateForm { it.copy(country = value, state = null, city = null) }
-        fetchStates()
     }
 
     private fun onChangeBirthDate(value: String) = updateForm {
@@ -246,8 +241,6 @@ class RegistrationViewModel @Inject constructor(
 
     private fun onChangeInterest(value: Gender) = updateForm { it.copy(interestedIn = value) }
 
-    private fun onAgreedPolicy(value: Boolean) = updateForm { it.copy(isAgree = value) }
-
     private fun onShowDatePicker(value: Boolean) {
         execute {
             _formUiState.update { state ->
@@ -256,19 +249,23 @@ class RegistrationViewModel @Inject constructor(
         }
     }
 
+    /** Update only the form part of the UiState in a single place to reduce repetition. */
+    private inline fun updateForm(transform: (FormData) -> FormData) {
+        _formUiState.update { state -> state.copy(form = transform(state.form)) }
+    }
+
     private fun setLoading(value: Boolean) {
         _formUiState.update {
             it.copy(
                 isLoading = value,
-                isLoginFailed = false,
-                loginFailedMessage = ""
             )
         }
     }
 
-    /** Update only the form part of the UiState in a single place to reduce repetition. */
-    private inline fun updateForm(transform: (FormData) -> FormData) {
-        _formUiState.update { state -> state.copy(form = transform(state.form)) }
+    private fun setToastMessage(message: UiText) {
+        execute {
+            _uiEvent.send(UiEvent.ShowToastMessage(message))
+        }
     }
 
     private fun bindIoError() {
@@ -283,25 +280,9 @@ class RegistrationViewModel @Inject constructor(
                         )
                     }
 
-                    RegistrationIoResult.InvalidUsername -> updateForm {
-                        it.copy(
-                            username = it.username.copy(
-                                isValid = false
-                            )
-                        )
-                    }
-
                     RegistrationIoResult.InvalidEmail -> updateForm {
                         it.copy(
                             email = it.email.copy(
-                                isValid = false
-                            )
-                        )
-                    }
-
-                    RegistrationIoResult.InvalidPassword -> updateForm {
-                        it.copy(
-                            password = it.password.copy(
                                 isValid = false
                             )
                         )
@@ -320,14 +301,10 @@ class RegistrationViewModel @Inject constructor(
                             )
                         )
                     }
+
+                    else -> {}
                 }
             }
-        }
-    }
-
-    private fun setToastMessage(message: UiText) {
-        execute {
-            _uiEvent.send(UiEvent.ShowToastMessage(message))
         }
     }
 }

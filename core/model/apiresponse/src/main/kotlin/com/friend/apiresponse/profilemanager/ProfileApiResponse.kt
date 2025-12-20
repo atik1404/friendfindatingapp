@@ -12,7 +12,7 @@ data class ProfileDetailsResponse(
     val username: String?,
     val name: String?,
     val gender: Int?,
-    val birthdate: String?,
+    val birthDate: String?,
     val email: String?,
     val interestedIn: Int?,
     val country: String?,
@@ -32,7 +32,7 @@ data class ProfileDetailsResponse(
     val title: String?,
     val weight: String?,
     val what_are_you_looking_for: String?,
-    val is_profile_complete: Boolean?,
+    val is_profile_complete: Int?,
 )
 
 data class BlockedUser(

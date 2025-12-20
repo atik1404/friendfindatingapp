@@ -8,6 +8,7 @@ import com.friend.membership.MembershipScreen
 import com.friend.otherprofile.OtherProfileScreenRouter
 import com.friend.overview.ProfileOverviewRoute
 import com.friend.personalsetting.PersonalSettingScreen
+import com.friend.personalsetting.PersonalSettingScreenRouter
 import com.friend.profile.ProfileScreenRouter
 import com.friend.profilecompletion.ProfileCompletionScreenRoute
 import com.friend.reportabuse.ReportAbuseScreen
@@ -78,9 +79,11 @@ object ProfileNavGraph {
         }
 
         entry(ProfileScreens.PersonalSettingNavScreen) {
-            PersonalSettingScreen {
-                backStack.removeLastOrNull()
-            }
+            PersonalSettingScreenRouter(
+                onBackButtonClicked = {
+                    backStack.removeLastOrNull()
+                },
+            )
         }
 
         entry(ProfileScreens.ChangePasswordNavScreen) {

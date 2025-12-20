@@ -1,8 +1,6 @@
 package com.friend.personalsetting
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -13,39 +11,34 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Female
-import androidx.compose.material.icons.rounded.Male
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
-import com.friend.ui.common.AppDatePickerDialog
-import com.friend.designsystem.R as Res
+import com.friend.personalsetting.components.AddressUiSection
+import com.friend.personalsetting.components.BirthDateSelection
+import com.friend.personalsetting.components.GenderSelection
+import com.friend.personalsetting.components.InterestedInSelection
 import com.friend.ui.common.AppToolbar
+import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppOutlineTextField
 import com.friend.ui.components.AppScaffold
-import com.friend.ui.components.AutoCompleteTextField
-import com.friend.ui.components.SingleChoiceSegmentsWithIcons
-import com.friend.ui.preview.LightDarkPreview
+import com.friend.ui.preview.LightPreview
+import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PersonalSettingScreen(
+    modifier: Modifier = Modifier,
+    state: UiState,
+    onAction: (UiAction) -> Unit,
     onBackButtonClicked: () -> Unit,
 ) {
     AppScaffold(
@@ -58,12 +51,8 @@ fun PersonalSettingScreen(
                 })
         }
     ) { padding ->
-        var fullName by rememberSaveable { mutableStateOf("") }
-        var email by rememberSaveable { mutableStateOf("") }
-        var showDatePicker by remember { mutableStateOf(false) }
-
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()              // from Scaffold
                 .padding(padding)
                 .consumeWindowInsets(padding)    // prevent double-inset consumption downstream
@@ -72,161 +61,110 @@ fun PersonalSettingScreen(
                 .verticalScroll(rememberScrollState()) // simple, contents are small; LazyColumn not necessary
                 .appPadding(SpacingToken.small),
         ) {
-
             AppOutlineTextField(
-                text = fullName,
-                modifier = Modifier.fillMaxWidth(),
+                text = state.form.name.value,
+                modifier = modifier.fillMaxWidth(),
                 title = stringResource(Res.string.label_full_name),
                 placeholder = stringResource(Res.string.hint_full_name),
-                onValueChange = { fullName = it },
+                onValueChange = { onAction.invoke(UiAction.OnChangeName(it)) },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
                 ),
             )
 
-            Spacer(modifier = Modifier.height(SpacingToken.medium))
+            Spacer(modifier = modifier.height(SpacingToken.medium))
 
             AppOutlineTextField(
-                text = email,
-                modifier = Modifier.fillMaxWidth(),
+                text = state.form.email.value,
+                modifier = modifier.fillMaxWidth(),
                 title = stringResource(Res.string.label_email),
                 placeholder = stringResource(Res.string.hint_email),
-                onValueChange = { email = it },
+                onValueChange = { onAction.invoke(UiAction.OnChangeEmail(it)) },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
                 ),
             )
 
-            Spacer(modifier = Modifier.height(SpacingToken.medium))
+            Spacer(modifier = modifier.height(SpacingToken.medium))
 
-            var segIndex by remember { mutableIntStateOf(0) }
-            var dateOfBirth by rememberSaveable { mutableStateOf("") }
-
-            SingleChoiceSegmentsWithIcons(
-                title = stringResource(Res.string.label_interested_in),
-                options = listOf(
-                    Pair(Icons.Rounded.Male, "Male"),
-                    Pair(Icons.Rounded.Female, "Female"),
-                ),
-                selectedIndex = 1,
-                onSelected = { segIndex = it }
-            )
-
-            Spacer(modifier = Modifier.height(SpacingToken.medium))
-
-            AppOutlineTextField(
-                text = dateOfBirth,
-                modifier = Modifier.fillMaxWidth(),
-                title = stringResource(Res.string.label_date_of_birth),
-                placeholder = stringResource(Res.string.hint_dob),
-                onValueChange = { dateOfBirth = it },
-                isReadOnly = true,
-                onClickListener = {
-                    showDatePicker = true
+            BirthDateSelection(
+                selectedDate = state.form.dateOfBirth.value,
+                onSelected = {
+                    onAction.invoke(UiAction.SelectBirthDate(it))
+                },
+                showDatePicker = state.showDatePicker,
+                setShowDatePicker = {
+                    onAction.invoke(UiAction.ShowDatePicker(it))
                 }
             )
 
-            Spacer(modifier = Modifier.height(SpacingToken.medium))
+            Spacer(modifier = modifier.height(SpacingToken.medium))
 
-            AddressField()
+            GenderSelection(
+                selectedGender = state.form.gender?.name ?: "",
+                onSelected = {
+                    onAction.invoke(UiAction.SelectGender(it))
+                }
+            )
 
-            Spacer(modifier = Modifier.height(SpacingToken.huge))
+            Spacer(modifier = modifier.height(SpacingToken.medium))
+
+            InterestedInSelection(
+                modifier = modifier,
+                selectedGender = state.form.interestedIn?.name ?: "",
+                onSelected = {
+                    onAction.invoke(UiAction.SelectInterestedIn(it))
+                }
+            )
+
+            Spacer(modifier = modifier.height(SpacingToken.medium))
+
+            AddressUiSection(
+                modifier = modifier,
+                postCode = state.form.postCode,
+                selectedCountry = state.form.country ?: "",
+                selectedState = state.form.state ?: "",
+                selectedCity = state.form.city ?: "",
+                countries = state.countries,
+                states = state.states,
+                cities = state.cities,
+                onPostCodeChange = {
+                    onAction.invoke(UiAction.OnChangePostCode(it))
+                },
+                onCountryChange = {
+                    onAction.invoke(UiAction.OnSelectCountry(it.value))
+                },
+                onStateChange = {
+                    onAction.invoke(UiAction.OnSelectState(it.value))
+                },
+                onCityChange = {
+                    onAction.invoke(UiAction.OnSelectCity(it.value))
+                }
+            )
+
+            Spacer(modifier = modifier.height(SpacingToken.huge))
 
             AppElevatedButton(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = modifier.fillMaxWidth(),
+                isLoading = state.isSubmitting,
                 text = stringResource(Res.string.action_save_changes),
                 onClick = {
-                    onBackButtonClicked.invoke()
+                    onAction.invoke(UiAction.PerformProfileUpdate)
                 },
             )
-
-            if (showDatePicker) {
-                AppDatePickerDialog(
-                    onDismissRequest = {
-                        showDatePicker = false
-                    },
-                    onConfirm = {
-                        dateOfBirth = it
-                        showDatePicker = false
-                    }
-                )
-            }
         }
+
+        if (state.isLoading)
+            LoadingUi()
     }
 }
 
 @Composable
-fun AddressField() {
-    var zipCode by rememberSaveable { mutableStateOf("") }
-    var text by remember { mutableStateOf("") }
-
-    val cities = listOf(
-        "Dhaka",
-        "Chattogram",
-        "Rajshahi",
-        "Khulna",
-        "Sylhet",
-        "Barishal",
-        "Rangpur",
-        "Mymensingh"
-    )
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            AutoCompleteTextField(
-                allOptions = cities,
-                modifier = Modifier.weight(1f),
-                label = stringResource(Res.string.label_country),
-                placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { text = it },
-                value = text
-            )
-
-            Spacer(modifier = Modifier.width(SpacingToken.medium))
-
-            AutoCompleteTextField(
-                allOptions = cities,
-                modifier = Modifier.weight(1f),
-                label = stringResource(Res.string.label_state),
-                placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { text = it },
-                value = text
-            )
-        }
-
-        Spacer(modifier = Modifier.height(SpacingToken.medium))
-
-        Row {
-            AutoCompleteTextField(
-                allOptions = cities,
-                modifier = Modifier.weight(1f),
-                label = stringResource(Res.string.label_city),
-                placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { text = it },
-                value = text
-            )
-
-            Spacer(modifier = Modifier.width(SpacingToken.medium))
-
-            AppOutlineTextField(
-                text = zipCode,
-                modifier = Modifier.weight(1f),
-                title = stringResource(Res.string.label_zip_code),
-                placeholder = stringResource(Res.string.hint_zip_code),
-                onValueChange = { zipCode = it },
-            )
-        }
-    }
-}
-
-@Composable
-@LightDarkPreview
+@LightPreview
 private fun ScreenPreview() {
     PersonalSettingScreen(
-        onBackButtonClicked = {}
+        onBackButtonClicked = {},
+        state = UiState(),
+        onAction = {}
     )
 }

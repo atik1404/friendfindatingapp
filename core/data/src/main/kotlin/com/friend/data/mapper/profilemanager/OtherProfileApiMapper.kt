@@ -24,7 +24,7 @@ class OtherProfileApiMapper @Inject constructor() :
                 fullName = profileData?.name.orEmpty(),
                 email = profileData?.email.orEmpty(),
                 gender = Gender.fromValue(profileData?.gender ?: -1).name,
-                birthdate = profileData?.birthdate.orEmpty(),
+                birthdate = profileData?.birthDate.orEmpty(),
                 interestedIn = Gender.fromValue(profileData?.interestedIn ?: -1).name,
                 country = profileData?.country.orEmpty(),
                 state = profileData?.state.orEmpty(),
