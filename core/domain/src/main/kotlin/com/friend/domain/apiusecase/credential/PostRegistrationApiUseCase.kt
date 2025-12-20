@@ -77,7 +77,7 @@ class PostRegistrationApiUseCase @Inject constructor(
         if (params.city == "-1")
             return DataValidationResult.Failure(RegistrationIoResult.InvalidCity)
 
-        if (params.zipCode.isEmpty())
+        if (params.zipCode.trim().isEmpty())
             return DataValidationResult.Failure(RegistrationIoResult.InvalidPostCode)
 
         return DataValidationResult.Success

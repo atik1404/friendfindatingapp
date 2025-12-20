@@ -87,7 +87,7 @@ class PostProfileUpdateApiUseCase @Inject constructor(
         if (params.city == "-1")
             return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidCity)
 
-        if (params.zipCode.isEmpty())
+        if (params.zipCode.trim().isEmpty())
             return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidPostCode)
 
         if (params.height.isEmpty())
@@ -114,13 +114,13 @@ class PostProfileUpdateApiUseCase @Inject constructor(
         if (params.lookingFor.isEmpty())
             return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidLookingFor)
 
-        if (params.title.isEmpty())
+        if (params.title.trim().isEmpty())
             return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidTitle)
 
-        if (params.aboutYou.isEmpty())
+        if (params.aboutYou.trim().isEmpty())
             return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidAboutYou)
 
-        if (params.whatsUp.isEmpty())
+        if (params.whatsUp.trim().isEmpty())
             return DataValidationResult.Failure(ProfileCompletionIoResult.InvalidWhatsUp)
 
         if (params.interests.isEmpty())
