@@ -4,11 +4,9 @@ import com.friend.domain.base.ApiResult
 import com.friend.domain.repository.remote.ProfileManageRepository
 import com.friend.domain.usecase.ApiUseCaseParams
 import com.friend.domain.validator.DataValidationResult
-import com.friend.domain.validator.LoginIoResult
 import com.friend.domain.validator.PasswordChangeIoResult
 import com.friend.domain.validator.isPasswordMatched
 import com.friend.domain.validator.isPasswordValid
-import com.friend.domain.validator.isUsernameValid
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow

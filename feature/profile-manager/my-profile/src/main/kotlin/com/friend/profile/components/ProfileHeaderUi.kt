@@ -40,6 +40,7 @@ import com.friend.ui.components.AppText
 import com.friend.ui.components.AppTextButton
 import com.friend.ui.components.NetworkImageLoader
 import com.friend.ui.preview.LightDarkPreview
+import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
 @Composable
@@ -137,7 +138,7 @@ fun ProfileHeaderUi(
 }
 
 @Composable
-@LightDarkPreview
+@LightPreview
 private fun ScreenPreview() {
     ProfileHeaderUi(
         fullName = "Tom Cruise",

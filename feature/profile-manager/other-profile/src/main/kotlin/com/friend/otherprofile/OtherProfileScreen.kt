@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,16 +24,14 @@ import com.friend.common.dateparser.DateTimePatterns
 import com.friend.common.dateparser.DateTimeUtils
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
+import com.friend.entity.profilemanager.OtherProfileApiEntity
 import com.friend.entity.profilemanager.ProfileApiEntity
+import com.friend.otherprofile.components.AppToolbarSection
 import com.friend.otherprofile.components.LabeledValue
 import com.friend.otherprofile.components.ProfileHeaderUi
-import com.friend.ui.common.AppToolbar
 import com.friend.ui.common.ErrorUi
 import com.friend.ui.common.LoadingUi
-import com.friend.ui.components.AppPopupMenu
 import com.friend.ui.components.AppScaffold
-import com.friend.ui.components.PopupMenuType
-import com.friend.ui.components.ProfilePopupMenu
 import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
@@ -43,35 +39,25 @@ import com.friend.designsystem.R as Res
 @Composable
 fun OtherProfileScreen(
     uiState: UiState,
+    username: String,
+    isBlocked: Boolean,
+    uiAction: (UiAction) -> Unit,
     onBackButtonClicked: () -> Unit,
     navigateToMessageRoom: () -> Unit,
     navigateToReportAbuse: () -> Unit,
-    onRetry: () -> Unit,
 ) {
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
-            AppToolbar(
-                title = stringResource(Res.string.title_profile),
-                onBackClick = {
-                    onBackButtonClicked.invoke()
+            AppToolbarSection(
+                isBlocked = isBlocked,
+                onBackButtonClicked = onBackButtonClicked,
+                navigateToReportAbuse = navigateToReportAbuse,
+                onBlockMenuClicked = {
+                    uiAction.invoke(UiAction.PerformBlockUnblock(username))
                 },
-                actions = {
-                    AppPopupMenu(
-                        icon = Icons.Default.MoreVert,
-                        menuItems = ProfilePopupMenu,
-                        onClick = { menu ->
-                            when (menu) {
-                                PopupMenuType.ReportUser -> {
-                                    navigateToReportAbuse.invoke()
-                                }
-
-                                PopupMenuType.BlockUser -> {}
-                                PopupMenuType.UnblockUser -> {}
-                                else -> {}
-                            }
-                        }
-                    )
+                onUnblockMenuClicked = {
+                    uiAction.invoke(UiAction.PerformBlockUnblock(username))
                 }
             )
         }
@@ -84,7 +70,7 @@ fun OtherProfileScreen(
                     .consumeWindowInsets(padding),
                 message = uiState.message
             ) {
-                onRetry.invoke()
+                uiAction.invoke(UiAction.PerformBlockUnblock(username))
             }
 
             UiState.Loading -> LoadingUi(
@@ -103,7 +89,7 @@ fun OtherProfileScreen(
                         .imePadding()                    // lift content when keyboard shows
                         .verticalScroll(rememberScrollState())
                         .appPadding(SpacingToken.small),
-                    data = uiState.data.profile,
+                    data = uiState.data,
                     onSendMsgClicked = navigateToMessageRoom
                 )
             }
@@ -114,7 +100,7 @@ fun OtherProfileScreen(
 @Composable
 private fun ProfileUi(
     modifier: Modifier,
-    data: ProfileApiEntity,
+    data: OtherProfileApiEntity,
     onSendMsgClicked: () -> Unit,
 ) {
     Column(
@@ -122,9 +108,10 @@ private fun ProfileUi(
     ) {
         ProfileHeaderUi(
             modifier = Modifier,
-            fullName = data.fullName,
-            email = data.email,
-            profilePicture = data.profilePicture,
+            isBlocked = data.isBlocked,
+            fullName = data.profile.fullName,
+            email = data.profile.email,
+            profilePicture = data.profile.profilePicture,
             onSendMsgClicked = onSendMsgClicked
         )
 
@@ -136,7 +123,7 @@ private fun ProfileUi(
             LabeledValue(
                 title = stringResource(Res.string.label_date_of_birth),
                 value = DateTimeUtils.parseToPattern(
-                    data.birthdate,
+                    data.profile.birthdate,
                     DateTimePatterns.MDY_TEXT_COMMA
                 ),
                 modifier = Modifier.weight(1f)
@@ -144,7 +131,7 @@ private fun ProfileUi(
 
             LabeledValue(
                 title = stringResource(Res.string.label_gender),
-                value = data.gender,
+                value = data.profile.gender,
                 modifier = Modifier.weight(1f),
                 alignment = Alignment.End
             )
@@ -163,7 +150,7 @@ private fun ProfileUi(
 
             LabeledValue(
                 title = stringResource(Res.string.label_interested_in),
-                value = data.interestedIn,
+                value = data.profile.interestedIn,
                 modifier = Modifier.weight(1f),
                 alignment = Alignment.End
             )
@@ -176,13 +163,13 @@ private fun ProfileUi(
         ) {
             LabeledValue(
                 title = stringResource(Res.string.label_height),
-                value = data.height,
+                value = data.profile.height,
                 modifier = Modifier.weight(1f)
             )
 
             LabeledValue(
                 title = stringResource(Res.string.label_weight),
-                value = data.weight,
+                value = data.profile.weight,
                 modifier = Modifier.weight(1f),
                 alignment = Alignment.End
             )
@@ -201,7 +188,7 @@ private fun ProfileUi(
 
             LabeledValue(
                 title = stringResource(Res.string.label_hair),
-                value = data.hair,
+                value = data.profile.hair,
                 modifier = Modifier.weight(1f),
                 alignment = Alignment.End
             )
@@ -214,13 +201,13 @@ private fun ProfileUi(
         ) {
             LabeledValue(
                 title = stringResource(Res.string.label_smoking),
-                value = data.smoking,
+                value = data.profile.smoking,
                 modifier = Modifier.weight(1f)
             )
 
             LabeledValue(
                 title = stringResource(Res.string.label_drinking),
-                value = data.drinking,
+                value = data.profile.drinking,
                 modifier = Modifier.weight(1f),
                 alignment = Alignment.End
             )
@@ -233,13 +220,13 @@ private fun ProfileUi(
         ) {
             LabeledValue(
                 title = stringResource(Res.string.label_body_type),
-                value = data.bodyType,
+                value = data.profile.bodyType,
                 modifier = Modifier.weight(1f)
             )
 
             LabeledValue(
                 title = stringResource(Res.string.label_country),
-                value = data.country,
+                value = data.profile.country,
                 modifier = Modifier.weight(1f),
                 alignment = Alignment.End
             )
@@ -252,13 +239,13 @@ private fun ProfileUi(
         ) {
             LabeledValue(
                 title = stringResource(Res.string.label_city),
-                value = data.city,
+                value = data.profile.city,
                 modifier = Modifier.weight(1f)
             )
 
             LabeledValue(
                 title = stringResource(Res.string.label_state),
-                value = data.state,
+                value = data.profile.state,
                 modifier = Modifier.weight(1f),
                 alignment = Alignment.End
             )
@@ -268,7 +255,7 @@ private fun ProfileUi(
 
         LabeledValue(
             title = stringResource(Res.string.label_about_yourself),
-            value = data.aboutYou,
+            value = data.profile.aboutYou,
             modifier = Modifier.fillMaxWidth(),
             maxLines = 5
         )
@@ -277,7 +264,7 @@ private fun ProfileUi(
 
         LabeledValue(
             title = stringResource(Res.string.label_interest),
-            value = data.interests,
+            value = data.profile.interests,
             modifier = Modifier.fillMaxWidth(),
             maxLines = 5
         )
@@ -286,7 +273,7 @@ private fun ProfileUi(
 
         LabeledValue(
             title = stringResource(Res.string.label_whats_up),
-            value = data.whatsUp,
+            value = data.profile.whatsUp,
             modifier = Modifier.fillMaxWidth(),
             maxLines = 5
         )
@@ -297,41 +284,43 @@ private fun ProfileUi(
 @LightPreview
 private fun ScreenPreview() {
     OtherProfileScreen(
-        uiState = UiState.ApiError("Error message"),
-//        uiState = UiState.ShowProfileData(
-//            OtherProfileApiEntity(
-//                isBlocked = false,
-//                profile = ProfileApiEntity(
-//                    userName = "Tom Cruise",
-//                    fullName = "Tom Cruise",
-//                    gender = "Male",
-//                    birthdate = "September 29, 1995",
-//                    email = "tom@gmail.com",
-//                    interestedIn = "Female",
-//                    country = "Bangladesh",
-//                    state = "Dhaka",
-//                    city = "Dhaka",
-//                    zipCode = "",
-//                    profilePicture = "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
-//                    bodyType = "",
-//                    drinking = "",
-//                    eyes = "",
-//                    hair = "",
-//                    height = "",
-//                    interests = "",
-//                    lookingFor = "",
-//                    smoking = "",
-//                    aboutYou = "",
-//                    title = "",
-//                    weight = "",
-//                    whatsUp = "",
-//                    isProfileComplete = false
-//                )
-//            )
-//        ),
+        //uiState = UiState.ApiError("Error message"),
+        uiState = UiState.ShowProfileData(
+            OtherProfileApiEntity(
+                isBlocked = false,
+                profile = ProfileApiEntity(
+                    userName = "Tom Cruise",
+                    fullName = "Tom Cruise",
+                    gender = "Male",
+                    birthdate = "September 29, 1995",
+                    email = "tom@gmail.com",
+                    interestedIn = "Female",
+                    country = "Bangladesh",
+                    state = "Dhaka",
+                    city = "Dhaka",
+                    zipCode = "",
+                    profilePicture = "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
+                    bodyType = "",
+                    drinking = "",
+                    eyes = "",
+                    hair = "",
+                    height = "",
+                    interests = "",
+                    lookingFor = "",
+                    smoking = "",
+                    aboutYou = "",
+                    title = "",
+                    weight = "",
+                    whatsUp = "",
+                    isProfileComplete = false
+                )
+            )
+        ),
         onBackButtonClicked = {},
         navigateToMessageRoom = {},
         navigateToReportAbuse = {},
-        onRetry = {}
+        username = "",
+        isBlocked = false,
+        uiAction = {}
     )
 }

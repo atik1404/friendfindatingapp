@@ -2,6 +2,7 @@ package com.friend.ui.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Report
@@ -67,9 +68,14 @@ val ProfilePopupMenu = listOf(
         menuType = PopupMenuType.ReportUser
     ),
     PopupMenu(
-        icon = Icons.Default.Search,
+        icon = Icons.Default.Block,
         menu = Res.string.menu_block_user,
         menuType = PopupMenuType.BlockUser
+    ),
+    PopupMenu(
+        icon = Icons.Default.Block,
+        menu = Res.string.menu_unblock_user,
+        menuType = PopupMenuType.UnblockUser
     ),
 )
 

@@ -32,6 +32,7 @@ import com.friend.designsystem.R as Res
 @Composable
 fun ProfileHeaderUi(
     modifier: Modifier = Modifier,
+    isBlocked: Boolean,
     fullName: String,
     email: String,
     profilePicture: String,
@@ -89,12 +90,14 @@ fun ProfileHeaderUi(
                 )
             }
 
-            AppIconButton(
-                resourceIcon = Res.drawable.ic_chat_bubble,
-                onClick = {
-                    onSendMsgClicked.invoke()
-                },
-            )
+            if(!isBlocked){
+                AppIconButton(
+                    resourceIcon = Res.drawable.ic_chat_bubble,
+                    onClick = {
+                        onSendMsgClicked.invoke()
+                    },
+                )
+            }
         }
     }
 }
@@ -107,5 +110,6 @@ private fun ScreenPreview() {
         email = "tom@gmail.com",
         profilePicture = "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
         onSendMsgClicked = {},
+        isBlocked = false
     )
 }

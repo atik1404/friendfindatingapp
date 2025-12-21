@@ -31,7 +31,7 @@ import com.friend.ui.common.AppToolbar
 import com.friend.ui.common.ErrorUi
 import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppScaffold
-import com.friend.ui.preview.LightDarkPreview
+import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -267,7 +267,7 @@ private fun ProfileUi(
 }
 
 @Composable
-@LightDarkPreview
+@LightPreview
 private fun ScreenPreview() {
     ProfileScreen(
         uiState = UiState.ShowProfileData(

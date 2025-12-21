@@ -2,6 +2,7 @@ package com.friend.data.repoimpl.remote
 
 import com.friend.data.NetworkBoundResource
 import com.friend.data.apiservice.CredentialApiServices
+import com.friend.data.mapper.credential.CommonApiMapper
 import com.friend.data.mapper.credential.ForgotPasswordApiMapper
 import com.friend.data.mapper.credential.LoginApiMapper
 import com.friend.data.mapper.credential.LogoutApiMapper
@@ -9,6 +10,8 @@ import com.friend.data.mapper.credential.RegistrationApiMapper
 import com.friend.data.mapper.mapFromApiResponse
 import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
 import com.friend.domain.apiusecase.credential.PostRegistrationApiUseCase
+import com.friend.domain.apiusecase.profilemanager.PostAbuseReportApiUseCase
+import com.friend.domain.apiusecase.profilemanager.PostBlockUnblockApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.repository.remote.CredentialRepository
 import com.friend.entity.credential.LoginApiEntity
@@ -25,6 +28,7 @@ class CredentialRepoImpl @Inject constructor(
     private val forgotPasswordApiMapper: ForgotPasswordApiMapper,
     private val logoutApiMapper: LogoutApiMapper,
     private val registrationApiMapper: RegistrationApiMapper,
+    private val commonApiMapper: CommonApiMapper,
     private val sharedPrefHelper: SharedPrefHelper
 ) : CredentialRepository {
     override suspend fun performLogin(params: PostLoginApiUseCase.Params): Flow<ApiResult<LoginApiEntity>> {
@@ -70,6 +74,22 @@ class CredentialRepoImpl @Inject constructor(
             result = networkBoundResources.downloadData {
                 apiServices.performLogout()
             }, mapper = logoutApiMapper
+        )
+    }
+
+    override suspend fun performAbuseReport(params: PostAbuseReportApiUseCase.Params): Flow<ApiResult<String>> {
+        return mapFromApiResponse(
+            result = networkBoundResources.downloadData {
+                apiServices.performReportAbuse(params)
+            }, mapper = commonApiMapper
+        )
+    }
+
+    override suspend fun performBlockUnblock(params: PostBlockUnblockApiUseCase.Params): Flow<ApiResult<String>> {
+        return mapFromApiResponse(
+            result = networkBoundResources.downloadData {
+                apiServices.performBlockUnblock(params)
+            }, mapper = commonApiMapper
         )
     }
 }
