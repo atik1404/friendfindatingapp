@@ -12,10 +12,10 @@
 #-----------------------------------
 # Project / Models
 #-----------------------------------
--keep class co.jatri.domain.** { *; }
--keep class co.jatri.domain.roomentity.** { *; }
--keep class com.friendfinapp.entity.** { *; }
--keep class co.jatri.apiresponse.** { *; }
+-keep class com.friend.domain.** { *; }
+-keep class com.friend.domain.roomentity.** { *; }
+-keep class com.friend.entity.** { *; }
+-keep class com.friend.apiresponse.** { *; }
 
 #-----------------------------------
 # Gson
@@ -65,8 +65,3 @@
 #-----------------------------------
 -dontwarn okio.**
 -keep class androidx.appcompat.widget.** { *; }
-
-#-----------------------------------
-# Pusher Java Client
-#-----------------------------------
--dontwarn org.slf4j.impl.StaticLoggerBinder
