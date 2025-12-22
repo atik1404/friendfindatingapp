@@ -14,10 +14,6 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -34,6 +30,9 @@ import com.friend.designsystem.R as Res
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReportAbuseScreen(
+    username: String,
+    uiState: UiState,
+    uiAction: (UiAction) -> Unit,
     onBackClick: () -> Unit,
 ) {
     AppScaffold(
@@ -55,15 +54,14 @@ fun ReportAbuseScreen(
                 .imePadding()
                 .appPadding(SpacingToken.medium)
         ) {
-            var reason by rememberSaveable { mutableStateOf("") }
-
             AppOutlineTextField(
-                text = reason,
+                error = if(uiState.description.isDirty) stringResource(Res.string.error_empty_not_allowed) else null,
+                text = uiState.description.value,
                 modifier = Modifier.fillMaxWidth(),
-                maxLines = 3,
+                maxLines = 5,
                 title = stringResource(Res.string.label_why_report_user),
                 placeholder = stringResource(Res.string.hint_write_here),
-                onValueChange = { reason = it },
+                onValueChange = { uiAction.invoke(UiAction.OnTextChange(it)) },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
                     autoCorrectEnabled = false,
@@ -73,9 +71,11 @@ fun ReportAbuseScreen(
             Spacer(modifier = Modifier.height(SpacingToken.huge))
 
             AppElevatedButton(
+                isLoading = uiState.isSubmitting,
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(Res.string.title_report_user),
                 onClick = {
+                    uiAction.invoke(UiAction.SubmitReport(username))
                 },
             )
         }
@@ -85,7 +85,10 @@ fun ReportAbuseScreen(
 @Composable
 @LightPreview
 private fun ScreenPreview() {
-    ReportAbuseScreen {
-
-    }
+    ReportAbuseScreen(
+        username = "",
+        uiState = UiState(),
+        uiAction = {},
+        onBackClick = {}
+    )
 }

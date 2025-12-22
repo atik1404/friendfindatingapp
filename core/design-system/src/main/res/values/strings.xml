@@ -173,6 +173,7 @@
 
     <string name="error_network_error">It looks like you’re offline. Please check your internet connection and try again.</string>
     <string name="error_no_data_found">No data found right now. Please refresh or try again in a moment.</string>
+    <string name="error_empty_not_allowed">Empty field not allowed.</string>
 
     <string name="menu_report_user">Report User</string>
     <string name="menu_report_abuse">Report Abuse</string>

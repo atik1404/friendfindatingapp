@@ -13,6 +13,7 @@ import com.friend.personalsetting.PersonalSettingScreenRouter
 import com.friend.profile.ProfileScreenRouter
 import com.friend.profilecompletion.ProfileCompletionScreenRoute
 import com.friend.reportabuse.ReportAbuseScreen
+import com.friend.reportabuse.ReportAbuseScreenRoute
 import com.friendfinapp.dating.navigation.AuthScreens
 import com.friendfinapp.dating.navigation.ChatMessageScreens
 import com.friendfinapp.dating.navigation.MainScreens
@@ -61,7 +62,7 @@ object ProfileNavGraph {
                     backStack.add(ChatMessageScreens.ChatListNavScreen)
                 },
                 navigateToReportAbuse = {
-                    backStack.add(ProfileScreens.ReportUserNavScreen)
+                    backStack.add(ProfileScreens.ReportUserNavScreen(key.username))
                 }
             )
         }
@@ -101,10 +102,13 @@ object ProfileNavGraph {
             }
         }
 
-        entry(ProfileScreens.ReportUserNavScreen) {
-            ReportAbuseScreen {
-                backStack.removeLastOrNull()
-            }
+        entry<ProfileScreens.ReportUserNavScreen> { key ->
+            ReportAbuseScreenRoute(
+                username = key.username,
+                onBackClick = {
+                    backStack.removeLastOrNull()
+                }
+            )
         }
     }
 }

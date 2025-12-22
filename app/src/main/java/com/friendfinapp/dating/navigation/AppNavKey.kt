@@ -63,5 +63,5 @@ sealed interface ProfileScreens : AppScreen {
     object MembershipNavScreen : AppScreen
 
     @Serializable
-    object ReportUserNavScreen : AppScreen
+    data class ReportUserNavScreen(val username: String) : AppScreen
 }
