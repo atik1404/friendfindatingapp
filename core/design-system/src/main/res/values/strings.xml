@@ -57,6 +57,8 @@
     <string name="action_manage_subscription">Manage Subscription</string>
     <string name="action_edit_profile">Edit Profile</string>
     <string name="action_retry">Try again</string>
+    <string name="action_gallery">Gallery</string>
+    <string name="action_camera">Camera</string>
 
     <string name="label_or">OR</string>
     <string name="label_username">Username*</string>
