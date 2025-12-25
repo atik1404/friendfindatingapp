@@ -64,10 +64,6 @@ android {
         buildConfig = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.15"
-    }
-
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -115,7 +111,9 @@ dependencies {
     with(libs){
         implementation(androidx.core.ktx)
         implementation(androidx.appcompat)
+        implementation(bundles.lifecycle)
 
+        implementation(platform(libs.androidx.compose.bom))
         implementation(bundles.compose.core)
         implementation(bundles.compose.navigation)
         implementation(bundles.androidx.navigation.dependencies)

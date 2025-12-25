@@ -45,7 +45,7 @@ fun PersonItemCardSection(
         modifier = modifier.appPadding(SpacingToken.micro)
     ) {
         NetworkImageLoader(
-            person.userImage,
+            url = person.userImage,
             modifier = modifier
                 .fillMaxSize()
                 .height(200.dp),

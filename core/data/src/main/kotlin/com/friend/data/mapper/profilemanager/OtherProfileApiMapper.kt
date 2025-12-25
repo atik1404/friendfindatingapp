@@ -30,7 +30,7 @@ class OtherProfileApiMapper @Inject constructor() :
                 state = profileData?.state.orEmpty().ifEmpty { "N/A" },
                 city = profileData?.city.orEmpty().ifEmpty { "N/A" },
                 zipCode = profileData?.zipCode.orEmpty(),
-                profilePicture = if (profileData?.image != null) "${imageBaseUrl}${profileData.image.orEmpty()}" else "",
+                profilePicture = if (profileData?.image != null && profileData.image?.isNotEmpty() == true) "${imageBaseUrl}${profileData.image.orEmpty()}" else "",
                 bodyType = profileData?.body_type.orEmpty(),
                 drinking = profileData?.drinking.orEmpty(),
                 eyes = profileData?.eyes.orEmpty(),

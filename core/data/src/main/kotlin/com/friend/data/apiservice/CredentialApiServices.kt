@@ -9,6 +9,7 @@ import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
 import com.friend.domain.apiusecase.credential.PostRegistrationApiUseCase
 import com.friend.domain.apiusecase.profilemanager.PostAbuseReportApiUseCase
 import com.friend.domain.apiusecase.profilemanager.PostBlockUnblockApiUseCase
+import com.friend.domain.apiusecase.profilemanager.PostProfileImageApiUseCase
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -41,5 +42,10 @@ interface CredentialApiServices {
     @POST("v1/BlockUnblockUser")
     suspend fun performBlockUnblock(
         @Body params: PostBlockUnblockApiUseCase.Params
+    ): Response<CommonApiResponse>
+
+    @POST("v1/AddPhoto")
+    suspend fun performProfileImageUpdate(
+        @Body params: PostProfileImageApiUseCase.Params
     ): Response<CommonApiResponse>
 }

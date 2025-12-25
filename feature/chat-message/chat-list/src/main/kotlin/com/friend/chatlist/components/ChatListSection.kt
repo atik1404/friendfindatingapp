@@ -80,7 +80,7 @@ private fun ChatListItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         NetworkImageLoader(
-            item.userImage,
+            url = item.userImage,
             name = item.toUsername,
             modifier = Modifier
                 .size(50.dp),

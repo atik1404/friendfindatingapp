@@ -87,6 +87,7 @@ fun ProfileHeaderUi(
                 NetworkImageLoader(
                     url = profilePicture,
                     name = fullName,
+                    isLoading = true,
                     shape = CircleShape,
                     modifier = Modifier.matchParentSize()
                 )

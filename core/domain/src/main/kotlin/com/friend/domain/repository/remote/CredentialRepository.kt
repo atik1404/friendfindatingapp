@@ -4,6 +4,7 @@ import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
 import com.friend.domain.apiusecase.credential.PostRegistrationApiUseCase
 import com.friend.domain.apiusecase.profilemanager.PostAbuseReportApiUseCase
 import com.friend.domain.apiusecase.profilemanager.PostBlockUnblockApiUseCase
+import com.friend.domain.apiusecase.profilemanager.PostProfileImageApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.entity.credential.LoginApiEntity
 import kotlinx.coroutines.flow.Flow
@@ -15,4 +16,6 @@ interface CredentialRepository {
     suspend fun performLogout(): Flow<ApiResult<String>>
     suspend fun performAbuseReport(params: PostAbuseReportApiUseCase.Params): Flow<ApiResult<String>>
     suspend fun performBlockUnblock(params: PostBlockUnblockApiUseCase.Params): Flow<ApiResult<String>>
+
+    suspend fun performProfileImageUpdate(params: PostProfileImageApiUseCase.Params): Flow<ApiResult<String>>
 }

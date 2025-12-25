@@ -55,7 +55,7 @@ fun ProfileInfoHeader(
         }
 
         NetworkImageLoader(
-            "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
+            url = "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
             modifier = Modifier
                 .size(IconSizeToken.extraLarge),
             shape = CircleShape

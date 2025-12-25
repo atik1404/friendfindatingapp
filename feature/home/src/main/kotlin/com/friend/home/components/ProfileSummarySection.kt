@@ -37,7 +37,7 @@ fun ProfileSummarySection(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         NetworkImageLoader(
-            profilePicture,
+            url = profilePicture,
             name = fullName,
             modifier = Modifier
                 .size(IconSizeToken.extraLarge)

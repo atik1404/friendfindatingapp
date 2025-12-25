@@ -12,6 +12,7 @@ import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
 import com.friend.domain.apiusecase.credential.PostRegistrationApiUseCase
 import com.friend.domain.apiusecase.profilemanager.PostAbuseReportApiUseCase
 import com.friend.domain.apiusecase.profilemanager.PostBlockUnblockApiUseCase
+import com.friend.domain.apiusecase.profilemanager.PostProfileImageApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.repository.remote.CredentialRepository
 import com.friend.entity.credential.LoginApiEntity
@@ -89,6 +90,14 @@ class CredentialRepoImpl @Inject constructor(
         return mapFromApiResponse(
             result = networkBoundResources.downloadData {
                 apiServices.performBlockUnblock(params)
+            }, mapper = commonApiMapper
+        )
+    }
+
+    override suspend fun performProfileImageUpdate(params: PostProfileImageApiUseCase.Params): Flow<ApiResult<String>> {
+        return mapFromApiResponse(
+            result = networkBoundResources.downloadData {
+                apiServices.performProfileImageUpdate(params)
             }, mapper = commonApiMapper
         )
     }
