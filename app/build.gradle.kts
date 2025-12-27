@@ -125,6 +125,7 @@ dependencies {
         implementation(platform(firebase.bom))
         implementation(firebase.analytics)
         implementation(firebase.crashlytics)
+        implementation(libs.android.image.cropper)
 
         testImplementation(test.junit)
         androidTestImplementation(test.extjunit)

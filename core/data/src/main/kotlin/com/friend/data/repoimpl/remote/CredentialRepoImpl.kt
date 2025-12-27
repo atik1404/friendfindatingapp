@@ -77,28 +77,4 @@ class CredentialRepoImpl @Inject constructor(
             }, mapper = logoutApiMapper
         )
     }
-
-    override suspend fun performAbuseReport(params: PostAbuseReportApiUseCase.Params): Flow<ApiResult<String>> {
-        return mapFromApiResponse(
-            result = networkBoundResources.downloadData {
-                apiServices.performReportAbuse(params)
-            }, mapper = commonApiMapper
-        )
-    }
-
-    override suspend fun performBlockUnblock(params: PostBlockUnblockApiUseCase.Params): Flow<ApiResult<String>> {
-        return mapFromApiResponse(
-            result = networkBoundResources.downloadData {
-                apiServices.performBlockUnblock(params)
-            }, mapper = commonApiMapper
-        )
-    }
-
-    override suspend fun performProfileImageUpdate(params: PostProfileImageApiUseCase.Params): Flow<ApiResult<String>> {
-        return mapFromApiResponse(
-            result = networkBoundResources.downloadData {
-                apiServices.performProfileImageUpdate(params)
-            }, mapper = commonApiMapper
-        )
-    }
 }

@@ -1,5 +1,6 @@
 package com.friend.data.repoimpl.remote
 
+import com.friend.common.dateparser.DateTimeUtils
 import com.friend.data.NetworkBoundResource
 import com.friend.data.apiservice.ProfileManagerApiServices
 import com.friend.data.mapper.credential.CommonApiMapper
@@ -7,7 +8,11 @@ import com.friend.data.mapper.mapFromApiResponse
 import com.friend.data.mapper.profilemanager.CacheProfile
 import com.friend.data.mapper.profilemanager.OtherProfileApiMapper
 import com.friend.data.mapper.profilemanager.ProfileApiMapper
+import com.friend.data.util.MultiPartConverter
+import com.friend.domain.apiusecase.profilemanager.PostAbuseReportApiUseCase
+import com.friend.domain.apiusecase.profilemanager.PostBlockUnblockApiUseCase
 import com.friend.domain.apiusecase.profilemanager.PostPasswordChangeApiUseCase
+import com.friend.domain.apiusecase.profilemanager.PostProfileImageApiUseCase
 import com.friend.domain.apiusecase.profilemanager.PostProfileUpdateApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.repository.remote.ProfileManageRepository
@@ -63,6 +68,38 @@ class ProfileManagerRepoImpl @Inject constructor(
             result = networkBoundResources.downloadData {
                 apiServices.performPasswordChanged(
                     params
+                )
+            }, mapper = commonApiMapper
+        )
+    }
+
+    override suspend fun performAbuseReport(params: PostAbuseReportApiUseCase.Params): Flow<ApiResult<String>> {
+        return mapFromApiResponse(
+            result = networkBoundResources.downloadData {
+                apiServices.performReportAbuse(params)
+            }, mapper = commonApiMapper
+        )
+    }
+
+    override suspend fun performBlockUnblock(params: PostBlockUnblockApiUseCase.Params): Flow<ApiResult<String>> {
+        return mapFromApiResponse(
+            result = networkBoundResources.downloadData {
+                apiServices.performBlockUnblock(params)
+            }, mapper = commonApiMapper
+        )
+    }
+
+    override suspend fun performProfileImageUpdate(params: PostProfileImageApiUseCase.Params): Flow<ApiResult<String>> {
+        return mapFromApiResponse(
+            result = networkBoundResources.downloadData {
+                apiServices.performProfileImageUpdate(
+                    username = MultiPartConverter.mConverter(params.username),
+                    name = MultiPartConverter.mConverter(params.name),
+                    photoAlbum = MultiPartConverter.mConverter("1"),
+                    description = MultiPartConverter.mConverter("profile picture"),
+                    approve = MultiPartConverter.mConverter("0"),
+                    approveDate = MultiPartConverter.mConverter(DateTimeUtils.nowUtc().toString()),
+                    image = MultiPartConverter.mConvertImg(params.image, "Image"),
                 )
             }, mapper = commonApiMapper
         )

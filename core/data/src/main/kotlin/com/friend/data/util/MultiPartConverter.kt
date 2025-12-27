@@ -9,10 +9,13 @@ import java.io.File
 
 object MultiPartConverter {
     fun mConverter(data: String): RequestBody =
-        data.toRequestBody("text/plain".toMediaTypeOrNull())
+        data.toRequestBody(MultipartBody.FORM)
+
+    fun mConverterNullable(data: String?): RequestBody? =
+        data?.toRequestBody(MultipartBody.FORM)
 
     fun mConvertImg(imageFile: File?, fileName: String): MultipartBody.Part? {
-        val body = imageFile?.asRequestBody("image/jpg".toMediaTypeOrNull())
+        val body = imageFile?.asRequestBody("image/*".toMediaTypeOrNull())
         return body?.let { MultipartBody.Part.createFormData(fileName, imageFile.name, it) }
     }
 }

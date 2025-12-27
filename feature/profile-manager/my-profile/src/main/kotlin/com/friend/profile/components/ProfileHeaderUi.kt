@@ -1,5 +1,6 @@
 package com.friend.profile.components
 
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -25,9 +26,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageContractOptions
+import com.canhub.cropper.CropImageOptions
+import com.canhub.cropper.CropImageView
+import com.friend.common.utils.ImageUtils.convertToFile
 import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.ImageSizeToken
 import com.friend.designsystem.spacing.SpacingToken
@@ -43,8 +50,9 @@ import com.friend.ui.components.AppIconButton
 import com.friend.ui.components.AppText
 import com.friend.ui.components.AppTextButton
 import com.friend.ui.components.NetworkImageLoader
-import com.friend.ui.preview.LightDarkPreview
 import com.friend.ui.preview.LightPreview
+import timber.log.Timber
+import java.io.File
 import com.friend.designsystem.R as Res
 
 @Composable
@@ -52,16 +60,46 @@ fun ProfileHeaderUi(
     modifier: Modifier = Modifier,
     fullName: String,
     email: String,
+    isImageLoading: Boolean,
     profilePicture: String,
     onEditClick: () -> Unit,
+    onImageSelected: (File) -> Unit,
 ) {
     val picSize = ImageSizeToken.profilePictureLarge
     var isPickerVisible by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
+    val cropLauncher = rememberLauncherForActivityResult(
+        contract = CropImageContract()
+    ) { result ->
+        if (result.isSuccessful) {
+            val file = result.uriContent?.convertToFile(context)
+            file?.let {
+                onImageSelected.invoke(file)
+            }?.run { Timber.e("Image picker error") }
+        }else {
+            Timber.e("Image picker error")
+        }
+    }
 
     ImagePickerBottomSheet(
         isVisible = isPickerVisible,
         onDismissRequest = { isPickerVisible = false },
-        onImageSelected = { }
+        onImageSelected = {
+            val options = CropImageContractOptions(
+                cropImageOptions = CropImageOptions(
+                    guidelines = CropImageView.Guidelines.ON,
+                    fixAspectRatio = true,
+                    aspectRatioX = 1,
+                    aspectRatioY = 1,
+                ),
+                uri = it
+            )
+            cropLauncher.launch(options)
+        },
+        onError = {
+            Timber.e("Image picker error")
+        }
     )
 
     Card(
@@ -87,7 +125,7 @@ fun ProfileHeaderUi(
                 NetworkImageLoader(
                     url = profilePicture,
                     name = fullName,
-                    isLoading = true,
+                    isLoading = isImageLoading,
                     shape = CircleShape,
                     modifier = Modifier.matchParentSize()
                 )
@@ -156,7 +194,9 @@ private fun ScreenPreview() {
     ProfileHeaderUi(
         fullName = "Tom Cruise",
         email = "tom@gmail.com",
+        isImageLoading = true,
         profilePicture = "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
         onEditClick = {},
+        onImageSelected = {}
     )
 }

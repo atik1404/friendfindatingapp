@@ -33,19 +33,4 @@ interface CredentialApiServices {
 
     @POST("v1/Logout")
     suspend fun performLogout(): Response<LogoutApiResponse>
-
-    @POST("v1/SendAbuseReport")
-    suspend fun performReportAbuse(
-        @Body params: PostAbuseReportApiUseCase.Params
-    ): Response<CommonApiResponse>
-
-    @POST("v1/BlockUnblockUser")
-    suspend fun performBlockUnblock(
-        @Body params: PostBlockUnblockApiUseCase.Params
-    ): Response<CommonApiResponse>
-
-    @POST("v1/AddPhoto")
-    suspend fun performProfileImageUpdate(
-        @Body params: PostProfileImageApiUseCase.Params
-    ): Response<CommonApiResponse>
 }

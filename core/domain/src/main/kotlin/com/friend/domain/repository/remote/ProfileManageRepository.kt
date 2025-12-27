@@ -1,6 +1,9 @@
 package com.friend.domain.repository.remote
 
+import com.friend.domain.apiusecase.profilemanager.PostAbuseReportApiUseCase
+import com.friend.domain.apiusecase.profilemanager.PostBlockUnblockApiUseCase
 import com.friend.domain.apiusecase.profilemanager.PostPasswordChangeApiUseCase
+import com.friend.domain.apiusecase.profilemanager.PostProfileImageApiUseCase
 import com.friend.domain.apiusecase.profilemanager.PostProfileUpdateApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.entity.profilemanager.OtherProfileApiEntity
@@ -9,10 +12,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface ProfileManageRepository {
     suspend fun fetchProfile(): Flow<ApiResult<ProfileApiEntity>>
-
     suspend fun otherProfile(username: String): Flow<ApiResult<OtherProfileApiEntity>>
-
     suspend fun performProfileUpdate(params: PostProfileUpdateApiUseCase.Params): Flow<ApiResult<String>>
-
     suspend fun performPasswordChange(params: PostPasswordChangeApiUseCase.Params): Flow<ApiResult<String>>
+    suspend fun performAbuseReport(params: PostAbuseReportApiUseCase.Params): Flow<ApiResult<String>>
+    suspend fun performBlockUnblock(params: PostBlockUnblockApiUseCase.Params): Flow<ApiResult<String>>
+    suspend fun performProfileImageUpdate(params: PostProfileImageApiUseCase.Params): Flow<ApiResult<String>>
 }

@@ -25,7 +25,7 @@ fun CaptureImage(
         contract = ActivityResultContracts.TakePicture()
     ) { success ->
         if (success) {
-            photoUri?.let(onCaptured)
+            photoUri?.let(onCaptured)?.run { onError.invoke() }
         } else onError.invoke()
     }
 

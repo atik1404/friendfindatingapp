@@ -4,3 +4,7 @@ plugins {
 android {
     namespace = "com.friend.profile"
 }
+
+dependencies{
+    implementation(libs.android.image.cropper)
+}

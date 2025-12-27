@@ -14,8 +14,4 @@ interface CredentialRepository {
     suspend fun performRegistration(params: PostRegistrationApiUseCase.Params): Flow<ApiResult<String>>
     suspend fun performForgotPassword(params: String): Flow<ApiResult<String>>
     suspend fun performLogout(): Flow<ApiResult<String>>
-    suspend fun performAbuseReport(params: PostAbuseReportApiUseCase.Params): Flow<ApiResult<String>>
-    suspend fun performBlockUnblock(params: PostBlockUnblockApiUseCase.Params): Flow<ApiResult<String>>
-
-    suspend fun performProfileImageUpdate(params: PostProfileImageApiUseCase.Params): Flow<ApiResult<String>>
 }

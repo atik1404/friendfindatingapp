@@ -32,12 +32,14 @@ import com.friend.ui.common.ErrorUi
 import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.preview.LightPreview
+import java.io.File
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     uiState: UiState,
+    imageUiState: ImageUiState,
     onAction: (UiAction) -> Unit,
     onBackButtonClicked: () -> Unit,
     navigateToEditProfile: () -> Unit,
@@ -76,8 +78,12 @@ fun ProfileScreen(
                         .imePadding()                    // lift content when keyboard shows
                         .verticalScroll(rememberScrollState())
                         .appPadding(SpacingToken.small),
+                    isImageLoading = imageUiState.isLoading,
                     data = uiState.profile,
-                    navigateToEditProfile = navigateToEditProfile
+                    navigateToEditProfile = navigateToEditProfile,
+                    onImageSelected = {
+                        onAction.invoke(UiAction.UpdateProfilePicture(it))
+                    }
                 )
             }
         }
@@ -88,7 +94,9 @@ fun ProfileScreen(
 private fun ProfileUi(
     modifier: Modifier,
     data: ProfileApiEntity,
+    isImageLoading: Boolean,
     navigateToEditProfile: () -> Unit,
+    onImageSelected: (File) -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -97,8 +105,10 @@ private fun ProfileUi(
             modifier = Modifier,
             fullName = data.fullName,
             email = data.email,
+            isImageLoading = isImageLoading,
             profilePicture = data.profilePicture,
             onEditClick = { navigateToEditProfile.invoke() },
+            onImageSelected = onImageSelected
         )
 
         Spacer(modifier = Modifier.height(SpacingToken.medium))
@@ -300,6 +310,7 @@ private fun ScreenPreview() {
         ),
         onBackButtonClicked = {},
         navigateToEditProfile = {},
-        onAction = {}
+        onAction = {},
+        imageUiState = ImageUiState()
     )
 }

@@ -13,9 +13,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.friend.common.utils.ImageUtils.convertToFile
 import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingHorizontal
@@ -25,29 +27,39 @@ import com.friend.ui.common.GalleryImagPicker
 import com.friend.ui.common.ShowBottomSheet
 import com.friend.ui.components.AppText
 import com.friend.ui.preview.LightPreview
-import timber.log.Timber
+import java.io.File
 import com.friend.designsystem.R as Res
 
 @Composable
 fun ImagePickerBottomSheet(
     isVisible: Boolean = false,
     onDismissRequest: () -> Unit,
+    onError: () -> Unit,
     onImageSelected: (Uri) -> Unit
 ) {
+
     if (isVisible)
         ShowBottomSheet(
             title = "Choose image",
             onDismissRequest = onDismissRequest
         ) {
-            ImagePickerUiSection {
-                onImageSelected.invoke(it)
-            }
+            ImagePickerUiSection(
+                onImageSelected = {
+                    onImageSelected.invoke(it)
+                    onDismissRequest.invoke()
+                },
+                onError = {
+                    onDismissRequest.invoke()
+                    onError.invoke()
+                }
+            )
         }
 }
 
 @Composable
 private fun ImagePickerUiSection(
-    onImageSelected: (Uri) -> Unit
+    onImageSelected: (Uri) -> Unit,
+    onError: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -60,11 +72,8 @@ private fun ImagePickerUiSection(
         CaptureImage(
             onCaptured = {
                 onImageSelected.invoke(it)
-                Timber.e("Captured image: $it")
             },
-            onError = {
-                Timber.e("Failed to capture image")
-            }
+            onError = onError
         ) {
             ImagePicker(
                 icon = Res.drawable.ic_camera,
@@ -76,11 +85,8 @@ private fun ImagePickerUiSection(
         GalleryImagPicker(
             onImageSelected = {
                 onImageSelected.invoke(it)
-                Timber.e("Selected image: $it")
             },
-            onError = {
-                Timber.e("Failed to select image")
-            }
+            onError = onError
         ) {
             ImagePicker(
                 icon = Res.drawable.ic_gallery,
@@ -122,6 +128,7 @@ private fun ScreenPreview() {
     ImagePickerBottomSheet(
         isVisible = true,
         onDismissRequest = {},
-        onImageSelected = {}
+        onImageSelected = {},
+        onError = {}
     )
 }

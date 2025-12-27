@@ -1,7 +1,7 @@
 package com.friend.domain.apiusecase.profilemanager
 
 import com.friend.domain.base.ApiResult
-import com.friend.domain.repository.remote.CredentialRepository
+import com.friend.domain.repository.remote.ProfileManageRepository
 import com.friend.domain.usecase.ApiUseCaseParams
 import com.friend.domain.validator.DataValidationResult
 import com.friend.domain.validator.ReportAbuseIoResult
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
 class PostAbuseReportApiUseCase @Inject constructor(
-    private val repository: CredentialRepository,
+    private val repository: ProfileManageRepository,
 ) : ApiUseCaseParams<PostAbuseReportApiUseCase.Params, String> {
     val ioError = Channel<ReportAbuseIoResult>()
 
@@ -35,8 +35,6 @@ class PostAbuseReportApiUseCase @Inject constructor(
     private fun validation(params: Params): DataValidationResult {
         if (params.reportNote.isEmpty())
             return DataValidationResult.Failure(ReportAbuseIoResult.InvalidNote)
-
-
         return DataValidationResult.Success
     }
 }
