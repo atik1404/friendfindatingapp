@@ -7,6 +7,7 @@ sealed interface UiState {
     data object Loading : UiState
     data class ApiError(val message: String) : UiState
     data class ShowProfileData(val data: OtherProfileApiEntity) : UiState
+    data object PrivateProfile : UiState
 }
 
 sealed interface UiEvent {

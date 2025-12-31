@@ -36,6 +36,7 @@
     <string name="title_something_wrong">Request failed</string>
     <string name="title_data_empty">Try a different search</string>
     <string name="title_network_error">Unable to connect server</string>
+    <string name="title_private_profile">Private Profile</string>
 
     <string name="action_login_with_google">Login with Google</string>
     <string name="action_login">Login</string>
@@ -144,6 +145,8 @@
     <string name="msg_greeting_good_afternoon">Good Afternoon</string>
     <string name="msg_greeting_good_evening">Good Evening</string>
     <string name="msg_everything_set_for_you">Everything’s in place for you</string>
+    <string name="msg_private_profile">This profile is visible for friends only!</string>
+    <string name="error_user_blocked">This user is blocked, you can\'t send message to this user.</string>
 
 
     <string name="error_invalid_username">Please enter a valid username.</string>

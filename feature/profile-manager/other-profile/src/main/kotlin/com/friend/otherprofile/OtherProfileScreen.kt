@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,14 +25,17 @@ import com.friend.common.dateparser.DateTimePatterns
 import com.friend.common.dateparser.DateTimeUtils
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
+import com.friend.designsystem.theme.textColors
 import com.friend.entity.profilemanager.OtherProfileApiEntity
 import com.friend.entity.profilemanager.ProfileApiEntity
+import com.friend.otherprofile.UiAction.PerformBlockUnblock
 import com.friend.otherprofile.components.AppToolbarSection
 import com.friend.otherprofile.components.LabeledValue
 import com.friend.otherprofile.components.ProfileHeaderUi
 import com.friend.ui.common.ErrorUi
 import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppScaffold
+import com.friend.ui.components.AppText
 import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
@@ -54,10 +58,10 @@ fun OtherProfileScreen(
                 onBackButtonClicked = onBackButtonClicked,
                 navigateToReportAbuse = navigateToReportAbuse,
                 onBlockMenuClicked = {
-                    uiAction.invoke(UiAction.PerformBlockUnblock(username))
+                    uiAction.invoke(PerformBlockUnblock(username))
                 },
                 onUnblockMenuClicked = {
-                    uiAction.invoke(UiAction.PerformBlockUnblock(username))
+                    uiAction.invoke(PerformBlockUnblock(username))
                 }
             )
         }
@@ -70,7 +74,7 @@ fun OtherProfileScreen(
                     .consumeWindowInsets(padding),
                 message = uiState.message
             ) {
-                uiAction.invoke(UiAction.PerformBlockUnblock(username))
+                uiAction.invoke(PerformBlockUnblock(username))
             }
 
             UiState.Loading -> LoadingUi(
@@ -93,6 +97,16 @@ fun OtherProfileScreen(
                     onSendMsgClicked = navigateToMessageRoom
                 )
             }
+
+            UiState.PrivateProfile -> ErrorUi(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .consumeWindowInsets(padding),
+                message = stringResource(Res.string.msg_private_profile),
+                title = stringResource(Res.string.title_private_profile),
+                isRetryEnable = false,
+            )
         }
     }
 }
@@ -114,6 +128,15 @@ private fun ProfileUi(
             profilePicture = data.profile.profilePicture,
             onSendMsgClicked = onSendMsgClicked
         )
+
+        if (data.isBlocked) {
+            Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+            AppText(
+                text = stringResource(Res.string.error_user_blocked),
+                textColor = MaterialTheme.textColors.error
+            )
+        }
 
         Spacer(modifier = Modifier.height(SpacingToken.medium))
 
@@ -284,10 +307,12 @@ private fun ProfileUi(
 @LightPreview
 private fun ScreenPreview() {
     OtherProfileScreen(
+        //uiState = UiState.PrivateProfile,
         //uiState = UiState.ApiError("Error message"),
         uiState = UiState.ShowProfileData(
             OtherProfileApiEntity(
                 isBlocked = false,
+                isPrivateProfile = true,
                 profile = ProfileApiEntity(
                     userName = "Tom Cruise",
                     fullName = "Tom Cruise",
@@ -312,7 +337,7 @@ private fun ScreenPreview() {
                     title = "",
                     weight = "",
                     whatsUp = "",
-                    isProfileComplete = false
+                    isProfileComplete = false,
                 )
             )
         ),

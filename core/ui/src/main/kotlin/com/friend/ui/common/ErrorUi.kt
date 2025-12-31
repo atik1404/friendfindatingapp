@@ -46,7 +46,9 @@ fun ErrorUi(
     modifier: Modifier = Modifier,
     errorType: ErrorType = ErrorType.API_ERROR,
     message: String,
-    onRetry: () -> Unit,
+    title: String = "",
+    isRetryEnable: Boolean = true,
+    onRetry: () -> Unit = {},
 ) {
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp.dp
@@ -60,8 +62,7 @@ fun ErrorUi(
 
     val errorAnimation =
         RawRes(getErrorAnimation(if (isNetworkError) ErrorType.NETWORK_ERROR else errorType))
-    val title =
-        stringResource(getErrorTitle(if (isNetworkError) ErrorType.NETWORK_ERROR else errorType))
+    val title = title.ifEmpty { stringResource(getErrorTitle(if (isNetworkError) ErrorType.NETWORK_ERROR else errorType)) }
 
     Column(
         modifier = modifier
@@ -108,11 +109,12 @@ fun ErrorUi(
 
         Spacer(modifier = Modifier.height(SpacingToken.huge))
 
-        AppOutlinedButton(
-            text = stringResource(Res.string.action_retry),
-            modifier = Modifier.fillMaxWidth(),
-            onClick = onRetry
-        )
+        if (isRetryEnable)
+            AppOutlinedButton(
+                text = stringResource(Res.string.action_retry),
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onRetry
+            )
 
         Spacer(modifier = Modifier.weight(1f))
     }

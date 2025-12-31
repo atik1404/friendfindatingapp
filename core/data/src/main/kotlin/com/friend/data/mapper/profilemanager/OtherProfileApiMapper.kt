@@ -16,9 +16,12 @@ class OtherProfileApiMapper @Inject constructor() :
 
     override fun mapFromApiResponse(response: OtherProfileApiResponse): OtherProfileApiEntity {
         val profileData = response.data?.firstOrNull()
+        val isBlockedByMe = response.isBlockedByMe ?: false
+        val isBlockedByTarget = response.isBlockedByTarget ?: false
 
         return OtherProfileApiEntity(
-            isBlocked = response.isBlocked ?: false,
+            isBlocked = isBlockedByMe || isBlockedByTarget,
+            isPrivateProfile = response.canViewProfile ?: false,
             profile = ProfileApiEntity(
                 userName = profileData?.username.orEmpty(),
                 fullName = profileData?.name.orEmpty(),

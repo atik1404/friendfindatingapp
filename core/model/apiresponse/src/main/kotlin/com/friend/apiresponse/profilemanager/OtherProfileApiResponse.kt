@@ -4,5 +4,7 @@ data class OtherProfileApiResponse(
     val status_code: Int?,
     val message: String?,
     val data: List<ProfileDetailsResponse>?,
-    val isBlocked: Boolean?,
+    val isBlockedByMe: Boolean?,
+    val isBlockedByTarget: Boolean?,
+    val canViewProfile: Boolean?,
 )
