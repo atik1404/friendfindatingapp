@@ -4,14 +4,17 @@ import com.friend.apiresponse.search.CityApiResponse
 import com.friend.apiresponse.search.CountryApiResponse
 import com.friend.apiresponse.search.FriendSuggestionApiResponse
 import com.friend.apiresponse.search.StateApiResponse
+import com.friend.domain.apiusecase.search.FetchFriendSuggestionApiUseCase
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface SearchApiServices {
-    @GET("v1/FetchUserSearchByUserProfileAnswers")
+    @POST("v1/UserHomeWithSearch")
     suspend fun fetchFriendSuggestion(
-        @Query("username") username: String,
+        @Body params: FetchFriendSuggestionApiUseCase.Params,
     ): Response<FriendSuggestionApiResponse>
 
     @GET("api/Location/v1/countries")

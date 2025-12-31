@@ -1,9 +1,11 @@
 package com.friend.home
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import timber.log.Timber
 
 @Composable
 fun HomeRoute(
@@ -18,6 +20,10 @@ fun HomeRoute(
     val profilePicture by viewModel.profilePicture.collectAsState()
     val uiSate by viewModel.uiState.collectAsState()
 
+    LaunchedEffect(Unit) {
+        viewModel.action(UiAction.FetchFriendSuggestion)
+    }
+
     HomeScreen(
         fullName = fullName,
         profilePicture = profilePicture,
@@ -25,7 +31,7 @@ fun HomeRoute(
         navigateToChatListScreen = navigateToChatListScreen,
         navigateToOverviewScreen = navigateToOverviewScreen,
         onEvent = {
-            viewModel.action
+            viewModel.action(it)
         },
         navigateToProfileScreen = navigateToProfileScreen,
         navigateToOtherProfileScreen = { navigateToOtherProfileScreen.invoke(it) },

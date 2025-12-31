@@ -1,5 +1,6 @@
 package com.friend.domain.repository.remote
 
+import com.friend.domain.apiusecase.search.FetchFriendSuggestionApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.entity.search.CityApiEntity
 import com.friend.entity.search.CountryApiEntity
@@ -8,7 +9,7 @@ import com.friend.entity.search.StateApiEntity
 import kotlinx.coroutines.flow.Flow
 
 interface SearchRepository {
-    suspend fun fetchFriendsSuggestion(userName: String): Flow<ApiResult<List<FriendSuggestionApiEntity>>>
+    suspend fun fetchFriendsSuggestion(params: FetchFriendSuggestionApiUseCase.Params): Flow<ApiResult<List<FriendSuggestionApiEntity>>>
 
     suspend fun fetchCountryList(): Flow<ApiResult<List<CountryApiEntity>>>
 

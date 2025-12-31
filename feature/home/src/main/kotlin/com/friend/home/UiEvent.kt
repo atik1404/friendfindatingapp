@@ -3,7 +3,6 @@ package com.friend.home
 import com.friend.entity.search.FriendSuggestionApiEntity
 
 sealed interface UiState {
-    data object Idle : UiState
     data object Loading : UiState
     data class Success(val data: List<FriendSuggestionApiEntity>) : UiState
     data class Error(val message: String) : UiState

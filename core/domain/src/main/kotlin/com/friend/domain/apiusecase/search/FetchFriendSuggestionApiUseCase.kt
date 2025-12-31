@@ -9,10 +9,28 @@ import kotlinx.coroutines.flow.Flow
 
 class FetchFriendSuggestionApiUseCase @Inject constructor(
     private val repository: SearchRepository,
-) : ApiUseCaseParams<String, List<FriendSuggestionApiEntity>> {
+) : ApiUseCaseParams<FetchFriendSuggestionApiUseCase.Params, List<FriendSuggestionApiEntity>> {
+
+    data class Params(
+        val gender: Int? = null,
+        val fromAge: Int? = null,
+        val toAge: Int? = null,
+        val country: String? = null,
+        val state: String? = null,
+        val city: String? = null,
+        val username: String? = null,
+        val isOnlineUser: String? = null,
+        val bodyType: String? = null,
+        val lookingFor: String? = null,
+        val eyes: String? = null,
+        val hair: String? = null,
+        val smoking: String? = null,
+        val drinking: String? = null,
+        val pageNo: Int = 1,
+    )
 
     override suspend fun execute(
-        params: String,
+        params: Params,
     ): Flow<ApiResult<List<FriendSuggestionApiEntity>>> {
         return repository.fetchFriendsSuggestion(params)
     }

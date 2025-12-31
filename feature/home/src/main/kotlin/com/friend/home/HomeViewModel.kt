@@ -3,13 +3,13 @@ package com.friend.home
 import com.friend.common.base.BaseViewModel
 import com.friend.domain.apiusecase.search.FetchFriendSuggestionApiUseCase
 import com.friend.domain.base.ApiResult
-import com.friend.entity.search.FriendSuggestionApiEntity
 import com.friend.sharedpref.SharedPrefHelper
 import com.friend.sharedpref.SpKey
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,7 +24,7 @@ class HomeViewModel @Inject constructor(
     val profilePicture: StateFlow<String> = _profilePicture.asStateFlow()
 
     private val _uiState =
-        MutableStateFlow<UiState>(UiState.Idle)
+        MutableStateFlow<UiState>(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState
 
     val action: (UiAction) -> Unit = {
@@ -36,14 +36,13 @@ class HomeViewModel @Inject constructor(
     init {
         _fullName.value = sharedPrefHelper.getString(SpKey.fullName)
         _profilePicture.value = sharedPrefHelper.getString(SpKey.profilePicture)
-
-        fetchFriendSuggestions()
     }
 
     private fun fetchFriendSuggestions() {
         execute {
-            val userName = sharedPrefHelper.getString(SpKey.userName)
-            fetchFriendSuggestionApiUseCase.execute(userName).collect { result ->
+            val params = FetchFriendSuggestionApiUseCase.Params()
+
+            fetchFriendSuggestionApiUseCase.execute(params).collect { result ->
                 when (result) {
                     is ApiResult.Error -> _uiState.value = UiState.Error(result.message)
                     is ApiResult.Loading -> _uiState.value = UiState.Loading

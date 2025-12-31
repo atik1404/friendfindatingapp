@@ -18,7 +18,8 @@ class FriendSuggestionApiMapper @Inject constructor() :
         return response.data?.map { item ->
             FriendSuggestionApiEntity(
                 username = item.username.orEmpty(),
-                userImage = "$imageBaseUrl${item.userimage.orEmpty()}",
+                fullName = item.fullName.orEmpty(),
+                userImage = if (item.userImage != null && item.userImage?.isNotEmpty() == true) "$imageBaseUrl${item.userImage}" else "",
             )
         } ?: emptyList()
     }

@@ -7,6 +7,7 @@ import com.friend.data.mapper.search.CityApiMapper
 import com.friend.data.mapper.search.CountryApiMapper
 import com.friend.data.mapper.search.FriendSuggestionApiMapper
 import com.friend.data.mapper.search.StateApiMapper
+import com.friend.domain.apiusecase.search.FetchFriendSuggestionApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.repository.remote.SearchRepository
 import com.friend.entity.search.CityApiEntity
@@ -24,11 +25,11 @@ class SearchRepoImpl @Inject constructor(
     private val stateApiMapper: StateApiMapper,
     private val countryApiMapper: CountryApiMapper,
 ) : SearchRepository {
-    override suspend fun fetchFriendsSuggestion(userName: String): Flow<ApiResult<List<FriendSuggestionApiEntity>>> {
+    override suspend fun fetchFriendsSuggestion(params: FetchFriendSuggestionApiUseCase.Params): Flow<ApiResult<List<FriendSuggestionApiEntity>>> {
         return mapFromApiResponse(
             result = networkBoundResources.downloadData {
                 apiServices.fetchFriendSuggestion(
-                    userName
+                    params
                 )
             }, mapper = friendSuggestionApiMapper
         )

@@ -9,5 +9,6 @@ data class FriendSuggestionApiResponse(
 
 data class FriendSuggestionApiItemResponse(
     val username: String?,
-    val userimage: String?
+    val userImage: String?,
+    val fullName: String?,
 )

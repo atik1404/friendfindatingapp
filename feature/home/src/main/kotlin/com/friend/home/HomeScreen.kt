@@ -33,6 +33,7 @@ import com.friend.ui.common.ErrorUi
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.preview.LightPreview
 import com.friend.ui.shimmer_effect.PersonItemCardShimmerSection
+import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -96,8 +97,6 @@ fun HomeScreen(
                         navigateToOtherProfileScreen.invoke(username)
                     }
                 }
-
-                UiState.Idle -> {}
             }
         }
     }
@@ -143,6 +142,7 @@ private fun PersonList(
                 person = person,
                 modifier = Modifier
                     .clickable {
+                        Timber.e("userImage: ${person.userImage}")
                         onPersonClick.invoke(person.username)
                     }
             )
