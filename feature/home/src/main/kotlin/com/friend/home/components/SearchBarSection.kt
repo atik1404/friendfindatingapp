@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Dashboard
+import androidx.compose.material.icons.filled.FilterAlt
+import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -32,7 +34,7 @@ fun SearchBarSection(
         colors = MaterialTheme.textFieldColors.outlinedTextField,
         readOnly = true,
         shape = RoundedCornerShape(SpacingToken.medium),
-        trailingIcon = Icons.Default.Search,
+        trailingIcon = Icons.Default.FilterList,
         leadingIcon = Icons.Default.Dashboard,
         onTrailingClick = navigateToSearchScreen,
         onLeadingClick = navigateToOverviewScreen

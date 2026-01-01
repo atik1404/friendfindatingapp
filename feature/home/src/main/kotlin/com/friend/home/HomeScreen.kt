@@ -1,6 +1,7 @@
 package com.friend.home
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -14,12 +15,16 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.friend.designsystem.spacing.SpacingToken
@@ -30,10 +35,10 @@ import com.friend.home.components.ProfileSummarySection
 import com.friend.home.components.SearchBarSection
 import com.friend.ui.common.ErrorType
 import com.friend.ui.common.ErrorUi
+import com.friend.ui.common.LoadingAnimation
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.preview.LightPreview
 import com.friend.ui.shimmer_effect.PersonItemCardShimmerSection
-import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,7 +57,7 @@ fun HomeScreen(
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing
     ) { padding ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
@@ -61,42 +66,65 @@ fun HomeScreen(
                 .imePadding()
                 .appPadding(SpacingToken.medium)
         ) {
-            SearchBarSection(
-                navigateToOverviewScreen = navigateToOverviewScreen,
-                navigateToSearchScreen = {
-                    showFilterBottomSheet = true
-                }
-            )
-            Spacer(Modifier.height(SpacingToken.medium))
-            ProfileSummarySection(
-                fullName = fullName,
-                profilePicture = profilePicture,
-                navigateToChatListScreen = navigateToChatListScreen,
-                navigateToProfileScreen = {
-                    navigateToProfileScreen.invoke()//TODO replace with current user data
-                }
-            )
-            Spacer(Modifier.height(SpacingToken.medium))
-            when (state) {
-                is UiState.Error -> ErrorSection(
-                    message = state.message
-                ) {
-                    onEvent(UiAction.FetchFriendSuggestion)
-                }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                SearchBarSection(
+                    navigateToOverviewScreen = navigateToOverviewScreen,
+                    navigateToSearchScreen = {
+                        showFilterBottomSheet = true
+                    }
+                )
+                Spacer(Modifier.height(SpacingToken.medium))
+                ProfileSummarySection(
+                    fullName = fullName,
+                    profilePicture = profilePicture,
+                    navigateToChatListScreen = navigateToChatListScreen,
+                    navigateToProfileScreen = {
+                        navigateToProfileScreen.invoke()//TODO replace with current user data
+                    }
+                )
+                Spacer(Modifier.height(SpacingToken.medium))
 
-                UiState.Loading -> LoadingSection()
-                UiState.NoDataFound -> ErrorSection(
-                    error = ErrorType.EMPTY_DATA,
-                    message = stringResource(Res.string.error_no_data_found)
-                ) {
-                    onEvent(UiAction.FetchFriendSuggestion)
-                }
-
-                is UiState.Success -> {
-                    PersonList(state.data) { username->
-                        navigateToOtherProfileScreen.invoke(username)
+                if (state.error.isNotEmpty()) {
+                    ErrorSection(
+                        message = state.error
+                    ) {
+                        onEvent(UiAction.FetchFriendSuggestion)
                     }
                 }
+
+                if (state.isLoading)
+                    LoadingSection()
+
+                if (state.data.isEmpty()) {
+                    ErrorSection(
+                        error = ErrorType.EMPTY_DATA,
+                        message = stringResource(Res.string.error_no_data_found)
+                    ) {
+                        onEvent(UiAction.FetchFriendSuggestion)
+                    }
+                } else {
+                    PersonList(
+                        state.data,
+                        state.hasMorePage,
+                        onLoadMore = {
+                            onEvent.invoke(UiAction.FetchFriendSuggestion)
+                        },
+                        onPersonClick = { username ->
+                            navigateToOtherProfileScreen.invoke(username)
+                        }
+                    )
+                }
+            }
+
+            if (state.isLoadingMore) {
+                LoadingAnimation(
+                    modifier = Modifier
+                        //.size(IconSizeToken.extraLarge)
+                        .align(alignment = Alignment.BottomCenter)
+                )
             }
         }
     }
@@ -128,9 +156,23 @@ private fun ErrorSection(
 @Composable
 private fun PersonList(
     items: List<FriendSuggestionApiEntity>,
+    hasMoreSize: Boolean,
     onPersonClick: (String) -> Unit,
+    onLoadMore: () -> Unit,
 ) {
+    val listState = rememberLazyGridState()
+    LaunchedEffect(listState, items, 10) {
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
+            .collect { lastVisible ->
+                val lastIndex = items.lastIndex
+                //Timber.e("---> LastVisible: $lastVisible LastIndex: $lastIndex")
+                if (lastVisible != null && lastVisible == lastIndex && hasMoreSize) {
+                    onLoadMore.invoke()
+                }
+            }
+    }
     LazyVerticalGrid(
+        state = listState,
         columns = GridCells.Fixed(2),
     ) {
         items(
@@ -142,7 +184,6 @@ private fun PersonList(
                 person = person,
                 modifier = Modifier
                     .clickable {
-                        Timber.e("userImage: ${person.userImage}")
                         onPersonClick.invoke(person.username)
                     }
             )
@@ -174,7 +215,7 @@ private fun ScreenPreview() {
         navigateToProfileScreen = { },
         navigateToOtherProfileScreen = { },
         onEvent = {},
-        state = UiState.Loading
+        state = UiState(isLoadingMore = true)
         //state = UiState.Error("No data found"),
 //        state = UiState.Success(
 //            listOf(
