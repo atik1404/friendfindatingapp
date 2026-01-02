@@ -129,23 +129,7 @@ private fun ChatListItem(
 @LightPreview
 private fun ScreenPreview() {
     ChatListSection(
-        items = listOf(
-            ChatListItemApiEntity(
-                toUsername = "Tom Cruise",
-                notificationToken = "",
-                userImage = "",
-                fullName = "Tom Cruise",
-                lastMessage = "Hi, How are you?",
-                dateTime = "2025-12-16T10:25:47Z"
-            ), ChatListItemApiEntity(
-                toUsername = "Tom Cruise",
-                notificationToken = "",
-                userImage = "",
-                fullName = "Tom Cruise",
-                lastMessage = "Hi, How are you?",
-                dateTime = "2025-12-16T10:25:47Z"
-            )
-        ),
+        items = emptyList(),
         onItemClicked = {},
         onLoadMore = {},
     )

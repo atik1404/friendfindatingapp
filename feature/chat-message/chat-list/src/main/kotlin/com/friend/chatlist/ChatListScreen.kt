@@ -60,32 +60,33 @@ fun ChatListScreen(
             SearchBarSection()
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
-            when (uiState) {
-                is UiState.Error -> ErrorUi(
-                    message = uiState.message
-                ) {
-                    action.invoke(UiAction.FetchChatList)
-                }
 
-                UiState.NoDataFound -> ErrorUi(
-                    errorType = ErrorType.EMPTY_DATA,
-                    message = stringResource(Res.string.error_no_data_found)
-                ) {
-                    action.invoke(UiAction.FetchChatList)
-                }
-
-                is UiState.Success -> ChatListSection(
-                    items = uiState.data,
-                    onLoadMore = {
-                        action.invoke(UiAction.LoadMore)
-                    },
-                    onItemClicked = { toUsername ->
-                        navigateToChatRoom.invoke(toUsername)
-                    }
-                )
-
-                UiState.Loading -> LoadingUi()
-            }
+//            when (uiState) {
+//                is UiState.Error -> ErrorUi(
+//                    message = uiState.message
+//                ) {
+//                    action.invoke(UiAction.FetchChatList)
+//                }
+//
+//                UiState.NoDataFound -> ErrorUi(
+//                    errorType = ErrorType.EMPTY_DATA,
+//                    message = stringResource(Res.string.error_no_data_found)
+//                ) {
+//                    action.invoke(UiAction.FetchChatList)
+//                }
+//
+//                is UiState.Success -> ChatListSection(
+//                    items = uiState.data,
+//                    onLoadMore = {
+//                        action.invoke(UiAction.LoadMore)
+//                    },
+//                    onItemClicked = { toUsername ->
+//                        navigateToChatRoom.invoke(toUsername)
+//                    }
+//                )
+//
+//                UiState.Loading -> LoadingUi()
+//            }
         }
     }
 }
@@ -96,8 +97,8 @@ private fun ScreenPreview() {
     ChatListScreen(
         onBackButtonClicked = {},
         navigateToChatRoom = { _ -> },
-        uiState = UiState.Success(
-            listOf(
+        uiState = UiState(
+            data = listOf(
                 ChatListItemApiEntity(
                     toUsername = "Tom Cruise",
                     notificationToken = "",

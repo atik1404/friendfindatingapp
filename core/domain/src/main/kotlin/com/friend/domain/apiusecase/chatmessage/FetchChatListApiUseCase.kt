@@ -9,12 +9,8 @@ import javax.inject.Inject
 
 class FetchChatListApiUseCase @Inject constructor(
     private val repository: ChatMessagesRepository,
-) : ApiUseCaseParams<FetchChatListApiUseCase.Params, List<ChatListItemApiEntity>> {
-    data class Params(
-        val fromUsername: String,
-        val pageNo: Int = 0
-    )
+) : ApiUseCaseParams<Int, List<ChatListItemApiEntity>> {
 
-    override suspend fun execute(params: Params): Flow<ApiResult<List<ChatListItemApiEntity>>> =
+    override suspend fun execute(params: Int): Flow<ApiResult<List<ChatListItemApiEntity>>> =
         repository.fetchChatList(params)
 }

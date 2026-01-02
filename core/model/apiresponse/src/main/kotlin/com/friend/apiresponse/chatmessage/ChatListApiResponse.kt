@@ -10,8 +10,8 @@ data class ChatListApiResponse(
 data class ChatListItemResponse(
     val toUsername: String?,
     val notificationToken: String?,
-    val userimage: String?,
+    val userImage: String?,
     val fullName: String?,
     val lastMessage: String?,
-    val dateTime: String?,
+    val lastMessageDateTime: String?,
 )

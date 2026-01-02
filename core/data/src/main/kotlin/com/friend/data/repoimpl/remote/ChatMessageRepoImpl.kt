@@ -4,7 +4,6 @@ import com.friend.data.NetworkBoundResource
 import com.friend.data.apiservice.ChatMessageApiServices
 import com.friend.data.mapper.chatmessage.ChatListApiMapper
 import com.friend.data.mapper.mapFromApiResponse
-import com.friend.domain.apiusecase.chatmessage.FetchChatListApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.repository.remote.ChatMessagesRepository
 import com.friend.entity.chatmessage.ChatListItemApiEntity
@@ -16,12 +15,11 @@ class ChatMessageRepoImpl @Inject constructor(
     private val apiServices: ChatMessageApiServices,
     private val chatListApiMapper: ChatListApiMapper
 ) : ChatMessagesRepository {
-    override suspend fun fetchChatList(params: FetchChatListApiUseCase.Params): Flow<ApiResult<List<ChatListItemApiEntity>>> {
+    override suspend fun fetchChatList(pageNo: Int): Flow<ApiResult<List<ChatListItemApiEntity>>> {
         return mapFromApiResponse(
             result = networkBoundResources.downloadData {
                 apiServices.fetchChatList(
-                    username = params.fromUsername,
-                    page = params.pageNo
+                    page = pageNo
                 )
             }, mapper = chatListApiMapper
         )
