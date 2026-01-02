@@ -46,13 +46,14 @@ import com.friend.designsystem.R as Res
 fun HomeScreen(
     fullName: String,
     profilePicture: String,
-    state: UiState,
+    uiState: UiState,
     filterUiState: FilterUiState,
     onEvent: (UiAction) -> Unit,
     navigateToChatListScreen: () -> Unit,
     navigateToOverviewScreen: () -> Unit,
     navigateToProfileScreen: () -> Unit,
     navigateToOtherProfileScreen: (String) -> Unit,
+    navigateToMembershipScreen: () -> Unit,
 ) {
     var showFilterBottomSheet by rememberSaveable { mutableStateOf(false) }
     AppScaffold(
@@ -73,9 +74,10 @@ fun HomeScreen(
             ) {
                 SearchBarSection(
                     navigateToOverviewScreen = navigateToOverviewScreen,
-                    navigateToSearchScreen = {
+                    showBottomSheet = {
                         showFilterBottomSheet = true
-                    }
+                    },
+                    navigateToMembership = navigateToMembershipScreen
                 )
                 Spacer(Modifier.height(SpacingToken.medium))
                 ProfileSummarySection(
@@ -83,23 +85,23 @@ fun HomeScreen(
                     profilePicture = profilePicture,
                     navigateToChatListScreen = navigateToChatListScreen,
                     navigateToProfileScreen = {
-                        navigateToProfileScreen.invoke()//TODO replace with current user data
+                        navigateToProfileScreen.invoke()
                     }
                 )
                 Spacer(Modifier.height(SpacingToken.medium))
 
-                if (state.error.isNotEmpty()) {
+                if (uiState.error.isNotEmpty()) {
                     ErrorSection(
-                        message = state.error
+                        message = uiState.error
                     ) {
                         onEvent(UiAction.FetchFriendSuggestion)
                     }
                 }
 
-                if (state.isLoading)
+                if (uiState.isLoading)
                     LoadingSection()
 
-                if (state.data.isEmpty()) {
+                if (uiState.data.isEmpty()) {
                     ErrorSection(
                         error = ErrorType.EMPTY_DATA,
                         message = stringResource(Res.string.error_no_data_found)
@@ -108,8 +110,8 @@ fun HomeScreen(
                     }
                 } else {
                     PersonList(
-                        state.data,
-                        state.hasMorePage,
+                        uiState.data,
+                        uiState.hasMorePage,
                         onLoadMore = {
                             onEvent.invoke(UiAction.FetchFriendSuggestion)
                         },
@@ -120,7 +122,7 @@ fun HomeScreen(
                 }
             }
 
-            if (state.isLoadingMore) {
+            if (uiState.isLoadingMore) {
                 LoadingAnimation(
                     modifier = Modifier
                         //.size(IconSizeToken.extraLarge)
@@ -220,7 +222,8 @@ private fun ScreenPreview() {
         navigateToOtherProfileScreen = { },
         onEvent = {},
         filterUiState = FilterUiState(),
-        state = UiState(isLoadingMore = true),
+        uiState = UiState(isLoadingMore = true),
+        navigateToMembershipScreen = {}
         //state = UiState.Error("No data found"),
 //        state = UiState.Success(
 //            listOf(

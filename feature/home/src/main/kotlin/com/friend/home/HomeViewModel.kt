@@ -57,6 +57,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    init {
+        fetchFriendSuggestions()
+    }
+
     private fun setCurrentUserInfo() {
         _fullName.value = sharedPrefHelper.getString(SpKey.fullName)
         _profilePicture.value = sharedPrefHelper.getString(SpKey.profilePicture)

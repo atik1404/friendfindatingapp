@@ -28,6 +28,9 @@ object MainNavGraph {
                 },
                 navigateToOtherProfileScreen = { username ->
                     backStack.add(ProfileScreens.OtherProfileNavScreen(username))
+                },
+                navigateToMembershipScreen = {
+                    backStack.add(ProfileScreens.MembershipNavScreen)
                 }
             )
         }

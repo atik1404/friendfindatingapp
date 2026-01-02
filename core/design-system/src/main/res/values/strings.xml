@@ -20,6 +20,7 @@
     <string name="CHANNEL_ID">com.friendfinapp.dating</string>
     <string name="fcmlink">https://fcm.googleapis.com</string>
 
+    <string name="title_friend_fin">FriendFin</string>
     <string name="title_registration">Registration</string>
     <string name="title_personal_information">Personal Information</string>
     <string name="title_forgot_password">Forgot Password</string>
@@ -32,6 +33,7 @@
     <string name="title_report_user">Report User</string>
     <string name="title_privacy_policy">Privacy Policy</string>
     <string name="title_member_ship">Membership plan</string>
+    <string name="title_home_capital">HOME</string>
 
     <string name="title_something_wrong">Request failed</string>
     <string name="title_data_empty">Try a different search</string>

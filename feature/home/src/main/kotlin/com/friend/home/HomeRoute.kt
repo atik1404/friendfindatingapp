@@ -6,13 +6,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import timber.log.Timber
 
 @Composable
 fun HomeRoute(
     navigateToChatListScreen: () -> Unit,
     navigateToOverviewScreen: () -> Unit,
     navigateToProfileScreen: () -> Unit,
+    navigateToMembershipScreen: () -> Unit,
     navigateToOtherProfileScreen: (String) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
@@ -24,13 +24,13 @@ fun HomeRoute(
 
     LaunchedEffect(Unit) {
         viewModel.action(UiAction.SetCurrentUserInfo)
-        viewModel.action(UiAction.FetchFriendSuggestion)
     }
 
     HomeScreen(
         fullName = fullName,
         profilePicture = profilePicture,
-        state = uiSate,
+        uiState = uiSate,
+        filterUiState = filterUiSate,
         navigateToChatListScreen = navigateToChatListScreen,
         navigateToOverviewScreen = navigateToOverviewScreen,
         onEvent = {
@@ -38,6 +38,6 @@ fun HomeRoute(
         },
         navigateToProfileScreen = navigateToProfileScreen,
         navigateToOtherProfileScreen = { navigateToOtherProfileScreen.invoke(it) },
-        filterUiState = filterUiSate
+        navigateToMembershipScreen = navigateToMembershipScreen
     )
 }

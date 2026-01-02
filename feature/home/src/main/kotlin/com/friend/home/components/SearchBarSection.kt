@@ -1,42 +1,62 @@
 package com.friend.home.components
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.Dashboard
-import androidx.compose.material.icons.filled.FilterAlt
-import androidx.compose.material.icons.filled.FilterList
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Verified
+import androidx.compose.material.icons.filled.VerifiedUser
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import com.friend.designsystem.spacing.IconSizeToken
+import com.friend.designsystem.theme.iconColors
+import com.friend.designsystem.theme.textColors
+import com.friend.designsystem.typography.AppTypography
+import com.friend.ui.components.AppIconButton
+import com.friend.ui.components.AppText
+import com.friend.ui.components.LocalImageLoader
 import com.friend.designsystem.R as Res
-import com.friend.designsystem.spacing.SpacingToken
-import com.friend.designsystem.theme.textFieldColors
-import com.friend.ui.components.AppBaseTextField
 
 @Composable
 fun SearchBarSection(
     navigateToOverviewScreen: () -> Unit,
-    navigateToSearchScreen: () -> Unit,
+    showBottomSheet: () -> Unit,
+    navigateToMembership: () -> Unit,
 ) {
-    var userName by rememberSaveable { mutableStateOf("") }
-    AppBaseTextField(
-        value = userName,
-        modifier = Modifier.fillMaxWidth(),
-        placeholder = stringResource(Res.string.hint_search_here),
-        onValueChange = { userName = it },
-        colors = MaterialTheme.textFieldColors.outlinedTextField,
-        readOnly = true,
-        shape = RoundedCornerShape(SpacingToken.medium),
-        trailingIcon = Icons.Default.FilterList,
-        leadingIcon = Icons.Default.Dashboard,
-        onTrailingClick = navigateToSearchScreen,
-        onLeadingClick = navigateToOverviewScreen
-    )
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        AppIconButton(
+            vectorIcon = Icons.Default.Dashboard,
+            onClick = navigateToOverviewScreen
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        AppText(
+            text = stringResource(Res.string.title_friend_fin),
+            fontWeight = FontWeight.Bold,
+            textStyle = AppTypography.titleLarge,
+            textColor = MaterialTheme.textColors.brand.copy(alpha = .7f),
+            trailing = {
+                LocalImageLoader(
+                    imageResId = Res.drawable.img_vip,
+                    modifier = Modifier.size(IconSizeToken.medium),
+                )
+            },
+            onClick = navigateToMembership
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        AppIconButton(
+            resourceIcon = Res.drawable.ic_filter,
+            onClick = showBottomSheet
+        )
+    }
 }
