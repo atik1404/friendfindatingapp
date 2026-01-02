@@ -13,13 +13,15 @@ class FetchFriendSuggestionApiUseCase @Inject constructor(
 
     data class Params(
         val gender: Int? = null,
-        val fromAge: Int? = null,
-        val toAge: Int? = null,
+        val interestedIn: Int? = null,
+        val fromAge: String? = null,
+        val toAge: String? = null,
         val country: String? = null,
         val state: String? = null,
         val city: String? = null,
         val username: String? = null,
-        val isOnlineUser: String? = null,
+        val isOnlineUser: Boolean? = null,
+        val isPhotoRequired: Boolean? = null,
         val bodyType: String? = null,
         val lookingFor: String? = null,
         val eyes: String? = null,

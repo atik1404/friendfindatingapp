@@ -27,7 +27,7 @@
     <string name="title_chat">Chat</string>
     <string name="title_overview">Overview</string>
     <string name="title_profile">Profile</string>
-    <string name="title_individual_search">Individual Search</string>
+    <string name="title_individual_search">Filter</string>
     <string name="title_report_abuse">Report Abuse</string>
     <string name="title_report_user">Report User</string>
     <string name="title_privacy_policy">Privacy Policy</string>
@@ -52,6 +52,7 @@
     <string name="action_forward">Forward</string>
     <string name="action_change_password">Change Password</string>
     <string name="action_search">Search</string>
+    <string name="action_reset">Reset all</string>
     <string name="action_activate_vip_membership">Activate VIP Membership</string>
     <string name="action_yearly">Yearly - Popular</string>
     <string name="action_monthly">1 Month</string>

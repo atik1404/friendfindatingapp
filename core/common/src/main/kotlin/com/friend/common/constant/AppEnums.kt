@@ -1,6 +1,7 @@
 package com.friend.common.constant
 
 enum class Gender(val value: Int) {
+    DEFAULT(-1),
     MALE(1),
     FEMALE(2);
 
@@ -10,7 +11,7 @@ enum class Gender(val value: Int) {
             when (value) {
                 1 -> MALE
                 2 -> FEMALE
-                else -> MALE
+                else -> DEFAULT
             }
 
         // "Male" / "Female" -> 1 / 2
@@ -26,7 +27,7 @@ enum class Gender(val value: Int) {
             when (name.trim().lowercase()) {
                 "male" -> MALE
                 "female" -> FEMALE
-                else -> MALE
+                else -> DEFAULT
             }
     }
 }
