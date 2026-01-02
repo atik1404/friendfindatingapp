@@ -1,5 +1,6 @@
 package com.friend.chatlist
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.friend.chatlist.components.ChatListSection
@@ -22,7 +24,7 @@ import com.friend.entity.chatmessage.ChatListItemApiEntity
 import com.friend.ui.common.AppToolbar
 import com.friend.ui.common.ErrorType
 import com.friend.ui.common.ErrorUi
-import com.friend.ui.common.LoadingUi
+import com.friend.ui.common.LoadingAnimation
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
@@ -45,7 +47,7 @@ fun ChatListScreen(
                 })
         }
     ) { padding ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
@@ -57,36 +59,48 @@ fun ChatListScreen(
                     vertical = SpacingToken.medium
                 )
         ) {
-            SearchBarSection()
-            Spacer(modifier = Modifier.height(SpacingToken.medium))
+            if (uiState.isLoading && uiState.data.isEmpty())
+                LoadingAnimation(
+                    modifier = Modifier.align(alignment = Alignment.Center)
+                )
+            Column {
+                SearchBarSection(searchKeyword = uiState.searchKeyword){
+                    action.invoke(UiAction.SearchByKeyword(it))
+                }
+                Spacer(modifier = Modifier.height(SpacingToken.medium))
 
+                if (uiState.error.isNotEmpty())
+                    ErrorUi(
+                        message = uiState.error
+                    ) {
+                        action.invoke(UiAction.FetchChatList)
+                    }
 
-//            when (uiState) {
-//                is UiState.Error -> ErrorUi(
-//                    message = uiState.message
-//                ) {
-//                    action.invoke(UiAction.FetchChatList)
-//                }
-//
-//                UiState.NoDataFound -> ErrorUi(
-//                    errorType = ErrorType.EMPTY_DATA,
-//                    message = stringResource(Res.string.error_no_data_found)
-//                ) {
-//                    action.invoke(UiAction.FetchChatList)
-//                }
-//
-//                is UiState.Success -> ChatListSection(
-//                    items = uiState.data,
-//                    onLoadMore = {
-//                        action.invoke(UiAction.LoadMore)
-//                    },
-//                    onItemClicked = { toUsername ->
-//                        navigateToChatRoom.invoke(toUsername)
-//                    }
-//                )
-//
-//                UiState.Loading -> LoadingUi()
-//            }
+                if (uiState.data.isEmpty() && !uiState.isLoading)
+                    ErrorUi(
+                        errorType = ErrorType.EMPTY_DATA,
+                        message = stringResource(Res.string.error_no_data_found)
+                    ) {
+                        action.invoke(UiAction.FetchChatList)
+                    }
+                else ChatListSection(
+                    hasMorePage = uiState.hasMorePage,
+                    items = uiState.filterData,
+                    onLoadMore = {
+                        action.invoke(UiAction.FetchChatList)
+                    },
+                    onItemClicked = { toUsername ->
+                        navigateToChatRoom.invoke(toUsername)
+                    }
+                )
+            }
+
+            if (uiState.isLoadingMore && uiState.data.isNotEmpty()) {
+                LoadingAnimation(
+                    modifier = Modifier
+                        .align(alignment = Alignment.BottomCenter)
+                )
+            }
         }
     }
 }

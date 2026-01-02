@@ -29,7 +29,7 @@ data class UiState(
     val data: List<FriendSuggestionApiEntity> = emptyList(),
     val error: String = "",
     val isLoadingMore: Boolean = false,
-    val pageNo: Int = 1,
+    val pageNo: Int = 0,
     val hasMorePage: Boolean = true,
 )
 

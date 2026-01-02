@@ -21,8 +21,9 @@ class ChatListViewModel @Inject constructor(
     val action: (UiAction) -> Unit = {
         when (it) {
             UiAction.FetchChatList -> fetchChatList()
-            UiAction.SearchByKeyword -> {}
+            is UiAction.SearchByKeyword -> onSearchKeywordChange(it.value)
             UiAction.LoadMore -> fetchChatList()
+            UiAction.ResetState -> resetState()
         }
     }
 
@@ -52,12 +53,40 @@ class ChatListViewModel @Inject constructor(
 
                         _uiState.value = _uiState.value.copy(
                             data = updatedItems,
+                            filterData = updatedItems,
                             pageNo = pageNo,
                             hasMorePage = hasMorePage
                         )
                     }
                 }
             }
+        }
+    }
+
+    private fun onSearchKeywordChange(value: String) {
+        execute {
+            _uiState.value = _uiState.value.copy(searchKeyword = value)
+            searchResult()
+        }
+    }
+
+    private fun searchResult() {
+        execute {
+            val currentState = _uiState.value
+            val searchResult =
+                currentState.data.filter {
+                    it.fullName.contains(currentState.searchKeyword) || it.toUsername.contains(
+                        currentState.searchKeyword
+                    )
+                }
+
+            _uiState.value = _uiState.value.copy(filterData = searchResult)
+        }
+    }
+
+    private fun resetState() {
+        execute {
+            _uiState.value = UiState()
         }
     }
 }

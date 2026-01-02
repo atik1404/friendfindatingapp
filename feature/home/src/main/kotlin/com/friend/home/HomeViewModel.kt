@@ -100,7 +100,7 @@ class HomeViewModel @Inject constructor(
                     }
 
                     is ApiResult.Loading -> {
-                        if (currentState.pageNo == 1)
+                        if (currentState.pageNo == 0)
                             _uiState.value = _uiState.value.copy(
                                 isLoading = result.loading,
                                 isLoadingMore = false
@@ -163,7 +163,7 @@ class HomeViewModel @Inject constructor(
     private fun onFilterApply() {
         execute {
             _uiState.value = _uiState.value.copy(
-                pageNo = 1,
+                pageNo = 0,
                 hasMorePage = true,
                 data = emptyList()
             )

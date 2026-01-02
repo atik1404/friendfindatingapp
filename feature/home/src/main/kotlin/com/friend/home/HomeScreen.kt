@@ -125,7 +125,6 @@ fun HomeScreen(
             if (uiState.isLoadingMore) {
                 LoadingAnimation(
                     modifier = Modifier
-                        //.size(IconSizeToken.extraLarge)
                         .align(alignment = Alignment.BottomCenter)
                 )
             }

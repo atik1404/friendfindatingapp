@@ -16,6 +16,7 @@ fun ChatListScreenRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
+        viewModel.action.invoke(UiAction.ResetState)
         viewModel.action.invoke(UiAction.FetchChatList)
     }
 

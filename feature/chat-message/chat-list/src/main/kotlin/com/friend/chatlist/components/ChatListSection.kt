@@ -12,15 +12,19 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.friend.common.constant.AppConstants
 import com.friend.common.dateparser.DateTimePatterns
 import com.friend.common.dateparser.DateTimeUtils
 import com.friend.designsystem.spacing.RadiusToken
@@ -38,10 +42,22 @@ import com.friend.ui.preview.LightPreview
 fun ChatListSection(
     modifier: Modifier = Modifier,
     items: List<ChatListItemApiEntity>,
+    hasMorePage: Boolean,
     onItemClicked: (ChatListItemApiEntity) -> Unit,
     onLoadMore: () -> Unit
 ) {
+    val listState = rememberLazyListState()
+    LaunchedEffect(listState, items, AppConstants.DATA_PER_PAGE) {
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
+            .collect { lastVisible ->
+                val lastIndex = items.lastIndex
+                if (lastVisible != null && lastVisible == lastIndex && hasMorePage && items.size >= AppConstants.DATA_PER_PAGE) {
+                    onLoadMore.invoke()
+                }
+            }
+    }
     LazyColumn(
+        state = listState,
         modifier = modifier.fillMaxWidth()
     ) {
         items(
@@ -91,9 +107,11 @@ private fun ChatListItem(
             modifier = Modifier.width(SpacingToken.medium)
         )
 
-        Column {
+        Column(
+            modifier = Modifier.weight(2f),
+        ) {
             AppText(
-                text = item.toUsername,
+                text = item.fullName,
                 textStyle = AppTypography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 textColor = MaterialTheme.textColors.primary,
@@ -111,12 +129,13 @@ private fun ChatListItem(
                 overflow = TextOverflow.Ellipsis
             )
         }
-
-        Spacer(
-            modifier = Modifier.weight(1f)
-        )
+        
+        Spacer(modifier = Modifier.width(SpacingToken.medium))
 
         AppText(
+            modifier = Modifier
+                .weight(.5f)
+                .align(alignment = Alignment.CenterVertically),
             text = DateTimeUtils.parseToPattern(item.dateTime, DateTimePatterns.TIME_12_HM_AMPM),
             textStyle = AppTypography.bodySmall,
             fontWeight = FontWeight.Medium,
@@ -128,9 +147,14 @@ private fun ChatListItem(
 @Composable
 @LightPreview
 private fun ScreenPreview() {
-    ChatListSection(
-        items = emptyList(),
-        onItemClicked = {},
-        onLoadMore = {},
+    ChatListItem(
+        item = ChatListItemApiEntity(
+            toUsername = "Atik Faysal",
+            notificationToken = "",
+            userImage = "",
+            fullName = "Tom Cruise",
+            lastMessage = "Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?",
+            dateTime = "2025-12-16"
+        )
     )
 }
