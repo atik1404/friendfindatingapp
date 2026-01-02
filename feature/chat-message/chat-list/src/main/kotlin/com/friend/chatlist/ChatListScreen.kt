@@ -89,8 +89,8 @@ fun ChatListScreen(
                     onLoadMore = {
                         action.invoke(UiAction.FetchChatList)
                     },
-                    onItemClicked = { toUsername ->
-                        navigateToChatRoom.invoke(toUsername)
+                    onItemClicked = { entity ->
+                        navigateToChatRoom.invoke(entity)
                     }
                 )
             }

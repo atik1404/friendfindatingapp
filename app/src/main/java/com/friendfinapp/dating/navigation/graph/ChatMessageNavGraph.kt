@@ -4,7 +4,7 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.friend.chatlist.ChatListScreenRoute
-import com.friend.chatroom.ChatRoomScreen
+import com.friend.chatroom.ChatRoomScreenRoute
 import com.friendfinapp.dating.navigation.ChatMessageScreens
 
 object ChatMessageNavGraph {
@@ -20,8 +20,7 @@ object ChatMessageNavGraph {
                 navigateToChatRoom = { chat ->
                     backStack.add(
                         ChatMessageScreens.ChatRoomNavScreen(
-                            userName = chat.toUsername,
-                            messageId = chat.toUsername
+                            chat = chat,
                         )
                     )
                 }
@@ -29,12 +28,12 @@ object ChatMessageNavGraph {
         }
 
         entry<ChatMessageScreens.ChatRoomNavScreen> { key ->
-            ChatRoomScreen(
-                messageId = key.messageId,
-                username = key.userName
-            ) {
-                backStack.removeLastOrNull()
-            }
+            ChatRoomScreenRoute(
+                chat = key.chat,
+                onBackButtonClicked = {
+                    backStack.removeLastOrNull()
+                }
+            )
         }
     }
 }

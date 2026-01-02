@@ -1,7 +1,8 @@
-package com.friend.chatroom.ui
+package com.friend.chatroom.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,6 +31,7 @@ import com.friend.designsystem.R as Res
 import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingHorizontal
+import com.friend.designsystem.spacing.appPaddingOnly
 import com.friend.designsystem.theme.backgroundColors
 import com.friend.designsystem.theme.buttonColors
 import com.friend.designsystem.theme.textFieldColors
@@ -37,7 +39,28 @@ import com.friend.ui.components.AppBaseTextField
 import com.friend.ui.components.AppIconButton
 
 @Composable
-fun MessageSendUi(
+fun MessageFormUi(
+    modifier: Modifier
+) {
+    var isAttachmentExpanded by remember { mutableStateOf(false) }
+    Column(
+        modifier = modifier
+    ) {
+        if (isAttachmentExpanded)
+            AttachmentTypeUi()
+
+        SendMessageUiSection(
+            modifier = Modifier
+                .appPaddingOnly(bottom = SpacingToken.medium),
+            onClickAttachment = {
+                isAttachmentExpanded = !isAttachmentExpanded
+            }
+        )
+    }
+}
+
+@Composable
+private fun SendMessageUiSection(
     modifier: Modifier,
     onClickAttachment: () -> Unit
 ) {

@@ -50,3 +50,12 @@ fun String.initialsOf(): String {
     // first two visible chars (works fine for normal latin names)
     return cleaned.take(2).uppercase()
 }
+
+fun String.tryParseInt(): Int {
+    try {
+        this.toInt()
+    } catch (e: Exception) {
+        return 0
+    }
+    return 0
+}

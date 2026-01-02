@@ -1,4 +1,4 @@
-package com.friend.chatroom.ui
+package com.friend.chatroom.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
@@ -33,6 +33,7 @@ import com.friend.ui.components.PopupMenuType
 fun ProfileInfoHeader(
     modifier: Modifier,
     username: String,
+    userImage: String,
     backToChatListScreen: () -> Unit,
     onMenuClicked: (PopupMenuType) -> Unit,
 ) {
@@ -55,7 +56,8 @@ fun ProfileInfoHeader(
         }
 
         NetworkImageLoader(
-            url = "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
+            url = userImage,
+            name = username,
             modifier = Modifier
                 .size(IconSizeToken.extraLarge),
             shape = CircleShape

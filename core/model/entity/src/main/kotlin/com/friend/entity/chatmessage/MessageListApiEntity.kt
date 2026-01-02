@@ -1,0 +1,19 @@
+package com.friend.entity.chatmessage
+
+data class MessageListApiEntity(
+    val isBlocked: Boolean,
+    val data: List<MessageEntity>
+)
+
+data class MessageEntity(
+    val messageId: String,
+    val fromUsername: String,
+    val body: String,
+    val imageUrl: String,
+    val audioUrl: String,
+    val audioDuration: Int,
+    val videoUrl: String,
+    val videoDuration: Int,
+    val dateTime: String,
+    val isMyMessage: Boolean
+)
