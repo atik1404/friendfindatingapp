@@ -41,7 +41,7 @@ class ChatRoomViewModel @Inject constructor(
                         _uiState.value.copy(isLoading = result.loading)
 
                     is ApiResult.Success -> _uiState.value =
-                        _uiState.value.copy(messages = result.data.data)
+                        _uiState.value.copy(messages = result.data.data.reversed())
                 }
             }
         }
