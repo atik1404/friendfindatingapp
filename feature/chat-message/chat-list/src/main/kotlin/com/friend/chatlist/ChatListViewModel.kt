@@ -39,10 +39,14 @@ class ChatListViewModel @Inject constructor(
                         if (currentState.data.isEmpty())
                             _uiState.value = _uiState.value.copy(
                                 isLoading = result.loading,
-                                isLoadingMore = false
+                                isLoadingMore = false,
+                                error = ""
                             )
                         else _uiState.value =
-                            _uiState.value.copy(isLoadingMore = result.loading, isLoading = false)
+                            _uiState.value.copy(
+                                isLoadingMore = result.loading, isLoading = false,
+                                error = ""
+                            )
                     }
 
                     is ApiResult.Success -> {
@@ -53,9 +57,9 @@ class ChatListViewModel @Inject constructor(
 
                         _uiState.value = _uiState.value.copy(
                             data = updatedItems,
-                            filterData = updatedItems,
                             pageNo = pageNo,
-                            hasMorePage = hasMorePage
+                            hasMorePage = hasMorePage,
+                            error = ""
                         )
                     }
                 }
@@ -66,21 +70,6 @@ class ChatListViewModel @Inject constructor(
     private fun onSearchKeywordChange(value: String) {
         execute {
             _uiState.value = _uiState.value.copy(searchKeyword = value)
-            searchResult()
-        }
-    }
-
-    private fun searchResult() {
-        execute {
-            val currentState = _uiState.value
-            val searchResult =
-                currentState.data.filter {
-                    it.fullName.contains(currentState.searchKeyword) || it.toUsername.contains(
-                        currentState.searchKeyword
-                    )
-                }
-
-            _uiState.value = _uiState.value.copy(filterData = searchResult)
         }
     }
 

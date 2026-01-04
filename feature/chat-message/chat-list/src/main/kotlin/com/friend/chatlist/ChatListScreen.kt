@@ -59,43 +59,49 @@ fun ChatListScreen(
                     vertical = SpacingToken.medium
                 )
         ) {
-            if (uiState.isLoading && uiState.data.isEmpty())
+            if (uiState.isLoading)
                 LoadingAnimation(
                     modifier = Modifier.align(alignment = Alignment.Center)
                 )
-            Column {
-                SearchBarSection(searchKeyword = uiState.searchKeyword){
-                    action.invoke(UiAction.SearchByKeyword(it))
+
+            if (uiState.isError)
+                ErrorUi(
+                    modifier = Modifier.fillMaxSize(),
+                    message = uiState.error
+                ) {
+                    action.invoke(UiAction.FetchChatList)
                 }
-                Spacer(modifier = Modifier.height(SpacingToken.medium))
 
-                if (uiState.error.isNotEmpty())
-                    ErrorUi(
-                        message = uiState.error
-                    ) {
-                        action.invoke(UiAction.FetchChatList)
-                    }
+            if (uiState.isDataEmpty)
+                ErrorUi(
+                    modifier = Modifier.fillMaxSize(),
+                    errorType = ErrorType.EMPTY_DATA,
+                    message = stringResource(Res.string.error_no_data_found)
+                ) {
+                    action.invoke(UiAction.FetchChatList)
+                }
 
-                if (uiState.data.isEmpty() && !uiState.isLoading)
-                    ErrorUi(
-                        errorType = ErrorType.EMPTY_DATA,
-                        message = stringResource(Res.string.error_no_data_found)
-                    ) {
-                        action.invoke(UiAction.FetchChatList)
+            if (uiState.isFetchSuccess) {
+                Column {
+                    SearchBarSection(searchKeyword = uiState.searchKeyword) {
+                        action.invoke(UiAction.SearchByKeyword(it))
                     }
-                else ChatListSection(
-                    hasMorePage = uiState.hasMorePage,
-                    items = uiState.filterData,
-                    onLoadMore = {
-                        action.invoke(UiAction.FetchChatList)
-                    },
-                    onItemClicked = { entity ->
-                        navigateToChatRoom.invoke(entity)
-                    }
-                )
+                    Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+                    ChatListSection(
+                        hasMorePage = uiState.hasMorePage,
+                        items = uiState.filteredItems,
+                        onLoadMore = {
+                            action.invoke(UiAction.FetchChatList)
+                        },
+                        onItemClicked = { entity ->
+                            navigateToChatRoom.invoke(entity)
+                        }
+                    )
+                }
             }
 
-            if (uiState.isLoadingMore && uiState.data.isNotEmpty()) {
+            if (uiState.isLoadingMore && uiState.isFetchSuccess) {
                 LoadingAnimation(
                     modifier = Modifier
                         .align(alignment = Alignment.BottomCenter)
