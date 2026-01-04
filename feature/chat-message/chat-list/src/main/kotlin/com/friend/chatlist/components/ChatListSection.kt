@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.friend.common.constant.AppConstants
 import com.friend.common.dateparser.DateTimePatterns
-import com.friend.common.dateparser.DateTimeUtils
+import com.friend.common.dateparser.DateTimeParser
 import com.friend.designsystem.spacing.RadiusToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingSymmetric
@@ -136,7 +136,7 @@ private fun ChatListItem(
             modifier = Modifier
                 .weight(.5f)
                 .align(alignment = Alignment.CenterVertically),
-            text = DateTimeUtils.parseToPattern(item.dateTime, DateTimePatterns.TIME_12_HM_AMPM),
+            text = DateTimeParser.parseToPattern(item.dateTime, DateTimePatterns.TIME_12_HM_AMPM),
             textStyle = AppTypography.bodySmall,
             fontWeight = FontWeight.Medium,
             textColor = MaterialTheme.textColors.primary,

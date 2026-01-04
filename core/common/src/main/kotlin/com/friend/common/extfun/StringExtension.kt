@@ -52,10 +52,9 @@ fun String.initialsOf(): String {
 }
 
 fun String.tryParseInt(): Int {
-    try {
+    return try {
         this.toInt()
     } catch (e: Exception) {
-        return 0
+        0
     }
-    return 0
 }

@@ -5,3 +5,7 @@ plugins {
 android {
     namespace = "com.friend.chatroom"
 }
+
+dependencies{
+    implementation(libs.bundles.media.exoplayer)
+}

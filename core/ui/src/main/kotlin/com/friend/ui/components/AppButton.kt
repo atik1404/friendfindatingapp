@@ -331,8 +331,8 @@ fun AppIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    vectorIcon: ImageVector? = null,   // XML vector via ImageVector
-    resourceIcon: Int? = null,         // drawable/mipmap id (png/jpg/xml)
+    vectorIcon: ImageVector? = null,
+    resourceIcon: Int? = null,
     contentDescription: String? = null,
     iconSize: Dp = 24.dp,
     tint: Color = LocalContentColor.current,

@@ -22,7 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.friend.common.dateparser.DateTimePatterns
-import com.friend.common.dateparser.DateTimeUtils
+import com.friend.common.dateparser.DateTimeParser
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
 import com.friend.designsystem.theme.textColors
@@ -145,7 +145,7 @@ private fun ProfileUi(
         ) {
             LabeledValue(
                 title = stringResource(Res.string.label_date_of_birth),
-                value = DateTimeUtils.parseToPattern(
+                value = DateTimeParser.parseToPattern(
                     data.profile.birthdate,
                     DateTimePatterns.MDY_TEXT_COMMA
                 ),

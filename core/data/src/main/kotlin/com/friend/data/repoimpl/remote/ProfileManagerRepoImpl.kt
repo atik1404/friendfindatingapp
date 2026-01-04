@@ -1,6 +1,6 @@
 package com.friend.data.repoimpl.remote
 
-import com.friend.common.dateparser.DateTimeUtils
+import com.friend.common.dateparser.DateTimeParser
 import com.friend.data.NetworkBoundResource
 import com.friend.data.apiservice.ProfileManagerApiServices
 import com.friend.data.mapper.credential.CommonApiMapper
@@ -98,7 +98,7 @@ class ProfileManagerRepoImpl @Inject constructor(
                     photoAlbum = MultiPartConverter.mConverter("1"),
                     description = MultiPartConverter.mConverter("profile picture"),
                     approve = MultiPartConverter.mConverter("0"),
-                    approveDate = MultiPartConverter.mConverter(DateTimeUtils.nowUtc().toString()),
+                    approveDate = MultiPartConverter.mConverter(DateTimeParser.nowUtc().toString()),
                     image = MultiPartConverter.mConvertImg(params.image, "Image"),
                 )
             }, mapper = commonApiMapper

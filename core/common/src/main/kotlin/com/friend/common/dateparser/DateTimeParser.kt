@@ -11,8 +11,9 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 
-object DateTimeUtils {
+object DateTimeParser {
 
     // -------------------------
     // Current device date & time
@@ -260,6 +261,18 @@ object DateTimeUtils {
         return formatter.format(Instant.ofEpochMilli(millis))
     }
 
+    fun convertMillisToTime(millis: Long): String {
+        val safeMillis = millis.coerceAtLeast(0L)
+
+        val totalSeconds = TimeUnit.MILLISECONDS.toSeconds(safeMillis)
+        val hours = totalSeconds / 3600
+        val minutes = (totalSeconds % 3600) / 60
+        val seconds = totalSeconds % 60
+
+        return if (hours > 0) String.format("%d:%02d:%02d", hours, minutes, seconds)
+        else String.format("%d:%02d", minutes, seconds)
+    }
+
     fun yearsAgoFromTodayUtcMillis(years: Long): Long {
         val todayUtc = LocalDate.now(ZoneOffset.UTC)
         val targetDate = todayUtc.minusYears(years)
@@ -276,7 +289,7 @@ object DateTimeUtils {
         dateTime: LocalDateTime?,
         zoneId: ZoneId = ZoneOffset.UTC
     ): Long {
-        if(dateTime == null) return 0L
+        if (dateTime == null) return 0L
 
         return dateTime
             .atZone(zoneId)

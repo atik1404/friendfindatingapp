@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.friend.common.constant.Gender
 import com.friend.common.dateparser.DateTimePatterns
-import com.friend.common.dateparser.DateTimeUtils
+import com.friend.common.dateparser.DateTimeParser
 import com.friend.designsystem.R as Res
 import com.friend.ui.common.AppDatePickerDialog
 import com.friend.ui.components.AppOutlineTextField
@@ -67,7 +67,7 @@ fun BirthDateSelection(
     modifier: Modifier = Modifier
 ) {
     AppOutlineTextField(
-        text = DateTimeUtils.parseToPattern(selectedDate, DateTimePatterns.DMY_TEXT),
+        text = DateTimeParser.parseToPattern(selectedDate, DateTimePatterns.DMY_TEXT),
         modifier = modifier.fillMaxWidth(),
         title = stringResource(Res.string.label_date_of_birth),
         placeholder = stringResource(Res.string.hint_dob),
@@ -78,11 +78,11 @@ fun BirthDateSelection(
         }
     )
 
-    val maxSelectableDates = DateTimeUtils.yearsAgoFromTodayUtcMillis(18)
-    val selectedDateTime = DateTimeUtils.parseToDateTime(selectedDate)
+    val maxSelectableDates = DateTimeParser.yearsAgoFromTodayUtcMillis(18)
+    val selectedDateTime = DateTimeParser.parseToDateTime(selectedDate)
 
     val selectedDateTimeInMillis = if (selectedDate.isNotEmpty())
-        DateTimeUtils.dateTimeToMillis(selectedDateTime)
+        DateTimeParser.dateTimeToMillis(selectedDateTime)
     else maxSelectableDates
 
     if (showDatePicker) {

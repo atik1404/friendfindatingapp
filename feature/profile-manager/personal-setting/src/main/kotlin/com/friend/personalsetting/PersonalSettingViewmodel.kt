@@ -3,7 +3,7 @@ package com.friend.personalsetting
 import com.friend.common.base.BaseViewModel
 import com.friend.common.constant.Gender
 import com.friend.common.dateparser.DateTimePatterns
-import com.friend.common.dateparser.DateTimeUtils
+import com.friend.common.dateparser.DateTimeParser
 import com.friend.domain.apiusecase.profilemanager.FetchProfileApiUseCase
 import com.friend.domain.apiusecase.profilemanager.PostProfileUpdateApiUseCase
 import com.friend.domain.apiusecase.search.FetchCityApiUseCase
@@ -81,7 +81,7 @@ class PersonalSettingViewmodel @Inject constructor(
         onChangeState(sharedPrefHelper.getString(SpKey.state))
         onChangeCity(sharedPrefHelper.getString(SpKey.city))
         onChangeBirthDate(
-            DateTimeUtils.parseToPattern(
+            DateTimeParser.parseToPattern(
                 sharedPrefHelper.getString(SpKey.dateOfBirth),
                 DateTimePatterns.SQL_YMD
             )
