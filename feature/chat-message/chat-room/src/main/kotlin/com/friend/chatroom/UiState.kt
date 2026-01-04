@@ -7,7 +7,9 @@ data class UiState(
     val messages: List<MessageEntity> = emptyList(),
     val isLoading: Boolean = false,
     val error: String = "",
-)
+){
+    val isAlreadyFetched: Boolean get() = messages.isNotEmpty()
+}
 
 sealed interface UiEvent {
     data class ShowToastMessage(val message: UiText) : UiEvent

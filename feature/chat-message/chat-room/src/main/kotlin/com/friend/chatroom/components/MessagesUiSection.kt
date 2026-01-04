@@ -72,13 +72,15 @@ fun MessageBubble(
             .appPaddingOnly(top = SpacingToken.medium),
         horizontalAlignment = alignment
     ) {
-        AppText(
-            text = DateTimeParser.parseToPattern(message.dateTime, DateTimePatterns.MDY_TEXT_COMMA),
-            textStyle = AppTypography.bodySmall,
-            fontWeight = FontWeight.Medium,
-            textColor = MaterialTheme.textColors.primary,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
+        if (message.readableDateTime.isNotEmpty()) {
+            AppText(
+                text = message.readableDateTime,
+                textStyle = AppTypography.bodySmall,
+                fontWeight = FontWeight.Medium,
+                textColor = MaterialTheme.textColors.primary,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+        }
 
         Spacer(
             modifier = Modifier.height(SpacingToken.medium)
@@ -143,7 +145,8 @@ private fun ScreenPreview() {
             audioDuration = 10,
             videoUrl = "",
             videoDuration = 0,
-            dateTime = "04:99 PM"
+            dateTime = "04:99 PM",
+            readableDateTime = ""
         )
     )
 }

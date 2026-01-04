@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.friend.chatlist.components.ChatListSection
 import com.friend.chatlist.components.SearchBarSection
+import com.friend.common.dateparser.DateTimeParser
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingSymmetric
 import com.friend.entity.chatmessage.ChatListItemApiEntity
@@ -27,6 +28,7 @@ import com.friend.ui.common.ErrorUi
 import com.friend.ui.common.LoadingAnimation
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.preview.LightPreview
+import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -95,6 +97,7 @@ fun ChatListScreen(
                             action.invoke(UiAction.FetchChatList)
                         },
                         onItemClicked = { entity ->
+                            Timber.e("currentDate: ${DateTimeParser.nowLocalDateTime()}")
                             navigateToChatRoom.invoke(entity)
                         }
                     )

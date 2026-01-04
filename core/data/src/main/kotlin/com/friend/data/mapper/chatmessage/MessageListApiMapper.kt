@@ -1,6 +1,8 @@
 package com.friend.data.mapper.chatmessage
 
 import com.friend.apiresponse.chatmessage.MessageListApiResponse
+import com.friend.common.dateparser.DateTimeParser
+import com.friend.common.dateparser.DateTimePatterns
 import com.friend.common.extfun.tryParseInt
 import com.friend.data.mapper.Mapper
 import com.friend.di.qualifier.AppImageBaseUrl
@@ -19,9 +21,28 @@ class MessageListApiMapper @Inject constructor(
     lateinit var imageBaseUrl: String
 
     override fun mapFromApiResponse(response: MessageListApiResponse): MessageListApiEntity {
+        var lastDate: String? = null
+
         return MessageListApiEntity(
             isBlocked = response.isBlocked ?: false,
             data = response.data.orEmpty().map { message ->
+                val sendDateTimeStr = message.sendTime ?: ""
+                val currentDateTime = DateTimeParser.nowLocalDateTime()
+
+                val sendDateTime = DateTimeParser.parseToDateTime(sendDateTimeStr)
+                val readableSendDateTime =
+                    DateTimeParser.parseToPattern(sendDateTimeStr, DateTimePatterns.SQL_YMD)
+                var effectiveDate = ""
+
+                sendDateTime?.let { date ->
+                    val dayDiff = DateTimeParser.calendarDayDifference(currentDateTime, date)
+                    if (readableSendDateTime.isNotEmpty() && readableSendDateTime != lastDate) {
+                        effectiveDate =
+                            DateTimeParser.formatRelativeDateLabel(dayDiff, date.toString())
+                        lastDate = readableSendDateTime
+                    } else effectiveDate = ""
+                }
+
                 MessageEntity(
                     messageId = message.id.orEmpty(),
                     fromUsername = message.fromUsername.orEmpty(),
@@ -32,6 +53,7 @@ class MessageListApiMapper @Inject constructor(
                     videoUrl = if (message.videoURL != null && message.videoURL?.isNotEmpty() == true) "$imageBaseUrl${message.videoURL.orEmpty()}" else "",
                     videoDuration = message.videoDuration.orEmpty().tryParseInt(),
                     dateTime = message.sendTime.orEmpty(),
+                    readableDateTime = effectiveDate,
                     isMyMessage = message.fromUsername == sharedPrefHelper.getString(SpKey.userName)
                 )
             }

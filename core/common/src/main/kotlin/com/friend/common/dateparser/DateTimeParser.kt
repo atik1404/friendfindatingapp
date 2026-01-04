@@ -1,6 +1,8 @@
 package com.friend.common.dateparser
 
+import com.iamkamrul.dateced.DateCed
 import timber.log.Timber
+import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -10,8 +12,10 @@ import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 
 object DateTimeParser {
 
@@ -295,5 +299,41 @@ object DateTimeParser {
             .atZone(zoneId)
             .toInstant()
             .toEpochMilli()
+    }
+
+    fun calendarDayDifference(from: LocalDateTime, to: LocalDateTime): Long {
+        return abs(ChronoUnit.DAYS.between(from.toLocalDate(), to.toLocalDate()))
+    }
+
+    /**
+     * @param dayDiff whole-day difference between 'today' and [date].
+     *        Example: today->0, yesterday->1, 2 days ago->2, etc.
+     * @param date the message date (local calendar date)
+     * @param locale output locale (defaults to device)
+     */
+    fun formatRelativeDateLabel(
+        dayDiff: Long,
+        date: String,
+    ): String {
+        try {
+            val effectiveDate = when {
+                dayDiff <= 0 -> "Today" // also covers future/invalid negatives
+                dayDiff == 1L -> "Yesterday"
+                dayDiff in 2..5 -> {
+                    // sat, sun, mon…
+                    DateCed.Factory.parse(date).day
+                }
+
+                else -> {
+                    // MMM dd, yyyy -> "Sep 14, 2025"
+                    val fmt = parseToPattern(date, DateTimePatterns.MDY_TEXT_COMMA)
+                    fmt
+                }
+            }
+            return effectiveDate
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            return date
+        }
     }
 }

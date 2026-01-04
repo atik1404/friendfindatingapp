@@ -16,6 +16,7 @@ fun ChatRoomScreenRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
+        viewModel.action(UiActon.ResetState)
         viewModel.action(UiActon.FetchMessages(chat.toUsername))
     }
 

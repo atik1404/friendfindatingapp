@@ -15,5 +15,6 @@ data class MessageEntity(
     val videoUrl: String,
     val videoDuration: Int,
     val dateTime: String,
+    val readableDateTime: String,
     val isMyMessage: Boolean
 )

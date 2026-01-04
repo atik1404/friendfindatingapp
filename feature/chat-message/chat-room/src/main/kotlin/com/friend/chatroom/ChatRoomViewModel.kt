@@ -6,6 +6,7 @@ import com.friend.domain.base.ApiResult
 import com.friend.sharedpref.SharedPrefHelper
 import com.friend.sharedpref.SpKey
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
@@ -20,8 +21,17 @@ class ChatRoomViewModel @Inject constructor(
 
     val action: (UiActon) -> Unit = { action ->
         when (action) {
-            is UiActon.FetchMessages -> fetchMessages(action.username)
+            is UiActon.FetchMessages -> refreshMessages(action.username)
             UiActon.ResetState -> _uiState.value = UiState()
+        }
+    }
+
+    private fun refreshMessages(toUsername: String) {
+        execute {
+            while (true) {
+                fetchMessages(toUsername)
+                delay(10000)
+            }
         }
     }
 
@@ -37,8 +47,11 @@ class ChatRoomViewModel @Inject constructor(
                     is ApiResult.Error -> _uiState.value =
                         _uiState.value.copy(error = result.message)
 
-                    is ApiResult.Loading -> _uiState.value =
-                        _uiState.value.copy(isLoading = result.loading)
+                    is ApiResult.Loading -> {
+                        if (!_uiState.value.isAlreadyFetched)
+                            _uiState.value =
+                                _uiState.value.copy(isLoading = result.loading)
+                    }
 
                     is ApiResult.Success -> _uiState.value =
                         _uiState.value.copy(messages = result.data.data.reversed())
