@@ -8,8 +8,10 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.friendfinapp.dating.navigation.graph.AuthNavGraph
 import com.friendfinapp.dating.navigation.graph.ChatMessageNavGraph
@@ -26,6 +28,10 @@ fun AppNavConfiguration() {
     ) {
         NavDisplay(
             backStack = backStack,
+            entryDecorators = listOf(
+                rememberSaveableStateHolderNavEntryDecorator(),
+                rememberViewModelStoreNavEntryDecorator(),
+            ),
             onBack = { backStack.removeLastOrNull() },
             transitionSpec = {
                 val duration = 700

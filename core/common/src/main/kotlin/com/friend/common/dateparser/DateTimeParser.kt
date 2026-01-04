@@ -1,8 +1,6 @@
 package com.friend.common.dateparser
 
-import com.iamkamrul.dateced.DateCed
 import timber.log.Timber
-import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -320,8 +318,12 @@ object DateTimeParser {
                 dayDiff <= 0 -> "Today" // also covers future/invalid negatives
                 dayDiff == 1L -> "Yesterday"
                 dayDiff in 2..5 -> {
-                    // sat, sun, mon…
-                    DateCed.Factory.parse(date).day
+                    val dateTime = parseToDateTime(date)
+                    var day = ""
+                    dateTime?.let {
+                        day = getDayOfWeek(dateTime).toString()
+                    }
+                    day
                 }
 
                 else -> {
@@ -336,4 +338,8 @@ object DateTimeParser {
             return date
         }
     }
+
+    fun getDayOfMonth(dateTime: LocalDateTime): Int = dateTime.dayOfMonth   // 1..31
+    fun getDayOfYear(dateTime: LocalDateTime): Int = dateTime.dayOfYear     // 1..365/366
+    fun getDayOfWeek(dateTime: LocalDateTime) = dateTime.dayOfWeek
 }

@@ -1,5 +1,6 @@
 package com.friend.data.mapper.chatmessage
 
+import android.util.Log
 import com.friend.apiresponse.chatmessage.MessageListApiResponse
 import com.friend.common.dateparser.DateTimeParser
 import com.friend.common.dateparser.DateTimePatterns
@@ -38,9 +39,10 @@ class MessageListApiMapper @Inject constructor(
                     val dayDiff = DateTimeParser.calendarDayDifference(currentDateTime, date)
                     if (readableSendDateTime.isNotEmpty() && readableSendDateTime != lastDate) {
                         effectiveDate =
-                            DateTimeParser.formatRelativeDateLabel(dayDiff, date.toString())
+                            DateTimeParser.formatRelativeDateLabel(dayDiff, sendDateTimeStr)
                         lastDate = readableSendDateTime
                     } else effectiveDate = ""
+                    Log.e("dateFormat", "effectiveDate: $effectiveDate $sendDateTimeStr")
                 }
 
                 MessageEntity(
