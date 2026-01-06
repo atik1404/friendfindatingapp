@@ -18,6 +18,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.friend.chatroom.components.MessageFormUi
 import com.friend.chatroom.components.MessagesUiSection
+import com.friend.chatroom.components.SearchResultCountUi
 import com.friend.chatroom.components.TopBarUiSection
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingVertical
@@ -34,6 +35,7 @@ fun ChatRoomScreen(
     chat: ChatListItemApiEntity,
     onBackButtonClicked: () -> Unit,
     onNavigateToProfileScreen: () -> Unit,
+    onAction: (UiActon) -> Unit,
 ) {
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
@@ -55,7 +57,7 @@ fun ChatRoomScreen(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                val (topbar, divider, messageList, messageSendUi) = createRefs()
+                val (topbar, divider, searchResult, messageList, messageSendUi) = createRefs()
 
                 TopBarUiSection(
                     userName = chat.fullName,
@@ -66,8 +68,12 @@ fun ChatRoomScreen(
                         end.linkTo(parent.end)
                     },
                     onProfileImageClicked = onNavigateToProfileScreen,
-                    onBackButtonClicked = onBackButtonClicked
+                    onBackButtonClicked = onBackButtonClicked,
+                    searchKeyword = uiState.searchKey,
+                    onSearchCanceled = { onAction.invoke(UiActon.OnClearSearch) },
+                    onSearchKeywordChange = { onAction.invoke(UiActon.OnSearchKeywordChange(it)) }
                 )
+
                 AppDivider(
                     modifier = Modifier.constrainAs(divider) {
                         top.linkTo(topbar.bottom)
@@ -77,11 +83,28 @@ fun ChatRoomScreen(
                     color = MaterialTheme.dividerColors.primary
                 )
 
+                if (uiState.isSearchEnabled) {
+                    SearchResultCountUi(
+                        modifier = Modifier
+                            .constrainAs(searchResult) {
+                                top.linkTo(divider.bottom)
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                            }
+                            .appPaddingVertical(SpacingToken.micro),
+                        count = uiState.messages.size,
+                        keyword = uiState.searchKey
+                    ) {
+                        onAction.invoke(UiActon.OnClearSearch)
+                        onAction.invoke(UiActon.FetchMessages(chat.toUsername))
+                    }
+                }
+
                 MessagesUiSection(
                     message = uiState.messages,
                     modifier = Modifier
                         .constrainAs(messageList) {
-                            top.linkTo(divider.bottom)
+                            top.linkTo(searchResult.bottom)
                             bottom.linkTo(messageSendUi.top)
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
@@ -118,7 +141,7 @@ private fun ScreenPreview() {
             dateTime = "2025-12-16"
         ),
         onBackButtonClicked = {},
-        onNavigateToProfileScreen = {}
-
+        onNavigateToProfileScreen = {},
+        onAction = {},
     )
 }

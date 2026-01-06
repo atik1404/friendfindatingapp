@@ -6,6 +6,7 @@ import com.friend.data.mapper.chatmessage.ChatListApiMapper
 import com.friend.data.mapper.chatmessage.MessageListApiMapper
 import com.friend.data.mapper.mapFromApiResponse
 import com.friend.domain.apiusecase.chatmessage.FetchMessageListApiUseCase
+import com.friend.domain.apiusecase.chatmessage.FetchMessageSearchResultApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.repository.remote.ChatMessagesRepository
 import com.friend.entity.chatmessage.ChatListItemApiEntity
@@ -33,6 +34,16 @@ class ChatMessageRepoImpl @Inject constructor(
         return mapFromApiResponse(
             result = networkBoundResources.downloadData {
                 apiServices.fetchMessageList(
+                    params = params
+                )
+            }, mapper = messageListApiMapper
+        )
+    }
+
+    override suspend fun searchMessage(params: FetchMessageSearchResultApiUseCase.Params): Flow<ApiResult<MessageListApiEntity>> {
+        return mapFromApiResponse(
+            result = networkBoundResources.downloadData {
+                apiServices.searchMessage(
                     params = params
                 )
             }, mapper = messageListApiMapper

@@ -8,10 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,7 +23,9 @@ import com.friend.designsystem.R as Res
 @Composable
 fun SearchBarUi(
     modifier : Modifier = Modifier,
-    onCancelClicked: () -> Unit
+    searchKeyword: String,
+    onCancelClicked: () -> Unit,
+    onSearchKeywordChange: (String) -> Unit
 ){
     Row(
         modifier = modifier
@@ -37,12 +35,11 @@ fun SearchBarUi(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        var searchKeyword by rememberSaveable { mutableStateOf("") }
         AppBaseTextField(
             value = searchKeyword,
             modifier = Modifier.weight(1f),
             placeholder = stringResource(Res.string.hint_search_here),
-            onValueChange = { searchKeyword = it },
+            onValueChange = onSearchKeywordChange,
             colors = MaterialTheme.textFieldColors.outlinedTextField,
             shape = RoundedCornerShape(SpacingToken.medium),
             keyboardActions = KeyboardActions {
