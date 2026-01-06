@@ -16,6 +16,4 @@ sealed interface UiEvent {
 }
 
 sealed interface UiActon {
-    data class FetchMessages(val username: String) : UiActon
-    data object ResetState: UiActon
-}
+    data class FetchMessages(val username: String) : UiActon }

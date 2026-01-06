@@ -33,6 +33,7 @@ fun ChatRoomScreen(
     uiState: UiState,
     chat: ChatListItemApiEntity,
     onBackButtonClicked: () -> Unit,
+    onNavigateToProfileScreen: () -> Unit,
 ) {
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
@@ -63,10 +64,10 @@ fun ChatRoomScreen(
                         top.linkTo(parent.top)
                         start.linkTo(parent.start)
                         end.linkTo(parent.end)
-                    }
-                ) {
-                    onBackButtonClicked.invoke()
-                }
+                    },
+                    onProfileImageClicked = onNavigateToProfileScreen,
+                    onBackButtonClicked = onBackButtonClicked
+                )
                 AppDivider(
                     modifier = Modifier.constrainAs(divider) {
                         top.linkTo(topbar.bottom)
@@ -115,8 +116,9 @@ private fun ScreenPreview() {
             fullName = "Tom Cruise",
             lastMessage = "Hi, How are you?",
             dateTime = "2025-12-16"
-        )
-    ) {
+        ),
+        onBackButtonClicked = {},
+        onNavigateToProfileScreen = {}
 
-    }
+    )
 }

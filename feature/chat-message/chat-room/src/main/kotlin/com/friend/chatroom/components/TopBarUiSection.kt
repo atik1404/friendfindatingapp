@@ -16,7 +16,8 @@ fun TopBarUiSection(
     userName: String,
     userImage: String,
     modifier: Modifier,
-    onBackButtonClicked: () -> Unit
+    onBackButtonClicked: () -> Unit,
+    onProfileImageClicked: () -> Unit,
 ) {
     var isSearchBarEnable by remember { mutableStateOf(false) }
     var showReportBottomSheet by rememberSaveable { mutableStateOf(false) }
@@ -41,7 +42,8 @@ fun TopBarUiSection(
                 PopupMenuType.ForwardMessage -> showForwardBottomSheet = true
                 else -> {}
             }
-        }
+        },
+        onProfileImageClicked = onProfileImageClicked
     )
 
 

@@ -14,22 +14,21 @@ import timber.log.Timber
 fun ChatRoomScreenRoute(
     chat: ChatListItemApiEntity,
     onBackButtonClicked: () -> Unit,
+    onNavigateToProfileScreen: (String) -> Unit,
     viewModel: ChatRoomViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        //viewModel.action(UiActon.ResetState)
-        Timber.e("dateFormat: ${DateTimeParser.parseToPattern("2026-01-02T10:57:03.56",
-            DateTimePatterns.MDY_TEXT_COMMA)}")
-        Timber.e("dateFormat: ${DateTimeParser.parseToPattern("2026-01-02T12:30:28.363",
-            DateTimePatterns.MDY_TEXT_COMMA)}")
         viewModel.action(UiActon.FetchMessages(chat.toUsername))
     }
 
     ChatRoomScreen(
         uiState = uiState,
         chat = chat,
-        onBackButtonClicked = onBackButtonClicked
+        onBackButtonClicked = onBackButtonClicked,
+        onNavigateToProfileScreen = {
+            onNavigateToProfileScreen.invoke(chat.toUsername)
+        }
     )
 }

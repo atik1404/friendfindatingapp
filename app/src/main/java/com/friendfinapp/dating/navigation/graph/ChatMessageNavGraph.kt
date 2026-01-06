@@ -6,6 +6,7 @@ import androidx.navigation3.runtime.NavKey
 import com.friend.chatlist.ChatListScreenRoute
 import com.friend.chatroom.ChatRoomScreenRoute
 import com.friendfinapp.dating.navigation.ChatMessageScreens
+import com.friendfinapp.dating.navigation.ProfileScreens
 
 object ChatMessageNavGraph {
     fun register(
@@ -32,6 +33,9 @@ object ChatMessageNavGraph {
                 chat = key.chat,
                 onBackButtonClicked = {
                     backStack.removeLastOrNull()
+                },
+                onNavigateToProfileScreen = { username ->
+                    backStack.add(ProfileScreens.OtherProfileNavScreen(username = username))
                 }
             )
         }

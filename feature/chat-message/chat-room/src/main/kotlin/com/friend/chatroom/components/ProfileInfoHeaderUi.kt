@@ -1,6 +1,7 @@
 package com.friend.chatroom.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,6 +36,7 @@ fun ProfileInfoHeader(
     username: String,
     userImage: String,
     backToChatListScreen: () -> Unit,
+    onProfileImageClicked: () -> Unit,
     onMenuClicked: (PopupMenuType) -> Unit,
 ) {
     Row(
@@ -59,7 +61,11 @@ fun ProfileInfoHeader(
             url = userImage,
             name = username,
             modifier = Modifier
-                .size(IconSizeToken.extraLarge),
+                .size(IconSizeToken.extraLarge)
+                .clickable(
+                    enabled = true,
+                    onClick = onProfileImageClicked
+                ),
             shape = CircleShape
         )
 

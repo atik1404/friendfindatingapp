@@ -22,7 +22,6 @@ class ChatRoomViewModel @Inject constructor(
     val action: (UiActon) -> Unit = { action ->
         when (action) {
             is UiActon.FetchMessages -> refreshMessages(action.username)
-            UiActon.ResetState -> _uiState.value = UiState()
         }
     }
 
