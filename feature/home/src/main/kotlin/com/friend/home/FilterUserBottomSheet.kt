@@ -63,10 +63,15 @@ fun FilterUserBottomSheet(
         FilterUi(
             modifier = modifier,
             filterUiState = filterUiState,
-            onAction = onAction
-        ) {
-            onSearchApply.invoke()
-        }
+            onAction = onAction,
+            onResetFilter = {
+                onAction.invoke(UiAction.ResetFilter)
+                onDismissRequest.invoke()
+            },
+            onSearchApply = {
+                onSearchApply.invoke()
+            }
+        )
     }
 }
 
@@ -75,7 +80,8 @@ private fun FilterUi(
     modifier: Modifier = Modifier,
     filterUiState: FilterUiState,
     onAction: (UiAction) -> Unit,
-    onSearchApply: () -> Unit
+    onSearchApply: () -> Unit,
+    onResetFilter: () -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -278,10 +284,7 @@ private fun FilterUi(
                 modifier = modifier.weight(1f),
                 text = stringResource(Res.string.action_reset),
                 colors = MaterialTheme.buttonColors.outlineButton,
-                onClick = {
-                    onAction.invoke(UiAction.ResetFilter)
-                    onSearchApply.invoke()
-                },
+                onClick = onResetFilter,
             )
 
             Spacer(modifier = modifier.width(SpacingToken.medium))
@@ -402,6 +405,7 @@ private fun ScreenPreview() {
     FilterUi(
         filterUiState = FilterUiState(),
         onAction = {},
-        onSearchApply = {}
+        onSearchApply = {},
+        onResetFilter = {},
     )
 }

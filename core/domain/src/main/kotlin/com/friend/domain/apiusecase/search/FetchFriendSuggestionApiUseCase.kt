@@ -28,6 +28,7 @@ class FetchFriendSuggestionApiUseCase @Inject constructor(
         val hair: String? = null,
         val smoking: String? = null,
         val drinking: String? = null,
+        val isSearch: Boolean = false,
         val pageNo: Int = 1,
     )
 

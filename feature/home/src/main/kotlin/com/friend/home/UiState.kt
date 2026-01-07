@@ -22,6 +22,7 @@ data class FilterUiState(
     val weight: String? = null,
     val smoking: String? = null,
     val drinking: String? = null,
+    val isSearchApply: Boolean = false,
 )
 
 data class UiState(

@@ -89,6 +89,7 @@ class HomeViewModel @Inject constructor(
                 hair = filterBy.hair,
                 smoking = filterBy.smoking,
                 drinking = filterBy.drinking,
+                isSearch = filterBy.isSearchApply,
             )
 
 
@@ -156,7 +157,16 @@ class HomeViewModel @Inject constructor(
 
     private fun onResetFilter() {
         execute {
-            _filterUiState.value = FilterUiState()
+            _uiState.value = _uiState.value.copy(
+                pageNo = 0,
+                hasMorePage = true,
+                data = emptyList()
+            )
+
+            _filterUiState.value = FilterUiState(
+                isSearchApply = false,
+            )
+            fetchFriendSuggestions()
         }
     }
 
@@ -167,6 +177,7 @@ class HomeViewModel @Inject constructor(
                 hasMorePage = true,
                 data = emptyList()
             )
+            updateForm { it.copy(isSearchApply = true) }
             fetchFriendSuggestions()
         }
     }
