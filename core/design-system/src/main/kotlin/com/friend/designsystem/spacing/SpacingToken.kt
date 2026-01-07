@@ -19,6 +19,9 @@ object SpacingToken {
     val large = 24.dp         // section spacing
     val extraLarge = 32.dp    // screen-level spacing
     val huge = 48.dp          // banners, dialogs, big gaps
+    val hugePlus = 64.dp      // dialogs, big gaps
+    val hugePlusPlus = 48.dp          // banners, dialogs, big gaps
+    val hugePlusPlusPlus = 96.dp      // dialogs, big gaps
 }
 
 

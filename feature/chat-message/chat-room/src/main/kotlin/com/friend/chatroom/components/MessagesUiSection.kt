@@ -35,7 +35,7 @@ fun MessagesUiSection(
     message: List<MessageEntity>,
     modifier: Modifier
 ) {
-    val audioController = rememberAudioPlayerController()
+    //val audioController = rememberAudioPlayerController()
 
     LazyColumn(
         reverseLayout = true,
@@ -49,7 +49,7 @@ fun MessagesUiSection(
             MessageBubble(
                 modifier = Modifier,
                 message = message,
-                audioController = audioController
+                //audioController = audioController
             )
         }
     }
@@ -59,7 +59,7 @@ fun MessagesUiSection(
 fun MessageBubble(
     modifier: Modifier = Modifier,
     message: MessageEntity,
-    audioController: AudioPlayerController
+    //audioController: AudioPlayerController
 ) {
     val backgroundColor = bubbleColorPair(message.isMyMessage).first
     val contentColor = bubbleColorPair(message.isMyMessage).second
@@ -110,7 +110,7 @@ fun MessageBubble(
                 message = message,
                 contentColor = contentColor,
                 alignment = alignment,
-                audioController = audioController
+                //audioController = audioController
             )
 
             Spacer(
@@ -134,7 +134,7 @@ fun MessageBubble(
 @LightPreview
 private fun ScreenPreview() {
     MessageBubble(
-        audioController = AudioPlayerController(LocalContext.current),
+        //audioController =  rememberAudioPlayerController(),
         message = MessageEntity(
             messageId = "",
             isMyMessage = true,

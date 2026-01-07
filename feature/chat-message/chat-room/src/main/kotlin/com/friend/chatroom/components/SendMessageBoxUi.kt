@@ -39,7 +39,7 @@ import com.friend.ui.components.AppBaseTextField
 import com.friend.ui.components.AppIconButton
 
 @Composable
-fun MessageFormUi(
+fun UserInputAndAttachment(
     modifier: Modifier
 ) {
     var isAttachmentExpanded by remember { mutableStateOf(false) }
@@ -49,7 +49,7 @@ fun MessageFormUi(
         if (isAttachmentExpanded)
             AttachmentTypeUi()
 
-        SendMessageUiSection(
+        UserInputForm(
             modifier = Modifier
                 .appPaddingOnly(bottom = SpacingToken.medium),
             onClickAttachment = {
@@ -60,7 +60,7 @@ fun MessageFormUi(
 }
 
 @Composable
-private fun SendMessageUiSection(
+private fun UserInputForm(
     modifier: Modifier,
     onClickAttachment: () -> Unit
 ) {

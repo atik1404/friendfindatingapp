@@ -42,7 +42,6 @@ class MessageListApiMapper @Inject constructor(
                             DateTimeParser.formatRelativeDateLabel(dayDiff, sendDateTimeStr)
                         lastDate = readableSendDateTime
                     } else effectiveDate = ""
-                    Log.e("dateFormat", "effectiveDate: $effectiveDate $sendDateTimeStr")
                 }
 
                 MessageEntity(

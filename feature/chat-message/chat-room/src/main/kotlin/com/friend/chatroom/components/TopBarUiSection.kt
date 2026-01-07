@@ -15,12 +15,11 @@ import com.friend.ui.components.PopupMenuType
 fun TopBarUiSection(
     userName: String,
     userImage: String,
-    searchKeyword: String,
     modifier: Modifier,
     onBackButtonClicked: () -> Unit,
     onProfileImageClicked: () -> Unit,
     onSearchCanceled: () -> Unit,
-    onSearchKeywordChange: (String) -> Unit,
+    onSearchApply: (String) -> Unit,
 ) {
     var isSearchBarEnable by remember { mutableStateOf(false) }
     var showReportBottomSheet by rememberSaveable { mutableStateOf(false) }
@@ -29,9 +28,13 @@ fun TopBarUiSection(
     if (isSearchBarEnable)
         SearchBarUi(
             modifier = modifier,
-            searchKeyword = searchKeyword,
-            onCancelClicked = onSearchCanceled,
-            onSearchKeywordChange = onSearchKeywordChange
+            onCancelClicked = {
+                isSearchBarEnable = false
+                onSearchCanceled.invoke()
+            },
+            onSearchApply = {
+                onSearchApply.invoke(it)
+            }
         )
     else ProfileInfoHeader(
         username = userName,

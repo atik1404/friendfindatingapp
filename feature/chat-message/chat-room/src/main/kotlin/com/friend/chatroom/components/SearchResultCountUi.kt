@@ -11,6 +11,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.friend.designsystem.spacing.RadiusToken
 import com.friend.designsystem.spacing.SpacingToken
+import com.friend.designsystem.spacing.appPadding
+import com.friend.designsystem.spacing.appPaddingHorizontal
 import com.friend.designsystem.spacing.appPaddingOnly
 import com.friend.designsystem.theme.surfaceColors
 import com.friend.designsystem.typography.AppTypography
@@ -24,22 +26,15 @@ fun SearchResultCountUi(
     modifier: Modifier = Modifier,
     count: Int,
     keyword: String,
-    onClick: () -> Unit
 ) {
     AppText(
         modifier = modifier
             .background(
-                color = MaterialTheme.surfaceColors.greenBase.copy(alpha = .3f),
+                color = MaterialTheme.surfaceColors.yellowLight,
                 shape = RoundedCornerShape(RadiusToken.large)
             )
-            .appPaddingOnly(start = SpacingToken.extraSmall),
+            .appPadding(SpacingToken.extraSmall),
         text = stringResource(Res.string.placeholder_message_search_result_count, count, keyword),
-        trailing = {
-            AppIconButton(
-                vectorIcon = Icons.Rounded.Clear,
-                onClick = onClick
-            )
-        },
         fontWeight = FontWeight.Light,
         textStyle = MaterialTheme.typography.bodySmall
     )
@@ -51,6 +46,5 @@ private fun ScreenPreview() {
     SearchResultCountUi(
         count = 10,
         keyword = "Tom Cruise",
-        onClick = {}
     )
 }

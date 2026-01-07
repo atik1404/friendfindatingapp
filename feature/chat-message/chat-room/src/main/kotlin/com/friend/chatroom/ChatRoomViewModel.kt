@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
+import com.friend.designsystem.R as Res
 
 @HiltViewModel
 class ChatRoomViewModel @Inject constructor(
@@ -30,9 +31,12 @@ class ChatRoomViewModel @Inject constructor(
 
     val action: (UiActon) -> Unit = { action ->
         when (action) {
-            is UiActon.FetchMessages -> fetchRecentMessages(action.username)
-            is UiActon.SearchMessage -> searchMessage(userName = action.username)
-            is UiActon.OnSearchKeywordChange -> onSearchKeywordChange(action.value)
+            is UiActon.FetchMessages -> fetchMessages(action.username)//fetchRecentMessages(action.username)
+            is UiActon.SearchMessage -> searchMessage(
+                userName = action.username,
+                keyword = action.keyword
+            )
+
             UiActon.OnClearSearch -> clearSearch()
         }
     }
@@ -79,26 +83,28 @@ class ChatRoomViewModel @Inject constructor(
         }
     }
 
-    private fun searchMessage(userName: String) {
+    private fun searchMessage(userName: String, keyword: String) {
         execute {
             val params = FetchMessageSearchResultApiUseCase.Params(
                 fromUsername = sharedPrefHelper.getString(SpKey.userName),
                 toUsername = userName,
-                searchValue = _uiState.value.searchKey
+                searchValue = keyword
             )
             fetchMessageSearchResultApiUseCase.execute(params).collect { result ->
                 when (result) {
-                    is ApiResult.Error ->
-                        _uiEvent.send(UiEvent.ShowToastMessage(UiText.Dynamic(result.message)))
+                    is ApiResult.Error -> showToastMessage(UiText.Dynamic(result.message))
 
                     is ApiResult.Loading -> _uiState.value =
                         _uiState.value.copy(isLoading = result.loading)
 
                     is ApiResult.Success -> {
-                        _uiState.value.copy(
-                            messages = result.data.data.reversed(),
-                            isSearchEnabled = true,
-                        )
+                        if (result.data.data.isNotEmpty()) {
+                            _uiState.value = _uiState.value.copy(
+                                messages = result.data.data.reversed(),
+                                isSearchEnabled = true,
+                                searchKey = keyword
+                            )
+                        } else showToastMessage(UiText.StringRes(Res.string.error_no_data_found))
                     }
                 }
             }
@@ -113,11 +119,9 @@ class ChatRoomViewModel @Inject constructor(
         }
     }
 
-    private fun onSearchKeywordChange(value: String) {
+    private fun showToastMessage(message: UiText) {
         execute {
-            _uiState.update {
-                it.copy(searchKey = value)
-            }
+            _uiEvent.send(UiEvent.ShowToastMessage(message))
         }
     }
 }

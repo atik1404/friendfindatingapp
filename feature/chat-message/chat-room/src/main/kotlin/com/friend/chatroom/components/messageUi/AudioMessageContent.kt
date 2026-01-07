@@ -28,14 +28,14 @@ fun AudioMessageContent(
     id: String,
     url: String,
     duration: Long,
-    audioController: AudioPlayerController
+   // audioController: AudioPlayerController
 ) {
     val maxMillis = duration.coerceAtLeast(0L)
-    val state = audioController.state.collectAsState().value
+    //val state = audioController.state.collectAsState().value
 
-    val isThisActive = state.activeId == id
-    val isPlaying = isThisActive && state.isPlaying
-    val positionMs = if (isThisActive) state.positionMs else 0L
+    val isThisActive = false
+    val isPlaying = false
+    val positionMs =  0L
 
     Row(
         modifier = Modifier.appPaddingHorizontal(SpacingToken.medium),
@@ -49,7 +49,7 @@ fun AudioMessageContent(
             ),
             vectorIcon = if (isPlaying) Icons.Default.PauseCircleFilled
             else Icons.Default.PlayCircleFilled,
-            onClick = { audioController.toggle(id, url) }
+            onClick = {  }
         )
 
         Spacer(modifier = Modifier.width(SpacingToken.small))

@@ -19,7 +19,6 @@ sealed interface UiEvent {
 
 sealed interface UiActon {
     data class FetchMessages(val username: String) : UiActon
-    data class SearchMessage(val username: String) : UiActon
-    data class OnSearchKeywordChange(val value: String) : UiActon
+    data class SearchMessage(val username: String, val keyword: String) : UiActon
     data object OnClearSearch : UiActon
 }
