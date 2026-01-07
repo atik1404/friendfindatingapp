@@ -36,6 +36,9 @@ object ChatMessageNavGraph {
                 },
                 onNavigateToProfileScreen = { username ->
                     backStack.add(ProfileScreens.OtherProfileNavScreen(username = username))
+                },
+                onNavigateToReportScreen = { username ->
+                    backStack.add(ProfileScreens.ReportUserNavScreen(username = username))
                 }
             )
         }

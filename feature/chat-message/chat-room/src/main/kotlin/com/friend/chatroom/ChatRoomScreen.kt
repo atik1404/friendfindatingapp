@@ -15,10 +15,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.friend.chatroom.components.MessagesUiSection
@@ -29,7 +25,6 @@ import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingOnly
 import com.friend.designsystem.theme.dividerColors
 import com.friend.entity.chatmessage.ChatListItemApiEntity
-import com.friend.ui.common.LoadingAnimation
 import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.preview.LightPreview
@@ -42,6 +37,7 @@ fun ChatRoomScreen(
     chat: ChatListItemApiEntity,
     onBackButtonClicked: () -> Unit,
     onNavigateToProfileScreen: () -> Unit,
+    onNavigateToReportScreen: () -> Unit,
     onAction: (UiActon) -> Unit,
 ) {
     AppScaffold(
@@ -72,7 +68,8 @@ fun ChatRoomScreen(
                         onAction.invoke(UiActon.OnClearSearch)
                         onAction.invoke(UiActon.FetchMessages(chat.toUsername))
                     },
-                    onSearchApply = { onAction.invoke(UiActon.SearchMessage(chat.toUsername, it)) }
+                    onSearchApply = { onAction.invoke(UiActon.SearchMessage(chat.toUsername, it)) },
+                    onReportAbuse = onNavigateToReportScreen
                 )
 
                 AppDivider(
@@ -126,5 +123,6 @@ private fun ScreenPreview() {
         onBackButtonClicked = {},
         onNavigateToProfileScreen = {},
         onAction = {},
+        onNavigateToReportScreen = {},
     )
 }

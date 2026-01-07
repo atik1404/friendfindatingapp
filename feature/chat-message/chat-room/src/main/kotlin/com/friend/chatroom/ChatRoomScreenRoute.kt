@@ -18,6 +18,7 @@ fun ChatRoomScreenRoute(
     chat: ChatListItemApiEntity,
     onBackButtonClicked: () -> Unit,
     onNavigateToProfileScreen: (String) -> Unit,
+    onNavigateToReportScreen: (String) -> Unit,
     viewModel: ChatRoomViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -42,6 +43,9 @@ fun ChatRoomScreenRoute(
         },
         onAction = {
             viewModel.action(it)
+        },
+        onNavigateToReportScreen = {
+            onNavigateToReportScreen.invoke(chat.toUsername)
         }
     )
 }

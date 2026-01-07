@@ -1,7 +1,10 @@
 package com.friend.chatroom.components
 
+import AppDivider
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,6 +27,7 @@ import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
 import com.friend.designsystem.spacing.appPaddingHorizontal
 import com.friend.designsystem.spacing.appPaddingOnly
+import com.friend.designsystem.theme.dividerColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.entity.chatmessage.MessageEntity
@@ -73,13 +77,7 @@ fun MessageBubble(
         horizontalAlignment = alignment
     ) {
         if (message.readableDateTime.isNotEmpty()) {
-            AppText(
-                text = message.readableDateTime,
-                textStyle = AppTypography.bodySmall,
-                fontWeight = FontWeight.Medium,
-                textColor = MaterialTheme.textColors.primary,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
+            DateDivider(message.readableDateTime)
         }
 
         Spacer(
@@ -131,6 +129,31 @@ fun MessageBubble(
 }
 
 @Composable
+private fun DateDivider(date: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        AppDivider(
+            modifier = Modifier.weight(1f),
+            color = MaterialTheme.dividerColors.primary
+        )
+        AppText(
+            text = date,
+            textStyle = AppTypography.bodySmall,
+            fontWeight = FontWeight.Medium,
+            textColor = MaterialTheme.textColors.primary,
+            modifier = Modifier
+                .appPaddingHorizontal(SpacingToken.medium)
+        )
+        AppDivider(
+            modifier = Modifier.weight(1f),
+            color = MaterialTheme.dividerColors.primary
+        )
+    }
+}
+
+@Composable
 @LightPreview
 private fun ScreenPreview() {
     MessageBubble(
@@ -148,5 +171,14 @@ private fun ScreenPreview() {
             dateTime = "04:99 PM",
             readableDateTime = ""
         )
+    )
+}
+
+
+@Composable
+@LightPreview
+private fun DatePreview() {
+    DateDivider(
+        date = "Today"
     )
 }

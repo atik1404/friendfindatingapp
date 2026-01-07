@@ -19,6 +19,7 @@ fun TopBarUiSection(
     onBackButtonClicked: () -> Unit,
     onProfileImageClicked: () -> Unit,
     onSearchCanceled: () -> Unit,
+    onReportAbuse: () -> Unit,
     onSearchApply: (String) -> Unit,
 ) {
     var isSearchBarEnable by remember { mutableStateOf(false) }
@@ -67,6 +68,7 @@ fun TopBarUiSection(
     if (showReportBottomSheet)
         ReportUserBottomSheet(
             onReportUser = {
+                onReportAbuse.invoke()
                 showReportBottomSheet = false
             },
             onDismissRequest = {

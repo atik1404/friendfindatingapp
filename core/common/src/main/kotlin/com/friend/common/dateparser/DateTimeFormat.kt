@@ -89,10 +89,11 @@ object DateTimePatterns {
 
     /** 2025-12-05T14:30:45 */
     const val ISO_YMD_THMS = "yyyy-MM-dd'T'HH:mm:ss"
-    const val ISO_YMD_THM_MILLI = "yyyy-MM-dd'T'HH:mm:ss.SS"
+    const val ISO_YMD_THM_MILLI_SS = "yyyy-MM-dd'T'HH:mm:ss.SS"
+    const val ISO_YMD_THM_MILLI_S = "yyyy-MM-dd'T'HH:mm:ss.S"
 
     /** 2025-12-05T14:30:45.123 */
-    const val ISO_YMD_THMS_MILLIS = "yyyy-MM-dd'T'HH:mm:ss.SSS"
+    const val ISO_YMD_THMS_MILLIS_SSS = "yyyy-MM-dd'T'HH:mm:ss.SSS"
 
     /** 2025-12-05T14:30:45.123Z */
     const val ISO_YMD_THMS_MILLIS_Z = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
@@ -146,8 +147,9 @@ object DateTimePatterns {
         DateTimeFormatter.ofPattern(SQL_YMD_HMS_OFFSET_XXX),
         DateTimeFormatter.ofPattern(ISO_YMD_THMS_MILLIS_OFFSET_XXX),
         DateTimeFormatter.ofPattern(ISO_YMD_THMS_MILLIS_Z),
-        DateTimeFormatter.ofPattern(ISO_YMD_THM_MILLI),
-        DateTimeFormatter.ofPattern(ISO_YMD_THMS_MILLIS),
+        DateTimeFormatter.ofPattern(ISO_YMD_THM_MILLI_SS),
+        DateTimeFormatter.ofPattern(ISO_YMD_THMS_MILLIS_SSS),
+        DateTimeFormatter.ofPattern(ISO_YMD_THM_MILLI_S),
         DateTimeFormatter.ofPattern(ISO_YMD_THMS),
     )
 
