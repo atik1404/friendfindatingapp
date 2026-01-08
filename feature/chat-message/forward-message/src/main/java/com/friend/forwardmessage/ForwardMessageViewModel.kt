@@ -116,7 +116,7 @@ class ForwardMessageViewModel @Inject constructor(
 
                     is ApiResult.Loading -> _uiState.value =
                         _uiState.value.copy(
-                            isLoadingMore = result.loading, isLoading = false,
+                            isLoadingMore = false, isLoading = result.loading,
                             error = ""
                         )
 
