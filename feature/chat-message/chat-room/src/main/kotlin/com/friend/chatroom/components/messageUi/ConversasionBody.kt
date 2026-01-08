@@ -7,13 +7,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.friend.chatroom.utils.AudioPlayerController
-import com.friend.chatroom.utils.rememberAudioPlayerController
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.entity.chatmessage.MessageEntity
 
 @Composable
-fun MessageContent(
+fun ConversasionBody(
     message: MessageEntity,
     contentColor: Color,
     alignment: Alignment.Horizontal,

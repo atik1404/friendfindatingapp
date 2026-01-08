@@ -1,9 +1,12 @@
 package com.friend.chatroom
 
 import com.friend.common.base.BaseViewModel
+import com.friend.domain.apiusecase.chatmessage.DeleteMessagesApiUseCase
 import com.friend.domain.apiusecase.chatmessage.FetchMessageListApiUseCase
 import com.friend.domain.apiusecase.chatmessage.FetchMessageSearchResultApiUseCase
+import com.friend.domain.apiusecase.chatmessage.ForwardMessageApiUseCase
 import com.friend.domain.base.ApiResult
+import com.friend.entity.chatmessage.MessageEntity
 import com.friend.sharedpref.SharedPrefHelper
 import com.friend.sharedpref.SpKey
 import com.friend.ui.common.UiText
@@ -21,6 +24,8 @@ import com.friend.designsystem.R as Res
 class ChatRoomViewModel @Inject constructor(
     private val fetchMessageListApiUseCase: FetchMessageListApiUseCase,
     private val fetchMessageSearchResultApiUseCase: FetchMessageSearchResultApiUseCase,
+    private val forwardMessageApiUseCase: ForwardMessageApiUseCase,
+    private val deleteMessagesApiUseCase: DeleteMessagesApiUseCase,
     private val sharedPrefHelper: SharedPrefHelper
 ) : BaseViewModel() {
     private val _uiState = MutableStateFlow(UiState())
@@ -38,6 +43,10 @@ class ChatRoomViewModel @Inject constructor(
             )
 
             UiActon.OnClearSearch -> clearSearch()
+            UiActon.OnClearMessageSelection -> clearSelectedMessage()
+            is UiActon.UpdateMessageSelectionStatus -> updateMessageSelectionStatus(action.item)
+            UiActon.DeleteMessages -> deleteMessage()
+            is UiActon.ForwardMessages -> forwardMessage(action.toUserNames)
         }
     }
 
@@ -111,12 +120,73 @@ class ChatRoomViewModel @Inject constructor(
         }
     }
 
+    private fun forwardMessage(toUsernames: List<String>) {
+        execute {
+            val params = ForwardMessageApiUseCase.Params(
+                ids = _uiState.value.messages.filter { it.isItemSelected }.map { it.messageId },
+                toUsernames = toUsernames
+            )
+
+            forwardMessageApiUseCase.execute(params).collect { result ->
+                when (result) {
+                    is ApiResult.Error -> showToastMessage(UiText.Dynamic(result.message))
+                    is ApiResult.Loading -> _uiState.value =
+                        _uiState.value.copy(isLoading = result.loading)
+
+                    is ApiResult.Success -> {
+                        clearSelectedMessage()
+                        _uiEvent.send(UiEvent.ForwardMessageComplete)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun deleteMessage() {
+        execute {
+            val selectedMessages = _uiState.value.messages.filter { it.isItemSelected }
+            if (selectedMessages.isEmpty()) {
+                showToastMessage(UiText.StringRes(Res.string.error_invalid_selected_items))
+                return@execute
+            }
+            val params = selectedMessages.map { it.messageId }
+
+            deleteMessagesApiUseCase.execute(params).collect { result ->
+                when (result) {
+                    is ApiResult.Error -> showToastMessage(UiText.Dynamic(result.message))
+                    is ApiResult.Loading -> _uiState.value =
+                        _uiState.value.copy(isLoading = result.loading)
+
+                    is ApiResult.Success -> {
+                        clearSelectedMessage()
+                        _uiEvent.send(UiEvent.DeleteMessageComplete)
+                    }
+                }
+            }
+        }
+    }
+
     private fun clearSearch() {
         execute {
             _uiState.update {
                 it.copy(isSearchEnabled = false, searchKey = "")
             }
         }
+    }
+
+    private fun updateMessageSelectionStatus(item: MessageEntity) {
+        val conversations = _uiState.value.messages.toMutableList()
+        val index = conversations.indexOf(item)
+        conversations[index] = item.copy(isItemSelected = !item.isItemSelected)
+        _uiState.value = _uiState.value.copy(messages = conversations)
+    }
+
+    private fun clearSelectedMessage() {
+        val conversations = _uiState.value.messages.toMutableList()
+        conversations.forEach {
+            it.isItemSelected = false
+        }
+        _uiState.value = _uiState.value.copy(messages = conversations)
     }
 
     private fun showToastMessage(message: UiText) {

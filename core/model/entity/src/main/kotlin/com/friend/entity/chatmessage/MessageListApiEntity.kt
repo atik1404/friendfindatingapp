@@ -16,5 +16,6 @@ data class MessageEntity(
     val videoDuration: Int,
     val dateTime: String,
     val readableDateTime: String,
-    val isMyMessage: Boolean
+    val isMyMessage: Boolean,
+    var isItemSelected: Boolean = false
 )

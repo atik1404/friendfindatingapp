@@ -2,6 +2,7 @@ package com.friend.chatroom.components
 
 import AppDivider
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,13 +15,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import com.friend.chatroom.components.messageUi.MessageContent
+import com.friend.chatroom.components.messageUi.ConversasionBody
 import com.friend.chatroom.components.messageUi.bubbleColorPair
 import com.friend.chatroom.components.messageUi.bubbleCornerShape
-import com.friend.chatroom.utils.AudioPlayerController
-import com.friend.chatroom.utils.rememberAudioPlayerController
 import com.friend.common.dateparser.DateTimeParser
 import com.friend.common.dateparser.DateTimePatterns
 import com.friend.designsystem.spacing.SpacingToken
@@ -31,13 +29,17 @@ import com.friend.designsystem.theme.dividerColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.entity.chatmessage.MessageEntity
+import com.friend.ui.components.AppCheckbox
 import com.friend.ui.components.AppText
 import com.friend.ui.preview.LightPreview
 
 @Composable
-fun MessagesUiSection(
+fun ConversionsUiSection(
+    modifier: Modifier,
     message: List<MessageEntity>,
-    modifier: Modifier
+    isItemSelectionEnable: Boolean,
+    onLongPress: () -> Unit,
+    onItemSelected: (MessageEntity) -> Unit
 ) {
     //val audioController = rememberAudioPlayerController()
 
@@ -50,9 +52,20 @@ fun MessagesUiSection(
             items = message,
             key = { it.messageId }
         ) { message ->
-            MessageBubble(
-                modifier = Modifier,
+            ConversationItemBubble(
+                modifier = Modifier
+                    .combinedClickable(
+                        onClick = {
+                            if (isItemSelectionEnable)
+                                onItemSelected.invoke(message)
+                        },
+                        onLongClick = onLongPress,
+                    ),
                 message = message,
+                isItemSelectionEnable = isItemSelectionEnable,
+                onItemSelected = {
+                    onItemSelected.invoke(message)
+                },
                 //audioController = audioController
             )
         }
@@ -60,9 +73,11 @@ fun MessagesUiSection(
 }
 
 @Composable
-fun MessageBubble(
+fun ConversationItemBubble(
     modifier: Modifier = Modifier,
     message: MessageEntity,
+    isItemSelectionEnable: Boolean = false,
+    onItemSelected: () -> Unit = {},
     //audioController: AudioPlayerController
 ) {
     val backgroundColor = bubbleColorPair(message.isMyMessage).first
@@ -70,60 +85,70 @@ fun MessageBubble(
     val bubbleShape = bubbleCornerShape(message.isMyMessage)
     val alignment = if (message.isMyMessage) Alignment.End else Alignment.Start
 
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .appPaddingOnly(top = SpacingToken.medium),
-        horizontalAlignment = alignment
+    Row(
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        if (message.readableDateTime.isNotEmpty()) {
-            DateDivider(message.readableDateTime)
-        }
-
-        Spacer(
-            modifier = Modifier.height(SpacingToken.medium)
-        )
-
-        AppText(
-            text = message.fromUsername,
-            textStyle = AppTypography.bodySmall,
-            fontWeight = FontWeight.Light,
-            textColor = MaterialTheme.textColors.primary,
-        )
-
-        Spacer(
-            modifier = Modifier.height(SpacingToken.micro)
-        )
-
+        if (isItemSelectionEnable)
+            AppCheckbox(
+                checked = message.isItemSelected,
+                onCheckedChange = {
+                    onItemSelected.invoke()
+                }
+            )
         Column(
-            modifier = Modifier
-                .background(
-                    color = backgroundColor,
-                    shape = bubbleShape
-                )
-                .appPadding(SpacingToken.tiny),
+            modifier = modifier
+                .fillMaxWidth()
+                .appPaddingOnly(top = SpacingToken.medium),
             horizontalAlignment = alignment
         ) {
-            MessageContent(
-                message = message,
-                contentColor = contentColor,
-                alignment = alignment,
-                //audioController = audioController
+            if (message.readableDateTime.isNotEmpty()) {
+                DateDivider(message.readableDateTime)
+                Spacer(
+                    modifier = Modifier.height(SpacingToken.medium)
+                )
+            }
+
+            AppText(
+                text = message.fromUsername,
+                textStyle = AppTypography.bodySmall,
+                fontWeight = FontWeight.Light,
+                textColor = MaterialTheme.textColors.primary,
             )
 
             Spacer(
                 modifier = Modifier.height(SpacingToken.micro)
             )
 
-            AppText(
-                text = DateTimeParser.parseToPattern(
-                    message.dateTime,
-                    outputPattern = DateTimePatterns.TIME_12_HM_AMPM,
-                ),
-                textStyle = AppTypography.bodySmall,
-                fontWeight = FontWeight.Light,
-                textColor = contentColor,
-            )
+            Column(
+                modifier = Modifier
+                    .background(
+                        color = backgroundColor,
+                        shape = bubbleShape
+                    )
+                    .appPadding(SpacingToken.tiny),
+                horizontalAlignment = alignment
+            ) {
+                ConversasionBody(
+                    message = message,
+                    contentColor = contentColor,
+                    alignment = alignment,
+                    //audioController = audioController
+                )
+
+                Spacer(
+                    modifier = Modifier.height(SpacingToken.micro)
+                )
+
+                AppText(
+                    text = DateTimeParser.parseToPattern(
+                        message.dateTime,
+                        outputPattern = DateTimePatterns.TIME_12_HM_AMPM,
+                    ),
+                    textStyle = AppTypography.bodySmall,
+                    fontWeight = FontWeight.Light,
+                    textColor = contentColor,
+                )
+            }
         }
     }
 }
@@ -156,7 +181,7 @@ private fun DateDivider(date: String) {
 @Composable
 @LightPreview
 private fun ScreenPreview() {
-    MessageBubble(
+    ConversationItemBubble(
         //audioController =  rememberAudioPlayerController(),
         message = MessageEntity(
             messageId = "",
@@ -169,7 +194,7 @@ private fun ScreenPreview() {
             videoUrl = "",
             videoDuration = 0,
             dateTime = "04:99 PM",
-            readableDateTime = ""
+            readableDateTime = "",
         )
     )
 }

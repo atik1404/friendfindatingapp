@@ -30,6 +30,9 @@ fun ChatRoomScreenRoute(
             when (event) {
                 is UiEvent.ShowToastMessage ->
                     context.showToastMessage(event.message.asString(context))
+
+                UiEvent.DeleteMessageComplete -> viewModel.action(UiActon.FetchMessages(chat.toUsername))
+                UiEvent.ForwardMessageComplete -> viewModel.action(UiActon.FetchMessages(chat.toUsername))
             }
         }
     }

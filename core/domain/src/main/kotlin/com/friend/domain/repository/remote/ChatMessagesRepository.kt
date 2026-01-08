@@ -1,7 +1,9 @@
 package com.friend.domain.repository.remote
 
+import com.friend.domain.apiusecase.chatmessage.DeleteMessagesApiUseCase
 import com.friend.domain.apiusecase.chatmessage.FetchMessageListApiUseCase
 import com.friend.domain.apiusecase.chatmessage.FetchMessageSearchResultApiUseCase
+import com.friend.domain.apiusecase.chatmessage.ForwardMessageApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.entity.chatmessage.ChatListItemApiEntity
 import com.friend.entity.chatmessage.MessageListApiEntity
@@ -13,4 +15,6 @@ interface ChatMessagesRepository {
     suspend fun fetchMessageList(params: FetchMessageListApiUseCase.Params): Flow<ApiResult<MessageListApiEntity>>
 
     suspend fun searchMessage(params: FetchMessageSearchResultApiUseCase.Params): Flow<ApiResult<MessageListApiEntity>>
+    suspend fun forwardMessages(params: ForwardMessageApiUseCase.Params): Flow<ApiResult<String>>
+    suspend fun deleteMessages(params: List<String>): Flow<ApiResult<String>>
 }

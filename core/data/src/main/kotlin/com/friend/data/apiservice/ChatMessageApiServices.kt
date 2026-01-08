@@ -2,8 +2,11 @@ package com.friend.data.apiservice
 
 import com.friend.apiresponse.chatmessage.ChatListApiResponse
 import com.friend.apiresponse.chatmessage.MessageListApiResponse
+import com.friend.apiresponse.search.CommonApiResponse
+import com.friend.domain.apiusecase.chatmessage.DeleteMessagesApiUseCase
 import com.friend.domain.apiusecase.chatmessage.FetchMessageListApiUseCase
 import com.friend.domain.apiusecase.chatmessage.FetchMessageSearchResultApiUseCase
+import com.friend.domain.apiusecase.chatmessage.ForwardMessageApiUseCase
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -25,4 +28,14 @@ interface ChatMessageApiServices {
     suspend fun searchMessage(
         @Body params: FetchMessageSearchResultApiUseCase.Params
     ): Response<MessageListApiResponse>
+
+    @POST("v1/ForwardMessage")
+    suspend fun forwardMessages(
+        @Body params: ForwardMessageApiUseCase.Params
+    ): Response<CommonApiResponse>
+
+    @POST("v1/SelectedMessageHistoryClean")
+    suspend fun deleteMessages(
+        @Body params: List<String>
+    ): Response<CommonApiResponse>
 }

@@ -13,7 +13,7 @@ import com.friend.ui.components.PopupMenuType
 
 @Composable
 fun TopBarUiSection(
-    userName: String,
+    fullName: String,
     userImage: String,
     modifier: Modifier,
     onBackButtonClicked: () -> Unit,
@@ -21,12 +21,16 @@ fun TopBarUiSection(
     onSearchCanceled: () -> Unit,
     onReportAbuse: () -> Unit,
     onSearchApply: (String) -> Unit,
+    isItemSelectionEnable: Boolean,
+    onSelectionCancel: () -> Unit,
+    onForwardMessage: () -> Unit,
+    onDeleteMessage: () -> Unit,
 ) {
     var isSearchBarEnable by remember { mutableStateOf(false) }
     var showReportBottomSheet by rememberSaveable { mutableStateOf(false) }
     var showForwardBottomSheet by rememberSaveable { mutableStateOf(false) }
 
-    if (isSearchBarEnable)
+    if (isSearchBarEnable && !isItemSelectionEnable)
         SearchBarUi(
             modifier = modifier,
             onCancelClicked = {
@@ -38,7 +42,7 @@ fun TopBarUiSection(
             }
         )
     else ProfileInfoHeader(
-        username = userName,
+        fullName = fullName,
         userImage = userImage,
         modifier = modifier,
         backToChatListScreen = onBackButtonClicked,
@@ -50,9 +54,12 @@ fun TopBarUiSection(
                 else -> {}
             }
         },
-        onProfileImageClicked = onProfileImageClicked
+        onProfileImageClicked = onProfileImageClicked,
+        isItemSelectionEnable = isItemSelectionEnable,
+        onSelectionCancel = onSelectionCancel,
+        onForwardMessage = onForwardMessage,
+        onDeleteMessage = onDeleteMessage
     )
-
 
     if (showForwardBottomSheet)
         MessageForwardBottomSheet(

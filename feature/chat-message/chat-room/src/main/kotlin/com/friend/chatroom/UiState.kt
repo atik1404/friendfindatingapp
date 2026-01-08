@@ -15,10 +15,16 @@ data class UiState(
 
 sealed interface UiEvent {
     data class ShowToastMessage(val message: UiText) : UiEvent
+    data object DeleteMessageComplete: UiEvent
+    data object ForwardMessageComplete: UiEvent
 }
 
 sealed interface UiActon {
     data class FetchMessages(val username: String) : UiActon
     data class SearchMessage(val username: String, val keyword: String) : UiActon
     data object OnClearSearch : UiActon
+    data object OnClearMessageSelection : UiActon
+    data class ForwardMessages(val toUserNames: List<String>) : UiActon
+    data object DeleteMessages : UiActon
+    data class UpdateMessageSelectionStatus(val item: MessageEntity) : UiActon
 }

@@ -10,20 +10,23 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.ForwardToInbox
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
 import com.friend.designsystem.theme.backgroundColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
+import com.friend.ui.components.AppIconButton
 import com.friend.ui.components.AppPopupMenu
 import com.friend.ui.components.AppText
 import com.friend.ui.components.ChatRoomPopupMenu
@@ -33,63 +36,61 @@ import com.friend.ui.components.PopupMenuType
 @Composable
 fun ProfileInfoHeader(
     modifier: Modifier,
-    username: String,
+    fullName: String,
     userImage: String,
     backToChatListScreen: () -> Unit,
     onProfileImageClicked: () -> Unit,
     onMenuClicked: (PopupMenuType) -> Unit,
+    isItemSelectionEnable: Boolean,
+    onSelectionCancel: () -> Unit,
+    onForwardMessage: () -> Unit,
+    onDeleteMessage: () -> Unit,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.backgroundColors.white)
             .appPadding(SpacingToken.extraSmall),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(
-            onClick = {
-                backToChatListScreen.invoke()
-            }
-        ) {
-            Icon(
-                contentDescription = "",
-                imageVector = Icons.Default.ArrowBackIosNew,
-            )
-        }
+        AppIconButton(onClick = backToChatListScreen, vectorIcon = Icons.Default.ArrowBackIosNew)
 
         NetworkImageLoader(
             url = userImage,
-            name = username,
+            name = fullName,
             modifier = Modifier
                 .size(IconSizeToken.extraLarge)
-                .clickable(
-                    enabled = true,
-                    onClick = onProfileImageClicked
-                ),
+                .clickable(onClick = onProfileImageClicked),
             shape = CircleShape
         )
 
-        Spacer(
-            modifier = Modifier.width(SpacingToken.medium)
-        )
+        Spacer(modifier = Modifier.width(SpacingToken.medium))
 
         AppText(
-            text = username,
+            modifier = Modifier.weight(1f),
+            text = fullName,
             textStyle = AppTypography.titleMedium,
             fontWeight = FontWeight.Bold,
             textColor = MaterialTheme.textColors.primary,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
 
-        Spacer(
-            modifier = Modifier.weight(1f)
-        )
+        Spacer(modifier = Modifier.width(SpacingToken.small))
 
-        AppPopupMenu(
-            icon = Icons.Default.MoreVert,
-            menuItems = ChatRoomPopupMenu,
-            onClick = {
-                onMenuClicked.invoke(it)
+
+        if (isItemSelectionEnable) {
+            Row {
+                AppIconButton(vectorIcon = Icons.Default.ForwardToInbox, onClick = onForwardMessage)
+                AppIconButton(vectorIcon = Icons.Default.Delete, onClick = onDeleteMessage)
+                AppIconButton(vectorIcon = Icons.Default.Clear, onClick = onSelectionCancel)
             }
-        )
+        } else {
+            AppPopupMenu(
+                icon = Icons.Default.MoreVert,
+                menuItems = ChatRoomPopupMenu,
+                onClick = onMenuClicked
+            )
+        }
     }
 }

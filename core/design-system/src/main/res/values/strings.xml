@@ -178,6 +178,7 @@
     <string name="error_invalid_about_you">Please write something about yourself.</string>
     <string name="error_invalid_whats_up">Please write what you’re looking for.</string>
     <string name="error_invalid_interests">Please select at least one interest.</string>
+    <string name="error_invalid_selected_items">Please select at least one item.</string>
 
     <string name="error_network_error">It looks like you’re offline. Please check your internet connection and try again.</string>
     <string name="error_no_data_found">No data found right now. Please refresh or try again in a moment.</string>
