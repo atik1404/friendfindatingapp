@@ -1,4 +1,4 @@
-package com.friend.chatlist.components
+package com.friend.forwardmessage.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,6 +34,7 @@ import com.friend.designsystem.theme.backgroundColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.entity.chatmessage.ChatListItemApiEntity
+import com.friend.ui.components.AppCheckbox
 import com.friend.ui.components.AppText
 import com.friend.ui.components.NetworkImageLoader
 import com.friend.ui.preview.LightPreview
@@ -42,6 +43,7 @@ import com.friend.ui.preview.LightPreview
 fun ChatListSection(
     modifier: Modifier = Modifier,
     items: List<ChatListItemApiEntity>,
+    selectedUsers: List<String>,
     hasMorePage: Boolean,
     onItemClicked: (ChatListItemApiEntity) -> Unit,
     onLoadMore: () -> Unit
@@ -70,7 +72,11 @@ fun ChatListSection(
                     .fillMaxWidth()
                     .clickable {
                         onItemClicked.invoke(item)
-                    }
+                    },
+                isItemSelected = selectedUsers.contains(item.toUsername),
+                onItemClicked = {
+                    onItemClicked.invoke(item)
+                }
             )
         }
     }
@@ -78,8 +84,10 @@ fun ChatListSection(
 
 @Composable
 private fun ChatListItem(
+    isItemSelected: Boolean,
     modifier: Modifier = Modifier,
-    item: ChatListItemApiEntity
+    item: ChatListItemApiEntity,
+    onItemClicked: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -132,14 +140,11 @@ private fun ChatListItem(
 
         Spacer(modifier = Modifier.width(SpacingToken.medium))
 
-        AppText(
-            modifier = Modifier
-                .weight(.5f)
-                .align(alignment = Alignment.CenterVertically),
-            text = DateTimeParser.parseToPattern(item.dateTime, DateTimePatterns.TIME_12_HM_AMPM),
-            textStyle = AppTypography.bodySmall,
-            fontWeight = FontWeight.Medium,
-            textColor = MaterialTheme.textColors.primary,
+        AppCheckbox(
+            checked = isItemSelected,
+            onCheckedChange = {
+                onItemClicked.invoke()
+            }
         )
     }
 }
@@ -155,6 +160,8 @@ private fun ScreenPreview() {
             fullName = "Tom Cruise",
             lastMessage = "Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?",
             dateTime = "2025-12-16"
-        )
+        ),
+        isItemSelected = true,
+        onItemClicked = {}
     )
 }

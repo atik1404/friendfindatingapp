@@ -6,12 +6,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.friend.common.dateparser.DateTimeParser
-import com.friend.common.dateparser.DateTimePatterns
 import com.friend.entity.chatmessage.ChatListItemApiEntity
 import com.friend.ui.common.asString
 import com.friend.ui.showToastMessage
-import timber.log.Timber
 
 @Composable
 fun ChatRoomScreenRoute(
@@ -19,20 +16,19 @@ fun ChatRoomScreenRoute(
     onBackButtonClicked: () -> Unit,
     onNavigateToProfileScreen: (String) -> Unit,
     onNavigateToReportScreen: (String) -> Unit,
+    onNavigateToForwardMessageScreen: (List<String>) -> Unit,
     viewModel: ChatRoomViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        viewModel.action(UiActon.FetchMessages(chat.toUsername))
+        viewModel.action(UiAction.FetchMessages(chat.toUsername))
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is UiEvent.ShowToastMessage ->
                     context.showToastMessage(event.message.asString(context))
-
-                UiEvent.DeleteMessageComplete -> viewModel.action(UiActon.FetchMessages(chat.toUsername))
-                UiEvent.ForwardMessageComplete -> viewModel.action(UiActon.FetchMessages(chat.toUsername))
+                UiEvent.DeleteMessageComplete -> viewModel.action(UiAction.FetchMessages(chat.toUsername))
             }
         }
     }
@@ -49,6 +45,10 @@ fun ChatRoomScreenRoute(
         },
         onNavigateToReportScreen = {
             onNavigateToReportScreen.invoke(chat.toUsername)
+        },
+        onNavigateToForwardMessageScreen = {
+            onNavigateToForwardMessageScreen.invoke(uiState.messages.filter { it.isItemSelected }
+                .map { it.messageId })
         }
     )
 }

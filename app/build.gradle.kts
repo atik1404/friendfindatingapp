@@ -95,6 +95,7 @@ dependencies {
 
         implementation(chatMessage.chatList)
         implementation(chatMessage.chatRoom)
+        implementation(chatMessage.forwardMessage)
 
         implementation(profileManager.myProfile)
         implementation(profileManager.otherProfile)

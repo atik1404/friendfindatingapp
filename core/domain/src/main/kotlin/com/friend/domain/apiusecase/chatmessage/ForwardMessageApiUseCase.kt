@@ -11,6 +11,7 @@ class ForwardMessageApiUseCase @Inject constructor(
 ) : ApiUseCaseParams<ForwardMessageApiUseCase.Params, String> {
 
     data class Params(
+        val fromUsername: String,
         val toUsernames: List<String>,
         val ids: List<String>,
     )

@@ -7,7 +7,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.friend.chatroom.bottomsheet.MessageForwardBottomSheet
 import com.friend.chatroom.bottomsheet.ReportUserBottomSheet
 import com.friend.ui.components.PopupMenuType
 
@@ -28,7 +27,6 @@ fun TopBarUiSection(
 ) {
     var isSearchBarEnable by remember { mutableStateOf(false) }
     var showReportBottomSheet by rememberSaveable { mutableStateOf(false) }
-    var showForwardBottomSheet by rememberSaveable { mutableStateOf(false) }
 
     if (isSearchBarEnable && !isItemSelectionEnable)
         SearchBarUi(
@@ -50,7 +48,6 @@ fun TopBarUiSection(
             when (it) {
                 PopupMenuType.ReportAbuse -> showReportBottomSheet = true
                 PopupMenuType.MessageSearch -> isSearchBarEnable = true
-                PopupMenuType.ForwardMessage -> showForwardBottomSheet = true
                 else -> {}
             }
         },
@@ -60,17 +57,6 @@ fun TopBarUiSection(
         onForwardMessage = onForwardMessage,
         onDeleteMessage = onDeleteMessage
     )
-
-    if (showForwardBottomSheet)
-        MessageForwardBottomSheet(
-            modifier = modifier,
-            onForward = {
-                showForwardBottomSheet = false
-            },
-            onDismiss = {
-                showForwardBottomSheet = false
-            }
-        )
 
     if (showReportBottomSheet)
         ReportUserBottomSheet(

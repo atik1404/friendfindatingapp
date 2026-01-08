@@ -49,16 +49,16 @@ val ChatRoomPopupMenu = listOf(
         menu = Res.string.menu_message_search,
         menuType = PopupMenuType.MessageSearch
     ),
-    PopupMenu(
-        icon = Icons.Default.Refresh,
-        menu = Res.string.menu_message_forward,
-        menuType = PopupMenuType.ForwardMessage
-    ),
-    PopupMenu(
-        icon = Icons.Default.Delete,
-        menu = Res.string.menu_delete_message,
-        menuType = PopupMenuType.DeleteMessage
-    ),
+//    PopupMenu(
+//        icon = Icons.Default.Refresh,
+//        menu = Res.string.menu_message_forward,
+//        menuType = PopupMenuType.ForwardMessage
+//    ),
+//    PopupMenu(
+//        icon = Icons.Default.Delete,
+//        menu = Res.string.menu_delete_message,
+//        menuType = PopupMenuType.DeleteMessage
+//    ),
 )
 
 val ProfilePopupMenu = listOf(

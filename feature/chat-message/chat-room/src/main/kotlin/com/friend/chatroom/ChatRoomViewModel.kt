@@ -4,7 +4,6 @@ import com.friend.common.base.BaseViewModel
 import com.friend.domain.apiusecase.chatmessage.DeleteMessagesApiUseCase
 import com.friend.domain.apiusecase.chatmessage.FetchMessageListApiUseCase
 import com.friend.domain.apiusecase.chatmessage.FetchMessageSearchResultApiUseCase
-import com.friend.domain.apiusecase.chatmessage.ForwardMessageApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.entity.chatmessage.MessageEntity
 import com.friend.sharedpref.SharedPrefHelper
@@ -24,7 +23,6 @@ import com.friend.designsystem.R as Res
 class ChatRoomViewModel @Inject constructor(
     private val fetchMessageListApiUseCase: FetchMessageListApiUseCase,
     private val fetchMessageSearchResultApiUseCase: FetchMessageSearchResultApiUseCase,
-    private val forwardMessageApiUseCase: ForwardMessageApiUseCase,
     private val deleteMessagesApiUseCase: DeleteMessagesApiUseCase,
     private val sharedPrefHelper: SharedPrefHelper
 ) : BaseViewModel() {
@@ -34,19 +32,18 @@ class ChatRoomViewModel @Inject constructor(
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    val action: (UiActon) -> Unit = { action ->
+    val action: (UiAction) -> Unit = { action ->
         when (action) {
-            is UiActon.FetchMessages -> fetchMessages(action.username)//fetchRecentMessages(action.username)
-            is UiActon.SearchMessage -> searchMessage(
+            is UiAction.FetchMessages -> fetchMessages(action.username)//fetchRecentMessages(action.username)
+            is UiAction.SearchMessage -> searchMessage(
                 userName = action.username,
                 keyword = action.keyword
             )
 
-            UiActon.OnClearSearch -> clearSearch()
-            UiActon.OnClearMessageSelection -> clearSelectedMessage()
-            is UiActon.UpdateMessageSelectionStatus -> updateMessageSelectionStatus(action.item)
-            UiActon.DeleteMessages -> deleteMessage()
-            is UiActon.ForwardMessages -> forwardMessage(action.toUserNames)
+            UiAction.OnClearSearch -> clearSearch()
+            UiAction.OnClearMessageSelection -> clearSelectedMessage()
+            is UiAction.UpdateMessageSelectionStatus -> updateMessageSelectionStatus(action.item)
+            UiAction.DeleteMessages -> deleteMessage()
         }
     }
 
@@ -120,35 +117,9 @@ class ChatRoomViewModel @Inject constructor(
         }
     }
 
-    private fun forwardMessage(toUsernames: List<String>) {
-        execute {
-            val params = ForwardMessageApiUseCase.Params(
-                ids = _uiState.value.messages.filter { it.isItemSelected }.map { it.messageId },
-                toUsernames = toUsernames
-            )
-
-            forwardMessageApiUseCase.execute(params).collect { result ->
-                when (result) {
-                    is ApiResult.Error -> showToastMessage(UiText.Dynamic(result.message))
-                    is ApiResult.Loading -> _uiState.value =
-                        _uiState.value.copy(isLoading = result.loading)
-
-                    is ApiResult.Success -> {
-                        clearSelectedMessage()
-                        _uiEvent.send(UiEvent.ForwardMessageComplete)
-                    }
-                }
-            }
-        }
-    }
-
     private fun deleteMessage() {
         execute {
             val selectedMessages = _uiState.value.messages.filter { it.isItemSelected }
-            if (selectedMessages.isEmpty()) {
-                showToastMessage(UiText.StringRes(Res.string.error_invalid_selected_items))
-                return@execute
-            }
             val params = selectedMessages.map { it.messageId }
 
             deleteMessagesApiUseCase.execute(params).collect { result ->

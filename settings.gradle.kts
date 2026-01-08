@@ -48,6 +48,8 @@ include(":feature:home")
 
 include(":feature:chat-message:chat-list")
 include(":feature:chat-message:chat-room")
+include(":feature:chat-message:forward-message")
+
 
 include(":feature:profile-manager:profile-overview")
 include(":feature:profile-manager:my-profile")

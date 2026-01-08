@@ -34,6 +34,11 @@ sealed interface ChatMessageScreens : AppScreen {
     data class ChatRoomNavScreen(
         val chat: ChatListItemApiEntity
     ) : AppScreen
+
+    @Serializable
+    data class ForwardMessageNavScreen(
+        val messages: List<String>
+    ) : AppScreen
 }
 
 sealed interface ProfileScreens : AppScreen {

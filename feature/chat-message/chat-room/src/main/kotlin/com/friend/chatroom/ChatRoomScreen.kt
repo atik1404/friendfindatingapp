@@ -42,7 +42,8 @@ fun ChatRoomScreen(
     onBackButtonClicked: () -> Unit,
     onNavigateToProfileScreen: () -> Unit,
     onNavigateToReportScreen: () -> Unit,
-    onAction: (UiActon) -> Unit,
+    onNavigateToForwardMessageScreen: () -> Unit,
+    onAction: (UiAction) -> Unit,
 ) {
     var isItemSelectionEnable by remember { mutableStateOf(false) }
 
@@ -71,22 +72,34 @@ fun ChatRoomScreen(
                     onProfileImageClicked = onNavigateToProfileScreen,
                     onBackButtonClicked = onBackButtonClicked,
                     onSearchCanceled = {
-                        onAction.invoke(UiActon.OnClearSearch)
-                        onAction.invoke(UiActon.FetchMessages(chat.toUsername))
+                        onAction.invoke(UiAction.OnClearSearch)
+                        onAction.invoke(UiAction.FetchMessages(chat.toUsername))
                     },
-                    onSearchApply = { onAction.invoke(UiActon.SearchMessage(chat.toUsername, it)) },
+                    onSearchApply = {
+                        onAction.invoke(
+                            UiAction.SearchMessage(
+                                chat.toUsername,
+                                it
+                            )
+                        )
+                    },
                     onReportAbuse = onNavigateToReportScreen,
                     isItemSelectionEnable = isItemSelectionEnable,
                     onSelectionCancel = {
                         isItemSelectionEnable = false
-                        onAction.invoke(UiActon.OnClearMessageSelection)
+                        onAction.invoke(UiAction.OnClearMessageSelection)
                     },
                     onForwardMessage = {
-                        isItemSelectionEnable = false
+                        if (uiState.isAnyItemSelected) {
+                            isItemSelectionEnable = false
+                            onNavigateToForwardMessageScreen.invoke()
+                        }
                     },
                     onDeleteMessage = {
-                        isItemSelectionEnable = false
-                        onAction.invoke(UiActon.DeleteMessages)
+                        if (uiState.isAnyItemSelected) {
+                            isItemSelectionEnable = false
+                            onAction.invoke(UiAction.DeleteMessages)
+                        }
                     }
                 )
 
@@ -104,7 +117,7 @@ fun ChatRoomScreen(
                         isItemSelectionEnable = true
                     },
                     onItemSelected = {
-                        onAction.invoke(UiActon.UpdateMessageSelectionStatus(it))
+                        onAction.invoke(UiAction.UpdateMessageSelectionStatus(it))
                     }
                 )
 
@@ -149,5 +162,6 @@ private fun ScreenPreview() {
         onNavigateToProfileScreen = {},
         onAction = {},
         onNavigateToReportScreen = {},
+        onNavigateToForwardMessageScreen = {},
     )
 }
