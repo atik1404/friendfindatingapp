@@ -103,6 +103,7 @@ class ForwardMessageViewModel @Inject constructor(
         execute {
             if (_uiState.value.selectedUsers.isEmpty()) {
                 showToastMessage(UiText.StringRes(Res.string.error_invalid_selected_items))
+                return@execute
             }
             val params = ForwardMessageApiUseCase.Params(
                 fromUsername = sharedPrefHelper.getString(SpKey.userName),
