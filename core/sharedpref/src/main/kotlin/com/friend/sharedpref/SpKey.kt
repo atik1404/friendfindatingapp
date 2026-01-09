@@ -2,6 +2,8 @@ package com.friend.sharedpref
 
 object SpKey {
     const val loginStatus = "loginStatus"
+    const val isLoginByGoogle = "isLoginByGoogle"
+    const val googleLoginToken = "googleLoginToken"
     const val authToken = "authToken"
     const val tokenExpireAt = "tokenExpireAt"
     const val refreshToken = "refreshToken"

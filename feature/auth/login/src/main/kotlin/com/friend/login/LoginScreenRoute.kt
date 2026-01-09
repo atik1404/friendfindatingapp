@@ -12,7 +12,7 @@ import com.friend.ui.showToastMessage
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginRoute(
-    navigateToRegistration: () -> Unit,
+    navigateToRegistration: (String) -> Unit,
     navigateToForgotPassword: () -> Unit,
     navigateToHome: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
@@ -21,13 +21,15 @@ fun LoginRoute(
     val state by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.uiEffect.collect { effect ->
+        viewModel.uiEvent.collect { effect ->
             when (effect) {
                 is UiEvent.ShowMessage ->
                     context.showToastMessage(effect.message)
 
                 is UiEvent.NavigateToHome ->
                     navigateToHome()
+
+                is UiEvent.NavigateToRegistration -> navigateToRegistration.invoke(effect.email)
             }
         }
     }
@@ -35,7 +37,9 @@ fun LoginRoute(
     LoginScreen(
         state = state,
         onEvent = viewModel.action,
-        navigateToRegistration = navigateToRegistration,
+        navigateToRegistration = {
+            navigateToRegistration.invoke("")
+        },
         navigateToForgotPassword = navigateToForgotPassword,
     )
 }

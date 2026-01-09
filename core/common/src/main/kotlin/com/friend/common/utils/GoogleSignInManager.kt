@@ -3,7 +3,9 @@ package com.friend.common.utils
 import android.content.Context
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
+import androidx.credentials.GetCredentialResponse
 import androidx.credentials.exceptions.GetCredentialException
 import com.friend.common.constant.AppConstants
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
@@ -37,7 +39,7 @@ class GoogleSignInManager(private val context: Context) {
 
             handleSignIn(result)
         } catch (e: GetCredentialException) {
-            GoogleSignInResult.Error(e.message)
+            GoogleSignInResult.Error(e.message.toString())
         }
     }
 
@@ -56,24 +58,37 @@ class GoogleSignInManager(private val context: Context) {
         }
     }
 
-    private fun handleSignIn(result: androidx.credentials.GetCredentialResponse): GoogleSignInResult {
+    private fun handleSignIn(result: GetCredentialResponse): GoogleSignInResult {
         val credential = result.credential
 
-        // Check if the credential is a Google ID Token
+        // Case 1: Direct Match (What you had before)
         if (credential is GoogleIdTokenCredential) {
-            val googleIdToken = credential.idToken
-            val email = credential.id
-            val displayName = credential.displayName
-
-            // Send this token to your backend or Firebase
             return GoogleSignInResult.Success(
-                idToken = googleIdToken,
-                email = email,
-                displayName = displayName
+                idToken = credential.idToken,
+                email = credential.id,
+                displayName = credential.displayName
             )
-        } else {
-            return GoogleSignInResult.Error("Unknown credential type")
         }
+        // Case 2: CustomCredential Wrapper (The Fix)
+        // Sometimes the library returns this generic type with the Google data inside
+        else if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+            try {
+                // Unpack the data manually
+                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
+                return GoogleSignInResult.Success(
+                    idToken = googleIdTokenCredential.idToken,
+                    email = googleIdTokenCredential.id,
+                    displayName = googleIdTokenCredential.displayName
+                )
+            } catch (e: Exception) {
+                Timber.e("Failed to unwrap Google Credential: $e")
+                return GoogleSignInResult.Error("Failed to parse Google data")
+            }
+        }
+
+        // Debugging: Print exactly what type you received if it still fails
+        Timber.e( "Received unknown type: ${credential.type} / Class: ${credential.javaClass.name}")
+        return GoogleSignInResult.Error("Unknown credential type")
     }
 }
 
@@ -82,5 +97,5 @@ sealed class GoogleSignInResult {
     data class Success(val idToken: String, val email: String, val displayName: String?) :
         GoogleSignInResult()
 
-    data class Error(val message: String?) : GoogleSignInResult()
+    data class Error(val message: String) : GoogleSignInResult()
 }

@@ -17,14 +17,13 @@ import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingHorizontal
 import com.friend.ui.components.AppOutlinedButton
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 @Composable
 fun GoogleLoginButton(
     modifier: Modifier = Modifier,
-    onIdToken: (String) -> Unit = {},
-    onError: (Throwable) -> Unit = {}
+    onIdToken: (String, String, String) -> Unit,
+    onError: (String) -> Unit
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -41,12 +40,11 @@ fun GoogleLoginButton(
             scope.launch {
                 when (val result = googleSignInManager.signIn()) {
                     is GoogleSignInResult.Success -> {
-                        Timber.e("Signed in as: ${result.email}")
-                        Timber.e("Token: ${result.idToken}")
+                        onIdToken.invoke(result.displayName ?: "", result.email, result.idToken)
                     }
 
                     is GoogleSignInResult.Error -> {
-                        Timber.e("Sign in failed: ${result.message}")
+                        onError.invoke(result.message)
                     }
                 }
             }

@@ -1,6 +1,7 @@
 package com.friend.login
 
 import com.friend.common.base.BaseViewModel
+import com.friend.domain.apiusecase.credential.PostGoogleLoginApiUseCase
 import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
 import com.friend.domain.apiusecase.profilemanager.FetchProfileApiUseCase
 import com.friend.domain.base.ApiResult
@@ -17,14 +18,15 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val postLoginApiUseCase: PostLoginApiUseCase,
+    private val postGoogleLoginApiUseCase: PostGoogleLoginApiUseCase,
     private val fetchProfileApiUseCase: FetchProfileApiUseCase
 ) : BaseViewModel() {
     val ioError get() = postLoginApiUseCase.ioError.receiveAsFlow()
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private val _uiEffect = Channel<UiEvent>()
-    val uiEffect = _uiEffect.receiveAsFlow()
+    private val _uiEvent = Channel<UiEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
 
     init {
         formValidation()
@@ -34,6 +36,8 @@ class LoginViewModel @Inject constructor(
         when (it) {
             is UiAction.UsernameChanged -> onUserNameChanged(it.value)
             is UiAction.PasswordChanged -> onPasswordChanged(it.value)
+            is UiAction.ShowErrorMessage -> showToastMessage(it.value)
+            is UiAction.PerformGoogleLogin -> performGoogleLoginApi(it.email)
             UiAction.PerformLogin -> performLoginApi()
         }
     }
@@ -53,7 +57,28 @@ class LoginViewModel @Inject constructor(
                         it.copy(isSubmitting = result.loading)
                     }
 
-                    is ApiResult.Error -> handleApiError(result.message)
+                    is ApiResult.Error -> showToastMessage(result.message)
+                }
+            }
+        }
+    }
+
+    private fun performGoogleLoginApi(email: String) {
+        execute {
+            postGoogleLoginApiUseCase.execute(email).collect { result ->
+                when (result) {
+                    is ApiResult.Success -> {
+                        if (result.data.isUserExist)
+                            fetchProfile()
+                        else _uiEvent.send(UiEvent.NavigateToRegistration(email))
+                    }
+
+                    is ApiResult.Loading -> onLoading(result.loading)
+
+                    is ApiResult.Error -> {
+                        showToastMessage(result.message)
+                        _uiEvent.send(UiEvent.NavigateToRegistration(email))
+                    }
                 }
             }
         }
@@ -63,9 +88,9 @@ class LoginViewModel @Inject constructor(
         execute {
             fetchProfileApiUseCase.execute().collect { result ->
                 when (result) {
-                    is ApiResult.Error -> handleApiError(result.message)
+                    is ApiResult.Error -> showToastMessage(result.message)
                     is ApiResult.Loading -> onLoading(result.loading)
-                    is ApiResult.Success -> _uiEffect.send(UiEvent.NavigateToHome)
+                    is ApiResult.Success -> _uiEvent.send(UiEvent.NavigateToHome)
                 }
             }
         }
@@ -89,9 +114,9 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun handleApiError(message: String) {
+    private fun showToastMessage(message: String) {
         execute {
-            _uiEffect.send(UiEvent.ShowMessage(message))
+            _uiEvent.send(UiEvent.ShowMessage(message))
         }
     }
 

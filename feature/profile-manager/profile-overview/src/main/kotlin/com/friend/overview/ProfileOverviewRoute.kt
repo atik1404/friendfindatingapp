@@ -4,13 +4,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.friend.common.constant.PersonalMenu
 import com.friend.common.extfun.openAppInPlayStore
 import com.friend.common.extfun.openMailApp
 import com.friend.common.extfun.shareApp
+import com.friend.common.utils.GoogleSignInManager
 import com.friend.ui.showToastMessage
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProfileOverviewRoute(
@@ -23,10 +28,13 @@ fun ProfileOverviewRoute(
     navigateToMembershipScreen: () -> Unit,
     viewModel: ProfileOverviewViewModel = hiltViewModel()
 ) {
-    val userInfo by viewModel.userInfo.collectAsState()
-    val state by viewModel.uiState.collectAsState()
+    val userInfo by viewModel.userInfo.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
+
+    val scope = rememberCoroutineScope()
+    val googleSignInManager = remember { GoogleSignInManager(context) }
 
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { event ->
@@ -48,7 +56,15 @@ fun ProfileOverviewRoute(
                 PersonalMenu.PRIVACY_POLICY -> navigateToPrivacyPolicyScreen.invoke()
                 PersonalMenu.CHANGE_PASSWORD -> navigateToChangePasswordScreen.invoke()
                 PersonalMenu.VIP_MEMBERSHIP -> navigateToMembershipScreen.invoke()
-                PersonalMenu.LOGOUT -> viewModel.action(UiAction.PerformLogout)
+                PersonalMenu.LOGOUT -> {
+                    viewModel.action(UiAction.PerformLogout)
+                    if (userInfo.isLoginByGoogle) {
+                        scope.launch {
+                            googleSignInManager.signOut()
+                        }
+                    }
+                }
+
                 PersonalMenu.SHARE_APP -> context.shareApp()
                 PersonalMenu.RATE_APP -> context.openAppInPlayStore()
                 PersonalMenu.CONTACT_US -> context.openMailApp()

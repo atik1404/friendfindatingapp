@@ -13,7 +13,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.friend.designsystem.spacing.SpacingToken
@@ -28,7 +27,6 @@ import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.LocalImageLoader
 import com.friend.ui.preview.LightPreview
-import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 /**
@@ -105,10 +103,16 @@ fun LoginScreen(
                         width = Dimension.fillToConstraints
                     },
                 onError = {
-                    Timber.e("Google login error: ${it.localizedMessage}")
+                    onEvent.invoke(UiAction.ShowErrorMessage(it))
                 },
-                onIdToken = {
-                    Timber.e("Google login successful $it")
+                onIdToken = { displayName, email, idToken ->
+                    onEvent.invoke(
+                        UiAction.PerformGoogleLogin(
+                            displayName = displayName,
+                            email = email,
+                            idToken = idToken
+                        )
+                    )
                 }
             )
 

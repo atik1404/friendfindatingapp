@@ -11,6 +11,7 @@ import com.friend.ui.showToastMessage
 
 @Composable
 fun RegistrationRoute(
+    email: String,
     onBackButtonClicked: () -> Unit,
     navigateToProfileCompletion: () -> Unit,
     viewModel: RegistrationViewModel = hiltViewModel()
@@ -20,6 +21,7 @@ fun RegistrationRoute(
 
     LaunchedEffect(Unit) {
         viewModel.action(UiAction.FetchCountry)
+        viewModel.action(UiAction.OnChangeEmail(email))
 
         viewModel.uiEvent.collect { event ->
             when (event) {

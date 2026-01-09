@@ -4,6 +4,7 @@ data class UserInfo(
     val username: String = "",
     val email: String = "",
     val image: String = "",
+    val isLoginByGoogle: Boolean = false
 )
 
 sealed interface UiState {

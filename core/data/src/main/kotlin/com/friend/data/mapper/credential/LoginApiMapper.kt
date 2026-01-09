@@ -15,6 +15,7 @@ class LoginApiMapper @Inject constructor() : Mapper<LoginApiResponse, LoginApiEn
             accessToken = response.data?.authToken ?: "",
             refreshToken = response.data?.refreshToken ?: "",
             expireAt = response.data?.expireAt ?: "",
+            isUserExist = response.count == 1,
         )
     }
 }

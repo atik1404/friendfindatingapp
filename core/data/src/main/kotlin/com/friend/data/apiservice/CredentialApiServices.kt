@@ -21,6 +21,11 @@ interface CredentialApiServices {
         @Body params: PostLoginApiUseCase.Params
     ): Response<LoginApiResponse>
 
+    @POST("api/Auth/v1/LoginWithGoogle")
+    suspend fun performGoogleLogin(
+        @Query("email") email: String
+    ): Response<LoginApiResponse>
+
     @POST("api/Auth/v1/Register")
     suspend fun performRegistration(
         @Body params: PostRegistrationApiUseCase.Params

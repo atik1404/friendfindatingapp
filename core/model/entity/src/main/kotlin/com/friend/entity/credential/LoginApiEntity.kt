@@ -5,4 +5,5 @@ data class LoginApiEntity(
     val accessToken: String,
     val refreshToken: String,
     val expireAt: String,
+    val isUserExist: Boolean
 )

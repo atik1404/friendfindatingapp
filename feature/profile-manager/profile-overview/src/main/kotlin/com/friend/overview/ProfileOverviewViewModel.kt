@@ -39,7 +39,8 @@ class ProfileOverviewViewModel @Inject constructor(
             UserInfo(
                 username = sharedPrefHelper.getString(SpKey.fullName),
                 email = sharedPrefHelper.getString(SpKey.email),
-                image = sharedPrefHelper.getString(SpKey.profilePicture)
+                image = sharedPrefHelper.getString(SpKey.profilePicture),
+                isLoginByGoogle = sharedPrefHelper.getBoolean(SpKey.isLoginByGoogle)
             )
         }
     }

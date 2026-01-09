@@ -14,7 +14,7 @@ sealed interface AuthScreens : AppScreen {
     object LoginNavScreen : AppScreen
 
     @Serializable
-    object RegistrationNavScreen : AppScreen
+    data class RegistrationNavScreen(val email: String) : AppScreen
 
     @Serializable
     object ForgotPasswordNavScreen : AppScreen

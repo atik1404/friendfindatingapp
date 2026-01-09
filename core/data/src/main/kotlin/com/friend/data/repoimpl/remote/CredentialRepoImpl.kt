@@ -2,7 +2,6 @@ package com.friend.data.repoimpl.remote
 
 import com.friend.data.NetworkBoundResource
 import com.friend.data.apiservice.CredentialApiServices
-import com.friend.data.mapper.credential.CommonApiMapper
 import com.friend.data.mapper.credential.ForgotPasswordApiMapper
 import com.friend.data.mapper.credential.LoginApiMapper
 import com.friend.data.mapper.credential.LogoutApiMapper
@@ -10,9 +9,6 @@ import com.friend.data.mapper.credential.RegistrationApiMapper
 import com.friend.data.mapper.mapFromApiResponse
 import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
 import com.friend.domain.apiusecase.credential.PostRegistrationApiUseCase
-import com.friend.domain.apiusecase.profilemanager.PostAbuseReportApiUseCase
-import com.friend.domain.apiusecase.profilemanager.PostBlockUnblockApiUseCase
-import com.friend.domain.apiusecase.profilemanager.PostProfileImageApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.repository.remote.CredentialRepository
 import com.friend.entity.credential.LoginApiEntity
@@ -29,7 +25,6 @@ class CredentialRepoImpl @Inject constructor(
     private val forgotPasswordApiMapper: ForgotPasswordApiMapper,
     private val logoutApiMapper: LogoutApiMapper,
     private val registrationApiMapper: RegistrationApiMapper,
-    private val commonApiMapper: CommonApiMapper,
     private val sharedPrefHelper: SharedPrefHelper
 ) : CredentialRepository {
     override suspend fun performLogin(params: PostLoginApiUseCase.Params): Flow<ApiResult<LoginApiEntity>> {
@@ -42,6 +37,25 @@ class CredentialRepoImpl @Inject constructor(
         ).map {
             if (it is ApiResult.Success) {
                 sharedPrefHelper.putBool(SpKey.loginStatus, true)
+                sharedPrefHelper.putString(SpKey.authToken, it.data.accessToken)
+                sharedPrefHelper.putString(SpKey.refreshToken, it.data.refreshToken)
+                sharedPrefHelper.putString(SpKey.tokenExpireAt, it.data.expireAt)
+            }
+            it
+        }
+    }
+
+    override suspend fun performGoogleLogin(params: String): Flow<ApiResult<LoginApiEntity>> {
+        return mapFromApiResponse(
+            result = networkBoundResources.downloadData {
+                apiServices.performGoogleLogin(
+                    params
+                )
+            }, mapper = loginApiMapper
+        ).map {
+            if (it is ApiResult.Success) {
+                sharedPrefHelper.putBool(SpKey.loginStatus, true)
+                sharedPrefHelper.putBool(SpKey.isLoginByGoogle, true)
                 sharedPrefHelper.putString(SpKey.authToken, it.data.accessToken)
                 sharedPrefHelper.putString(SpKey.refreshToken, it.data.refreshToken)
                 sharedPrefHelper.putString(SpKey.tokenExpireAt, it.data.expireAt)
