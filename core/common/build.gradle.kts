@@ -19,4 +19,6 @@ dependencies {
     implementation(libs.cirlce.imageview)
     implementation(libs.dateced)
     implementation(libs.date.picker)
+
+    implementation(libs.bundles.google.login)
 }
