@@ -36,7 +36,7 @@ fun PageIndicator(
 
             // Animate width for a "worm" or "stretch" effect
             val width by animateDpAsState(
-                targetValue = IconSizeToken.large,
+                targetValue = IconSizeToken.mediumLarge,
                 label = "dot_width"
             )
 

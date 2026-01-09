@@ -41,8 +41,10 @@ import com.friend.designsystem.R as Res
 @Composable
 fun MembershipScreen(
     onBackClick: () -> Unit,
+    monthlySubscription: () -> Unit,
+    yearlySubscription: () -> Unit,
+    manageSubscription: () -> Unit,
 ) {
-
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
@@ -90,12 +92,21 @@ fun MembershipScreen(
 
             if (showBottomSheet)
                 PackagesBottomSheet(
-                    onClickListener = {
-                        showBottomSheet = false
-                    },
                     onDismissRequest = {
                         showBottomSheet = false
                     },
+                    monthlySubscription = {
+                        showBottomSheet = false
+                        monthlySubscription.invoke()
+                    },
+                    yearlySubscription = {
+                        showBottomSheet = false
+                        yearlySubscription.invoke()
+                    },
+                    manageSubscription = {
+                        showBottomSheet = false
+                        manageSubscription.invoke()
+                    }
                 )
         }
     }
@@ -132,7 +143,10 @@ private fun BannerPager() {
 @Composable
 @LightPreview
 private fun ScreenPreview() {
-    MembershipScreen {
-
-    }
+    MembershipScreen(
+        onBackClick = {},
+        monthlySubscription = {},
+        yearlySubscription = {},
+        manageSubscription = {},
+    )
 }

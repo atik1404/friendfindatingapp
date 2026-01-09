@@ -18,10 +18,13 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
+import com.friend.common.utils.BillingManager
 import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.ImageSizeToken
 import com.friend.designsystem.spacing.SpacingToken
@@ -45,6 +48,8 @@ fun ProfileSummaryUi(
     email: String,
     onClick: () -> Unit
 ) {
+    val isPro by BillingManager.isSubscribed.collectAsState()
+
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
@@ -73,22 +78,24 @@ fun ProfileSummaryUi(
                 )
 
                 // Overlay edit button at bottom-right (RTL-aware via BottomEnd)
-                AppIconButton(
-                    vectorIcon = Icons.Default.Verified,
-                    tint = MaterialTheme.surfaceColors.grayLight,
-                    onClick = {},
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .size(IconSizeToken.small) // tweak as you like
-                        .clip(CircleShape)
-                        .background(MaterialTheme.surfaceColors.greenBase)
-                        .border(
-                            width = StrokeTokens.hairline,
-                            color = MaterialTheme.strokeColors.primary,
-                            shape = CircleShape
-                        )
-                        .appPadding(SpacingToken.minimum) // inner padding for icon touch target
-                )
+                if (isPro) {
+                    AppIconButton(
+                        vectorIcon = Icons.Default.Verified,
+                        tint = MaterialTheme.surfaceColors.grayLight,
+                        onClick = {},
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .size(IconSizeToken.small) // tweak as you like
+                            .clip(CircleShape)
+                            .background(MaterialTheme.surfaceColors.greenBase)
+                            .border(
+                                width = StrokeTokens.hairline,
+                                color = MaterialTheme.strokeColors.primary,
+                                shape = CircleShape
+                            )
+                            .appPadding(SpacingToken.minimum) // inner padding for icon touch target
+                    )
+                }
             }
 
             Spacer(

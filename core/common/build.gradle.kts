@@ -21,4 +21,5 @@ dependencies {
     implementation(libs.date.picker)
 
     implementation(libs.bundles.google.login)
+    implementation(libs.billing)
 }

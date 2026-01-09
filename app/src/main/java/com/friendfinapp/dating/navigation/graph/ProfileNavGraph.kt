@@ -4,7 +4,6 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.friend.changepassword.ChangePasswordScreenRoute
-import com.friend.membership.MembershipScreen
 import com.friend.membership.MembershipScreenRoute
 import com.friend.otherprofile.OtherProfileScreenRouter
 import com.friend.overview.ProfileOverviewRoute
@@ -95,9 +94,11 @@ object ProfileNavGraph {
         }
 
         entry(ProfileScreens.MembershipNavScreen) {
-            MembershipScreenRoute {
-                backStack.removeLastOrNull()
-            }
+            MembershipScreenRoute(
+                onBackClick = {
+                    backStack.removeLastOrNull()
+                }
+            )
         }
 
         entry<ProfileScreens.ReportUserNavScreen> { key ->
