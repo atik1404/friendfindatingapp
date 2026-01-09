@@ -4,16 +4,16 @@ import com.friend.common.constant.Gender
 import com.friend.entity.search.FriendSuggestionApiEntity
 
 data class FilterUiState(
-    val gender: Int? = null,
-    val interestedIn: Int? = null,
-    val fromAge: String? = null,
-    val toAge: String? = null,
+    val gender: Int = 1,
+    val interestedIn: Int = 2,
+    val fromAge: String = "18",
+    val toAge: String = "99",
     val country: String? = null,
     val state: String? = null,
     val city: String? = null,
     val username: String? = null,
-    val isOnlineUser: Boolean? = null,
-    val isPhotoRequired: Boolean? = null,
+    val isOnlineUser: Boolean = false,
+    val isPhotoRequired: Boolean = false,
     val bodyType: String? = null,
     val lookingFor: String? = null,
     val eyes: String? = null,
@@ -33,12 +33,6 @@ data class UiState(
     val pageNo: Int = 0,
     val hasMorePage: Boolean = true,
 )
-
-sealed class UiEvent {
-    object NavigateToProfileScreen : UiEvent()
-    object NavigateToOverviewScreen : UiEvent()
-    object NavigateToChatMessageScreen : UiEvent()
-}
 
 sealed interface UiAction {
     object SetCurrentUserInfo : UiAction
