@@ -19,7 +19,6 @@ fun ProfileCompletionScreenRoute(
     val state by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.action(UiAction.ResetState)
         viewModel.action(UiAction.SetDefaultData)
         viewModel.uiEvent.collect { event ->
             when (event) {

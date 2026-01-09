@@ -56,5 +56,4 @@ sealed class UiAction {
     data class OnSelectState(val value: String) : UiAction()
     data class OnSelectCity(val value: String) : UiAction()
     data class OnChangePostCode(val value: String) : UiAction()
-    object ResetState : UiAction()
 }

@@ -32,7 +32,6 @@ class ForgotPasswordViewModel @Inject constructor(
         when (it) {
             is UiAction.EmailChanged -> onEmailChanged(it.value)
             UiAction.SendLinkToEmail -> forgotPassword()
-            UiAction.ResetState -> _uiState.value = UiState()
         }
     }
 

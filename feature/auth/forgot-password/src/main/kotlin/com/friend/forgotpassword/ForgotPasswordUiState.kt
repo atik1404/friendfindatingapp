@@ -15,5 +15,4 @@ sealed class UiEvent {
 sealed class UiAction {
     data class EmailChanged(val value: String) : UiAction()
     object SendLinkToEmail : UiAction()
-    object ResetState : UiAction()
 }

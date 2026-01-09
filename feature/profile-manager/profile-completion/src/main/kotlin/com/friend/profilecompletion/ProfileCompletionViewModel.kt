@@ -35,7 +35,6 @@ class ProfileCompletionViewModel @Inject constructor(
 
     val action: (UiAction) -> Unit = {
         when (it) {
-            UiAction.ResetState -> _formUiState.value = UiState()
             UiAction.SetDefaultData -> defaultValue()
             UiAction.FormSubmit -> performProfileCompletion()
             UiAction.FetchProfile -> fetchProfile()

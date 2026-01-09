@@ -25,5 +25,4 @@ sealed interface UiAction {
     data object FetchChatList : UiAction
     data object LoadMore : UiAction
     data class SearchByKeyword(val value: String) : UiAction
-    data object ResetState : UiAction
 }

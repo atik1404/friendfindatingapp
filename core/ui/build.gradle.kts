@@ -15,4 +15,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.coil)
     implementation(libs.lottie.animation)
+
+    implementation(libs.play.services.ads)
 }

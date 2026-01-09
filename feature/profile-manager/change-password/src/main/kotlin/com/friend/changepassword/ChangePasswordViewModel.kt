@@ -35,7 +35,6 @@ class ChangePasswordViewModel @Inject constructor(
             is UiAction.OnNewPasswordChange -> onNewPasswordChange(it.value)
             is UiAction.OnOldPasswordChange -> onOldPasswordChange(it.value)
             UiAction.PerformPasswordChanged -> performPasswordChanged()
-            UiAction.ResetState -> _uiState.value = UiState()
         }
     }
 

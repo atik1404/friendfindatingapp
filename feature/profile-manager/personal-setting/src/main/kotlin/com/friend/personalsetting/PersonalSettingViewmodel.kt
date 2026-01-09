@@ -65,7 +65,6 @@ class PersonalSettingViewmodel @Inject constructor(
             is UiAction.SelectGender -> onChangeGender(it.value)
             is UiAction.SelectInterestedIn -> onChangeInterest(it.value)
             is UiAction.ShowDatePicker -> onShowDatePicker(it.isVisible)
-            UiAction.ResetState -> _formUiState.value = UiState()
         }
     }
 

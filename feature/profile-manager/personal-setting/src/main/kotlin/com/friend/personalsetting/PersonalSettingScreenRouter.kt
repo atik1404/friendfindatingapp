@@ -18,7 +18,6 @@ fun PersonalSettingScreenRouter(
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        viewmodel.action(UiAction.ResetState)
         viewmodel.action(UiAction.FetchCountry)
         viewmodel.action(UiAction.SetDefaultData)
 

@@ -61,7 +61,6 @@ class RegistrationViewModel @Inject constructor(
             is UiAction.SelectInterestedIn -> onChangeInterest(it.value)
             is UiAction.CheckPrivacyPolicy -> onAgreedPolicy(it.value)
             is UiAction.ShowDatePicker -> onShowDatePicker(it.isVisible)
-            UiAction.ResetState -> _formUiState.value = UiState()
         }
     }
 

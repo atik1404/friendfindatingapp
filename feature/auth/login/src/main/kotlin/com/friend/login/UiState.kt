@@ -19,5 +19,4 @@ sealed class UiAction {
     data class UsernameChanged(val value: String) : UiAction()
     data class PasswordChanged(val value: String) : UiAction()
     object PerformLogin : UiAction()
-    object ResetState : UiAction()
 }

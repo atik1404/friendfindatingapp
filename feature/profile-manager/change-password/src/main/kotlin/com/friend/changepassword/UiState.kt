@@ -20,5 +20,4 @@ sealed interface UiAction {
     data class OnNewPasswordChange(val value: String) : UiAction
     data class OnConfirmPasswordChange(val value: String) : UiAction
     object PerformPasswordChanged : UiAction
-    object ResetState : UiAction
 }

@@ -35,7 +35,6 @@ class LoginViewModel @Inject constructor(
             is UiAction.UsernameChanged -> onUserNameChanged(it.value)
             is UiAction.PasswordChanged -> onPasswordChanged(it.value)
             UiAction.PerformLogin -> performLoginApi()
-            UiAction.ResetState -> _uiState.value = UiState()
         }
     }
 

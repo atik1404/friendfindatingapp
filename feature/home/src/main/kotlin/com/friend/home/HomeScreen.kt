@@ -27,12 +27,14 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.constraintlayout.compose.Dimension
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
 import com.friend.entity.search.FriendSuggestionApiEntity
 import com.friend.home.components.PersonItemCardSection
 import com.friend.home.components.ProfileSummarySection
 import com.friend.home.components.SearchBarSection
+import com.friend.ui.ads.BannerAds
 import com.friend.ui.common.ErrorType
 import com.friend.ui.common.ErrorUi
 import com.friend.ui.common.LoadingAnimation
@@ -57,7 +59,10 @@ fun HomeScreen(
 ) {
     var showFilterBottomSheet by rememberSaveable { mutableStateOf(false) }
     AppScaffold(
-        contentWindowInsets = WindowInsets.safeDrawing
+        contentWindowInsets = WindowInsets.safeDrawing,
+        bottomBar = {
+
+        }
     ) { padding ->
         Box(
             modifier = Modifier
@@ -128,6 +133,12 @@ fun HomeScreen(
                         .align(alignment = Alignment.BottomCenter)
                 )
             }
+
+            // Bottom banner ads area
+            BannerAds(
+                modifier = Modifier
+                    .align(alignment = Alignment.BottomCenter)
+            )
         }
     }
 
