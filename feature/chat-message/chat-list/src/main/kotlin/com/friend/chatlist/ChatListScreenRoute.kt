@@ -2,6 +2,7 @@ package com.friend.chatlist
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -13,9 +14,10 @@ fun ChatListScreenRoute(
     navigateToChatRoom: (ChatListItemApiEntity) -> Unit,
     viewModel: ChatListViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
+        viewModel.action.invoke(UiAction.ResetState)
         viewModel.action.invoke(UiAction.FetchChatList)
     }
 
