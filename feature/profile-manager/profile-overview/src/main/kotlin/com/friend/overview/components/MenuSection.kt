@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ContactPage
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Lock
@@ -26,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.friend.common.constant.PersonalMenu
+import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.R as Res
 import com.friend.designsystem.spacing.RadiusToken
 import com.friend.designsystem.spacing.SpacingToken
@@ -48,6 +51,13 @@ fun MenuCard(
             .appPaddingHorizontal(SpacingToken.medium)
     ) {
         MenuItem(
+            icon = Icons.Default.Verified,
+            menu = stringResource(Res.string.menu_vip_membership)
+        ) {
+            clickedOnMenu.invoke(PersonalMenu.VIP_MEMBERSHIP)
+        }
+
+        MenuItem(
             icon = Icons.Default.Person,
             menu = stringResource(Res.string.menu_personal_setting)
         ) {
@@ -59,13 +69,6 @@ fun MenuCard(
             menu = stringResource(Res.string.menu_change_password)
         ) {
             clickedOnMenu.invoke(PersonalMenu.CHANGE_PASSWORD)
-        }
-
-        MenuItem(
-            icon = Icons.Default.Verified,
-            menu = stringResource(Res.string.menu_vip_membership)
-        ) {
-            clickedOnMenu.invoke(PersonalMenu.VIP_MEMBERSHIP)
         }
 
         MenuItem(
@@ -102,6 +105,13 @@ fun MenuCard(
         ) {
             clickedOnMenu.invoke(PersonalMenu.LOGOUT)
         }
+
+        MenuItem(
+            icon = Icons.Default.ArrowBack,
+            menu = stringResource(Res.string.action_exit)
+        ) {
+            clickedOnMenu.invoke(PersonalMenu.EXIT_APP)
+        }
     }
 }
 
@@ -124,6 +134,7 @@ private fun MenuItem(
         Spacer(modifier = Modifier.width(SpacingToken.small))
         AppText(menu, textStyle = AppTypography.bodyMedium)
         Spacer(modifier = Modifier.weight(1f))
-        Icon(Icons.Default.KeyboardArrowRight, contentDescription = "")
+        Icon(Icons.Default.KeyboardArrowRight, contentDescription = "", modifier = Modifier.size(
+            IconSizeToken.large))
     }
 }

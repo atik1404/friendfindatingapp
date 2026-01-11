@@ -46,6 +46,7 @@
     <string name="action_sign_up">Sign Up</string>
     <string name="action_no_account">Don\'t have an account?</string>
     <string name="action_logout">Logout</string>
+    <string name="action_exit">Exit</string>
     <string name="action_save">Save</string>
     <string name="action_save_changes">Save Changes</string>
     <string name="action_send_link">Send Link</string>
@@ -194,7 +195,7 @@
     <string name="menu_block_user">Block this user</string>
     <string name="menu_unblock_user">Unblock this user</string>
 
-    <string name="menu_personal_setting">Personal Setting</string>
+    <string name="menu_personal_setting">Personal Settings</string>
     <string name="menu_change_password">Change Password</string>
     <string name="menu_vip_membership">VIP Membership</string>
     <string name="menu_privacy_policy">Privacy Policy</string>

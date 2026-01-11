@@ -127,6 +127,7 @@ fun ProfileSummaryUi(
             )
 
             AppIconButton(
+                iconSize = IconSizeToken.large,
                 onClick = onClick,
                 vectorIcon = Icons.Default.KeyboardArrowRight
             )

@@ -51,7 +51,7 @@ fun Context.openAppInPlayStore() {
 }
 
 fun Context.openMailApp() {
-    val recipient = "atik@gmail.com"
+    val recipient = "contactus@friendfin.com"
 
     val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
         data = Uri.parse("mailto:$recipient")

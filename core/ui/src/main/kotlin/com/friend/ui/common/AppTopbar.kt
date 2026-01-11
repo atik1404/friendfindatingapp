@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.material.icons.Icons
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.theme.surfaceColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
@@ -55,7 +57,8 @@ fun AppToolbar(
             IconButton(onClick = onBackClick) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBackIosNew,
-                    contentDescription = "Back"
+                    contentDescription = "Back",
+                    modifier = Modifier.size(IconSizeToken.large)
                 )
             }
         }

@@ -27,6 +27,7 @@ import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.LocalImageLoader
 import com.friend.ui.preview.LightPreview
+import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 /**

@@ -23,7 +23,7 @@ object SpKey {
     const val drinking = "drinking"
     const val eyes = "eyes"
     const val hair = "hair"
-    const val height = "hair"
+    const val height = "height"
     const val interests = "interests"
     const val lookingFor = "lookingFor"
     const val smoking = "smoking"

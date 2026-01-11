@@ -26,6 +26,7 @@ fun ProfileOverviewRoute(
     navigateToPrivacyPolicyScreen: () -> Unit,
     navigateToPersonalSettingScreen: () -> Unit,
     navigateToMembershipScreen: () -> Unit,
+    exitApp: () -> Unit,
     viewModel: ProfileOverviewViewModel = hiltViewModel()
 ) {
     val userInfo by viewModel.userInfo.collectAsStateWithLifecycle()
@@ -68,6 +69,7 @@ fun ProfileOverviewRoute(
                 PersonalMenu.SHARE_APP -> context.shareApp()
                 PersonalMenu.RATE_APP -> context.openAppInPlayStore()
                 PersonalMenu.CONTACT_US -> context.openMailApp()
+                PersonalMenu.EXIT_APP -> exitApp.invoke()
             }
         }
     )

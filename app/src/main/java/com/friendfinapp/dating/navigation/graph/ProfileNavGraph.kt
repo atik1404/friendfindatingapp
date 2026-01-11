@@ -36,6 +36,7 @@ object ProfileNavGraph {
                 navigateToPrivacyPolicyScreen = { backStack.add(MainScreens.PrivacyPolicyNavScreen) },
                 navigateToChangePasswordScreen = { backStack.add(ProfileScreens.ChangePasswordNavScreen) },
                 navigateToPersonalSettingScreen = { backStack.add(ProfileScreens.PersonalSettingNavScreen) },
+                exitApp = {backStack.clear()}
             )
         }
         entry<ProfileScreens.ProfileNavScreen> { key ->

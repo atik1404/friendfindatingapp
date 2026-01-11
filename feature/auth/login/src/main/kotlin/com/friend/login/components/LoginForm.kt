@@ -94,7 +94,8 @@ fun LoginForm(
         AppTextButton(
             text = stringResource(Res.string.action_forgot_password),
             modifier = Modifier.wrapContentWidth(Alignment.End),
-            onClick = onForgotPasswordClick
+            onClick = onForgotPasswordClick,
+            textColor = MaterialTheme.textColors.brand
         )
 
         SignUpContent {
@@ -117,7 +118,7 @@ private fun SignUpContent(
         ColoredTextSegment(
             text = stringResource(Res.string.action_sign_up),
             color = MaterialTheme.textColors.brand,
-            style = AppTypography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+            style = AppTypography.bodyMedium.copy(fontWeight = FontWeight.Black),
             onClick = onSignUpClick
         ),
     )

@@ -39,6 +39,7 @@ class GoogleSignInManager(private val context: Context) {
 
             handleSignIn(result)
         } catch (e: GetCredentialException) {
+            Timber.e("Error signing in: ${e.message}")
             GoogleSignInResult.Error(e.message.toString())
         }
     }

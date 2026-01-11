@@ -65,3 +65,10 @@
 #-----------------------------------
 -dontwarn okio.**
 -keep class androidx.appcompat.widget.** { *; }
+
+# Google Play Services
+-keep class com.google.android.gms.auth.api.signin.** { *; }
+-keep class com.google.android.gms.common.api.** { *; }
+
+# If you use Firebase
+-keep class com.google.firebase.** { *; }

@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.friend.ui.showToastMessage
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,8 +24,10 @@ fun LoginRoute(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { effect ->
             when (effect) {
-                is UiEvent.ShowMessage ->
+                is UiEvent.ShowMessage -> {
+                    Timber.e("Error signing in00: ${effect.message}")
                     context.showToastMessage(effect.message)
+                }
 
                 is UiEvent.NavigateToHome ->
                     navigateToHome()

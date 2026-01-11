@@ -260,7 +260,7 @@ private fun ProfileUi(
 
         LabeledValue(
             title = stringResource(Res.string.label_interest),
-            value = data.interests,
+            value = data.interests.replace(":", ", "),
             modifier = Modifier.fillMaxWidth(),
             maxLines = 5
         )

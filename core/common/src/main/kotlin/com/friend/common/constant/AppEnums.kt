@@ -41,4 +41,5 @@ enum class PersonalMenu {
     VIP_MEMBERSHIP,
     CONTACT_US,
     LOGOUT,
+    EXIT_APP,
 }
