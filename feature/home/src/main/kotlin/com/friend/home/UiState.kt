@@ -11,7 +11,7 @@ data class FilterUiState(
     val country: String? = null,
     val state: String? = null,
     val city: String? = null,
-    val username: String? = null,
+    val username: String = "",
     val isOnlineUser: Boolean = false,
     val isPhotoRequired: Boolean = false,
     val bodyType: String? = null,
