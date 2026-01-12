@@ -10,12 +10,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import com.friend.chatroom.components.messageUi.ConversasionBody
 import com.friend.chatroom.components.messageUi.bubbleColorPair
 import com.friend.chatroom.components.messageUi.bubbleCornerShape
@@ -33,9 +41,12 @@ import com.friend.ui.components.AppCheckbox
 import com.friend.ui.components.AppText
 import com.friend.ui.preview.LightPreview
 
+private val JumpToBottomThreshold = 56.dp
+
 @Composable
 fun ConversionsUiSection(
     modifier: Modifier,
+    listState: LazyListState,
     message: List<MessageEntity>,
     isItemSelectionEnable: Boolean,
     onLongPress: () -> Unit,
@@ -44,6 +55,7 @@ fun ConversionsUiSection(
     //val audioController = rememberAudioPlayerController()
 
     LazyColumn(
+        state = listState,
         reverseLayout = true,
         modifier = modifier
             .appPaddingHorizontal(SpacingToken.small)

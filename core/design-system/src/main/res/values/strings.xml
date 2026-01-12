@@ -143,6 +143,7 @@
     <string name="msg_get_more_in_vip">Get more with VIP membership</string>
     <string name="msg_forgot_password_instruction">Enter your email address below and we will send you instructions to reset your password.</string>
     <string name="msg_reset_your_password">Reset your password</string>
+    <string name="msg_jump_to_bottom">Jump to Bottom</string>
 
     <string name="msg_advance_filter">Use advanced filter!</string>
     <string name="msg_advance_filter_description">you can use country and distance filter.</string>

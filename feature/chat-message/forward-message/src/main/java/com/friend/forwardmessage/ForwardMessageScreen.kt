@@ -63,11 +63,6 @@ fun ForwardMessageScreen(
                     vertical = SpacingToken.medium
                 )
         ) {
-            if (uiState.isLoading)
-                LoadingAnimation(
-                    modifier = Modifier.align(alignment = Alignment.Center)
-                )
-
             if (uiState.isError)
                 ErrorUi(
                     modifier = Modifier.fillMaxSize(),
@@ -112,6 +107,11 @@ fun ForwardMessageScreen(
                         .align(alignment = Alignment.BottomCenter)
                 )
             }
+
+            if (uiState.isLoading)
+                LoadingAnimation(
+                    modifier = Modifier.align(alignment = Alignment.Center)
+                )
 
             FabDrawableIcon(
                 modifier = Modifier.align(Alignment.BottomEnd)

@@ -12,19 +12,25 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
 import com.friend.chatroom.components.ConversionsUiSection
 import com.friend.chatroom.components.SearchResultCountUi
 import com.friend.chatroom.components.TopBarUiSection
 import com.friend.chatroom.components.UserInputAndAttachment
+import com.friend.chatroom.components.messageUi.JumpToBottom
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingOnly
 import com.friend.designsystem.theme.dividerColors
@@ -32,6 +38,9 @@ import com.friend.entity.chatmessage.ChatListItemApiEntity
 import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.preview.LightPreview
+import kotlinx.coroutines.launch
+
+private val JumpToBottomThreshold = 56.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,6 +55,20 @@ fun ChatRoomScreen(
     onAction: (UiAction) -> Unit,
 ) {
     var isItemSelectionEnable by remember { mutableStateOf(false) }
+
+    val listState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+
+    val jumpThreshold = with(LocalDensity.current) {
+        JumpToBottomThreshold.toPx()
+    }
+
+    val jumpToBottomButtonEnabled by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex != 0 ||
+                    listState.firstVisibleItemScrollOffset > jumpThreshold
+        }
+    }
 
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
@@ -108,6 +131,7 @@ fun ChatRoomScreen(
                 )
 
                 ConversionsUiSection(
+                    listState = listState,
                     message = uiState.messages,
                     modifier = modifier
                         .fillMaxWidth()
@@ -141,6 +165,17 @@ fun ChatRoomScreen(
                         keyword = uiState.searchKey
                     )
                 }
+
+            JumpToBottom(
+                // Only show if the scroller is not at the bottom
+                enabled = jumpToBottomButtonEnabled,
+                onClicked = {
+                    scope.launch {
+                        listState.animateScrollToItem(0)
+                    }
+                },
+                modifier = Modifier.align(Alignment.BottomCenter),
+            )
         }
     }
 }
