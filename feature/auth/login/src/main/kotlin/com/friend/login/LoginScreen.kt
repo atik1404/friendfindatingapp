@@ -22,12 +22,10 @@ import com.friend.login.components.CopyrightText
 import com.friend.login.components.GoogleLoginButton
 import com.friend.login.components.LoginForm
 import com.friend.login.components.LoginOptionDivider
-import com.friend.ui.ads.BannerAds
 import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.LocalImageLoader
 import com.friend.ui.preview.LightPreview
-import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 /**
