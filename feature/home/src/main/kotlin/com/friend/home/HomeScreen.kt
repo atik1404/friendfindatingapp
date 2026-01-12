@@ -59,9 +59,6 @@ fun HomeScreen(
     var showFilterBottomSheet by rememberSaveable { mutableStateOf(false) }
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
-        bottomBar = {
-
-        }
     ) { padding ->
         Box(
             modifier = Modifier
@@ -132,12 +129,6 @@ fun HomeScreen(
                         .align(alignment = Alignment.BottomCenter)
                 )
             }
-
-            // Bottom banner ads area
-            BannerAds(
-                modifier = Modifier
-                    .align(alignment = Alignment.BottomCenter)
-            )
         }
     }
 

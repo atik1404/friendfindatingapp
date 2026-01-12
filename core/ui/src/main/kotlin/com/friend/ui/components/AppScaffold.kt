@@ -11,13 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.friend.designsystem.theme.backgroundColors
+import com.friend.ui.ads.BannerAds
 
 
 @Composable
 fun AppScaffold(
     modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = {},
-    bottomBar: @Composable () -> Unit = {},
+    //bottomBar: @Composable () -> Unit = {},
     snackbarHost: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
@@ -29,7 +30,9 @@ fun AppScaffold(
     Scaffold(
         modifier = modifier,
         topBar = topBar,
-        bottomBar = bottomBar,
+        bottomBar = {
+            BannerAds()
+        },
         snackbarHost = snackbarHost,
         floatingActionButton = floatingActionButton,
         floatingActionButtonPosition = floatingActionButtonPosition,

@@ -156,16 +156,6 @@ fun LoginScreen(
                     height = Dimension.preferredWrapContent
                 }
             )
-
-            // Bottom banner ads area
-            BannerAds(
-                modifier = Modifier.constrainAs(bannerAds) {
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                    width = Dimension.fillToConstraints
-                }
-            )
         }
 
         if (state.isLoading)
