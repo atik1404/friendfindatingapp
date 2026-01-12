@@ -30,7 +30,10 @@ import com.friend.designsystem.spacing.ImageSizeToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.StrokeTokens
 import com.friend.designsystem.spacing.appPadding
+import com.friend.designsystem.spacing.appPaddingHorizontal
+import com.friend.designsystem.spacing.appPaddingOnly
 import com.friend.designsystem.spacing.appPaddingSymmetric
+import com.friend.designsystem.spacing.appPaddingVertical
 import com.friend.designsystem.theme.backgroundColors
 import com.friend.designsystem.theme.strokeColors
 import com.friend.designsystem.theme.surfaceColors
@@ -60,10 +63,10 @@ fun ProfileSummaryUi(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .appPaddingSymmetric(
-                    horizontal = SpacingToken.medium,
+                .appPaddingVertical(
                     vertical = SpacingToken.large
-                ),
+                )
+                .appPaddingOnly(start = SpacingToken.medium, end = SpacingToken.small),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             val picSize = ImageSizeToken.profilePictureSmall
@@ -129,7 +132,8 @@ fun ProfileSummaryUi(
             AppIconButton(
                 iconSize = IconSizeToken.large,
                 onClick = onClick,
-                vectorIcon = Icons.Default.KeyboardArrowRight
+                vectorIcon = Icons.Default.KeyboardArrowRight,
+                tint = MaterialTheme.surfaceColors.graySoft
             )
         }
     }

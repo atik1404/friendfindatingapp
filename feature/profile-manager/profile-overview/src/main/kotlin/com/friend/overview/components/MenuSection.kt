@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import com.friend.common.constant.PersonalMenu
 import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.R as Res
@@ -35,6 +36,7 @@ import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingHorizontal
 import com.friend.designsystem.spacing.appPaddingVertical
 import com.friend.designsystem.theme.backgroundColors
+import com.friend.designsystem.theme.surfaceColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.ui.components.AppText
 
@@ -130,11 +132,11 @@ private fun MenuItem(
             },
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(icon, contentDescription = "")
+        Icon(icon, contentDescription = "", tint = MaterialTheme.surfaceColors.graySoft)
         Spacer(modifier = Modifier.width(SpacingToken.small))
-        AppText(menu, textStyle = AppTypography.bodyMedium)
+        AppText(menu, textStyle = AppTypography.bodyMedium, fontWeight = FontWeight.Medium)
         Spacer(modifier = Modifier.weight(1f))
         Icon(Icons.Default.KeyboardArrowRight, contentDescription = "", modifier = Modifier.size(
-            IconSizeToken.large))
+            IconSizeToken.large), tint = MaterialTheme.surfaceColors.graySoft)
     }
 }
