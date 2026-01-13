@@ -92,7 +92,7 @@ private fun FilterUi(
                 .verticalScroll(rememberScrollState())
         ) {
             AppOutlineTextField(
-                text = filterUiState.username ?: "",
+                text = filterUiState.username,
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(Res.string.label_username),
                 placeholder = stringResource(Res.string.hint_user_name),
@@ -115,8 +115,8 @@ private fun FilterUi(
             Spacer(Modifier.height(SpacingToken.micro))
 
             AgeRangeUi(
-                minAge = filterUiState.fromAge ?: "",
-                maxAge = filterUiState.toAge ?: "",
+                minAge = filterUiState.fromAge,
+                maxAge = filterUiState.toAge,
                 onFromAgeChange = { onAction.invoke(UiAction.OnChangeFromAge(it)) },
                 onToAgeChange = { onAction.invoke(UiAction.OnChangeToAge(it)) },
             )
@@ -125,7 +125,7 @@ private fun FilterUi(
 
             GenderSelection(
                 title = stringResource(Res.string.label_am_looking_for),
-                selectedValue = Gender.fromValue(filterUiState.gender ?: -1).name,
+                selectedValue = Gender.fromValue(filterUiState.gender).name,
             ) {
                 onAction.invoke(UiAction.OnChangeGender(it))
             }
@@ -134,7 +134,7 @@ private fun FilterUi(
 
             GenderSelection(
                 title = stringResource(Res.string.label_seeking_for),
-                selectedValue = Gender.fromValue(filterUiState.interestedIn ?: -1).name,
+                selectedValue = Gender.fromValue(filterUiState.interestedIn).name,
             ) {
                 onAction.invoke(UiAction.OnChangeInterested(it))
             }
@@ -257,7 +257,7 @@ private fun FilterUi(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 AppCheckbox(
-                    checked = filterUiState.isOnlineUser ?: false,
+                    checked = filterUiState.isOnlineUser,
                     onCheckedChange = { onAction.invoke(UiAction.OnlineUserChanged(it)) },
                     label = stringResource(Res.string.msg_online_user_only)
                 )
@@ -265,7 +265,7 @@ private fun FilterUi(
                 Spacer(modifier = Modifier.height(SpacingToken.extraSmall))
 
                 AppCheckbox(
-                    checked = filterUiState.isPhotoRequired ?: false,
+                    checked = filterUiState.isPhotoRequired,
                     onCheckedChange = { onAction.invoke(UiAction.PhotoRequiredChanged(it)) },
                     label = stringResource(Res.string.msg_photo_required)
                 )

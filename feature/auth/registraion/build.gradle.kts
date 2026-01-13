@@ -5,3 +5,7 @@ plugins {
 android {
     namespace = "com.friend.registration"
 }
+
+dependencies{
+    implementation(libs.google.recaptcha)
+}

@@ -1,6 +1,7 @@
 package com.friend.registration
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -14,24 +15,30 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
+import com.friend.designsystem.theme.textColors
+import com.friend.designsystem.typography.AppTypography
 import com.friend.registration.component.AddressSection
 import com.friend.registration.component.BirthDateSelection
 import com.friend.registration.component.EmailSection
-import com.friend.registration.component.GenderSelection
-import com.friend.registration.component.InterestedInSelection
 import com.friend.registration.component.NameSection
 import com.friend.registration.component.PasswordSection
 import com.friend.ui.common.AppToolbar
 import com.friend.ui.common.ErrorUi
+import com.friend.ui.common.GenderSelection
 import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppCheckbox
 import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppScaffold
+import com.friend.ui.components.ColoredTextSegment
+import com.friend.ui.components.MultiColorText
 import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
@@ -42,6 +49,7 @@ fun RegistrationScreen(
     uiAction: (UiAction) -> Unit,
     modifier: Modifier = Modifier,
     onBackButtonClicked: () -> Unit,
+    privacyPolicyClicked: () -> Unit,
 ) {
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
@@ -100,8 +108,9 @@ fun RegistrationScreen(
             Spacer(modifier = modifier.height(SpacingToken.medium))
 
             GenderSelection(
+                title = stringResource(Res.string.label_gender),
                 modifier = modifier,
-                selectedGender = state.form.gender?.name ?: "",
+                selectedValue = state.form.gender?.name ?: "",
                 onSelected = {
                     uiAction.invoke(UiAction.SelectGender(it))
                 }
@@ -109,9 +118,10 @@ fun RegistrationScreen(
 
             Spacer(modifier = modifier.height(SpacingToken.medium))
 
-            InterestedInSelection(
+            GenderSelection(
+                title = stringResource(Res.string.label_interested_in),
                 modifier = modifier,
-                selectedGender = state.form.interestedIn?.name ?: "",
+                selectedValue = state.form.interestedIn?.name ?: "",
                 onSelected = {
                     uiAction.invoke(UiAction.SelectInterestedIn(it))
                 }
@@ -158,13 +168,47 @@ fun RegistrationScreen(
 
             Spacer(modifier = modifier.height(SpacingToken.medium))
 
-            AppCheckbox(
-                checked = state.form.isAgree,
-                onCheckedChange = {
-                    uiAction.invoke(UiAction.CheckPrivacyPolicy(it))
-                },
-                label = stringResource(Res.string.msg_agree_with_term_condition)
-            )
+            Row(
+                modifier = modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                AppCheckbox(
+                    checked = state.form.isAgree,
+                    onCheckedChange = {
+                        uiAction.invoke(UiAction.CheckPrivacyPolicy(it))
+                    },
+                    //label = stringResource(Res.string.msg_agree_with_term_condition)
+                )
+
+                val segments = listOf(
+                    ColoredTextSegment(
+                        text = stringResource(Res.string.msg_agree_with_term_condition),
+                        color = MaterialTheme.textColors.secondary,
+                        style = AppTypography.bodyMedium,
+                        addSpace = true
+                    ),
+                    ColoredTextSegment(
+                        text = stringResource(Res.string.label_privacy_policy),
+                        color = MaterialTheme.textColors.brand,
+                        style = AppTypography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                        addSpace = true,
+                        onClick = privacyPolicyClicked
+                    ),
+                    ColoredTextSegment(
+                        text = stringResource(Res.string.msg_and),
+                        color = MaterialTheme.textColors.secondary,
+                        style = AppTypography.bodyMedium,
+                        addSpace = true
+                    ),
+                    ColoredTextSegment(
+                        text = stringResource(Res.string.label_term_and_condition),
+                        color = MaterialTheme.textColors.brand,
+                        style = AppTypography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                        onClick = privacyPolicyClicked
+                    ),
+                )
+                MultiColorText(segments = segments)
+            }
 
             Spacer(modifier = modifier.height(SpacingToken.medium))
 
@@ -195,6 +239,7 @@ private fun ScreenPreview() {
     RegistrationScreen(
         onBackButtonClicked = {},
         state = UiState(),
-        uiAction = {}
+        uiAction = {},
+        privacyPolicyClicked = {},
     )
 }

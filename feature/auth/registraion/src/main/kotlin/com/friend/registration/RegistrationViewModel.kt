@@ -1,5 +1,6 @@
 package com.friend.registration
 
+import android.app.Application
 import com.friend.common.base.BaseViewModel
 import com.friend.common.constant.Gender
 import com.friend.common.extfun.getLocalIpAddress
@@ -16,6 +17,8 @@ import com.friend.entity.search.StateApiEntity
 import com.friend.sharedpref.SharedPrefHelper
 import com.friend.sharedpref.SpKey
 import com.friend.ui.common.UiText
+import com.google.android.recaptcha.Recaptcha
+import com.google.android.recaptcha.RecaptchaAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import timber.log.Timber
 import javax.inject.Inject
 import com.friend.designsystem.R as Res
 
@@ -33,7 +37,8 @@ class RegistrationViewModel @Inject constructor(
     private val fetchCountryApiUseCase: FetchCountriesUseCase,
     private val postRegistrationApiUseCase: PostRegistrationApiUseCase,
     private val postLoginApiUseCase: PostLoginApiUseCase,
-    private val sharedPrefHelper: SharedPrefHelper
+    private val sharedPrefHelper: SharedPrefHelper,
+    private val application: Application
 ) : BaseViewModel() {
     val ioError get() = postRegistrationApiUseCase.ioError.receiveAsFlow()
 
@@ -65,6 +70,7 @@ class RegistrationViewModel @Inject constructor(
     }
 
     init {
+        fetchCountries()
         bindIoError()
     }
 
@@ -147,7 +153,9 @@ class RegistrationViewModel @Inject constructor(
                 userIP = getLocalIpAddress()
             )
 
-            postRegistrationApiUseCase.execute(params).collect { result ->
+            val result = postRegistrationApiUseCase.execute(params)
+
+            result.collect { result ->
                 when (result) {
                     is ApiResult.Error -> setToastMessage(UiText.Dynamic(result.message))
                     is ApiResult.Loading -> _formUiState.update { it.copy(isSubmitting = result.loading) }
@@ -327,6 +335,27 @@ class RegistrationViewModel @Inject constructor(
     private fun setToastMessage(message: UiText) {
         execute {
             _uiEvent.send(UiEvent.ShowToastMessage(message))
+        }
+    }
+
+    private fun handleRecaptcha(
+        onResult: (Boolean) -> Unit = {}
+    ) {
+        execute {
+            val siteKey = "6LeMdEksAAAAAHbOZMR-HfHgBTggNHpvdizahH83"
+
+            val recaptchaClient =
+                Recaptcha.fetchClient(application = application, siteKey = siteKey)
+
+            recaptchaClient.execute(RecaptchaAction.LOGIN)
+                .onSuccess {
+                    Timber.e("Recaptcha response: $it")
+                    onResult.invoke(true)
+                }
+                .onFailure {
+                    Timber.e("Recaptcha error: $it")
+                    onResult.invoke(false)
+                }
         }
     }
 }

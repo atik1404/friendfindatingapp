@@ -90,6 +90,7 @@ playServicesSafetynet = "18.1.0"
 playAppUpdateVersionVersion = "2.0.1"
 googleCredential = "1.6.0-rc01"
 googleAuthId = "1.1.1"
+recaptcha = "18.9.0-beta01"
 
 espressoVersion = "3.7.0"
 junitVersion = "4.13.2"
@@ -201,6 +202,8 @@ play-services-safetynet = { module = "com.google.android.gms:play-services-safet
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "googleCredential" }
 androidx-credentials-service-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "googleCredential" }
 androidx-credentials-googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleAuthId" }
+
+google-recaptcha = { module = "com.google.android.recaptcha:recaptcha", version.ref = "recaptcha" }
 
 billing = { module = "com.android.billingclient:billing-ktx", version.ref = "billing" }
 
