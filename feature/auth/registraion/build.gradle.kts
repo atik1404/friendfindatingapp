@@ -7,5 +7,5 @@ android {
 }
 
 dependencies{
-    implementation(libs.google.recaptcha)
+    implementation(libs.play.services.recaptcha)
 }

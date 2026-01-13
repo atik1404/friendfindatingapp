@@ -112,6 +112,7 @@ dependencies {
     with(libs){
         implementation(androidx.core.ktx)
         implementation(androidx.appcompat)
+        implementation(androidx.activity.ktx)
         implementation(bundles.lifecycle)
 
         implementation(platform(libs.androidx.compose.bom))
@@ -126,6 +127,9 @@ dependencies {
         implementation(platform(firebase.bom))
         implementation(firebase.analytics)
         implementation(firebase.crashlytics)
+
+        implementation(libs.play.services.ads)
+
         implementation(libs.android.image.cropper)
 
         testImplementation(test.junit)

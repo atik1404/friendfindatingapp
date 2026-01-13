@@ -84,13 +84,13 @@ workRuntime = "2.11.0"
 lottieVersion = "6.7.1"
 
 playServicesAds = "24.9.0"
-playServicesAuth = "21.4.0"
-playServicesRecaptcha = "17.1.0"
+playServicesAuth = "21.5.0"
+playServicesRecaptcha = "18.9.0-beta01"
 playServicesSafetynet = "18.1.0"
 playAppUpdateVersionVersion = "2.0.1"
 googleCredential = "1.6.0-rc01"
 googleAuthId = "1.1.1"
-recaptcha = "18.9.0-beta01"
+
 
 espressoVersion = "3.7.0"
 junitVersion = "4.13.2"
@@ -196,14 +196,12 @@ photoview = { module = "com.github.chrisbanes:PhotoView", version.ref = "photovi
 
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
-play-services-recaptcha = { module = "com.google.android.gms:play-services-recaptcha", version.ref = "playServicesRecaptcha" }
+play-services-recaptcha = { module = "com.google.android.recaptcha:recaptcha", version.ref = "playServicesRecaptcha" }
 play-services-safetynet = { module = "com.google.android.gms:play-services-safetynet", version.ref = "playServicesSafetynet" }
 
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "googleCredential" }
 androidx-credentials-service-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "googleCredential" }
 androidx-credentials-googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleAuthId" }
-
-google-recaptcha = { module = "com.google.android.recaptcha:recaptcha", version.ref = "recaptcha" }
 
 billing = { module = "com.android.billingclient:billing-ktx", version.ref = "billing" }
 
@@ -330,30 +328,10 @@ media-exoplayer = [
     "exoplayer-compose",
 ]
 
-# ---- Google Play Services ----
-play-services = [
-    "play-services-ads",
-    "play-services-auth",
-    "play-services-recaptcha",
-    "play-services-safetynet",
-]
-
-# ---- Work / Multidex / Misc ----
-work = [
-    "androidx-work-runtime",
-]
 misc = [
     "androidx-multidex",
     "localisation",
     "dateced",
-]
-
-# ---- Billing / Permissions ----
-billing = [
-    "billing",
-]
-permissions = [
-    "dexter",
 ]
 
 # ---- Debug / Logging ----
