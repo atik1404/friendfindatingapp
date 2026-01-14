@@ -2,6 +2,7 @@ package com.friend.profile
 
 import com.friend.common.base.BaseViewModel
 import com.friend.domain.apiusecase.profilemanager.FetchProfileApiUseCase
+import com.friend.domain.apiusecase.profilemanager.PostBlockUnblockApiUseCase
 import com.friend.domain.apiusecase.profilemanager.PostProfileImageApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.sharedpref.SharedPrefHelper
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val fetchProfileApiUseCase: FetchProfileApiUseCase,
     private val postProfileImageApiUseCase: PostProfileImageApiUseCase,
+    private val postBlockUnblockApiUseCase: PostBlockUnblockApiUseCase,
     private val sharedPrefHelper: SharedPrefHelper,
 ) : BaseViewModel() {
     private val _uiSate = MutableStateFlow<UiState>(UiState.Loading)
@@ -35,6 +37,7 @@ class ProfileViewModel @Inject constructor(
         when (it) {
             UiAction.FetchProfile -> fetchProfile()
             is UiAction.UpdateProfilePicture -> performProfileImageUpdate(it.image)
+            is UiAction.OnUnblockUser -> performUnblock(it.username)
         }
     }
 
@@ -64,6 +67,39 @@ class ProfileViewModel @Inject constructor(
                     is ApiResult.Success -> {
                         _uiEvent.send(UiEvent.ShowToastMessage(UiText.Dynamic(result.data)))
                         _imageUiSate.update { it.copy(error = null) }
+                        fetchProfile()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun performUnblock(blockedUser: String) {
+        execute {
+            val params = PostBlockUnblockApiUseCase.Params(
+                userBlocker = sharedPrefHelper.getString(SpKey.userName),
+                blockedUser = blockedUser
+            )
+
+            postBlockUnblockApiUseCase.execute(params).collect { result ->
+                when (result) {
+                    is ApiResult.Error -> _uiEvent.send(
+                        UiEvent.ShowToastMessage(
+                            UiText.Dynamic(
+                                result.message
+                            )
+                        )
+                    )
+
+                    is ApiResult.Loading -> _uiSate.value = UiState.Loading
+                    is ApiResult.Success -> {
+                        _uiEvent.send(
+                            UiEvent.ShowToastMessage(
+                                UiText.Dynamic(
+                                    result.data
+                                )
+                            )
+                        )
                         fetchProfile()
                     }
                 }

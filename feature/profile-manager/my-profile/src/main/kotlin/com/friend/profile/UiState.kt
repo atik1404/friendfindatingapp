@@ -22,4 +22,5 @@ sealed interface UiEvent {
 sealed interface UiAction {
     data object FetchProfile : UiAction
     data class UpdateProfilePicture(val image: File) : UiAction
+    data class OnUnblockUser(val username: String) : UiAction
 }

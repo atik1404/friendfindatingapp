@@ -6,12 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -43,7 +40,7 @@ import com.friend.designsystem.R as Res
 fun BlockedUserSection(
     modifier: Modifier = Modifier,
     blockers: List<BlockedUserEntity> = emptyList(),
-    onUnblock: (String) -> Unit = {},
+    onUnblock: (String) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -63,11 +60,11 @@ fun BlockedUserSection(
         LazyColumn(
             modifier = modifier
                 .fillMaxWidth()
-                .heightIn(max = 300.dp)
+                .heightIn(max = 400.dp)
         ) {
             items(
                 items = blockers,
-                key = { it.fullName }
+                key = { it.username }
             ) {
                 BlockedUserItem(user = it) {
                     onUnblock(it.username)
@@ -132,6 +129,7 @@ private fun ScreenPreview() {
                 fullName = "Tom Cruise2",
                 userImage = "",
             )
-        )
+        ),
+        onUnblock = {}
     )
 }

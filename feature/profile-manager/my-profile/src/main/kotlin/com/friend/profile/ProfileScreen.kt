@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -79,6 +78,9 @@ fun ProfileScreen(
                     navigateToEditProfile = navigateToEditProfile,
                     onImageSelected = {
                         onAction.invoke(UiAction.UpdateProfilePicture(it))
+                    },
+                    onUnblock = {
+                        onAction.invoke(UiAction.OnUnblockUser(it))
                     }
                 )
             }
@@ -93,6 +95,7 @@ private fun ProfileUi(
     isImageLoading: Boolean,
     navigateToEditProfile: () -> Unit,
     onImageSelected: (File) -> Unit,
+    onUnblock: (String) -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -113,9 +116,12 @@ private fun ProfileUi(
 
         Spacer(modifier = Modifier.height(SpacingToken.medium))
 
-        BlockedUserSection(
-            blockers = data.blockedList
-        ) { }
+        if (data.blockedList.isNotEmpty())
+            BlockedUserSection(
+                blockers = data.blockedList
+            ) {
+                onUnblock.invoke(it)
+            }
     }
 }
 

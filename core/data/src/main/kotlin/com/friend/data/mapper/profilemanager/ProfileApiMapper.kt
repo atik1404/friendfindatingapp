@@ -48,7 +48,7 @@ class ProfileApiMapper @Inject constructor() :
             blockedList = response.blockedUser?.map {
                 BlockedUserEntity(
                     fullName = it.blockedUser.orEmpty(),
-                    username = it.userBlocker.orEmpty(),
+                    username = it.blockedUser.orEmpty(),
                     userImage = ""
                 )
             } ?: emptyList()
