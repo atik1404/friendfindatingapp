@@ -30,7 +30,7 @@ import com.friend.ui.preview.LightDarkPreview
 import com.friend.designsystem.R as Res
 
 @Composable
-fun ProfileHeaderUi(
+fun ProfileHeaderSection(
     modifier: Modifier = Modifier,
     isBlocked: Boolean,
     fullName: String,
@@ -105,7 +105,7 @@ fun ProfileHeaderUi(
 @Composable
 @LightDarkPreview
 private fun ScreenPreview() {
-    ProfileHeaderUi(
+    ProfileHeaderSection(
         fullName = "Tom Cruise",
         email = "tom@gmail.com",
         profilePicture = "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",

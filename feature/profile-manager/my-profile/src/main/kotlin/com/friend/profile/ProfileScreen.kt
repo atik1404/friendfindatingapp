@@ -26,7 +26,8 @@ import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
 import com.friend.entity.profilemanager.ProfileApiEntity
 import com.friend.profile.components.LabeledValue
-import com.friend.profile.components.ProfileHeaderUi
+import com.friend.profile.components.ProfileHeaderSection
+import com.friend.profile.components.ProfileInformationSection
 import com.friend.ui.common.AppToolbar
 import com.friend.ui.common.ErrorUi
 import com.friend.ui.common.LoadingUi
@@ -101,7 +102,7 @@ private fun ProfileUi(
     Column(
         modifier = modifier,
     ) {
-        ProfileHeaderUi(
+        ProfileHeaderSection(
             modifier = Modifier,
             fullName = data.fullName,
             email = data.email,
@@ -113,166 +114,7 @@ private fun ProfileUi(
 
         Spacer(modifier = Modifier.height(SpacingToken.medium))
 
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            LabeledValue(
-                title = stringResource(Res.string.label_date_of_birth),
-                value = DateTimeParser.parseToPattern(
-                    data.birthdate,
-                    DateTimePatterns.MDY_TEXT_COMMA
-                ),
-                modifier = Modifier.weight(1f)
-            )
-
-            LabeledValue(
-                title = stringResource(Res.string.label_gender),
-                value = data.gender,
-                modifier = Modifier.weight(1f),
-                alignment = Alignment.End
-            )
-        }
-
-        Spacer(modifier = Modifier.height(SpacingToken.medium))
-
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            LabeledValue(
-                title = stringResource(Res.string.label_language),
-                value = "English",
-                modifier = Modifier.weight(1f)
-            )
-
-            LabeledValue(
-                title = stringResource(Res.string.label_interested_in),
-                value = data.interestedIn,
-                modifier = Modifier.weight(1f),
-                alignment = Alignment.End
-            )
-        }
-
-        Spacer(modifier = Modifier.height(SpacingToken.medium))
-
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            LabeledValue(
-                title = stringResource(Res.string.label_height),
-                value = data.height,
-                modifier = Modifier.weight(1f)
-            )
-
-            LabeledValue(
-                title = stringResource(Res.string.label_weight),
-                value = data.weight,
-                modifier = Modifier.weight(1f),
-                alignment = Alignment.End
-            )
-        }
-
-        Spacer(modifier = Modifier.height(SpacingToken.medium))
-
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            LabeledValue(
-                title = stringResource(Res.string.label_eyes),
-                value = "Black",
-                modifier = Modifier.weight(1f)
-            )
-
-            LabeledValue(
-                title = stringResource(Res.string.label_hair),
-                value = data.hair,
-                modifier = Modifier.weight(1f),
-                alignment = Alignment.End
-            )
-        }
-
-        Spacer(modifier = Modifier.height(SpacingToken.medium))
-
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            LabeledValue(
-                title = stringResource(Res.string.label_smoking),
-                value = data.smoking,
-                modifier = Modifier.weight(1f)
-            )
-
-            LabeledValue(
-                title = stringResource(Res.string.label_drinking),
-                value = data.drinking,
-                modifier = Modifier.weight(1f),
-                alignment = Alignment.End
-            )
-        }
-
-        Spacer(modifier = Modifier.height(SpacingToken.medium))
-
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            LabeledValue(
-                title = stringResource(Res.string.label_body_type),
-                value = data.bodyType,
-                modifier = Modifier.weight(1f)
-            )
-
-            LabeledValue(
-                title = stringResource(Res.string.label_country),
-                value = data.country,
-                modifier = Modifier.weight(1f),
-                alignment = Alignment.End
-            )
-        }
-
-        Spacer(modifier = Modifier.height(SpacingToken.medium))
-
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            LabeledValue(
-                title = stringResource(Res.string.label_city),
-                value = data.city,
-                modifier = Modifier.weight(1f)
-            )
-
-            LabeledValue(
-                title = stringResource(Res.string.label_state),
-                value = data.state,
-                modifier = Modifier.weight(1f),
-                alignment = Alignment.End
-            )
-        }
-
-        Spacer(modifier = Modifier.height(SpacingToken.medium))
-
-        LabeledValue(
-            title = stringResource(Res.string.label_about_yourself),
-            value = data.aboutYou,
-            modifier = Modifier.fillMaxWidth(),
-            maxLines = 5
-        )
-
-        Spacer(modifier = Modifier.height(SpacingToken.medium))
-
-        LabeledValue(
-            title = stringResource(Res.string.label_interest),
-            value = data.interests.replace(":", ", "),
-            modifier = Modifier.fillMaxWidth(),
-            maxLines = 5
-        )
-
-        Spacer(modifier = Modifier.height(SpacingToken.medium))
-
-        LabeledValue(
-            title = stringResource(Res.string.label_whats_up),
-            value = data.whatsUp,
-            modifier = Modifier.fillMaxWidth(),
-            maxLines = 5
-        )
+        ProfileInformationSection(data)
     }
 }
 

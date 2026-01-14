@@ -70,7 +70,6 @@ class AppOpenAdManager(
         if (isShowingAd) return
 
         if (!isAdAvailable()) {
-            // ✅ Mark show requested, load and auto-show when loaded
             pendingShow = true
             loadAd(activity)
             return
@@ -85,15 +84,13 @@ class AppOpenAdManager(
             }
 
             override fun onAdDismissedFullScreenContent() {
-                Timber.e("App open ad dismissed")
                 appOpenAd = null
                 isShowingAd = false
                 onComplete()
-                loadAd(activity) // preload next
+                loadAd(activity)
             }
 
             override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                Timber.e("App open ad show failed: ${adError.message}")
                 appOpenAd = null
                 isShowingAd = false
                 onComplete()

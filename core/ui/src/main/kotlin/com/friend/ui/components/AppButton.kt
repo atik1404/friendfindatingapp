@@ -47,6 +47,7 @@ import com.friend.designsystem.theme.surfaceColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.ui.preview.LightDarkPreview
+import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
 
@@ -98,7 +99,7 @@ var lastClickAt = 0L
 @Composable
 private fun rememberDebouncedClick(
     debounceMillis: Long = 1000L,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ): () -> Unit {
     return {
         val now = System.currentTimeMillis()
@@ -374,6 +375,12 @@ fun AppIconButton(
 
 
 @Composable
-@LightDarkPreview
+@LightPreview
 fun ComponentPreview() {
+    AppElevatedButton(
+        modifier = Modifier.fillMaxWidth(),
+        text = stringResource(Res.string.action_login),
+        isLoading = false,
+        onClick = {},
+    )
 }

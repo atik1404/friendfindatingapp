@@ -56,7 +56,7 @@ import java.io.File
 import com.friend.designsystem.R as Res
 
 @Composable
-fun ProfileHeaderUi(
+fun ProfileHeaderSection(
     modifier: Modifier = Modifier,
     fullName: String,
     email: String,
@@ -191,7 +191,7 @@ fun ProfileHeaderUi(
 @Composable
 @LightPreview
 private fun ScreenPreview() {
-    ProfileHeaderUi(
+    ProfileHeaderSection(
         fullName = "Tom Cruise",
         email = "tom@gmail.com",
         isImageLoading = true,
