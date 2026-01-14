@@ -24,5 +24,12 @@ data class ProfileApiEntity(
     val title: String,
     val weight: String,
     val whatsUp: String,
-    val isProfileComplete: Boolean
+    val isProfileComplete: Boolean,
+    val blockedList: List<BlockedUserEntity> = emptyList(),
+)
+
+data class BlockedUserEntity(
+    val fullName: String,
+    val userImage: String,
+    val username: String
 )

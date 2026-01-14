@@ -64,6 +64,7 @@
     <string name="action_retry">Try again</string>
     <string name="action_gallery">Gallery</string>
     <string name="action_camera">Camera</string>
+    <string name="action_unblock">Unblock</string>
 
     <string name="label_or">OR</string>
     <string name="label_username">Username</string>
@@ -100,6 +101,7 @@
     <string name="label_why_report_user">Tell use why you want to report this user?</string>
     <string name="label_privacy_policy">Privacy Policy</string>
     <string name="label_term_and_condition">Terms &amp; Condition</string>
+    <string name="label_blocked_list">Blocked list</string>
 
     <string name="hint_user_name">Enter Username</string>
     <string name="hint_search_here">Search here....</string>

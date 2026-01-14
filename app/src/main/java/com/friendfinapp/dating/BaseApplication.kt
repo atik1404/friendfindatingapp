@@ -27,14 +27,14 @@ class BaseApplication : Application(),
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         if (BuildConfig.DEBUG)
             Timber.plant(Timber.DebugTree())
-
-        MobileAds.initialize(this)
-
-        registerActivityLifecycleCallbacks(this)
-        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-
-        appOpenAdManager = AppOpenAdManager(APP_OPEN_TEST_AD_UNIT_ID)
-        appOpenAdManager.loadAd(this)
+//
+//        MobileAds.initialize(this)
+//
+//        registerActivityLifecycleCallbacks(this)
+//        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+//
+//        appOpenAdManager = AppOpenAdManager(APP_OPEN_TEST_AD_UNIT_ID)
+//        appOpenAdManager.loadAd(this)
     }
 
     override fun onStart(owner: LifecycleOwner) {

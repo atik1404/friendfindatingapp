@@ -4,6 +4,7 @@ import com.friend.apiresponse.profilemanager.ProfileApiResponse
 import com.friend.common.constant.Gender
 import com.friend.data.mapper.Mapper
 import com.friend.di.qualifier.AppImageBaseUrl
+import com.friend.entity.profilemanager.BlockedUserEntity
 import com.friend.entity.profilemanager.ProfileApiEntity
 import com.friend.sharedpref.SharedPrefHelper
 import com.friend.sharedpref.SpKey
@@ -11,7 +12,6 @@ import javax.inject.Inject
 
 class ProfileApiMapper @Inject constructor() :
     Mapper<ProfileApiResponse, ProfileApiEntity> {
-
 
     @Inject
     @AppImageBaseUrl
@@ -44,7 +44,14 @@ class ProfileApiMapper @Inject constructor() :
             title = profileData?.title.orEmpty(),
             weight = profileData?.weight.orEmpty(),
             whatsUp = profileData?.what_are_you_looking_for.orEmpty(),
-            isProfileComplete = profileData?.is_profile_complete == 1
+            isProfileComplete = profileData?.is_profile_complete == 1,
+            blockedList = response.blockedUser?.map {
+                BlockedUserEntity(
+                    fullName = it.blockedUser.orEmpty(),
+                    username = it.userBlocker.orEmpty(),
+                    userImage = ""
+                )
+            } ?: emptyList()
         )
     }
 }
