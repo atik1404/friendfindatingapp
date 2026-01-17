@@ -92,7 +92,7 @@ class ForwardMessageViewModel @Inject constructor(
             val currentState = _uiState.value
             val usernames = mutableListOf<String>()
             usernames.addAll(currentState.selectedUsers)
-            if(!usernames.contains(username))
+            if(usernames.contains(username))
                 usernames.add(username)
             else usernames.remove(username)
             _uiState.update {

@@ -1,8 +1,6 @@
 package com.friend.entity.chatmessage
 
-import java.io.Serializable
-
-data class ChatListItemApiEntity(
+data class ChatItemApiEntity(
     val toUsername: String,
     val notificationToken: String,
     val userImage: String,

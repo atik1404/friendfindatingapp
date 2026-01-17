@@ -1,4 +1,4 @@
-package com.friend.chatroom.components.messageUi
+package com.friend.chatroom.components.conversation
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height

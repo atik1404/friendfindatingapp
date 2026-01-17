@@ -1,4 +1,4 @@
-package com.friend.chatroom.components.messageUi
+package com.friend.chatroom.components.conversation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

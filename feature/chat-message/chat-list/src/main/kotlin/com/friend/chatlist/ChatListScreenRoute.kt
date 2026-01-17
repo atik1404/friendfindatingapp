@@ -5,13 +5,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.friend.entity.chatmessage.ChatListItemApiEntity
+import com.friend.entity.chatmessage.ChatItemApiEntity
 
 @Composable
 fun ChatListScreenRoute(
     onBackButtonClicked: () -> Unit,
-    navigateToChatRoom: (ChatListItemApiEntity) -> Unit,
+    navigateToChatRoom: (ChatItemApiEntity) -> Unit,
     viewModel: ChatListViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()

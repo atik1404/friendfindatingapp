@@ -18,7 +18,7 @@ import javax.inject.Inject
 import com.friend.designsystem.R as Res
 
 @HiltViewModel
-class ChatRoomViewModel @Inject constructor(
+class ConversationViewModel @Inject constructor(
     private val fetchConversationsApiUseCase: FetchConversationsApiUseCase,
     private val searchConversationApiUseCase: SearchConversationApiUseCase,
     private val deleteMessagesApiUseCase: DeleteMessagesApiUseCase,
@@ -73,7 +73,7 @@ class ChatRoomViewModel @Inject constructor(
                     is ApiResult.Success -> {
                         _uiState.value =
                             _uiState.value.copy(
-                                messages = result.data.data.reversed(),
+                                conversations = result.data.data.reversed(),
                                 isSearchEnabled = false
                             )
                     }
@@ -98,7 +98,7 @@ class ChatRoomViewModel @Inject constructor(
                     is ApiResult.Success -> {
                         if (result.data.data.isNotEmpty()) {
                             _uiState.value = _uiState.value.copy(
-                                messages = result.data.data.reversed(),
+                                conversations = result.data.data.reversed(),
                                 isSearchEnabled = true,
                                 searchKey = keyword
                             )
@@ -111,7 +111,7 @@ class ChatRoomViewModel @Inject constructor(
 
     private fun deleteMessage() {
         execute {
-            val selectedMessages = _uiState.value.messages.filter { it.isItemSelected }
+            val selectedMessages = _uiState.value.conversations.filter { it.isItemSelected }
             val params = selectedMessages.map { it.messageId }
 
             deleteMessagesApiUseCase.execute(params).collect { result ->
@@ -138,18 +138,18 @@ class ChatRoomViewModel @Inject constructor(
     }
 
     private fun updateMessageSelectionStatus(item: MessageEntity) {
-        val conversations = _uiState.value.messages.toMutableList()
+        val conversations = _uiState.value.conversations.toMutableList()
         val index = conversations.indexOf(item)
         conversations[index] = item.copy(isItemSelected = !item.isItemSelected)
-        _uiState.value = _uiState.value.copy(messages = conversations)
+        _uiState.value = _uiState.value.copy(conversations = conversations)
     }
 
     private fun clearSelectedMessage() {
-        val conversations = _uiState.value.messages.toMutableList()
+        val conversations = _uiState.value.conversations.toMutableList()
         conversations.forEach {
             it.isItemSelected = false
         }
-        _uiState.value = _uiState.value.copy(messages = conversations)
+        _uiState.value = _uiState.value.copy(conversations = conversations)
     }
 
     private fun showToastMessage(message: UiText) {

@@ -1,10 +1,10 @@
 package com.friend.forwardmessage
 
-import com.friend.entity.chatmessage.ChatListItemApiEntity
+import com.friend.entity.chatmessage.ChatItemApiEntity
 import com.friend.ui.common.UiText
 
 data class UiState(
-    val data: List<ChatListItemApiEntity> = emptyList(),
+    val data: List<ChatItemApiEntity> = emptyList(),
     val selectedUsers: List<String> = emptyList(),
     val isLoading: Boolean = false,
     val isLoadingMore: Boolean = false,
@@ -16,7 +16,7 @@ data class UiState(
     val isError: Boolean get() = error.isNotEmpty()
     val isFetchSuccess: Boolean get() = data.isNotEmpty()
     val isDataEmpty: Boolean get() = data.isEmpty() && !isLoading && !isLoadingMore
-    val filteredItems: List<ChatListItemApiEntity>
+    val filteredItems: List<ChatItemApiEntity>
         get() = if (searchKeyword.isBlank()) data
         else data.filter {
             it.fullName.contains(searchKeyword, ignoreCase = true)

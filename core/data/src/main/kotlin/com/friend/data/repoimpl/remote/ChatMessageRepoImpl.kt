@@ -10,7 +10,7 @@ import com.friend.domain.apiusecase.chatmessage.SearchConversationApiUseCase
 import com.friend.domain.apiusecase.chatmessage.ForwardMessageApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.repository.remote.ChatMessagesRepository
-import com.friend.entity.chatmessage.ChatListItemApiEntity
+import com.friend.entity.chatmessage.ChatItemApiEntity
 import com.friend.entity.chatmessage.ConversationApiEntity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -22,7 +22,7 @@ class ChatMessageRepoImpl @Inject constructor(
     private val conversationsApiMapper: ConversationsApiMapper,
     private val commonApiMapper: CommonApiMapper,
 ) : ChatMessagesRepository {
-    override suspend fun fetchChatList(pageNo: Int): Flow<ApiResult<List<ChatListItemApiEntity>>> {
+    override suspend fun fetchChatList(pageNo: Int): Flow<ApiResult<List<ChatItemApiEntity>>> {
         return mapFromApiResponse(
             result = networkBoundResources.downloadData {
                 apiServices.fetchChatList(

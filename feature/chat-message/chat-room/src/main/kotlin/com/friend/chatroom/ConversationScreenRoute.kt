@@ -6,18 +6,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.friend.entity.chatmessage.ChatListItemApiEntity
+import com.friend.entity.chatmessage.ChatItemApiEntity
 import com.friend.ui.common.asString
 import com.friend.ui.showToastMessage
 
 @Composable
-fun ChatRoomScreenRoute(
-    chat: ChatListItemApiEntity,
+fun ConversationScreenRoute(
+    chat: ChatItemApiEntity,
     onBackButtonClicked: () -> Unit,
     onNavigateToProfileScreen: (String) -> Unit,
     onNavigateToReportScreen: (String) -> Unit,
     onNavigateToForwardMessageScreen: (List<String>) -> Unit,
-    viewModel: ChatRoomViewModel = hiltViewModel()
+    viewModel: ConversationViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -33,7 +33,7 @@ fun ChatRoomScreenRoute(
         }
     }
 
-    ChatRoomScreen(
+    ConversationScreen(
         uiState = uiState,
         chat = chat,
         onBackButtonClicked = onBackButtonClicked,
@@ -47,7 +47,7 @@ fun ChatRoomScreenRoute(
             onNavigateToReportScreen.invoke(chat.toUsername)
         },
         onNavigateToForwardMessageScreen = {
-            onNavigateToForwardMessageScreen.invoke(uiState.messages.filter { it.isItemSelected }
+            onNavigateToForwardMessageScreen.invoke(uiState.conversations.filter { it.isItemSelected }
                 .map { it.messageId })
         }
     )

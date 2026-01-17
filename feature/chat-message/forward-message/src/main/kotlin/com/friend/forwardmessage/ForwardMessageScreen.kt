@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingSymmetric
-import com.friend.entity.chatmessage.ChatListItemApiEntity
+import com.friend.entity.chatmessage.ChatItemApiEntity
 import com.friend.forwardmessage.components.ChatListSection
 import com.friend.forwardmessage.components.SearchBarSection
 import com.friend.ui.common.AppToolbar
@@ -141,42 +141,77 @@ private fun ScreenPreview() {
         onBackButtonClicked = {},
         uiState = UiState(
             data = listOf(
-                ChatListItemApiEntity(
+                ChatItemApiEntity(
                     toUsername = "Tom Cruise",
                     notificationToken = "",
                     userImage = "",
                     fullName = "Tom Cruise",
                     lastMessage = "Hi, How are you?",
                     dateTime = "2025-12-16T10:25:47Z"
-                ), ChatListItemApiEntity(
+                ), ChatItemApiEntity(
                     toUsername = "Tom Cruise",
                     notificationToken = "",
                     userImage = "",
                     fullName = "Tom Cruise",
                     lastMessage = "Hi, How are you?",
                     dateTime = "2025-12-16T10:25:47Z"
-                ), ChatListItemApiEntity(
+                ), ChatItemApiEntity(
                     toUsername = "Tom Cruise",
                     notificationToken = "",
                     userImage = "",
                     fullName = "Tom Cruise",
                     lastMessage = "Hi, How are you?",
                     dateTime = "2025-12-16T10:25:47Z"
-                ), ChatListItemApiEntity(
+                ), ChatItemApiEntity(
                     toUsername = "Tom Cruise",
                     notificationToken = "",
                     userImage = "",
                     fullName = "Tom Cruise",
                     lastMessage = "Hi, How are you?",
                     dateTime = "2025-12-16T10:25:47Z"
-                ), ChatListItemApiEntity(
+                ), ChatItemApiEntity(
                     toUsername = "Tom Cruise",
                     notificationToken = "",
                     userImage = "",
                     fullName = "Tom Cruise",
                     lastMessage = "Hi, How are you?",
                     dateTime = "2025-12-16T10:25:47Z"
-                ), ChatListItemApiEntity(
+                ), ChatItemApiEntity(
+                    toUsername = "Tom Cruise",
+                    notificationToken = "",
+                    userImage = "",
+                    fullName = "Tom Cruise",
+                    lastMessage = "Hi, How are you?",
+                    dateTime = "2025-12-16T10:25:47Z"
+                ), ChatItemApiEntity(
+                    toUsername = "Tom Cruise",
+                    notificationToken = "",
+                    userImage = "",
+                    fullName = "Tom Cruise",
+                    lastMessage = "Hi, How are you?",
+                    dateTime = "2025-12-16T10:25:47Z"
+                ), ChatItemApiEntity(
+                    toUsername = "Tom Cruise",
+                    notificationToken = "",
+                    userImage = "",
+                    fullName = "Tom Cruise",
+                    lastMessage = "Hi, How are you?",
+                    dateTime = "2025-12-16T10:25:47Z"
+                ), ChatItemApiEntity(
+                    toUsername = "Tom Cruise",
+                    notificationToken = "",
+                    userImage = "",
+                    fullName = "Tom Cruise",
+                    lastMessage = "Hi, How are you?",
+                    dateTime = "2025-12-16T10:25:47Z"
+                ), ChatItemApiEntity(
+                    toUsername = "Tom Cruise",
+                    notificationToken = "",
+                    userImage = "",
+                    fullName = "Tom Cruise",
+                    lastMessage = "Hi, How are you?",
+                    dateTime = "2025-12-16T10:25:47Z"
+                ), ChatItemApiEntity(
                     toUsername = "Tom Cruise",
                     notificationToken = "",
                     userImage = "",

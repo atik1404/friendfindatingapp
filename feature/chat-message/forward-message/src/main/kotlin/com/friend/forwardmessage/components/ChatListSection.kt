@@ -3,6 +3,7 @@ package com.friend.forwardmessage.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,11 +26,14 @@ import androidx.compose.ui.unit.dp
 import com.friend.common.constant.AppConstants
 import com.friend.designsystem.spacing.RadiusToken
 import com.friend.designsystem.spacing.SpacingToken
+import com.friend.designsystem.spacing.appPadding
+import com.friend.designsystem.spacing.appPaddingOnly
 import com.friend.designsystem.spacing.appPaddingSymmetric
+import com.friend.designsystem.spacing.appPaddingVertical
 import com.friend.designsystem.theme.backgroundColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
-import com.friend.entity.chatmessage.ChatListItemApiEntity
+import com.friend.entity.chatmessage.ChatItemApiEntity
 import com.friend.ui.components.AppCheckbox
 import com.friend.ui.components.AppText
 import com.friend.ui.components.NetworkImageLoader
@@ -38,10 +42,10 @@ import com.friend.ui.preview.LightPreview
 @Composable
 fun ChatListSection(
     modifier: Modifier = Modifier,
-    items: List<ChatListItemApiEntity>,
+    items: List<ChatItemApiEntity>,
     selectedUsers: List<String>,
     hasMorePage: Boolean,
-    onItemClicked: (ChatListItemApiEntity) -> Unit,
+    onItemClicked: (ChatItemApiEntity) -> Unit,
     onLoadMore: () -> Unit
 ) {
     val listState = rememberLazyListState()
@@ -56,11 +60,13 @@ fun ChatListSection(
     }
     LazyColumn(
         state = listState,
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth(),
+        contentPadding = PaddingValues(bottom = SpacingToken.hugePlusPlusPlus)
     ) {
         items(
             items = items,
-            key = { it.toUsername }
+            //key = { it.toUsername }
         ) { item ->
             ChatListItem(
                 item = item,
@@ -82,7 +88,7 @@ fun ChatListSection(
 private fun ChatListItem(
     isItemSelected: Boolean,
     modifier: Modifier = Modifier,
-    item: ChatListItemApiEntity,
+    item: ChatItemApiEntity,
     onItemClicked: () -> Unit
 ) {
     Row(
@@ -133,7 +139,7 @@ private fun ChatListItem(
 @LightPreview
 private fun ScreenPreview() {
     ChatListItem(
-        item = ChatListItemApiEntity(
+        item = ChatItemApiEntity(
             toUsername = "Atik Faysal",
             notificationToken = "",
             userImage = "",

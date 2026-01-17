@@ -1,4 +1,4 @@
-package com.friend.chatroom.components.messageUi
+package com.friend.chatroom.components.conversation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color

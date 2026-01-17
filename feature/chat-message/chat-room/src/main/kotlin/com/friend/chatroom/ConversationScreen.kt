@@ -30,11 +30,11 @@ import com.friend.chatroom.components.ConversionsUiSection
 import com.friend.chatroom.components.SearchResultCountUi
 import com.friend.chatroom.components.TopBarUiSection
 import com.friend.chatroom.components.UserInputAndAttachment
-import com.friend.chatroom.components.messageUi.JumpToBottom
+import com.friend.chatroom.components.conversation.JumpToBottom
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingOnly
 import com.friend.designsystem.theme.dividerColors
-import com.friend.entity.chatmessage.ChatListItemApiEntity
+import com.friend.entity.chatmessage.ChatItemApiEntity
 import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.preview.LightPreview
@@ -44,10 +44,10 @@ private val JumpToBottomThreshold = 56.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatRoomScreen(
+fun ConversationScreen(
     modifier: Modifier = Modifier,
     uiState: UiState,
-    chat: ChatListItemApiEntity,
+    chat: ChatItemApiEntity,
     onBackButtonClicked: () -> Unit,
     onNavigateToProfileScreen: () -> Unit,
     onNavigateToReportScreen: () -> Unit,
@@ -132,7 +132,7 @@ fun ChatRoomScreen(
 
                 ConversionsUiSection(
                     listState = listState,
-                    message = uiState.messages,
+                    message = uiState.conversations,
                     modifier = modifier
                         .fillMaxWidth()
                         .weight(1f),
@@ -161,7 +161,7 @@ fun ChatRoomScreen(
                         .appPaddingOnly(top = SpacingToken.hugePlusPlusPlus),
                 ) {
                     SearchResultCountUi(
-                        count = uiState.messages.size,
+                        count = uiState.conversations.size,
                         keyword = uiState.searchKey
                     )
                 }
@@ -183,9 +183,9 @@ fun ChatRoomScreen(
 @Composable
 @LightPreview
 private fun ScreenPreview() {
-    ChatRoomScreen(
+    ConversationScreen(
         uiState = UiState(),
-        chat = ChatListItemApiEntity(
+        chat = ChatItemApiEntity(
             toUsername = "Tom Cruise",
             notificationToken = "",
             userImage = "",

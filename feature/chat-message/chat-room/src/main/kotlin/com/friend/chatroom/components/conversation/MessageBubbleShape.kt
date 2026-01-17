@@ -1,4 +1,4 @@
-package com.friend.chatroom.components.messageUi
+package com.friend.chatroom.components.conversation
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme

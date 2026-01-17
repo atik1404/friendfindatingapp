@@ -33,7 +33,7 @@ import com.friend.designsystem.spacing.appPaddingSymmetric
 import com.friend.designsystem.theme.backgroundColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
-import com.friend.entity.chatmessage.ChatListItemApiEntity
+import com.friend.entity.chatmessage.ChatItemApiEntity
 import com.friend.ui.components.AppText
 import com.friend.ui.components.NetworkImageLoader
 import com.friend.ui.preview.LightPreview
@@ -41,9 +41,9 @@ import com.friend.ui.preview.LightPreview
 @Composable
 fun ChatListSection(
     modifier: Modifier = Modifier,
-    items: List<ChatListItemApiEntity>,
+    items: List<ChatItemApiEntity>,
     hasMorePage: Boolean,
-    onItemClicked: (ChatListItemApiEntity) -> Unit,
+    onItemClicked: (ChatItemApiEntity) -> Unit,
     onLoadMore: () -> Unit
 ) {
     val listState = rememberLazyListState()
@@ -79,7 +79,7 @@ fun ChatListSection(
 @Composable
 private fun ChatListItem(
     modifier: Modifier = Modifier,
-    item: ChatListItemApiEntity
+    item: ChatItemApiEntity
 ) {
     Row(
         modifier = modifier
@@ -148,7 +148,7 @@ private fun ChatListItem(
 @LightPreview
 private fun ScreenPreview() {
     ChatListItem(
-        item = ChatListItemApiEntity(
+        item = ChatItemApiEntity(
             toUsername = "Atik Faysal",
             notificationToken = "",
             userImage = "",

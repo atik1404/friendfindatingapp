@@ -4,7 +4,7 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.friend.chatlist.ChatListScreenRoute
-import com.friend.chatroom.ChatRoomScreenRoute
+import com.friend.chatroom.ConversationScreenRoute
 import com.friend.forwardmessage.ForwardMessageScreenRoute
 import com.friendfinapp.dating.navigation.ChatMessageScreens
 import com.friendfinapp.dating.navigation.ProfileScreens
@@ -21,7 +21,7 @@ object ChatMessageNavGraph {
                 },
                 navigateToChatRoom = { chat ->
                     backStack.add(
-                        ChatMessageScreens.ChatRoomNavScreen(
+                        ChatMessageScreens.ConversationNavScreen(
                             chat = chat,
                         )
                     )
@@ -29,8 +29,8 @@ object ChatMessageNavGraph {
             )
         }
 
-        entry<ChatMessageScreens.ChatRoomNavScreen> { key ->
-            ChatRoomScreenRoute(
+        entry<ChatMessageScreens.ConversationNavScreen> { key ->
+            ConversationScreenRoute(
                 chat = key.chat,
                 onBackButtonClicked = {
                     backStack.removeLastOrNull()
@@ -42,7 +42,11 @@ object ChatMessageNavGraph {
                     backStack.add(ProfileScreens.ReportUserNavScreen(username = username))
                 },
                 onNavigateToForwardMessageScreen = { messages ->
-                    backStack.add(ChatMessageScreens.ForwardMessageNavScreen(messages = messages))
+                    backStack.add(
+                        ChatMessageScreens.ForwardMessageNavScreen(
+                            messages = messages,
+                        )
+                    )
                 }
             )
         }
@@ -52,7 +56,7 @@ object ChatMessageNavGraph {
                 onBackButtonClicked = {
                     backStack.removeLastOrNull()
                 },
-                messages = key.messages
+                messages = key.messages,
             )
         }
     }

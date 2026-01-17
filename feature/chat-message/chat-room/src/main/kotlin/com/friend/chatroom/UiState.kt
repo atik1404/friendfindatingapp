@@ -4,14 +4,14 @@ import com.friend.entity.chatmessage.MessageEntity
 import com.friend.ui.common.UiText
 
 data class UiState(
-    val messages: List<MessageEntity> = emptyList(),
+    val conversations: List<MessageEntity> = emptyList(),
     val isLoading: Boolean = false,
     val error: String = "",
     val isSearchEnabled: Boolean = false,
     val searchKey: String = ""
 ) {
-    val isAlreadyFetched: Boolean get() = messages.isNotEmpty()
-    val isAnyItemSelected: Boolean get() = messages.any { it.isItemSelected }
+    val isAlreadyFetched: Boolean get() = conversations.isNotEmpty()
+    val isAnyItemSelected: Boolean get() = conversations.any { it.isItemSelected }
 }
 
 sealed interface UiEvent {

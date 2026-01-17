@@ -21,7 +21,7 @@ import com.friend.chatlist.components.SearchBarSection
 import com.friend.common.dateparser.DateTimeParser
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingSymmetric
-import com.friend.entity.chatmessage.ChatListItemApiEntity
+import com.friend.entity.chatmessage.ChatItemApiEntity
 import com.friend.ui.common.AppToolbar
 import com.friend.ui.common.ErrorType
 import com.friend.ui.common.ErrorUi
@@ -37,7 +37,7 @@ fun ChatListScreen(
     uiState: UiState,
     action: (UiAction) -> Unit,
     onBackButtonClicked: () -> Unit,
-    navigateToChatRoom: (ChatListItemApiEntity) -> Unit
+    navigateToChatRoom: (ChatItemApiEntity) -> Unit
 ) {
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
@@ -122,42 +122,42 @@ private fun ScreenPreview() {
         navigateToChatRoom = { _ -> },
         uiState = UiState(
             data = listOf(
-                ChatListItemApiEntity(
+                ChatItemApiEntity(
                     toUsername = "Tom Cruise",
                     notificationToken = "",
                     userImage = "",
                     fullName = "Tom Cruise",
                     lastMessage = "Hi, How are you?",
                     dateTime = "2025-12-16T10:25:47Z"
-                ), ChatListItemApiEntity(
+                ), ChatItemApiEntity(
                     toUsername = "Tom Cruise",
                     notificationToken = "",
                     userImage = "",
                     fullName = "Tom Cruise",
                     lastMessage = "Hi, How are you?",
                     dateTime = "2025-12-16T10:25:47Z"
-                ), ChatListItemApiEntity(
+                ), ChatItemApiEntity(
                     toUsername = "Tom Cruise",
                     notificationToken = "",
                     userImage = "",
                     fullName = "Tom Cruise",
                     lastMessage = "Hi, How are you?",
                     dateTime = "2025-12-16T10:25:47Z"
-                ), ChatListItemApiEntity(
+                ), ChatItemApiEntity(
                     toUsername = "Tom Cruise",
                     notificationToken = "",
                     userImage = "",
                     fullName = "Tom Cruise",
                     lastMessage = "Hi, How are you?",
                     dateTime = "2025-12-16T10:25:47Z"
-                ), ChatListItemApiEntity(
+                ), ChatItemApiEntity(
                     toUsername = "Tom Cruise",
                     notificationToken = "",
                     userImage = "",
                     fullName = "Tom Cruise",
                     lastMessage = "Hi, How are you?",
                     dateTime = "2025-12-16T10:25:47Z"
-                ), ChatListItemApiEntity(
+                ), ChatItemApiEntity(
                     toUsername = "Tom Cruise",
                     notificationToken = "",
                     userImage = "",
