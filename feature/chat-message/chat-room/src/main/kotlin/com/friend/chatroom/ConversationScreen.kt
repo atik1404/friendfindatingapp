@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.friend.chatroom.components.ConversionsUiSection
 import com.friend.chatroom.components.SearchResultCountUi
 import com.friend.chatroom.components.TopBarUiSection
-import com.friend.chatroom.components.UserInputAndAttachment
+import com.friend.chatroom.components.UserInputForm
 import com.friend.chatroom.components.conversation.JumpToBottom
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingOnly
@@ -145,9 +145,19 @@ fun ConversationScreen(
                     }
                 )
 
-                UserInputAndAttachment(
-                    modifier = modifier
-                        .appPaddingOnly(top = SpacingToken.medium),
+                UserInputForm(
+                    modifier = Modifier
+                        .appPaddingOnly(bottom = SpacingToken.medium),
+                    textMessage = uiState.message.message,
+                    onTextChange = {
+                        onAction.invoke(UiAction.OnChangeTextMessage(it))
+                    },
+                    onClickAttachment = {
+
+                    },
+                    onSendTextMessage = {
+                        onAction.invoke(UiAction.SendMessage(chat.toUsername))
+                    }
                 )
             }
 

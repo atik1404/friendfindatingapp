@@ -8,11 +8,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.friend.designsystem.spacing.SpacingToken
-import com.friend.entity.chatmessage.MessageEntity
+import com.friend.entity.chatmessage.ConversationEntity
 
 @Composable
 fun ConversasionBody(
-    message: MessageEntity,
+    message: ConversationEntity,
     contentColor: Color,
     alignment: Alignment.Horizontal,
    // audioController: AudioPlayerController

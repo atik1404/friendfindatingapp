@@ -6,7 +6,7 @@ import com.friend.common.dateparser.DateTimePatterns
 import com.friend.common.extfun.tryParseInt
 import com.friend.data.mapper.Mapper
 import com.friend.di.qualifier.AppImageBaseUrl
-import com.friend.entity.chatmessage.MessageEntity
+import com.friend.entity.chatmessage.ConversationEntity
 import com.friend.entity.chatmessage.ConversationApiEntity
 import com.friend.sharedpref.SharedPrefHelper
 import com.friend.sharedpref.SpKey
@@ -43,7 +43,7 @@ class ConversationsApiMapper @Inject constructor(
                     } else effectiveDate = ""
                 }
 
-                MessageEntity(
+                ConversationEntity(
                     messageId = message.id.orEmpty(),
                     fromUsername = message.fromUsername.orEmpty(),
                     body = message.body.orEmpty(),

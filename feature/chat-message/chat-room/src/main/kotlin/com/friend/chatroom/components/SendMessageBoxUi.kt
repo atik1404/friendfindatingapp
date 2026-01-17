@@ -40,8 +40,9 @@ import com.friend.ui.components.AppIconButton
 
 @Composable
 fun UserInputAndAttachment(
-    modifier: Modifier
-) {
+    modifier: Modifier = Modifier,
+
+    ) {
     var isAttachmentExpanded by remember { mutableStateOf(false) }
     Column(
         modifier = modifier
@@ -49,23 +50,24 @@ fun UserInputAndAttachment(
         if (isAttachmentExpanded)
             AttachmentTypeUi()
 
-        UserInputForm(
-            modifier = Modifier
-                .appPaddingOnly(bottom = SpacingToken.medium),
-            onClickAttachment = {
-                isAttachmentExpanded = !isAttachmentExpanded
-            }
-        )
+//        UserInputForm(
+//            modifier = Modifier
+//                .appPaddingOnly(bottom = SpacingToken.medium),
+//            onClickAttachment = {
+//                isAttachmentExpanded = !isAttachmentExpanded
+//            }
+//        )
     }
 }
 
 @Composable
-private fun UserInputForm(
+fun UserInputForm(
     modifier: Modifier,
-    onClickAttachment: () -> Unit
+    textMessage: String,
+    onTextChange: (String) -> Unit,
+    onClickAttachment: () -> Unit,
+    onSendTextMessage: (String) -> Unit,
 ) {
-    var message by remember { mutableStateOf("") }
-
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -92,8 +94,8 @@ private fun UserInputForm(
                     .weight(1f)
                     .fillMaxHeight(),
                 shape = RoundedCornerShape(SpacingToken.extraLarge),
-                onValueChange = { message = it },
-                value = message,
+                onValueChange = onTextChange,
+                value = textMessage,
                 placeholder = stringResource(Res.string.hint_write_something_here),
                 colors = MaterialTheme.textFieldColors.transparentOutlinedTextField
             )
@@ -115,7 +117,7 @@ private fun UserInputForm(
 
         Spacer(Modifier.width(SpacingToken.tiny))
 
-        if (message.isEmpty()) {
+        if (textMessage.isEmpty()) {
             AppIconButton(
                 modifier = Modifier
                     .background(
@@ -130,7 +132,9 @@ private fun UserInputForm(
             AppIconButton(
                 modifier = Modifier
                     .size(IconSizeToken.mediumLarge),
-                onClick = {},
+                onClick = {
+                    onSendTextMessage.invoke(textMessage)
+                },
                 vectorIcon = Icons.Default.Send
             )
         }

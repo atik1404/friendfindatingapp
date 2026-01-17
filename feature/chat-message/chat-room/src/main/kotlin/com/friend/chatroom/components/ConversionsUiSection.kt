@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,7 +31,7 @@ import com.friend.designsystem.spacing.appPaddingOnly
 import com.friend.designsystem.theme.dividerColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
-import com.friend.entity.chatmessage.MessageEntity
+import com.friend.entity.chatmessage.ConversationEntity
 import com.friend.ui.components.AppCheckbox
 import com.friend.ui.components.AppText
 import com.friend.ui.preview.LightPreview
@@ -41,10 +42,10 @@ private val JumpToBottomThreshold = 56.dp
 fun ConversionsUiSection(
     modifier: Modifier,
     listState: LazyListState,
-    message: List<MessageEntity>,
+    message: List<ConversationEntity>,
     isItemSelectionEnable: Boolean,
     onLongPress: () -> Unit,
-    onItemSelected: (MessageEntity) -> Unit
+    onItemSelected: (ConversationEntity) -> Unit
 ) {
     //val audioController = rememberAudioPlayerController()
 
@@ -52,7 +53,8 @@ fun ConversionsUiSection(
         state = listState,
         reverseLayout = true,
         modifier = modifier
-            .appPaddingHorizontal(SpacingToken.small)
+            .appPaddingHorizontal(SpacingToken.small),
+        contentPadding = PaddingValues(bottom = SpacingToken.medium)
     ) {
         items(
             items = message,
@@ -81,7 +83,7 @@ fun ConversionsUiSection(
 @Composable
 fun ConversationItemBubble(
     modifier: Modifier = Modifier,
-    message: MessageEntity,
+    message: ConversationEntity,
     isItemSelectionEnable: Boolean = false,
     onItemSelected: () -> Unit = {},
     //audioController: AudioPlayerController
@@ -189,7 +191,7 @@ private fun DateDivider(date: String) {
 private fun ScreenPreview() {
     ConversationItemBubble(
         //audioController =  rememberAudioPlayerController(),
-        message = MessageEntity(
+        message = ConversationEntity(
             messageId = "",
             isMyMessage = true,
             fromUsername = "John Doe",

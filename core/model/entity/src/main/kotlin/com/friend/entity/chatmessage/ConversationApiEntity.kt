@@ -2,10 +2,10 @@ package com.friend.entity.chatmessage
 
 data class ConversationApiEntity(
     val isBlocked: Boolean,
-    val data: List<MessageEntity>
+    val data: List<ConversationEntity>
 )
 
-data class MessageEntity(
+data class ConversationEntity(
     val messageId: String,
     val fromUsername: String,
     val body: String,

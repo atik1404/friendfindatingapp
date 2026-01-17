@@ -4,8 +4,9 @@ import com.friend.common.base.BaseViewModel
 import com.friend.domain.apiusecase.chatmessage.DeleteMessagesApiUseCase
 import com.friend.domain.apiusecase.chatmessage.FetchConversationsApiUseCase
 import com.friend.domain.apiusecase.chatmessage.SearchConversationApiUseCase
+import com.friend.domain.apiusecase.chatmessage.SendMessageApiUseCase
 import com.friend.domain.base.ApiResult
-import com.friend.entity.chatmessage.MessageEntity
+import com.friend.entity.chatmessage.ConversationEntity
 import com.friend.ui.common.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -22,6 +23,7 @@ class ConversationViewModel @Inject constructor(
     private val fetchConversationsApiUseCase: FetchConversationsApiUseCase,
     private val searchConversationApiUseCase: SearchConversationApiUseCase,
     private val deleteMessagesApiUseCase: DeleteMessagesApiUseCase,
+    private val sendMessageApiUseCase: SendMessageApiUseCase,
 ) : BaseViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
@@ -41,6 +43,8 @@ class ConversationViewModel @Inject constructor(
             UiAction.OnClearMessageSelection -> clearSelectedMessage()
             is UiAction.UpdateMessageSelectionStatus -> updateMessageSelectionStatus(action.item)
             UiAction.DeleteMessages -> deleteMessage()
+            is UiAction.SendMessage -> sendMessage(action.toUsername)
+            is UiAction.OnChangeTextMessage -> onChangeTextMessage(action.message)
         }
     }
 
@@ -58,7 +62,6 @@ class ConversationViewModel @Inject constructor(
 
     private fun fetchMessages(toUsername: String) {
         execute {
-
             fetchConversationsApiUseCase.execute(toUsername).collect { result ->
                 when (result) {
                     is ApiResult.Error -> _uiState.value =
@@ -76,6 +79,46 @@ class ConversationViewModel @Inject constructor(
                                 conversations = result.data.data.reversed(),
                                 isSearchEnabled = false
                             )
+                    }
+                }
+            }
+        }
+    }
+
+    private fun sendMessage(username: String) {
+        execute {
+            val currentState = _uiState.value.message
+            val params = SendMessageApiUseCase.Params(
+                toUsername = username,
+                content = currentState.message
+            )
+            sendMessageApiUseCase.execute(params).collect { result ->
+                when (result) {
+                    is ApiResult.Error -> showToastMessage(UiText.Dynamic(result.message))
+                    is ApiResult.Loading -> _uiState.value =
+                        _uiState.value.copy(message = _uiState.value.message.copy(isSending = result.loading))
+
+                    is ApiResult.Success -> {
+                        val conversations = _uiState.value.conversations.toMutableList()
+                        val message = ConversationEntity(
+                            messageId = "31212",
+                            fromUsername = "faysal007",
+                            body = currentState.message,
+                            imageUrl = "",
+                            audioUrl = "",
+                            audioDuration = 0,
+                            videoUrl = "",
+                            videoDuration = 0,
+                            dateTime = "2023-12-12",
+                            readableDateTime = "2023-12-12",
+                            isMyMessage = true,
+                            isItemSelected = false,
+                        )
+                        conversations.add(0, message)
+                        _uiState.value = _uiState.value.copy(
+                            conversations = conversations,
+                            message = MessageState()
+                        )
                     }
                 }
             }
@@ -137,7 +180,7 @@ class ConversationViewModel @Inject constructor(
         }
     }
 
-    private fun updateMessageSelectionStatus(item: MessageEntity) {
+    private fun updateMessageSelectionStatus(item: ConversationEntity) {
         val conversations = _uiState.value.conversations.toMutableList()
         val index = conversations.indexOf(item)
         conversations[index] = item.copy(isItemSelected = !item.isItemSelected)
@@ -155,6 +198,14 @@ class ConversationViewModel @Inject constructor(
     private fun showToastMessage(message: UiText) {
         execute {
             _uiEvent.send(UiEvent.ShowToastMessage(message))
+        }
+    }
+
+    private fun onChangeTextMessage(value: String) {
+        execute {
+            _uiState.update {
+                it.copy(message = it.message.copy(message = value))
+            }
         }
     }
 }

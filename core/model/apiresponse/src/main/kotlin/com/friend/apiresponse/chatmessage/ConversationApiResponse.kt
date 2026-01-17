@@ -19,3 +19,10 @@ data class ConversationResponse(
     val videoDuration: String?,
     val sendTime: String?,
 )
+
+data class SendMessageApiResponse(
+    val status_code: Int?,
+    val message: String?,
+    val data: ConversationResponse?,
+    val count: Int?,
+)
