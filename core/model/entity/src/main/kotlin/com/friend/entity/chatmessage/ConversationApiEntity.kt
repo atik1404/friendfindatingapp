@@ -1,6 +1,6 @@
 package com.friend.entity.chatmessage
 
-data class MessageListApiEntity(
+data class ConversationApiEntity(
     val isBlocked: Boolean,
     val data: List<MessageEntity>
 )

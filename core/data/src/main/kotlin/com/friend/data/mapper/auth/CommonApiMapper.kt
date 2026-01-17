@@ -1,4 +1,4 @@
-package com.friend.data.mapper.credential
+package com.friend.data.mapper.auth
 
 import com.friend.apiresponse.search.CommonApiResponse
 import com.friend.data.mapper.Mapper

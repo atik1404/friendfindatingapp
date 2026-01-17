@@ -1,11 +1,8 @@
-package com.friend.data.mapper.credential
+package com.friend.data.mapper.auth
 
 import com.friend.apiresponse.credential.LoginApiResponse
-import com.friend.common.constant.Gender
 import com.friend.data.mapper.Mapper
-import com.friend.entity.credential.LoginApiEntity
-import com.friend.sharedpref.SharedPrefHelper
-import com.friend.sharedpref.SpKey
+import com.friend.entity.auth.LoginApiEntity
 import javax.inject.Inject
 
 class LoginApiMapper @Inject constructor() : Mapper<LoginApiResponse, LoginApiEntity> {

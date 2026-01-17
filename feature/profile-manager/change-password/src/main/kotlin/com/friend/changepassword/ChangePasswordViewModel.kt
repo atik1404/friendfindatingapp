@@ -1,7 +1,7 @@
 package com.friend.changepassword
 
 import com.friend.common.base.BaseViewModel
-import com.friend.domain.apiusecase.profilemanager.PostPasswordChangeApiUseCase
+import com.friend.domain.apiusecase.auth.PostPasswordChangeApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.validator.PasswordChangeIoResult
 import com.friend.sharedpref.SharedPrefHelper

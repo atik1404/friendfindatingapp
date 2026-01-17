@@ -1,4 +1,4 @@
-package com.friend.entity.credential
+package com.friend.entity.auth
 
 data class LoginApiEntity(
     val message: String,

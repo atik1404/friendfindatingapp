@@ -1,7 +1,7 @@
-package com.friend.domain.apiusecase.credential
+package com.friend.domain.apiusecase.auth
 
 import com.friend.domain.base.ApiResult
-import com.friend.domain.repository.remote.CredentialRepository
+import com.friend.domain.repository.remote.AuthRepository
 import com.friend.domain.usecase.ApiUseCaseParams
 import com.friend.domain.validator.DataValidationResult
 import com.friend.domain.validator.ForgotPasswordIoResult
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
 class PostForgotPasswordApiUseCase @Inject constructor(
-    private val repository: CredentialRepository,
+    private val repository: AuthRepository,
 ) : ApiUseCaseParams<String, String> {
 
     val ioError = Channel<ForgotPasswordIoResult>()

@@ -76,12 +76,7 @@ class ProfileViewModel @Inject constructor(
 
     private fun performUnblock(blockedUser: String) {
         execute {
-            val params = PostBlockUnblockApiUseCase.Params(
-                userBlocker = sharedPrefHelper.getString(SpKey.userName),
-                blockedUser = blockedUser
-            )
-
-            postBlockUnblockApiUseCase.execute(params).collect { result ->
+            postBlockUnblockApiUseCase.execute(blockedUser).collect { result ->
                 when (result) {
                     is ApiResult.Error -> _uiEvent.send(
                         UiEvent.ShowToastMessage(

@@ -3,17 +3,15 @@ package com.friend.data.repoimpl.remote
 import com.friend.data.NetworkBoundResource
 import com.friend.data.apiservice.ChatMessageApiServices
 import com.friend.data.mapper.chatmessage.ChatListApiMapper
-import com.friend.data.mapper.chatmessage.MessageListApiMapper
-import com.friend.data.mapper.credential.CommonApiMapper
+import com.friend.data.mapper.chatmessage.ConversationsApiMapper
+import com.friend.data.mapper.auth.CommonApiMapper
 import com.friend.data.mapper.mapFromApiResponse
-import com.friend.domain.apiusecase.chatmessage.DeleteMessagesApiUseCase
-import com.friend.domain.apiusecase.chatmessage.FetchMessageListApiUseCase
-import com.friend.domain.apiusecase.chatmessage.FetchMessageSearchResultApiUseCase
+import com.friend.domain.apiusecase.chatmessage.SearchConversationApiUseCase
 import com.friend.domain.apiusecase.chatmessage.ForwardMessageApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.repository.remote.ChatMessagesRepository
 import com.friend.entity.chatmessage.ChatListItemApiEntity
-import com.friend.entity.chatmessage.MessageListApiEntity
+import com.friend.entity.chatmessage.ConversationApiEntity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -21,7 +19,7 @@ class ChatMessageRepoImpl @Inject constructor(
     private val networkBoundResources: NetworkBoundResource,
     private val apiServices: ChatMessageApiServices,
     private val chatListApiMapper: ChatListApiMapper,
-    private val messageListApiMapper: MessageListApiMapper,
+    private val conversationsApiMapper: ConversationsApiMapper,
     private val commonApiMapper: CommonApiMapper,
 ) : ChatMessagesRepository {
     override suspend fun fetchChatList(pageNo: Int): Flow<ApiResult<List<ChatListItemApiEntity>>> {
@@ -34,23 +32,23 @@ class ChatMessageRepoImpl @Inject constructor(
         )
     }
 
-    override suspend fun fetchMessageList(params: FetchMessageListApiUseCase.Params): Flow<ApiResult<MessageListApiEntity>> {
+    override suspend fun fetchConversations(toUsername: String): Flow<ApiResult<ConversationApiEntity>> {
         return mapFromApiResponse(
             result = networkBoundResources.downloadData {
                 apiServices.fetchMessageList(
-                    params = params
+                    toUsername = toUsername
                 )
-            }, mapper = messageListApiMapper
+            }, mapper = conversationsApiMapper
         )
     }
 
-    override suspend fun searchMessage(params: FetchMessageSearchResultApiUseCase.Params): Flow<ApiResult<MessageListApiEntity>> {
+    override suspend fun searchConversation(params: SearchConversationApiUseCase.Params): Flow<ApiResult<ConversationApiEntity>> {
         return mapFromApiResponse(
             result = networkBoundResources.downloadData {
                 apiServices.searchMessage(
                     params = params
                 )
-            }, mapper = messageListApiMapper
+            }, mapper = conversationsApiMapper
         )
     }
 

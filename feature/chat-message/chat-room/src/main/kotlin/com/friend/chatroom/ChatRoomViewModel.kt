@@ -2,12 +2,10 @@ package com.friend.chatroom
 
 import com.friend.common.base.BaseViewModel
 import com.friend.domain.apiusecase.chatmessage.DeleteMessagesApiUseCase
-import com.friend.domain.apiusecase.chatmessage.FetchMessageListApiUseCase
-import com.friend.domain.apiusecase.chatmessage.FetchMessageSearchResultApiUseCase
+import com.friend.domain.apiusecase.chatmessage.FetchConversationsApiUseCase
+import com.friend.domain.apiusecase.chatmessage.SearchConversationApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.entity.chatmessage.MessageEntity
-import com.friend.sharedpref.SharedPrefHelper
-import com.friend.sharedpref.SpKey
 import com.friend.ui.common.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -21,10 +19,9 @@ import com.friend.designsystem.R as Res
 
 @HiltViewModel
 class ChatRoomViewModel @Inject constructor(
-    private val fetchMessageListApiUseCase: FetchMessageListApiUseCase,
-    private val fetchMessageSearchResultApiUseCase: FetchMessageSearchResultApiUseCase,
+    private val fetchConversationsApiUseCase: FetchConversationsApiUseCase,
+    private val searchConversationApiUseCase: SearchConversationApiUseCase,
     private val deleteMessagesApiUseCase: DeleteMessagesApiUseCase,
-    private val sharedPrefHelper: SharedPrefHelper
 ) : BaseViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
@@ -61,12 +58,8 @@ class ChatRoomViewModel @Inject constructor(
 
     private fun fetchMessages(toUsername: String) {
         execute {
-            val params = FetchMessageListApiUseCase.Params(
-                fromUsername = sharedPrefHelper.getString(SpKey.userName),
-                toUsername = toUsername
-            )
 
-            fetchMessageListApiUseCase.execute(params).collect { result ->
+            fetchConversationsApiUseCase.execute(toUsername).collect { result ->
                 when (result) {
                     is ApiResult.Error -> _uiState.value =
                         _uiState.value.copy(error = result.message)
@@ -91,12 +84,11 @@ class ChatRoomViewModel @Inject constructor(
 
     private fun searchMessage(userName: String, keyword: String) {
         execute {
-            val params = FetchMessageSearchResultApiUseCase.Params(
-                fromUsername = sharedPrefHelper.getString(SpKey.userName),
+            val params = SearchConversationApiUseCase.Params(
                 toUsername = userName,
                 searchValue = keyword
             )
-            fetchMessageSearchResultApiUseCase.execute(params).collect { result ->
+            searchConversationApiUseCase.execute(params).collect { result ->
                 when (result) {
                     is ApiResult.Error -> showToastMessage(UiText.Dynamic(result.message))
 

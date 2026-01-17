@@ -1,7 +1,7 @@
-package com.friend.domain.apiusecase.profilemanager
+package com.friend.domain.apiusecase.auth
 
 import com.friend.domain.base.ApiResult
-import com.friend.domain.repository.remote.ProfileManageRepository
+import com.friend.domain.repository.remote.AuthRepository
 import com.friend.domain.usecase.ApiUseCaseParams
 import com.friend.domain.validator.DataValidationResult
 import com.friend.domain.validator.PasswordChangeIoResult
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
 class PostPasswordChangeApiUseCase @Inject constructor(
-    private val repository: ProfileManageRepository,
+    private val repository: AuthRepository,
 ) : ApiUseCaseParams<PostPasswordChangeApiUseCase.Params, String> {
 
     val ioError = Channel<PasswordChangeIoResult>()

@@ -4,8 +4,8 @@ import android.app.Application
 import com.friend.common.base.BaseViewModel
 import com.friend.common.constant.Gender
 import com.friend.common.extfun.getLocalIpAddress
-import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
-import com.friend.domain.apiusecase.credential.PostRegistrationApiUseCase
+import com.friend.domain.apiusecase.auth.PostLoginApiUseCase
+import com.friend.domain.apiusecase.auth.PostRegistrationApiUseCase
 import com.friend.domain.apiusecase.search.FetchCityApiUseCase
 import com.friend.domain.apiusecase.search.FetchCountriesUseCase
 import com.friend.domain.apiusecase.search.FetchStateApiUseCase

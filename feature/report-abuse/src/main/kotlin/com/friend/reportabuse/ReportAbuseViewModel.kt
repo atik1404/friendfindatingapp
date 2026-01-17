@@ -4,8 +4,6 @@ import com.friend.common.base.BaseViewModel
 import com.friend.domain.apiusecase.profilemanager.PostAbuseReportApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.validator.ReportAbuseIoResult
-import com.friend.sharedpref.SharedPrefHelper
-import com.friend.sharedpref.SpKey
 import com.friend.ui.common.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -19,7 +17,6 @@ import javax.inject.Inject
 @HiltViewModel
 class ReportAbuseViewModel @Inject constructor(
     private val postAbuseReportApiUseCase: PostAbuseReportApiUseCase,
-    private val sharedPrefHelper: SharedPrefHelper
 ) : BaseViewModel() {
     val ioError get() = postAbuseReportApiUseCase.ioError.receiveAsFlow()
     private val _uiState = MutableStateFlow(UiState())
@@ -45,7 +42,6 @@ class ReportAbuseViewModel @Inject constructor(
             postAbuseReportApiUseCase.execute(
                 PostAbuseReportApiUseCase.Params(
                     reportedUser = username,
-                    reportedBy = sharedPrefHelper.getString(SpKey.userName),
                     reportNote = current.description.value
                 )
             ).collect { result ->

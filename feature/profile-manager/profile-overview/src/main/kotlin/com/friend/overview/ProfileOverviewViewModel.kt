@@ -1,7 +1,7 @@
 package com.friend.overview
 
 import com.friend.common.base.BaseViewModel
-import com.friend.domain.apiusecase.credential.PostLogoutApiUseCase
+import com.friend.domain.apiusecase.auth.PostLogoutApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.sharedpref.SharedPrefHelper
 import com.friend.sharedpref.SpKey

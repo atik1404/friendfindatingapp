@@ -1,30 +1,29 @@
 package com.friend.data.mapper.chatmessage
 
-import android.util.Log
-import com.friend.apiresponse.chatmessage.MessageListApiResponse
+import com.friend.apiresponse.chatmessage.ConversationApiResponse
 import com.friend.common.dateparser.DateTimeParser
 import com.friend.common.dateparser.DateTimePatterns
 import com.friend.common.extfun.tryParseInt
 import com.friend.data.mapper.Mapper
 import com.friend.di.qualifier.AppImageBaseUrl
 import com.friend.entity.chatmessage.MessageEntity
-import com.friend.entity.chatmessage.MessageListApiEntity
+import com.friend.entity.chatmessage.ConversationApiEntity
 import com.friend.sharedpref.SharedPrefHelper
 import com.friend.sharedpref.SpKey
 import javax.inject.Inject
 
-class MessageListApiMapper @Inject constructor(
+class ConversationsApiMapper @Inject constructor(
     private val sharedPrefHelper: SharedPrefHelper
-) : Mapper<MessageListApiResponse, MessageListApiEntity> {
+) : Mapper<ConversationApiResponse, ConversationApiEntity> {
 
     @Inject
     @AppImageBaseUrl
     lateinit var imageBaseUrl: String
 
-    override fun mapFromApiResponse(response: MessageListApiResponse): MessageListApiEntity {
+    override fun mapFromApiResponse(response: ConversationApiResponse): ConversationApiEntity {
         var lastDate: String? = null
 
-        return MessageListApiEntity(
+        return ConversationApiEntity(
             isBlocked = response.isBlocked ?: false,
             data = response.data.orEmpty().map { message ->
                 val sendDateTimeStr = message.sendTime ?: ""

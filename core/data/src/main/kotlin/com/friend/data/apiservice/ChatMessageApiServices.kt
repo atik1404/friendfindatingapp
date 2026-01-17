@@ -1,11 +1,9 @@
 package com.friend.data.apiservice
 
 import com.friend.apiresponse.chatmessage.ChatListApiResponse
-import com.friend.apiresponse.chatmessage.MessageListApiResponse
+import com.friend.apiresponse.chatmessage.ConversationApiResponse
 import com.friend.apiresponse.search.CommonApiResponse
-import com.friend.domain.apiusecase.chatmessage.DeleteMessagesApiUseCase
-import com.friend.domain.apiusecase.chatmessage.FetchMessageListApiUseCase
-import com.friend.domain.apiusecase.chatmessage.FetchMessageSearchResultApiUseCase
+import com.friend.domain.apiusecase.chatmessage.SearchConversationApiUseCase
 import com.friend.domain.apiusecase.chatmessage.ForwardMessageApiUseCase
 import retrofit2.Response
 import retrofit2.http.Body
@@ -19,22 +17,22 @@ interface ChatMessageApiServices {
         @Query("pageNo") page: Int,
     ): Response<ChatListApiResponse>
 
-    @POST("v1/SendMessageHistory")
+    @GET("v1/ChatHistory")
     suspend fun fetchMessageList(
-        @Body params: FetchMessageListApiUseCase.Params
-    ): Response<MessageListApiResponse>
+        @Query("toUsername") toUsername: String
+    ): Response<ConversationApiResponse>
 
-    @POST("v1/SendMessageHistorySearch")
+    @POST("v1/ChatHistorySearch")
     suspend fun searchMessage(
-        @Body params: FetchMessageSearchResultApiUseCase.Params
-    ): Response<MessageListApiResponse>
+        @Body params: SearchConversationApiUseCase.Params
+    ): Response<ConversationApiResponse>
 
-    @POST("v1/ForwardMessage")
+    @POST("v1/MessageForward")
     suspend fun forwardMessages(
         @Body params: ForwardMessageApiUseCase.Params
     ): Response<CommonApiResponse>
 
-    @POST("v1/SelectedMessageHistoryClean")
+    @POST("v1/SelectedMessageClean")
     suspend fun deleteMessages(
         @Body params: List<String>
     ): Response<CommonApiResponse>

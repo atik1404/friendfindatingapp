@@ -45,11 +45,11 @@ class ProfileApiMapper @Inject constructor() :
             weight = profileData?.weight.orEmpty(),
             whatsUp = profileData?.what_are_you_looking_for.orEmpty(),
             isProfileComplete = profileData?.is_profile_complete == 1,
-            blockedList = response.blockedUser?.map {
+            blockedList = response.blockedUsers?.map {
                 BlockedUserEntity(
-                    fullName = it.blockedUser.orEmpty(),
-                    username = it.blockedUser.orEmpty(),
-                    userImage = ""
+                    fullName = it.fullName.orEmpty(),
+                    username = it.userName.orEmpty(),
+                    userImage = if (it.userImage != null && it.userImage?.isNotEmpty() == true) "${imageBaseUrl}${it.userImage.orEmpty()}" else ""
                 )
             } ?: emptyList()
         )

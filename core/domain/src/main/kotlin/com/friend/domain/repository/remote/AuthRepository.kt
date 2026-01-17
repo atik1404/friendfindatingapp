@@ -1,19 +1,16 @@
 package com.friend.domain.repository.remote
 
-import com.friend.domain.apiusecase.credential.PostGoogleLoginApiUseCase
-import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
-import com.friend.domain.apiusecase.credential.PostRegistrationApiUseCase
-import com.friend.domain.apiusecase.profilemanager.PostAbuseReportApiUseCase
-import com.friend.domain.apiusecase.profilemanager.PostBlockUnblockApiUseCase
-import com.friend.domain.apiusecase.profilemanager.PostProfileImageApiUseCase
+import com.friend.domain.apiusecase.auth.PostLoginApiUseCase
+import com.friend.domain.apiusecase.auth.PostRegistrationApiUseCase
+import com.friend.domain.apiusecase.auth.PostPasswordChangeApiUseCase
 import com.friend.domain.base.ApiResult
-import com.friend.entity.credential.LoginApiEntity
+import com.friend.entity.auth.LoginApiEntity
 import kotlinx.coroutines.flow.Flow
 
-interface CredentialRepository {
+interface AuthRepository {
     suspend fun performLogin(params: PostLoginApiUseCase.Params): Flow<ApiResult<LoginApiEntity>>
-
     suspend fun performGoogleLogin(params: String): Flow<ApiResult<LoginApiEntity>>
+    suspend fun performPasswordChange(params: PostPasswordChangeApiUseCase.Params): Flow<ApiResult<String>>
     suspend fun performRegistration(params: PostRegistrationApiUseCase.Params): Flow<ApiResult<String>>
     suspend fun performForgotPassword(params: String): Flow<ApiResult<String>>
     suspend fun performLogout(): Flow<ApiResult<String>>

@@ -2,11 +2,10 @@ package com.friend.forwardmessage.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -22,11 +21,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.friend.common.constant.AppConstants
-import com.friend.common.dateparser.DateTimePatterns
-import com.friend.common.dateparser.DateTimeParser
 import com.friend.designsystem.spacing.RadiusToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingSymmetric
@@ -101,7 +97,8 @@ private fun ChatListItem(
                 horizontal = SpacingToken.tiny,
                 vertical = SpacingToken.medium
             ),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         NetworkImageLoader(
             url = item.userImage,
@@ -115,30 +112,13 @@ private fun ChatListItem(
             modifier = Modifier.width(SpacingToken.medium)
         )
 
-        Column(
-            modifier = Modifier.weight(2f),
-        ) {
-            AppText(
-                text = item.fullName,
-                textStyle = AppTypography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                textColor = MaterialTheme.textColors.primary,
-            )
-
-            Spacer(
-                modifier = Modifier.height(SpacingToken.micro)
-            )
-
-            AppText(
-                text = item.lastMessage,
-                textStyle = AppTypography.bodyMedium,
-                fontWeight = FontWeight.Light,
-                textColor = MaterialTheme.textColors.primary,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-
-        Spacer(modifier = Modifier.width(SpacingToken.medium))
+        AppText(
+            modifier = modifier.weight(1f),
+            text = item.fullName,
+            textStyle = AppTypography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            textColor = MaterialTheme.textColors.primary,
+        )
 
         AppCheckbox(
             checked = isItemSelected,

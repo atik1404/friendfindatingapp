@@ -5,7 +5,7 @@ data class ProfileApiResponse(
     val status_code: Int?,
     val message: String?,
     val data: List<ProfileDetailsResponse>?,
-    val blockedUser: List<BlockedUser>?,
+    val blockedUsers: List<BlockedUser>?,
 )
 
 data class ProfileDetailsResponse(
@@ -36,6 +36,7 @@ data class ProfileDetailsResponse(
 )
 
 data class BlockedUser(
-    val userBlocker: String?,
-    val blockedUser: String?
+    val userName: String?,
+    val fullName: String?,
+    val userImage: String?,
 )

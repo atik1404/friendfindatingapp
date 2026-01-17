@@ -1,7 +1,7 @@
-package com.friend.domain.apiusecase.credential
+package com.friend.domain.apiusecase.auth
 
 import com.friend.domain.base.ApiResult
-import com.friend.domain.repository.remote.CredentialRepository
+import com.friend.domain.repository.remote.AuthRepository
 import com.friend.domain.usecase.ApiUseCaseParams
 import com.friend.domain.validator.DataValidationResult
 import com.friend.domain.validator.RegistrationIoResult
@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
 class PostRegistrationApiUseCase @Inject constructor(
-    private val repository: CredentialRepository,
+    private val repository: AuthRepository,
 ) : ApiUseCaseParams<PostRegistrationApiUseCase.Params, String> {
 
     val ioError = Channel<RegistrationIoResult>()

@@ -4,9 +4,6 @@ import com.friend.apiresponse.profilemanager.OtherProfileApiResponse
 import com.friend.apiresponse.profilemanager.ProfileApiResponse
 import com.friend.apiresponse.search.CommonApiResponse
 import com.friend.domain.apiusecase.profilemanager.PostAbuseReportApiUseCase
-import com.friend.domain.apiusecase.profilemanager.PostBlockUnblockApiUseCase
-import com.friend.domain.apiusecase.profilemanager.PostPasswordChangeApiUseCase
-import com.friend.domain.apiusecase.profilemanager.PostProfileImageApiUseCase
 import com.friend.domain.apiusecase.profilemanager.PostProfileUpdateApiUseCase
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -33,23 +30,8 @@ interface ProfileManagerApiServices {
         @Body params: PostProfileUpdateApiUseCase.Params
     ): Response<CommonApiResponse>
 
-    @POST("v1/PasswordChange")
-    suspend fun performPasswordChanged(
-        @Body params: PostPasswordChangeApiUseCase.Params
-    ): Response<CommonApiResponse>
-
-    @POST("v1/SendAbuseReport")
-    suspend fun performReportAbuse(
-        @Body params: PostAbuseReportApiUseCase.Params
-    ): Response<CommonApiResponse>
-
-    @POST("v1/BlockUnblockUser")
-    suspend fun performBlockUnblock(
-        @Body params: PostBlockUnblockApiUseCase.Params
-    ): Response<CommonApiResponse>
-
     @Multipart
-    @POST("v1/AddPhoto")
+    @POST("api/Profile/v1/UploadPhoto")
     suspend fun performProfileImageUpdate(
         @Part("Username") username: RequestBody,
         @Part("PhotoAlbumID") photoAlbum: RequestBody,
@@ -58,5 +40,15 @@ interface ProfileManagerApiServices {
         @Part("Approved") approve: RequestBody,
         @Part("ApprovedDate") approveDate: RequestBody,
         @Part image: MultipartBody.Part?,
+    ): Response<CommonApiResponse>
+
+    @POST("v1/AbuseReport")
+    suspend fun performReportAbuse(
+        @Body params: PostAbuseReportApiUseCase.Params
+    ): Response<CommonApiResponse>
+
+    @POST("v1/BlockUnblock")
+    suspend fun performBlockUnblock(
+        @Query("blockedUser") username: String,
     ): Response<CommonApiResponse>
 }

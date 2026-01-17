@@ -1,20 +1,20 @@
-package com.friend.domain.apiusecase.credential
+package com.friend.domain.apiusecase.auth
 
 import com.friend.domain.base.ApiResult
-import com.friend.domain.repository.remote.CredentialRepository
+import com.friend.domain.repository.remote.AuthRepository
 import com.friend.domain.usecase.ApiUseCaseParams
 import com.friend.domain.validator.DataValidationResult
 import com.friend.domain.validator.LoginIoResult
 import com.friend.domain.validator.isPasswordValid
 import com.friend.domain.validator.isUsernameValid
-import com.friend.entity.credential.LoginApiEntity
+import com.friend.entity.auth.LoginApiEntity
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
 class PostLoginApiUseCase @Inject constructor(
-    private val repository: CredentialRepository,
+    private val repository: AuthRepository,
 ) : ApiUseCaseParams<PostLoginApiUseCase.Params, LoginApiEntity> {
     val ioError = Channel<LoginIoResult>()
 

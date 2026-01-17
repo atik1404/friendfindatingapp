@@ -16,7 +16,6 @@ class PostAbuseReportApiUseCase @Inject constructor(
     val ioError = Channel<ReportAbuseIoResult>()
 
     data class Params(
-        val reportedBy: String,
         val reportedUser: String,
         val reportNote: String,
     )

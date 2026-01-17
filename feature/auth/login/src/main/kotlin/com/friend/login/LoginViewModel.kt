@@ -1,8 +1,8 @@
 package com.friend.login
 
 import com.friend.common.base.BaseViewModel
-import com.friend.domain.apiusecase.credential.PostGoogleLoginApiUseCase
-import com.friend.domain.apiusecase.credential.PostLoginApiUseCase
+import com.friend.domain.apiusecase.auth.PostGoogleLoginApiUseCase
+import com.friend.domain.apiusecase.auth.PostLoginApiUseCase
 import com.friend.domain.apiusecase.profilemanager.FetchProfileApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.validator.LoginIoResult
@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel

@@ -1,14 +1,14 @@
 package com.friend.apiresponse.chatmessage
 
-data class MessageListApiResponse(
+data class ConversationApiResponse(
     val status_code: Int?,
     val message: String?,
-    val data: List<MessageResponse>?,
+    val data: List<ConversationResponse>?,
     val isBlocked: Boolean?,
     val count: Int?,
 )
 
-data class MessageResponse(
+data class ConversationResponse(
     val id: String?,
     val fromUsername: String?,
     val body: String?,

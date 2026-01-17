@@ -8,12 +8,8 @@ import javax.inject.Inject
 
 class PostBlockUnblockApiUseCase @Inject constructor(
     private val repository: ProfileManageRepository,
-) : ApiUseCaseParams<PostBlockUnblockApiUseCase.Params, String> {
-    data class Params(
-        val userBlocker: String,
-        val blockedUser: String,
-    )
+) : ApiUseCaseParams<String, String> {
 
-    override suspend fun execute(params: Params): Flow<ApiResult<String>> =
+    override suspend fun execute(params: String): Flow<ApiResult<String>> =
         repository.performBlockUnblock(params)
 }

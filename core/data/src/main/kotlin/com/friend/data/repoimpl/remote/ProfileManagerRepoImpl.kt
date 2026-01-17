@@ -3,15 +3,13 @@ package com.friend.data.repoimpl.remote
 import com.friend.common.dateparser.DateTimeParser
 import com.friend.data.NetworkBoundResource
 import com.friend.data.apiservice.ProfileManagerApiServices
-import com.friend.data.mapper.credential.CommonApiMapper
+import com.friend.data.mapper.auth.CommonApiMapper
 import com.friend.data.mapper.mapFromApiResponse
 import com.friend.data.mapper.profilemanager.CacheProfile
 import com.friend.data.mapper.profilemanager.OtherProfileApiMapper
 import com.friend.data.mapper.profilemanager.ProfileApiMapper
 import com.friend.data.util.MultiPartConverter
 import com.friend.domain.apiusecase.profilemanager.PostAbuseReportApiUseCase
-import com.friend.domain.apiusecase.profilemanager.PostBlockUnblockApiUseCase
-import com.friend.domain.apiusecase.profilemanager.PostPasswordChangeApiUseCase
 import com.friend.domain.apiusecase.profilemanager.PostProfileImageApiUseCase
 import com.friend.domain.apiusecase.profilemanager.PostProfileUpdateApiUseCase
 import com.friend.domain.base.ApiResult
@@ -63,16 +61,6 @@ class ProfileManagerRepoImpl @Inject constructor(
         )
     }
 
-    override suspend fun performPasswordChange(params: PostPasswordChangeApiUseCase.Params): Flow<ApiResult<String>> {
-        return mapFromApiResponse(
-            result = networkBoundResources.downloadData {
-                apiServices.performPasswordChanged(
-                    params
-                )
-            }, mapper = commonApiMapper
-        )
-    }
-
     override suspend fun performAbuseReport(params: PostAbuseReportApiUseCase.Params): Flow<ApiResult<String>> {
         return mapFromApiResponse(
             result = networkBoundResources.downloadData {
@@ -81,7 +69,7 @@ class ProfileManagerRepoImpl @Inject constructor(
         )
     }
 
-    override suspend fun performBlockUnblock(params: PostBlockUnblockApiUseCase.Params): Flow<ApiResult<String>> {
+    override suspend fun performBlockUnblock(params: String): Flow<ApiResult<String>> {
         return mapFromApiResponse(
             result = networkBoundResources.downloadData {
                 apiServices.performBlockUnblock(params)

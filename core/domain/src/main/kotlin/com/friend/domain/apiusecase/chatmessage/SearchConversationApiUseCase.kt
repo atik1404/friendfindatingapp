@@ -3,20 +3,20 @@ package com.friend.domain.apiusecase.chatmessage
 import com.friend.domain.base.ApiResult
 import com.friend.domain.repository.remote.ChatMessagesRepository
 import com.friend.domain.usecase.ApiUseCaseParams
-import com.friend.entity.chatmessage.MessageListApiEntity
+import com.friend.entity.chatmessage.ConversationApiEntity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class FetchMessageListApiUseCase @Inject constructor(
+class SearchConversationApiUseCase @Inject constructor(
     private val repository: ChatMessagesRepository,
-) : ApiUseCaseParams<FetchMessageListApiUseCase.Params, MessageListApiEntity> {
+) : ApiUseCaseParams<SearchConversationApiUseCase.Params, ConversationApiEntity> {
 
     data class Params(
-        val fromUsername: String,
         val toUsername: String,
+        val searchValue: String
     )
 
-    override suspend fun execute(params: Params): Flow<ApiResult<MessageListApiEntity>> {
-        return repository.fetchMessageList(params)
+    override suspend fun execute(params: Params): Flow<ApiResult<ConversationApiEntity>> {
+        return repository.searchConversation(params)
     }
 }

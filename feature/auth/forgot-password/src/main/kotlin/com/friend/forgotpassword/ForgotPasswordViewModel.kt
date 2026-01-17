@@ -1,7 +1,7 @@
 package com.friend.forgotpassword
 
 import com.friend.common.base.BaseViewModel
-import com.friend.domain.apiusecase.credential.PostForgotPasswordApiUseCase
+import com.friend.domain.apiusecase.auth.PostForgotPasswordApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.validator.ForgotPasswordIoResult
 import dagger.hilt.android.lifecycle.HiltViewModel
