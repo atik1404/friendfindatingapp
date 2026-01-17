@@ -1,6 +1,7 @@
 package com.friend.domain.repository.remote
 
 import com.friend.domain.apiusecase.auth.PostLoginApiUseCase
+import com.friend.domain.apiusecase.auth.PostLogoutApiUseCase
 import com.friend.domain.apiusecase.auth.PostRegistrationApiUseCase
 import com.friend.domain.apiusecase.auth.PostPasswordChangeApiUseCase
 import com.friend.domain.base.ApiResult
@@ -13,5 +14,5 @@ interface AuthRepository {
     suspend fun performPasswordChange(params: PostPasswordChangeApiUseCase.Params): Flow<ApiResult<String>>
     suspend fun performRegistration(params: PostRegistrationApiUseCase.Params): Flow<ApiResult<String>>
     suspend fun performForgotPassword(params: String): Flow<ApiResult<String>>
-    suspend fun performLogout(): Flow<ApiResult<String>>
+    suspend fun performLogout(params: PostLogoutApiUseCase.Params): Flow<ApiResult<String>>
 }

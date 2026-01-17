@@ -19,7 +19,6 @@ import com.friend.designsystem.R as Res
 @HiltViewModel
 class ChangePasswordViewModel @Inject constructor(
     private val postPasswordChangeApiUseCase: PostPasswordChangeApiUseCase,
-    private val sharedPrefHelper: SharedPrefHelper
 ) : BaseViewModel() {
 
     private val ioError = postPasswordChangeApiUseCase.ioError.receiveAsFlow()
@@ -63,10 +62,9 @@ class ChangePasswordViewModel @Inject constructor(
     private fun performPasswordChanged() {
         val current = _uiState.value
         val params = PostPasswordChangeApiUseCase.Params(
-            sharedPrefHelper.getString(SpKey.userName),
+            oldPassword = current.oldPassword.value,
             current.oldPassword.value,
             current.newPassword.value,
-            current.confirmPassword.value,
         )
 
         execute {

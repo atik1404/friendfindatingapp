@@ -19,7 +19,6 @@ class PostPasswordChangeApiUseCase @Inject constructor(
     val ioError = Channel<PasswordChangeIoResult>()
 
     data class Params(
-        val username: String,
         val oldPassword: String,
         val newPassword: String,
         val confirmPassword: String,

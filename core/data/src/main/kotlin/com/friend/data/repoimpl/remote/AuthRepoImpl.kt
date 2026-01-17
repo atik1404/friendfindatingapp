@@ -9,6 +9,7 @@ import com.friend.data.mapper.auth.LogoutApiMapper
 import com.friend.data.mapper.auth.RegistrationApiMapper
 import com.friend.data.mapper.mapFromApiResponse
 import com.friend.domain.apiusecase.auth.PostLoginApiUseCase
+import com.friend.domain.apiusecase.auth.PostLogoutApiUseCase
 import com.friend.domain.apiusecase.auth.PostRegistrationApiUseCase
 import com.friend.domain.apiusecase.auth.PostPasswordChangeApiUseCase
 import com.friend.domain.base.ApiResult
@@ -97,10 +98,10 @@ class AuthRepoImpl @Inject constructor(
         )
     }
 
-    override suspend fun performLogout(): Flow<ApiResult<String>> {
+    override suspend fun performLogout(params: PostLogoutApiUseCase.Params): Flow<ApiResult<String>> {
         return mapFromApiResponse(
             result = networkBoundResources.downloadData {
-                apiServices.performLogout()
+                apiServices.performLogout(params)
             }, mapper = logoutApiMapper
         )
     }

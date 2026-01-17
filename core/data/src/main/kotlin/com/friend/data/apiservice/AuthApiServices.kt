@@ -6,6 +6,7 @@ import com.friend.apiresponse.credential.LogoutApiResponse
 import com.friend.apiresponse.credential.RegistrationApiResponse
 import com.friend.apiresponse.search.CommonApiResponse
 import com.friend.domain.apiusecase.auth.PostLoginApiUseCase
+import com.friend.domain.apiusecase.auth.PostLogoutApiUseCase
 import com.friend.domain.apiusecase.auth.PostRegistrationApiUseCase
 import com.friend.domain.apiusecase.auth.PostPasswordChangeApiUseCase
 import retrofit2.Response
@@ -40,7 +41,9 @@ interface AuthApiServices {
     ): Response<CommonApiResponse>
 
     @POST("api/Auth/v1/Logout")
-    suspend fun performLogout(): Response<LogoutApiResponse>
+    suspend fun performLogout(
+        @Body params: PostLogoutApiUseCase.Params
+    ): Response<LogoutApiResponse>
 
     @POST("v1/UserDelete")
     suspend fun performUserDelete(

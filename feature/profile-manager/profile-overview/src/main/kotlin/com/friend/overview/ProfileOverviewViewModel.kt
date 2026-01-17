@@ -47,7 +47,11 @@ class ProfileOverviewViewModel @Inject constructor(
 
     private fun performLogout() {
         execute {
-            logoutApiUseCase.execute().collect { result ->
+            logoutApiUseCase.execute(
+                PostLogoutApiUseCase.Params(
+                    sharedPrefHelper.getString(SpKey.refreshToken)
+                )
+            ).collect { result ->
                 when (result) {
                     is ApiResult.Error -> _uiEvent.send(UiEvent.ShowMessage(result.message))
                     is ApiResult.Loading -> _uiState.value = UiState.Loading(result.loading)
