@@ -46,12 +46,12 @@ interface ChatMessageApiServices {
     @POST("v1/MessageSend")
     suspend fun sendMessage(
         @Part("ToUsername") toUsername: RequestBody,
-        @Part("Body") body: RequestBody,
+        @Part("Body") body: RequestBody? = null,
         @Part("DeviceToken") deviceToken: RequestBody,
-        @Part("AudioDuration") audioDuration: RequestBody,
-        @Part("VideoDuration") videoDuration: RequestBody,
-        @Part image: MultipartBody.Part?,
-        @Part audio: MultipartBody.Part?,
-        @Part video: MultipartBody.Part?,
+        @Part("AudioDuration") audioDuration: RequestBody? = null,
+        @Part("VideoDuration") videoDuration: RequestBody? = null,
+        @Part image: MultipartBody.Part? = null,
+        @Part audio: MultipartBody.Part? = null,
+        @Part video: MultipartBody.Part? = null,
     ): Response<SendMessageApiResponse>
 }

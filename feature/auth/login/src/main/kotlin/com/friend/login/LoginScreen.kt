@@ -24,7 +24,7 @@ import com.friend.login.components.LoginForm
 import com.friend.login.components.LoginOptionDivider
 import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppScaffold
-import com.friend.ui.components.LocalImageLoader
+import com.friend.ui.components.ResourceImageLoader
 import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
@@ -78,7 +78,7 @@ fun LoginScreen(
                 createRefs()
 
             // Top illustration image
-            LocalImageLoader(
+            ResourceImageLoader(
                 imageResId = Res.drawable.img_login_illustration,
                 modifier = Modifier.constrainAs(bannerImage) {
                     top.linkTo(parent.top)

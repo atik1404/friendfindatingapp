@@ -1,21 +1,16 @@
 package com.friend.chatroom.components.conversation
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.friend.designsystem.spacing.RadiusToken
 import com.friend.ui.components.NetworkImageLoader
 
 @Composable
-fun ImageMessageContent(url: String) {
+fun ImageMessageContent(url: String, modifier: Modifier) {
     NetworkImageLoader(
         url = url,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(220.dp),
+        modifier = modifier,
         shape = RoundedCornerShape(RadiusToken.large)
     )
 }

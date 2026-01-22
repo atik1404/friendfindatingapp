@@ -8,4 +8,5 @@ android {
 
 dependencies{
     implementation(libs.bundles.media.exoplayer)
+    implementation(libs.android.image.cropper)
 }

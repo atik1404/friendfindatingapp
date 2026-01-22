@@ -35,7 +35,7 @@ import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppOutlineTextField
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AppText
-import com.friend.ui.components.LocalImageLoader
+import com.friend.ui.components.ResourceImageLoader
 import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
@@ -69,7 +69,7 @@ fun ForgotPasswordScreen(
                 .verticalScroll(rememberScrollState()), // Allow scroll on small screens,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            LocalImageLoader(
+            ResourceImageLoader(
                 imageResId = Res.drawable.img_login_illustration,
                 modifier = Modifier
                     .fillMaxWidth()

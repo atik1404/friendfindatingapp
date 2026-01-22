@@ -1,5 +1,10 @@
 package com.friend.chatroom.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -17,6 +22,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import com.friend.common.utils.FilesUtils.convertToFile
 import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.RadiusToken
 import com.friend.designsystem.spacing.SpacingToken
@@ -24,13 +31,46 @@ import com.friend.designsystem.spacing.appPadding
 import com.friend.designsystem.spacing.appPaddingSymmetric
 import com.friend.designsystem.theme.backgroundColors
 import com.friend.designsystem.theme.buttonColors
+import com.friend.ui.common.CaptureImage
+import com.friend.ui.common.ImageFilePicker
+import com.friend.ui.common.VideoFilePicker
 import com.friend.ui.components.AppIconButton
-import com.friend.ui.preview.LightDarkPreview
+import com.friend.ui.preview.LightPreview
+import java.io.File
+
+@Composable
+fun AnimatedAttachmentType(
+    visible: Boolean,
+    modifier: Modifier = Modifier,
+    pickImage: (File) -> Unit,
+    pickVideo: (File?) -> Unit,
+) {
+    AnimatedVisibility(
+        visible = visible,
+        modifier = modifier,
+        enter = slideInVertically(
+            initialOffsetY = { fullHeight -> fullHeight }
+        ) + fadeIn(),
+        exit = slideOutVertically(
+            targetOffsetY = { fullHeight -> fullHeight }
+        ) + fadeOut()
+    ) {
+        AttachmentTypeUi(
+            pickImage = pickImage,
+            pickVideo = {
+                pickVideo.invoke(it)
+            },
+        )
+    }
+}
 
 @Composable
 fun AttachmentTypeUi(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    pickImage: (File) -> Unit,
+    pickVideo: (File) -> Unit,
 ) {
+    val context = LocalContext.current
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -45,24 +85,54 @@ fun AttachmentTypeUi(
             ),
         horizontalArrangement = Arrangement.Center
     ) {
-        AttachmentType(
-            icon = Icons.Default.LocalMovies,
-            onClick = {}
-        )
-        
+        VideoFilePicker(
+            onFileSelected = {
+                val file = it.convertToFile(context)
+                file?.let { f ->
+                    pickVideo.invoke(f)
+                }
+            },
+            onError = {}
+        ) {
+            AttachmentType(
+                icon = Icons.Default.LocalMovies,
+                onClick = it
+            )
+        }
+
         Spacer(modifier = Modifier.width(SpacingToken.small))
 
-        AttachmentType(
-            icon = Icons.Default.CameraAlt,
-            onClick = {}
-        )
+        CaptureImage(
+            onCaptured = {
+                val file = it.convertToFile(context)
+                file?.let { f ->
+                    pickImage.invoke(f)
+                }
+            },
+            onError = {}
+        ) {
+            AttachmentType(
+                icon = Icons.Default.CameraAlt,
+                onClick = it
+            )
+        }
 
         Spacer(modifier = Modifier.width(SpacingToken.small))
 
-        AttachmentType(
-            icon = Icons.Default.Image,
-            onClick = {}
-        )
+        ImageFilePicker(
+            onImageSelected = {
+                val file = it.convertToFile(context)
+                file?.let { f ->
+                    pickImage.invoke(f)
+                }
+            },
+            onError = {}
+        ) {
+            AttachmentType(
+                icon = Icons.Default.Image,
+                onClick = it
+            )
+        }
     }
 }
 
@@ -84,7 +154,10 @@ private fun AttachmentType(
 }
 
 @Composable
-@LightDarkPreview
+@LightPreview
 private fun ScreenPreview() {
-    AttachmentTypeUi()
+    AttachmentTypeUi(
+        pickImage = {},
+        pickVideo = {},
+    )
 }

@@ -22,7 +22,9 @@ object ChatMessageNavGraph {
                 navigateToChatRoom = { chat ->
                     backStack.add(
                         ChatMessageScreens.ConversationNavScreen(
-                            chat = chat,
+                            toUsername = chat.toUsername,
+                            fullName = chat.fullName,
+                            imageUrl = chat.userImage
                         )
                     )
                 }
@@ -31,7 +33,9 @@ object ChatMessageNavGraph {
 
         entry<ChatMessageScreens.ConversationNavScreen> { key ->
             ConversationScreenRoute(
-                chat = key.chat,
+                toUsername = key.toUsername,
+                fullName = key.fullName,
+                imageUrl = key.imageUrl,
                 onBackButtonClicked = {
                     backStack.removeLastOrNull()
                 },

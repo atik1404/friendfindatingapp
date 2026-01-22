@@ -14,7 +14,8 @@ class SendMessageApiUseCase @Inject constructor(
 
     data class Params(
         val toUsername: String,
-        val content: String,
+        val content: String? = null,
+        val deviceToken: String = "",
         val image: File? = null,
         val audio: File? = null,
         val video: File? = null,

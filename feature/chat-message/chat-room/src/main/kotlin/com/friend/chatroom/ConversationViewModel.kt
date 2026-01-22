@@ -1,6 +1,8 @@
 package com.friend.chatroom
 
+import androidx.lifecycle.viewModelScope
 import com.friend.common.base.BaseViewModel
+import com.friend.common.utils.FilesUtils
 import com.friend.domain.apiusecase.chatmessage.DeleteMessagesApiUseCase
 import com.friend.domain.apiusecase.chatmessage.FetchConversationsApiUseCase
 import com.friend.domain.apiusecase.chatmessage.SearchConversationApiUseCase
@@ -9,12 +11,17 @@ import com.friend.domain.base.ApiResult
 import com.friend.entity.chatmessage.ConversationEntity
 import com.friend.ui.common.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.io.File
 import javax.inject.Inject
 import com.friend.designsystem.R as Res
 
@@ -31,9 +38,11 @@ class ConversationViewModel @Inject constructor(
     private val _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
+    private var pollingJob: Job? = null
+
     val action: (UiAction) -> Unit = { action ->
         when (action) {
-            is UiAction.FetchMessages -> fetchMessages(action.username)//fetchRecentMessages(action.username)
+            is UiAction.FetchMessages -> fetchMessages(action.username)
             is UiAction.SearchMessage -> searchMessage(
                 userName = action.username,
                 keyword = action.keyword
@@ -45,19 +54,26 @@ class ConversationViewModel @Inject constructor(
             UiAction.DeleteMessages -> deleteMessage()
             is UiAction.SendMessage -> sendMessage(action.toUsername)
             is UiAction.OnChangeTextMessage -> onChangeTextMessage(action.message)
+            is UiAction.OnChangeAudioAttachment -> onChangeAudioFile(action.file)
+            is UiAction.OnChangeImageAttachment -> onChangeImageFile(action.file)
+            is UiAction.OnChangeVideoAttachment -> onChangeVideoFile(action.file)
         }
     }
 
-    private fun fetchRecentMessages(toUsername: String) {
-        execute {
-            val currentState = _uiState.value
-            while (true) {
-                if (!currentState.isSearchEnabled) {
-                    fetchMessages(toUsername)
-                    delay(10000)
-                }
+    fun startPolling(toUsername: String) {
+        if (pollingJob?.isActive == true) return
+
+        pollingJob = viewModelScope.launch {
+            while (isActive) {
+                fetchMessages(toUsername)
+                delay(10_000L)
             }
         }
+    }
+
+    fun stopPolling() {
+        pollingJob?.cancel()
+        pollingJob = null
     }
 
     private fun fetchMessages(toUsername: String) {
@@ -87,38 +103,36 @@ class ConversationViewModel @Inject constructor(
 
     private fun sendMessage(username: String) {
         execute {
-            val currentState = _uiState.value.message
+            val currentState = _uiState.value.messageContent
+            val videoDuration = FilesUtils.getFileDurationMs(currentState.video)
+            val audioDuration = FilesUtils.getFileDurationMs(currentState.audio)
             val params = SendMessageApiUseCase.Params(
                 toUsername = username,
-                content = currentState.message
+                content = currentState.textMessage,
+                image = currentState.image,
+                video = currentState.video,
+                videoDuration = videoDuration?.toString(),
+                audio = currentState.audio,
+                audioDuration = audioDuration?.toString()
             )
             sendMessageApiUseCase.execute(params).collect { result ->
                 when (result) {
                     is ApiResult.Error -> showToastMessage(UiText.Dynamic(result.message))
                     is ApiResult.Loading -> _uiState.value =
-                        _uiState.value.copy(message = _uiState.value.message.copy(isSending = result.loading))
+                        _uiState.value.copy(
+                            messageContent = _uiState.value.messageContent.copy(
+                                isSending = result.loading
+                            )
+                        )
 
                     is ApiResult.Success -> {
                         val conversations = _uiState.value.conversations.toMutableList()
-                        val message = ConversationEntity(
-                            messageId = "31212",
-                            fromUsername = "faysal007",
-                            body = currentState.message,
-                            imageUrl = "",
-                            audioUrl = "",
-                            audioDuration = 0,
-                            videoUrl = "",
-                            videoDuration = 0,
-                            dateTime = "2023-12-12",
-                            readableDateTime = "2023-12-12",
-                            isMyMessage = true,
-                            isItemSelected = false,
-                        )
-                        conversations.add(0, message)
+                        conversations.add(0, result.data)
                         _uiState.value = _uiState.value.copy(
                             conversations = conversations,
-                            message = MessageState()
+                            messageContent = MessageState()
                         )
+                        _uiEvent.send(UiEvent.ResetScroll)
                     }
                 }
             }
@@ -204,7 +218,31 @@ class ConversationViewModel @Inject constructor(
     private fun onChangeTextMessage(value: String) {
         execute {
             _uiState.update {
-                it.copy(message = it.message.copy(message = value))
+                it.copy(messageContent = it.messageContent.copy(textMessage = value))
+            }
+        }
+    }
+
+    private fun onChangeImageFile(file: File?) {
+        execute {
+            _uiState.update {
+                it.copy(messageContent = it.messageContent.copy(image = file))
+            }
+        }
+    }
+
+    private fun onChangeAudioFile(file: File?) {
+        execute {
+            _uiState.update {
+                it.copy(messageContent = it.messageContent.copy(audio = file))
+            }
+        }
+    }
+
+    private fun onChangeVideoFile(file: File?) {
+        execute {
+            _uiState.update {
+                it.copy(messageContent = it.messageContent.copy(video = file))
             }
         }
     }

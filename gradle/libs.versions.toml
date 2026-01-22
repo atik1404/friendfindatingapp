@@ -5,27 +5,27 @@ ksp = "2.2.20-2.0.4"
 
 firebasecrashlyticsplugin = "3.0.6"
 firebasePerfplugin = "2.0.2"
-firebaseBomVersion = "34.7.0"
+firebaseBomVersion = "34.8.0"
 
 googleServices = "4.4.4"
 
 billing = "8.3.0"
 
 androidxComposeActivity = "1.12.2"
-androidxComposeBom = "2025.12.01"
+androidxComposeBom = "2026.01.00"
 runtimeComposeVersion = "2.6.0-beta01"
 androidxComposeCompiler = "1.5.15"
 material3 = "1.4.0"
 material = "1.10.0"
-androidxComposeFoundation = "1.10.0"
+androidxComposeFoundation = "1.10.1"
 constraintlayout = "1.1.1"
-runtime = "1.10.0"
+runtime = "1.10.1"
 
 androidxComposeNavigation = "2.9.6"
 nav3Core = "1.0.0"
 lifecycleViewmodelNav3 = "2.10.0"
 kotlinSerialization = "2.1.21"
-kotlinxSerializationCore = "1.9.0"
+kotlinxSerializationCore = "1.10.0"
 material3AdaptiveNav3 = "1.0.0-SNAPSHOT"
 
 appcompatVersion = "1.7.1"
@@ -89,7 +89,7 @@ playServicesRecaptcha = "18.9.0-beta01"
 playServicesSafetynet = "18.1.0"
 playAppUpdateVersionVersion = "2.0.1"
 googleCredential = "1.6.0-rc01"
-googleAuthId = "1.1.1"
+googleAuthId = "1.2.0"
 
 
 espressoVersion = "3.7.0"

@@ -10,7 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import com.friend.common.utils.ImageUtils
+import com.friend.common.utils.FilesUtils
 
 @Composable
 fun CaptureImage(
@@ -30,14 +30,14 @@ fun CaptureImage(
     }
 
     captureButton {
-        val uri = ImageUtils.createImageUri(context)
+        val uri = FilesUtils.createImageUri(context)
         photoUri = uri
         takePictureLauncher.launch(uri)
     }
 }
 
 @Composable
-fun GalleryImagPicker(
+fun ImageFilePicker(
     onImageSelected: (Uri) -> Unit,
     onError: () -> Unit,
     pickerButton: @Composable (onClick: () -> Unit) -> Unit,
@@ -51,5 +51,23 @@ fun GalleryImagPicker(
 
     pickerButton {
         pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+}
+
+@Composable
+fun VideoFilePicker(
+    onFileSelected: (Uri) -> Unit,
+    onError: () -> Unit,
+    pickerButton: @Composable (onClick: () -> Unit) -> Unit,
+) {
+    val pickMedia =
+        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri != null) {
+                onFileSelected(uri)
+            } else onError.invoke()
+        }
+
+    pickerButton {
+        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly))
     }
 }

@@ -82,13 +82,13 @@ class ChatMessageRepoImpl @Inject constructor(
             result = networkBoundResources.downloadData {
                 apiServices.sendMessage(
                     toUsername = MultiPartConverter.mConverter(params.toUsername),
-                    body = MultiPartConverter.mConverter(params.content),
-                    deviceToken = MultiPartConverter.mConverter(params.content),
-                    audioDuration = MultiPartConverter.mConverter(params.audioDuration ?: ""),
-                    videoDuration = MultiPartConverter.mConverter(params.videoDuration ?: ""),
-                    image = MultiPartConverter.mConvertImg(params.image, "Image"),
-                    audio = MultiPartConverter.mConvertImg(params.image, "Audio"),
-                    video = MultiPartConverter.mConvertImg(params.image, "Video"),
+                    body = MultiPartConverter.mConverterNullable(params.content),
+                    deviceToken = MultiPartConverter.mConverter(params.deviceToken),
+                    audioDuration = MultiPartConverter.mConverterNullable(params.audioDuration),
+                    videoDuration = MultiPartConverter.mConverterNullable(params.videoDuration),
+                    image = MultiPartConverter.mConvertImage(params.image, "Image"),
+                    audio = MultiPartConverter.convertAudio(params.audio, "Audio"),
+                    video = MultiPartConverter.convertVideo(params.video, "Video"),
                 )
             }, mapper = sendMessageApiMapper
         )

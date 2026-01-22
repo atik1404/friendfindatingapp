@@ -34,7 +34,7 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageContractOptions
 import com.canhub.cropper.CropImageOptions
 import com.canhub.cropper.CropImageView
-import com.friend.common.utils.ImageUtils.convertToFile
+import com.friend.common.utils.FilesUtils.convertToFile
 import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.ImageSizeToken
 import com.friend.designsystem.spacing.SpacingToken

@@ -3,15 +3,18 @@ package com.friend.chatroom
 import AppDivider
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -26,19 +29,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import com.friend.chatroom.components.AnimatedAttachmentType
+import com.friend.chatroom.components.AttachedFilePreviewUi
 import com.friend.chatroom.components.ConversionsUiSection
 import com.friend.chatroom.components.SearchResultCountUi
 import com.friend.chatroom.components.TopBarUiSection
 import com.friend.chatroom.components.UserInputForm
 import com.friend.chatroom.components.conversation.JumpToBottom
+import com.friend.common.utils.FilesUtils
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingOnly
 import com.friend.designsystem.theme.dividerColors
-import com.friend.entity.chatmessage.ChatItemApiEntity
 import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.preview.LightPreview
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 private val JumpToBottomThreshold = 56.dp
 
@@ -47,7 +53,10 @@ private val JumpToBottomThreshold = 56.dp
 fun ConversationScreen(
     modifier: Modifier = Modifier,
     uiState: UiState,
-    chat: ChatItemApiEntity,
+    listState: LazyListState,
+    toUsername: String,
+    fullName: String,
+    imageUrl: String,
     onBackButtonClicked: () -> Unit,
     onNavigateToProfileScreen: () -> Unit,
     onNavigateToReportScreen: () -> Unit,
@@ -55,8 +64,8 @@ fun ConversationScreen(
     onAction: (UiAction) -> Unit,
 ) {
     var isItemSelectionEnable by remember { mutableStateOf(false) }
+    var isAttachmentExpanded by remember { mutableStateOf(false) }
 
-    val listState = rememberLazyListState()
     val scope = rememberCoroutineScope()
 
     val jumpThreshold = with(LocalDensity.current) {
@@ -90,18 +99,18 @@ fun ConversationScreen(
                         .statusBarsPadding()
                         .navigationBarsPadding()
                         .imePadding(),
-                    fullName = chat.fullName,
-                    userImage = chat.userImage,
+                    fullName = fullName,
+                    userImage = imageUrl,
                     onProfileImageClicked = onNavigateToProfileScreen,
                     onBackButtonClicked = onBackButtonClicked,
                     onSearchCanceled = {
                         onAction.invoke(UiAction.OnClearSearch)
-                        onAction.invoke(UiAction.FetchMessages(chat.toUsername))
+                        onAction.invoke(UiAction.FetchMessages(toUsername))
                     },
                     onSearchApply = {
                         onAction.invoke(
                             UiAction.SearchMessage(
-                                chat.toUsername,
+                                toUsername,
                                 it
                             )
                         )
@@ -145,18 +154,54 @@ fun ConversationScreen(
                     }
                 )
 
+                AnimatedAttachmentType(
+                    isAttachmentExpanded,
+                    modifier = modifier,
+                    pickImage = {
+                        isAttachmentExpanded = false
+                        onAction.invoke(UiAction.OnChangeImageAttachment(it))
+                    },
+                    pickVideo = {
+                        Timber.e("videoDuration: ${FilesUtils.getFileDurationMs(it)}")
+                        isAttachmentExpanded = false
+                        onAction.invoke(UiAction.OnChangeVideoAttachment(it))
+                        onAction.invoke(UiAction.SendMessage(toUsername))
+                    },
+                )
+
+                if (uiState.messageContent.image !== null) {
+                    Spacer(modifier = modifier.height(SpacingToken.medium))
+
+                    val bitmap = FilesUtils.fileToBitmap(
+                        uiState.messageContent.image
+                    )
+
+                    AttachedFilePreviewUi(
+                        bitmap = bitmap,
+                        modifier = modifier,
+                        clearFile = {
+                            onAction.invoke(UiAction.OnChangeImageAttachment(null))
+                        }
+                    )
+                    Spacer(modifier = modifier.height(SpacingToken.medium))
+                }
+
                 UserInputForm(
                     modifier = Modifier
                         .appPaddingOnly(bottom = SpacingToken.medium),
-                    textMessage = uiState.message.message,
+                    isSendEnable = uiState.messageContent.isSendEnable,
+                    textMessage = uiState.messageContent.textMessage,
                     onTextChange = {
                         onAction.invoke(UiAction.OnChangeTextMessage(it))
                     },
                     onClickAttachment = {
-
+                        isAttachmentExpanded = !isAttachmentExpanded
+                    },
+                    onCaptureImage = {
+                        onAction.invoke(UiAction.OnChangeImageAttachment(it))
                     },
                     onSendTextMessage = {
-                        onAction.invoke(UiAction.SendMessage(chat.toUsername))
+                        onAction.invoke(UiAction.SendMessage(toUsername))
                     }
                 )
             }
@@ -195,14 +240,10 @@ fun ConversationScreen(
 private fun ScreenPreview() {
     ConversationScreen(
         uiState = UiState(),
-        chat = ChatItemApiEntity(
-            toUsername = "Tom Cruise",
-            notificationToken = "",
-            userImage = "",
-            fullName = "Tom CruiseTom Cruise",
-            lastMessage = "Hi, How are you?",
-            dateTime = "2025-12-16"
-        ),
+        listState = rememberLazyListState(),
+        toUsername = "",
+        fullName = "",
+        imageUrl = "",
         onBackButtonClicked = {},
         onNavigateToProfileScreen = {},
         onAction = {},

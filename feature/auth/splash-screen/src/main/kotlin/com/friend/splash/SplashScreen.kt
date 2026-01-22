@@ -28,7 +28,7 @@ import com.friend.ui.common.ErrorUi
 import com.friend.ui.common.LoadingAnimation
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AppText
-import com.friend.ui.components.LocalImageLoader
+import com.friend.ui.components.ResourceImageLoader
 import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
@@ -52,7 +52,7 @@ fun SplashScreen(
                         .fillMaxSize()
                         .padding(padding)
                 ) {
-                    LocalImageLoader(
+                    ResourceImageLoader(
                         imageResId = Res.drawable.img_splash_background,
                         modifier = Modifier
                             .fillMaxSize()
@@ -94,7 +94,7 @@ fun AnimatedVisibilityImage(visible: Boolean) {
         enter = fadeIn() + scaleIn(initialScale = 0.95f),
         exit = fadeOut() + scaleOut(targetScale = 0.95f)
     ) {
-        LocalImageLoader(
+        ResourceImageLoader(
             imageResId = Res.drawable.friendfin,
         )
     }

@@ -87,7 +87,7 @@ class ProfileManagerRepoImpl @Inject constructor(
                     description = MultiPartConverter.mConverter("profile picture"),
                     approve = MultiPartConverter.mConverter("0"),
                     approveDate = MultiPartConverter.mConverter(DateTimeParser.nowUtc().toString()),
-                    image = MultiPartConverter.mConvertImg(params.image, "Image"),
+                    image = MultiPartConverter.mConvertImage(params.image, "Image"),
                 )
             }, mapper = commonApiMapper
         )

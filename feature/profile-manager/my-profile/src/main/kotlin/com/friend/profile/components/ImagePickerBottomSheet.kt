@@ -13,21 +13,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import com.friend.common.utils.ImageUtils.convertToFile
 import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingHorizontal
 import com.friend.designsystem.spacing.appPaddingVertical
 import com.friend.ui.common.CaptureImage
-import com.friend.ui.common.GalleryImagPicker
+import com.friend.ui.common.ImageFilePicker
 import com.friend.ui.common.ShowBottomSheet
 import com.friend.ui.components.AppText
 import com.friend.ui.preview.LightPreview
-import java.io.File
 import com.friend.designsystem.R as Res
 
 @Composable
@@ -82,7 +79,7 @@ private fun ImagePickerUiSection(
             )
         }
 
-        GalleryImagPicker(
+        ImageFilePicker(
             onImageSelected = {
                 onImageSelected.invoke(it)
             },

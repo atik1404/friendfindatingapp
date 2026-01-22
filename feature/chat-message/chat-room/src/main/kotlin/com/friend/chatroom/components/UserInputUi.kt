@@ -1,8 +1,10 @@
 package com.friend.chatroom.components
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,49 +18,36 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import com.friend.common.utils.FilesUtils.convertToFile
 import com.friend.designsystem.R as Res
 import com.friend.designsystem.spacing.IconSizeToken
+import com.friend.designsystem.spacing.RadiusToken
 import com.friend.designsystem.spacing.SpacingToken
+import com.friend.designsystem.spacing.StrokeTokens
+import com.friend.designsystem.spacing.appPadding
 import com.friend.designsystem.spacing.appPaddingHorizontal
-import com.friend.designsystem.spacing.appPaddingOnly
+import com.friend.designsystem.spacing.appPaddingSymmetric
 import com.friend.designsystem.theme.backgroundColors
 import com.friend.designsystem.theme.buttonColors
+import com.friend.designsystem.theme.strokeColors
+import com.friend.designsystem.theme.surfaceColors
 import com.friend.designsystem.theme.textFieldColors
+import com.friend.ui.common.CaptureImage
 import com.friend.ui.components.AppBaseTextField
 import com.friend.ui.components.AppIconButton
-
-@Composable
-fun UserInputAndAttachment(
-    modifier: Modifier = Modifier,
-
-    ) {
-    var isAttachmentExpanded by remember { mutableStateOf(false) }
-    Column(
-        modifier = modifier
-    ) {
-        if (isAttachmentExpanded)
-            AttachmentTypeUi()
-
-//        UserInputForm(
-//            modifier = Modifier
-//                .appPaddingOnly(bottom = SpacingToken.medium),
-//            onClickAttachment = {
-//                isAttachmentExpanded = !isAttachmentExpanded
-//            }
-//        )
-    }
-}
+import com.friend.ui.components.BitmapImageLoader
+import com.friend.ui.preview.LightPreview
+import java.io.File
 
 @Composable
 fun UserInputForm(
@@ -66,8 +55,11 @@ fun UserInputForm(
     textMessage: String,
     onTextChange: (String) -> Unit,
     onClickAttachment: () -> Unit,
+    onCaptureImage: (File) -> Unit,
     onSendTextMessage: (String) -> Unit,
+    isSendEnable: Boolean = false,
 ) {
+    val context = LocalContext.current
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -108,16 +100,26 @@ fun UserInputForm(
 
             Spacer(Modifier.width(SpacingToken.tiny))
 
-            AppIconButton(
-                modifier = Modifier.size(IconSizeToken.large),
-                onClick = {},
-                vectorIcon = Icons.Default.CameraAlt
-            )
+            CaptureImage(
+                onCaptured = {
+                    val file = it.convertToFile(context)
+                    file?.let { f ->
+                        onCaptureImage.invoke(f)
+                    }
+                },
+                onError = {}
+            ) {
+                AppIconButton(
+                    modifier = Modifier.size(IconSizeToken.large),
+                    onClick = it,
+                    vectorIcon = Icons.Default.CameraAlt
+                )
+            }
         }
 
         Spacer(Modifier.width(SpacingToken.tiny))
 
-        if (textMessage.isEmpty()) {
+        if (!isSendEnable) {
             AppIconButton(
                 modifier = Modifier
                     .background(
@@ -139,4 +141,73 @@ fun UserInputForm(
             )
         }
     }
+}
+
+@Composable
+fun AttachedFilePreviewUi(
+    modifier: Modifier = Modifier,
+    bitmap: Bitmap? = null,
+    clearFile: () -> Unit = {}
+) {
+    Box(
+        modifier = modifier
+            .appPaddingSymmetric(SpacingToken.medium)
+            .width(IconSizeToken.large)
+            .height(IconSizeToken.mediumLarge)
+            .background(
+                color = MaterialTheme.surfaceColors.white,
+                shape = RoundedCornerShape(RadiusToken.small)
+            )
+    ) {
+        bitmap?.let {
+            BitmapImageLoader(
+                bitmap = it,
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(
+                        color = MaterialTheme.surfaceColors.white,
+                        shape = RoundedCornerShape(RadiusToken.small)
+                    )
+            )
+        }
+
+        AppIconButton(
+            vectorIcon = Icons.Default.Clear,
+            tint = MaterialTheme.surfaceColors.grayLight,
+            onClick = clearFile,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .size(IconSizeToken.small) // tweak as you like
+                .clip(CircleShape)
+                .background(MaterialTheme.surfaceColors.primary)
+                .border(
+                    width = StrokeTokens.hairline,
+                    color = MaterialTheme.strokeColors.primary,
+                    shape = CircleShape
+                )
+                .appPadding(SpacingToken.micro) // inner padding for icon touch target
+        )
+    }
+}
+
+@Composable
+@LightPreview
+private fun ScreenPreview() {
+    AttachedFilePreviewUi(
+
+    )
+}
+
+@Composable
+@LightPreview
+private fun InputBoxPreview() {
+    UserInputForm(
+        textMessage = "",
+        onTextChange = {},
+        onClickAttachment = {},
+        onCaptureImage = {},
+        onSendTextMessage = {},
+        modifier = Modifier,
+        isSendEnable = true
+    )
 }

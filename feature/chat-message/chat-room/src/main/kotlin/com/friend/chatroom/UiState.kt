@@ -1,17 +1,21 @@
 package com.friend.chatroom
 
+import android.graphics.Bitmap
 import com.friend.entity.chatmessage.ConversationEntity
 import com.friend.ui.common.UiText
+import java.io.File
 
 data class MessageState(
-    val message: String = "",
-    val image: String = "",
-    val audio: String = "",
-    val video: String = "",
+    val textMessage: String = "",
+    val image: File? = null,
+    val audio: File? = null,
+    val video: File? = null,
     val audioDuration: String = "",
     val videoDuration: String = "",
     val isSending: Boolean = false,
-)
+) {
+    val isSendEnable = textMessage.isNotEmpty() || image != null || audio != null || video != null
+}
 
 data class UiState(
     val conversations: List<ConversationEntity> = emptyList(),
@@ -19,7 +23,7 @@ data class UiState(
     val error: String = "",
     val isSearchEnabled: Boolean = false,
     val searchKey: String = "",
-    val message: MessageState = MessageState()
+    val messageContent: MessageState = MessageState()
 ) {
     val isAlreadyFetched: Boolean get() = conversations.isNotEmpty()
     val isAnyItemSelected: Boolean get() = conversations.any { it.isItemSelected }
@@ -28,6 +32,7 @@ data class UiState(
 sealed interface UiEvent {
     data class ShowToastMessage(val message: UiText) : UiEvent
     data object DeleteMessageComplete : UiEvent
+    data object ResetScroll : UiEvent
 }
 
 sealed interface UiAction {
@@ -38,5 +43,8 @@ sealed interface UiAction {
     data object DeleteMessages : UiAction
     data class SendMessage(val toUsername: String) : UiAction
     data class OnChangeTextMessage(val message: String) : UiAction
+    data class OnChangeImageAttachment(val file: File?) : UiAction
+    data class OnChangeVideoAttachment(val file: File?) : UiAction
+    data class OnChangeAudioAttachment(val file: File?) : UiAction
     data class UpdateMessageSelectionStatus(val item: ConversationEntity) : UiAction
 }

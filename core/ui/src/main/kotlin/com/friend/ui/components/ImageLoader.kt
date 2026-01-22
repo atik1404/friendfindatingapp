@@ -1,5 +1,6 @@
 package com.friend.ui.components
 
+import android.graphics.Bitmap
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -12,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -26,10 +28,11 @@ import com.friend.designsystem.spacing.RadiusToken
 import com.friend.designsystem.theme.surfaceColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
+import java.io.File
 import com.friend.designsystem.R as Res
 
 @Composable
-fun LocalImageLoader(
+fun ResourceImageLoader(
     modifier: Modifier = Modifier,
     imageResId: Int,
     contentDescription: String = stringResource(Res.string.msg_image_content_description),
@@ -113,4 +116,19 @@ fun NetworkImageLoader(
             CircularProgressIndicator()
         }
     }
+}
+
+@Composable
+fun BitmapImageLoader(
+    modifier: Modifier = Modifier,
+    bitmap: Bitmap,
+    contentDescription: String = stringResource(Res.string.msg_image_content_description),
+    contentScale: ContentScale = ContentScale.Crop,
+) {
+    Image(
+        bitmap = bitmap.asImageBitmap(),
+        contentDescription = contentDescription,
+        modifier = modifier,
+        contentScale = contentScale,
+    )
 }

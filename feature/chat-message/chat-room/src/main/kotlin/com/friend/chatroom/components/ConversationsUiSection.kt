@@ -18,8 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import com.friend.chatroom.components.conversation.ConversasionBody
+import com.friend.chatroom.components.conversation.ConversationBody
 import com.friend.chatroom.components.conversation.bubbleColorPair
 import com.friend.chatroom.components.conversation.bubbleCornerShape
 import com.friend.common.dateparser.DateTimeParser
@@ -35,8 +34,6 @@ import com.friend.entity.chatmessage.ConversationEntity
 import com.friend.ui.components.AppCheckbox
 import com.friend.ui.components.AppText
 import com.friend.ui.preview.LightPreview
-
-private val JumpToBottomThreshold = 56.dp
 
 @Composable
 fun ConversionsUiSection(
@@ -136,7 +133,7 @@ fun ConversationItemBubble(
                     .appPadding(SpacingToken.tiny),
                 horizontalAlignment = alignment
             ) {
-                ConversasionBody(
+                ConversationBody(
                     message = message,
                     contentColor = contentColor,
                     alignment = alignment,

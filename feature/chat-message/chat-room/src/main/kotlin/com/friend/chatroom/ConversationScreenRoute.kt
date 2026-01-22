@@ -1,18 +1,25 @@
 package com.friend.chatroom
 
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.friend.chatroom.UiAction.*
 import com.friend.entity.chatmessage.ChatItemApiEntity
 import com.friend.ui.common.asString
 import com.friend.ui.showToastMessage
+import kotlinx.coroutines.launch
 
 @Composable
 fun ConversationScreenRoute(
-    chat: ChatItemApiEntity,
+    toUsername: String,
+    fullName: String,
+    imageUrl: String,
     onBackButtonClicked: () -> Unit,
     onNavigateToProfileScreen: (String) -> Unit,
     onNavigateToReportScreen: (String) -> Unit,
@@ -21,30 +28,45 @@ fun ConversationScreenRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val listState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        viewModel.action(UiAction.FetchMessages(chat.toUsername))
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is UiEvent.ShowToastMessage ->
                     context.showToastMessage(event.message.asString(context))
-                UiEvent.DeleteMessageComplete -> viewModel.action(UiAction.FetchMessages(chat.toUsername))
+
+                UiEvent.DeleteMessageComplete -> viewModel.action(FetchMessages(toUsername))
+                UiEvent.ResetScroll -> {
+                    scope.launch {
+                        listState.animateScrollToItem(0)
+                    }
+                }
             }
         }
     }
 
+    DisposableEffect(Unit) {
+        viewModel.startPolling(toUsername)
+        onDispose { viewModel.stopPolling() }
+    }
+
     ConversationScreen(
         uiState = uiState,
-        chat = chat,
+        listState = listState,
+        toUsername = toUsername,
+        fullName = fullName,
+        imageUrl = imageUrl,
         onBackButtonClicked = onBackButtonClicked,
         onNavigateToProfileScreen = {
-            onNavigateToProfileScreen.invoke(chat.toUsername)
+            onNavigateToProfileScreen.invoke(toUsername)
         },
         onAction = {
             viewModel.action(it)
         },
         onNavigateToReportScreen = {
-            onNavigateToReportScreen.invoke(chat.toUsername)
+            onNavigateToReportScreen.invoke(toUsername)
         },
         onNavigateToForwardMessageScreen = {
             onNavigateToForwardMessageScreen.invoke(uiState.conversations.filter { it.isItemSelected }

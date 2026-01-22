@@ -14,8 +14,20 @@ object MultiPartConverter {
     fun mConverterNullable(data: String?): RequestBody? =
         data?.toRequestBody(MultipartBody.FORM)
 
-    fun mConvertImg(imageFile: File?, fileName: String): MultipartBody.Part? {
-        val body = imageFile?.asRequestBody("image/*".toMediaTypeOrNull())
-        return body?.let { MultipartBody.Part.createFormData(fileName, imageFile.name, it) }
+    fun mConvertImage(file: File?, fileName: String): MultipartBody.Part? {
+        val body = file?.asRequestBody("image/*".toMediaTypeOrNull())
+        return body?.let { MultipartBody.Part.createFormData(fileName, file.name, it) }
+    }
+
+    fun convertVideo(file: File?, formKey: String): MultipartBody.Part? {
+        if (file == null) return null
+        val body = file.asRequestBody("video/*".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData(formKey, file.name, body)
+    }
+
+    fun convertAudio(file: File?, formKey: String): MultipartBody.Part? {
+        if (file == null) return null
+        val body = file.asRequestBody("audio/*".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData(formKey, file.name, body)
     }
 }

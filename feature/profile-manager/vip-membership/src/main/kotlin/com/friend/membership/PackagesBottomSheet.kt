@@ -17,7 +17,7 @@ import com.friend.designsystem.spacing.appPadding
 import com.friend.ui.common.ShowBottomSheet
 import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppText
-import com.friend.ui.components.LocalImageLoader
+import com.friend.ui.components.ResourceImageLoader
 import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
@@ -37,7 +37,7 @@ fun PackagesBottomSheet(
             modifier = modifier.appPadding(SpacingToken.medium),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            LocalImageLoader(
+            ResourceImageLoader(
                 imageResId = Res.drawable.img_vip,
                 modifier = modifier.size(IconSizeToken.extraLarge)
             )

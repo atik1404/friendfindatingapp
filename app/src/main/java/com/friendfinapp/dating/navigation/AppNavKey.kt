@@ -31,8 +31,12 @@ sealed interface MainScreens : AppScreen {
 sealed interface ChatMessageScreens : AppScreen {
     @Serializable
     object ChatListNavScreen : AppScreen
+
+    @Serializable
     data class ConversationNavScreen(
-        val chat: ChatItemApiEntity
+        val toUsername: String,
+        val fullName: String,
+        val imageUrl: String
     ) : AppScreen
 
     @Serializable

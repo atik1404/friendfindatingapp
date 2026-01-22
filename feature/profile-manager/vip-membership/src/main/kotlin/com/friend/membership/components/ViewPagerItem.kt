@@ -19,7 +19,7 @@ import com.friend.designsystem.spacing.appPaddingVertical
 import com.friend.designsystem.theme.surfaceColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.ui.components.AppText
-import com.friend.ui.components.LocalImageLoader
+import com.friend.ui.components.ResourceImageLoader
 
 @Composable
 fun ViewPagerItem(
@@ -40,7 +40,7 @@ fun ViewPagerItem(
                 .appPaddingHorizontal(SpacingToken.small),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            LocalImageLoader(
+            ResourceImageLoader(
                 imageResId = image,
                 modifier = modifier
                     .fillMaxWidth()
