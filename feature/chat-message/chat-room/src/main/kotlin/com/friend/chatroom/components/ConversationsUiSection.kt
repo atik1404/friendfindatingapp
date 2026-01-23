@@ -21,6 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import com.friend.chatroom.components.conversation.ConversationBody
 import com.friend.chatroom.components.conversation.bubbleColorPair
 import com.friend.chatroom.components.conversation.bubbleCornerShape
+import com.friend.chatroom.utils.AudioPlayerController
+import com.friend.chatroom.utils.rememberAudioPlayerController
 import com.friend.common.dateparser.DateTimeParser
 import com.friend.common.dateparser.DateTimePatterns
 import com.friend.designsystem.spacing.SpacingToken
@@ -45,7 +47,7 @@ fun ConversionsUiSection(
     onItemSelected: (ConversationEntity) -> Unit,
     onNavigateToPlayerScreen: (String) -> Unit
 ) {
-    //val audioController = rememberAudioPlayerController()
+    val audioController = rememberAudioPlayerController()
 
     LazyColumn(
         state = listState,
@@ -78,8 +80,8 @@ fun ConversionsUiSection(
                 onClick = {
                     if (message.videoUrl.isNotEmpty() && !isItemSelectionEnable)
                         onNavigateToPlayerScreen.invoke(message.videoUrl)
-                }
-                //audioController = audioController
+                },
+                audioController = audioController
             )
         }
     }
@@ -91,8 +93,8 @@ fun ConversationItemBubble(
     message: ConversationEntity,
     isItemSelectionEnable: Boolean = false,
     onItemSelected: () -> Unit = {},
-    onClick: () -> Unit
-    //audioController: AudioPlayerController
+    onClick: () -> Unit,
+    audioController: AudioPlayerController
 ) {
     val backgroundColor = bubbleColorPair(message.isMyMessage).first
     val contentColor = bubbleColorPair(message.isMyMessage).second
@@ -146,7 +148,7 @@ fun ConversationItemBubble(
                     message = message,
                     contentColor = contentColor,
                     alignment = alignment,
-                    //audioController = audioController,
+                    audioController = audioController,
                     onClick = onClick
                 )
 
@@ -197,7 +199,7 @@ private fun DateDivider(date: String) {
 @LightPreview
 private fun ScreenPreview() {
     ConversationItemBubble(
-        //audioController =  rememberAudioPlayerController(),
+        audioController =  rememberAudioPlayerController(),
         message = ConversationEntity(
             messageId = "",
             isMyMessage = true,

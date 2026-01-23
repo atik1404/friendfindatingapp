@@ -11,8 +11,10 @@ import androidx.compose.material.icons.filled.PauseCircleFilled
 import androidx.compose.material.icons.filled.PlayCircleFilled
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.friend.chatroom.utils.AudioPlayerController
 import com.friend.common.dateparser.DateTimeParser
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingHorizontal
@@ -26,14 +28,14 @@ fun AudioMessageContent(
     id: String,
     url: String,
     duration: Long,
-   // audioController: AudioPlayerController
+    audioController: AudioPlayerController
 ) {
     val maxMillis = duration.coerceAtLeast(0L)
-    //val state = audioController.state.collectAsState().value
+    val state = audioController.state.collectAsState().value
 
-    val isThisActive = false
-    val isPlaying = false
-    val positionMs =  0L
+    val isThisActive = state.activeId == id
+    val isPlaying = isThisActive && state.isPlaying
+    val positionMs = if (isThisActive) state.positionMs else 0L
 
     Row(
         modifier = Modifier.appPaddingHorizontal(SpacingToken.medium),
@@ -47,7 +49,7 @@ fun AudioMessageContent(
             ),
             vectorIcon = if (isPlaying) Icons.Default.PauseCircleFilled
             else Icons.Default.PlayCircleFilled,
-            onClick = {  }
+            onClick = { audioController.toggle(id, url) }
         )
 
         Spacer(modifier = Modifier.width(SpacingToken.small))
@@ -61,5 +63,6 @@ fun AudioMessageContent(
         Spacer(modifier = Modifier.width(SpacingToken.small))
 
         AppText(text = DateTimeParser.convertMillisToTime(duration))
+
     }
 }

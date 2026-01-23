@@ -9,6 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.friend.chatroom.utils.AudioPlayerController
+import com.friend.chatroom.utils.rememberAudioPlayerController
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.entity.chatmessage.ConversationEntity
 
@@ -18,7 +20,7 @@ fun ConversationBody(
     contentColor: Color,
     alignment: Alignment.Horizontal,
     onClick: () -> Unit,
-    // audioController: AudioPlayerController
+    audioController: AudioPlayerController
 ) {
     Column(
         horizontalAlignment = alignment
@@ -51,7 +53,7 @@ fun ConversationBody(
                 id = message.messageId,
                 url = message.audioUrl,
                 duration = message.audioDuration.toLong(),
-                //audioController =  rememberAudioPlayerController()
+                audioController = audioController
             )
             return
         }
