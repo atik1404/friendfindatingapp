@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,15 +21,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import coil.compose.AsyncImage
-import coil.request.CachePolicy
-import coil.request.ImageRequest
+import coil3.ImageLoader
+import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.CachePolicy
+import coil3.request.ImageRequest
+import coil3.request.crossfade
+import coil3.video.VideoFrameDecoder
+import coil3.video.videoFrameMicros
 import com.friend.common.extfun.initialsOf
 import com.friend.designsystem.spacing.RadiusToken
 import com.friend.designsystem.theme.surfaceColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
-import java.io.File
 import com.friend.designsystem.R as Res
 
 @Composable
@@ -65,7 +70,7 @@ fun NetworkImageLoader(
         when {
             url.isNotEmpty() -> {
                 AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
+                    model = ImageRequest.Builder(LocalPlatformContext.current)
                         .data(url)
                         .crossfade(true)
                         .diskCachePolicy(CachePolicy.ENABLED)
@@ -130,5 +135,38 @@ fun BitmapImageLoader(
         contentDescription = contentDescription,
         modifier = modifier,
         contentScale = contentScale,
+    )
+}
+
+@Composable
+fun VideoThumbnailLoader(
+    modifier: Modifier = Modifier,
+    videoUrl: String,
+    @DrawableRes placeholderRes: Int? = Res.drawable.image_loader,
+    @DrawableRes errorRes: Int? = Res.drawable.image_loader,
+    shape: Shape = RoundedCornerShape(RadiusToken.none),
+    contentScale: ContentScale = ContentScale.Crop,
+) {
+    val context = LocalContext.current
+
+    val imageLoader = remember {
+        ImageLoader.Builder(context)
+            .components { add(VideoFrameDecoder.Factory()) }
+            .build()
+    }
+
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(videoUrl)
+            .crossfade(true)
+            .videoFrameMicros(1000000)
+            .build(),
+        imageLoader = imageLoader,
+        contentDescription = stringResource(Res.string.msg_image_content_description),
+        placeholder = placeholderRes?.let { painterResource(it) },
+        error = errorRes?.let { painterResource(it) },
+        contentScale = contentScale,
+        modifier = modifier
+            .clip(shape)
     )
 }

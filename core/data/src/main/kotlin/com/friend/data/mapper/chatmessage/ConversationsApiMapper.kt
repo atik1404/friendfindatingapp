@@ -18,7 +18,7 @@ class ConversationsApiMapper @Inject constructor(
 
     @Inject
     @AppImageBaseUrl
-    lateinit var imageBaseUrl: String
+    lateinit var fileBaseUrl: String
 
     override fun mapFromApiResponse(response: ConversationApiResponse): ConversationApiEntity {
         var lastDate: String? = null
@@ -47,10 +47,10 @@ class ConversationsApiMapper @Inject constructor(
                     messageId = message.id.orEmpty(),
                     fromUsername = message.fromUsername.orEmpty(),
                     body = message.body.orEmpty(),
-                    imageUrl = if (message.imageURL != null && message.imageURL?.isNotEmpty() == true) "$imageBaseUrl${message.imageURL.orEmpty()}" else "",
-                    audioUrl = if (message.audioURL != null && message.audioURL?.isNotEmpty() == true) "$imageBaseUrl${message.audioURL.orEmpty()}" else "",
+                    imageUrl = if (message.imageURL != null && message.imageURL?.isNotEmpty() == true) "$fileBaseUrl${message.imageURL.orEmpty()}" else "",
+                    audioUrl = if (message.audioURL != null && message.audioURL?.isNotEmpty() == true) "$fileBaseUrl${message.audioURL.orEmpty()}" else "",
                     audioDuration = message.audioDuration.orEmpty().tryParseInt(),
-                    videoUrl = if (message.videoURL != null && message.videoURL?.isNotEmpty() == true) "$imageBaseUrl${message.videoURL.orEmpty()}" else "",
+                    videoUrl = if (message.videoURL != null && message.videoURL?.isNotEmpty() == true) "$fileBaseUrl${message.videoURL.orEmpty()}" else "",
                     videoDuration = message.videoDuration.orEmpty().tryParseInt(),
                     dateTime = message.sendTime.orEmpty(),
                     readableDateTime = effectiveDate,

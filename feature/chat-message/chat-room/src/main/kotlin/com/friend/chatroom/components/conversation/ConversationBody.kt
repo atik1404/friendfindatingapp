@@ -54,5 +54,14 @@ fun ConversationBody(
             )
             return
         }
+
+        if (message.videoUrl.isNotEmpty()) {
+            VideoMessageContent(
+                url = message.videoUrl,
+                modifier = Modifier
+                    .width(220.dp)
+                    .height(180.dp)
+            )
+        }
     }
 }
