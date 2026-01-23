@@ -15,9 +15,14 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import com.friend.chatroom.bottomsheet.ImagePreviewDialog
 import com.friend.chatroom.components.conversation.ConversationBody
 import com.friend.chatroom.components.conversation.bubbleColorPair
 import com.friend.chatroom.components.conversation.bubbleCornerShape
@@ -45,9 +50,11 @@ fun ConversionsUiSection(
     isItemSelectionEnable: Boolean,
     onLongPress: () -> Unit,
     onItemSelected: (ConversationEntity) -> Unit,
-    onNavigateToPlayerScreen: (String) -> Unit
+    onNavigateToPlayerScreen: (String) -> Unit,
 ) {
     val audioController = rememberAudioPlayerController()
+    var showDialog by remember { mutableStateOf(false) }
+    var image by remember { mutableStateOf("") }
 
     LazyColumn(
         state = listState,
@@ -69,6 +76,11 @@ fun ConversionsUiSection(
 
                             if (message.videoUrl.isNotEmpty() && !isItemSelectionEnable)
                                 onNavigateToPlayerScreen.invoke(message.videoUrl)
+
+                            if (message.imageUrl.isNotEmpty() && !isItemSelectionEnable) {
+                                image = message.imageUrl
+                                showDialog = true
+                            }
                         },
                         onLongClick = onLongPress,
                     ),
@@ -84,6 +96,13 @@ fun ConversionsUiSection(
                 audioController = audioController
             )
         }
+    }
+
+    if (showDialog) {
+        ImagePreviewDialog(
+            onDismiss = { showDialog = false },
+            url = image
+        )
     }
 }
 
@@ -199,7 +218,7 @@ private fun DateDivider(date: String) {
 @LightPreview
 private fun ScreenPreview() {
     ConversationItemBubble(
-        audioController =  rememberAudioPlayerController(),
+        audioController = rememberAudioPlayerController(),
         message = ConversationEntity(
             messageId = "",
             isMyMessage = true,

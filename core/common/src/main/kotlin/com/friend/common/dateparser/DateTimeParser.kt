@@ -176,7 +176,7 @@ object DateTimeParser {
         return raw
     }
 
-    fun parseToDateTime(
+    fun parseToLocalDateTime(
         raw: String,
         zoneId: ZoneId = ZoneId.systemDefault()
     ): LocalDateTime? {
@@ -210,6 +210,12 @@ object DateTimeParser {
     ): LocalDateTime? {
         return try {
             when {
+                formatter in DateTimePatterns.dateTimeFormatters -> {
+                    val local = LocalDateTime.parse(raw, formatter)
+                    local.atZone(ZoneOffset.UTC)
+                        .withZoneSameInstant(zoneId)
+                        .toLocalDateTime()
+                }
                 // ISO instant
                 formatter == DateTimeFormatter.ISO_INSTANT -> {
                     Instant.parse(raw).atZone(zoneId).toLocalDateTime()
@@ -248,8 +254,10 @@ object DateTimeParser {
                 }
 
                 else -> {
-                    // Fallback: try as LocalDateTime
-                    LocalDateTime.parse(raw, formatter)
+                    val utcLdt = LocalDateTime.parse(raw, formatter)
+                    utcLdt.atZone(ZoneOffset.UTC)
+                        .withZoneSameInstant(zoneId)
+                        .toLocalDateTime()
                 }
             }
         } catch (e: Exception) {
@@ -318,7 +326,7 @@ object DateTimeParser {
                 dayDiff <= 0 -> "Today" // also covers future/invalid negatives
                 dayDiff == 1L -> "Yesterday"
                 dayDiff in 2..5 -> {
-                    val dateTime = parseToDateTime(date)
+                    val dateTime = parseToLocalDateTime(date)
                     var day = ""
                     dateTime?.let {
                         day = getDayOfWeek(dateTime).toString()

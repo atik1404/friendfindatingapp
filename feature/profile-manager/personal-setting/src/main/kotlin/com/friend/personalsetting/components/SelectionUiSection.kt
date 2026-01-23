@@ -79,7 +79,7 @@ fun BirthDateSelection(
     )
 
     val maxSelectableDates = DateTimeParser.yearsAgoFromTodayUtcMillis(18)
-    val selectedDateTime = DateTimeParser.parseToDateTime(selectedDate)
+    val selectedDateTime = DateTimeParser.parseToLocalDateTime(selectedDate)
 
     val selectedDateTimeInMillis = if (selectedDate.isNotEmpty())
         DateTimeParser.dateTimeToMillis(selectedDateTime)

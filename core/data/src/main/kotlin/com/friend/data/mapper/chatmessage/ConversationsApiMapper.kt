@@ -29,7 +29,7 @@ class ConversationsApiMapper @Inject constructor(
                 val sendDateTimeStr = message.sendTime ?: ""
                 val currentDateTime = DateTimeParser.nowLocalDateTime()
 
-                val sendDateTime = DateTimeParser.parseToDateTime(sendDateTimeStr)
+                val sendDateTime = DateTimeParser.parseToLocalDateTime(sendDateTimeStr)
                 val readableSendDateTime =
                     DateTimeParser.parseToPattern(sendDateTimeStr, DateTimePatterns.SQL_YMD)
                 var effectiveDate = ""
