@@ -7,6 +7,7 @@ import com.friend.chatlist.ChatListScreenRoute
 import com.friend.chatroom.ConversationScreenRoute
 import com.friend.forwardmessage.ForwardMessageScreenRoute
 import com.friendfinapp.dating.navigation.ChatMessageScreens
+import com.friendfinapp.dating.navigation.CommonScreens
 import com.friendfinapp.dating.navigation.ProfileScreens
 
 object ChatMessageNavGraph {
@@ -51,7 +52,8 @@ object ChatMessageNavGraph {
                             messages = messages,
                         )
                     )
-                }
+                },
+                onNavigateToPlayerScreen = { url -> backStack.add(CommonScreens.VideoPlayerNavScreen(url)) }
             )
         }
 

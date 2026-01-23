@@ -13,7 +13,7 @@ import com.friend.profilecompletion.ProfileCompletionScreenRoute
 import com.friend.reportabuse.ReportAbuseScreenRoute
 import com.friendfinapp.dating.navigation.AuthScreens
 import com.friendfinapp.dating.navigation.ChatMessageScreens
-import com.friendfinapp.dating.navigation.MainScreens
+import com.friendfinapp.dating.navigation.CommonScreens
 import com.friendfinapp.dating.navigation.ProfileScreens
 
 object ProfileNavGraph {
@@ -33,7 +33,7 @@ object ProfileNavGraph {
                     backStack.add(ProfileScreens.ProfileNavScreen)
                 },
                 navigateToMembershipScreen = { backStack.add(ProfileScreens.MembershipNavScreen) },
-                navigateToPrivacyPolicyScreen = { backStack.add(MainScreens.PrivacyPolicyNavScreen) },
+                navigateToPrivacyPolicyScreen = { backStack.add(CommonScreens.PrivacyPolicyNavScreen) },
                 navigateToChangePasswordScreen = { backStack.add(ProfileScreens.ChangePasswordNavScreen) },
                 navigateToPersonalSettingScreen = { backStack.add(ProfileScreens.PersonalSettingNavScreen) },
                 exitApp = {backStack.clear()}
@@ -73,7 +73,7 @@ object ProfileNavGraph {
                 },
                 navigateToHomeScreen = {
                     backStack.clear()
-                    backStack.add(MainScreens.HomeNavScreen)
+                    backStack.add(CommonScreens.HomeNavScreen)
                 }
             )
         }

@@ -105,8 +105,9 @@ dependencies {
         implementation(profileManager.vipMembership)
         implementation(profileManager.changePassword)
 
-        implementation(privacyPolicy)
-        implementation(reportAbuse)
+        implementation(common.privacyPolicy)
+        implementation(common.reportAbuse)
+        implementation(common.videoPlayer)
     }
 
     with(libs){

@@ -17,6 +17,7 @@ fun ConversationBody(
     message: ConversationEntity,
     contentColor: Color,
     alignment: Alignment.Horizontal,
+    onClick: () -> Unit,
     // audioController: AudioPlayerController
 ) {
     Column(
@@ -60,7 +61,8 @@ fun ConversationBody(
                 url = message.videoUrl,
                 modifier = Modifier
                     .width(220.dp)
-                    .height(180.dp)
+                    .height(180.dp),
+                onClick = onClick
             )
         }
     }

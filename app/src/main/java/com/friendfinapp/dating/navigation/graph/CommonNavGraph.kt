@@ -4,18 +4,18 @@ import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.friend.home.HomeRoute
-import com.friend.home.HomeScreen
 import com.friend.policy.PrivacyPolicyScreen
+import com.friend.videoplayer.VideoPlayerScreenRoute
 import com.friendfinapp.dating.navigation.ChatMessageScreens
-import com.friendfinapp.dating.navigation.MainScreens
+import com.friendfinapp.dating.navigation.CommonScreens
 import com.friendfinapp.dating.navigation.ProfileScreens
 
-object MainNavGraph {
+object CommonNavGraph {
     fun register(
         backStack: NavBackStack<NavKey>,
         builder: EntryProviderScope<NavKey>
     ) = with(builder) {
-        entry(MainScreens.HomeNavScreen) {
+        entry(CommonScreens.HomeNavScreen) {
             HomeRoute(
                 navigateToChatListScreen = {
                     backStack.add(ChatMessageScreens.ChatListNavScreen)
@@ -35,8 +35,14 @@ object MainNavGraph {
             )
         }
 
-        entry(MainScreens.PrivacyPolicyNavScreen) {
+        entry(CommonScreens.PrivacyPolicyNavScreen) {
             PrivacyPolicyScreen {
+                backStack.removeLastOrNull()
+            }
+        }
+
+        entry<CommonScreens.VideoPlayerNavScreen> { key ->
+            VideoPlayerScreenRoute(key.url) {
                 backStack.removeLastOrNull()
             }
         }

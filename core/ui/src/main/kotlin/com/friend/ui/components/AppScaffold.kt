@@ -18,6 +18,7 @@ import com.friend.ui.ads.BannerAds
 fun AppScaffold(
     modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = {},
+    isAdsVisible: Boolean = true,
     //bottomBar: @Composable () -> Unit = {},
     snackbarHost: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
@@ -31,7 +32,8 @@ fun AppScaffold(
         modifier = modifier,
         topBar = topBar,
         bottomBar = {
-            BannerAds()
+            if (isAdsVisible)
+                BannerAds()
         },
         snackbarHost = snackbarHost,
         floatingActionButton = floatingActionButton,

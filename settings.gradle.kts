@@ -59,5 +59,6 @@ include(":feature:profile-manager:personal-setting")
 include(":feature:profile-manager:change-password")
 include(":feature:profile-manager:vip-membership")
 
-include(":feature:privacy-policy")
-include(":feature:report-abuse")
+include(":feature:common:privacy-policy")
+include(":feature:common:report-abuse")
+include(":feature:common:video-player")

@@ -8,7 +8,7 @@ import com.friend.login.LoginRoute
 import com.friend.registration.RegistrationRoute
 import com.friend.splash.SplashRoute
 import com.friendfinapp.dating.navigation.AuthScreens
-import com.friendfinapp.dating.navigation.MainScreens
+import com.friendfinapp.dating.navigation.CommonScreens
 import com.friendfinapp.dating.navigation.ProfileScreens
 
 object AuthNavGraph {
@@ -24,7 +24,7 @@ object AuthNavGraph {
                 },
                 navigateToHomeScreen = {
                     backStack.clear()
-                    backStack.add(MainScreens.HomeNavScreen)
+                    backStack.add(CommonScreens.HomeNavScreen)
                 },
                 navigateToProfileComplete = {
                     backStack.clear()
@@ -43,7 +43,7 @@ object AuthNavGraph {
                 },
                 navigateToHome = {
                     backStack.clear()
-                    backStack.add(MainScreens.HomeNavScreen)
+                    backStack.add(CommonScreens.HomeNavScreen)
                 }
             )
         }
@@ -67,7 +67,7 @@ object AuthNavGraph {
                     backStack.add(ProfileScreens.ProfileCompletionNavScreen)
                 },
                 privacyPolicyClicked = {
-                    backStack.add(MainScreens.PrivacyPolicyNavScreen)
+                    backStack.add(CommonScreens.PrivacyPolicyNavScreen)
                 }
             )
         }

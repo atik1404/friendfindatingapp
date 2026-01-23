@@ -42,7 +42,8 @@ fun ConversionsUiSection(
     message: List<ConversationEntity>,
     isItemSelectionEnable: Boolean,
     onLongPress: () -> Unit,
-    onItemSelected: (ConversationEntity) -> Unit
+    onItemSelected: (ConversationEntity) -> Unit,
+    onNavigateToPlayerScreen: (String) -> Unit
 ) {
     //val audioController = rememberAudioPlayerController()
 
@@ -63,6 +64,9 @@ fun ConversionsUiSection(
                         onClick = {
                             if (isItemSelectionEnable)
                                 onItemSelected.invoke(message)
+
+                            if (message.videoUrl.isNotEmpty() && !isItemSelectionEnable)
+                                onNavigateToPlayerScreen.invoke(message.videoUrl)
                         },
                         onLongClick = onLongPress,
                     ),
@@ -71,6 +75,10 @@ fun ConversionsUiSection(
                 onItemSelected = {
                     onItemSelected.invoke(message)
                 },
+                onClick = {
+                    if (message.videoUrl.isNotEmpty() && !isItemSelectionEnable)
+                        onNavigateToPlayerScreen.invoke(message.videoUrl)
+                }
                 //audioController = audioController
             )
         }
@@ -83,6 +91,7 @@ fun ConversationItemBubble(
     message: ConversationEntity,
     isItemSelectionEnable: Boolean = false,
     onItemSelected: () -> Unit = {},
+    onClick: () -> Unit
     //audioController: AudioPlayerController
 ) {
     val backgroundColor = bubbleColorPair(message.isMyMessage).first
@@ -137,7 +146,8 @@ fun ConversationItemBubble(
                     message = message,
                     contentColor = contentColor,
                     alignment = alignment,
-                    //audioController = audioController
+                    //audioController = audioController,
+                    onClick = onClick
                 )
 
                 Spacer(
@@ -200,7 +210,8 @@ private fun ScreenPreview() {
             videoDuration = 0,
             dateTime = "04:99 PM",
             readableDateTime = "",
-        )
+        ),
+        onClick = {}
     )
 }
 

@@ -26,7 +26,7 @@ fun ImageMessageContent(url: String, modifier: Modifier) {
 }
 
 @Composable
-fun VideoMessageContent(url: String, modifier: Modifier) {
+fun VideoMessageContent(url: String, modifier: Modifier, onClick: () -> Unit) {
     Box {
         VideoThumbnailLoader(
             videoUrl = url,
@@ -38,7 +38,7 @@ fun VideoMessageContent(url: String, modifier: Modifier) {
             modifier = Modifier
                 .align(Alignment.Center),
             iconSize = IconSizeToken.mediumLarge,
-            onClick = { /*TODO*/ },
+            onClick = onClick,
             vectorIcon = Icons.Default.PlayCircle,
             tint = MaterialTheme.surfaceColors.primary.copy(alpha = .5f)
         )

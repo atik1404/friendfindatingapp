@@ -22,6 +22,7 @@ fun ConversationScreenRoute(
     imageUrl: String,
     onBackButtonClicked: () -> Unit,
     onNavigateToProfileScreen: (String) -> Unit,
+    onNavigateToPlayerScreen: (String) -> Unit,
     onNavigateToReportScreen: (String) -> Unit,
     onNavigateToForwardMessageScreen: (List<String>) -> Unit,
     viewModel: ConversationViewModel = hiltViewModel()
@@ -71,6 +72,7 @@ fun ConversationScreenRoute(
         onNavigateToForwardMessageScreen = {
             onNavigateToForwardMessageScreen.invoke(uiState.conversations.filter { it.isItemSelected }
                 .map { it.messageId })
-        }
+        },
+        onNavigateToPlayerScreen = onNavigateToPlayerScreen
     )
 }

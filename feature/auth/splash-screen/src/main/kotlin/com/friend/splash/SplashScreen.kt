@@ -39,7 +39,8 @@ fun SplashScreen(
     onEvent: (UiEvent) -> Unit
 ) {
     AppScaffold(
-        contentWindowInsets = WindowInsets(0)
+        contentWindowInsets = WindowInsets(0),
+        isAdsVisible = false
     ) { padding ->
         when (uiState) {
             is UiState.Error -> ErrorUi(message = uiState.message) {

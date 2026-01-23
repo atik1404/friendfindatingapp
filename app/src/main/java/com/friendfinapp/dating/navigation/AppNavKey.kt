@@ -1,7 +1,6 @@
 package com.friendfinapp.dating.navigation
 
 import androidx.navigation3.runtime.NavKey
-import com.friend.entity.chatmessage.ChatItemApiEntity
 import kotlinx.serialization.Serializable
 
 sealed interface AppScreen : NavKey
@@ -20,12 +19,15 @@ sealed interface AuthScreens : AppScreen {
     object ForgotPasswordNavScreen : AppScreen
 }
 
-sealed interface MainScreens : AppScreen {
+sealed interface CommonScreens : AppScreen {
     @Serializable
     object HomeNavScreen : AppScreen
 
     @Serializable
     object PrivacyPolicyNavScreen : AppScreen
+
+    @Serializable
+    data class VideoPlayerNavScreen(val url: String) : AppScreen
 }
 
 sealed interface ChatMessageScreens : AppScreen {

@@ -15,7 +15,7 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.friendfinapp.dating.navigation.graph.AuthNavGraph
 import com.friendfinapp.dating.navigation.graph.ChatMessageNavGraph
-import com.friendfinapp.dating.navigation.graph.MainNavGraph
+import com.friendfinapp.dating.navigation.graph.CommonNavGraph
 import com.friendfinapp.dating.navigation.graph.ProfileNavGraph
 
 @Composable
@@ -63,7 +63,7 @@ fun AppNavConfiguration() {
             },
             entryProvider = entryProvider {
                 AuthNavGraph.register(backStack, this)
-                MainNavGraph.register(backStack, this)
+                CommonNavGraph.register(backStack, this)
                 ChatMessageNavGraph.register(backStack, this)
                 ProfileNavGraph.register(backStack, this)
             }

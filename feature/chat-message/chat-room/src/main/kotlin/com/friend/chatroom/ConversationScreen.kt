@@ -61,6 +61,7 @@ fun ConversationScreen(
     onNavigateToProfileScreen: () -> Unit,
     onNavigateToReportScreen: () -> Unit,
     onNavigateToForwardMessageScreen: () -> Unit,
+    onNavigateToPlayerScreen: (String) -> Unit,
     onAction: (UiAction) -> Unit,
 ) {
     var isItemSelectionEnable by remember { mutableStateOf(false) }
@@ -81,6 +82,7 @@ fun ConversationScreen(
 
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
+        isAdsVisible = false
     ) { padding ->
         Box(
             modifier = modifier
@@ -151,7 +153,8 @@ fun ConversationScreen(
                     },
                     onItemSelected = {
                         onAction.invoke(UiAction.UpdateMessageSelectionStatus(it))
-                    }
+                    },
+                    onNavigateToPlayerScreen = onNavigateToPlayerScreen
                 )
 
                 AnimatedAttachmentType(
@@ -249,5 +252,6 @@ private fun ScreenPreview() {
         onAction = {},
         onNavigateToReportScreen = {},
         onNavigateToForwardMessageScreen = {},
+        onNavigateToPlayerScreen = {}
     )
 }
