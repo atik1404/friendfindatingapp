@@ -10,4 +10,5 @@ object IconSizeToken {
     val large = 32.dp        // dialogs, cards
     val mediumLarge = 40.dp        // dialogs, cards
     val extraLarge = 48.dp   // splash, feature icons
+    val huge = 70.dp
 }

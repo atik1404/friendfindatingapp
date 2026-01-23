@@ -209,7 +209,7 @@ fun ConversationScreen(
                 )
             }
 
-            if (uiState.isLoading)
+            if (uiState.isLoading || uiState.messageContent.isSending)
                 LoadingUi()
 
             if (uiState.isSearchEnabled)

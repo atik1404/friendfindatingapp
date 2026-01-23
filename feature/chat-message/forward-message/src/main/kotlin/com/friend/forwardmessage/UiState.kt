@@ -5,7 +5,6 @@ import com.friend.ui.common.UiText
 
 data class UiState(
     val data: List<ChatItemApiEntity> = emptyList(),
-    val selectedUsers: List<String> = emptyList(),
     val isLoading: Boolean = false,
     val isLoadingMore: Boolean = false,
     val hasMorePage: Boolean = false,

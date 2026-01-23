@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 import com.friend.designsystem.R as Res
@@ -50,7 +49,7 @@ class ConversationViewModel @Inject constructor(
 
             UiAction.OnClearSearch -> clearSearch()
             UiAction.OnClearMessageSelection -> clearSelectedMessage()
-            is UiAction.UpdateMessageSelectionStatus -> updateMessageSelectionStatus(action.item)
+            is UiAction.UpdateMessageSelectionStatus -> toggleMessageSelection(action.item)
             UiAction.DeleteMessages -> deleteMessage()
             is UiAction.SendMessage -> sendMessage(action.toUsername)
             is UiAction.OnChangeTextMessage -> onChangeTextMessage(action.message)
@@ -90,9 +89,15 @@ class ConversationViewModel @Inject constructor(
                     }
 
                     is ApiResult.Success -> {
+                        val selectedItems =
+                            _uiState.value.conversations.filter { it.isItemSelected }
+                                .map { it.messageId }.toSet()
+                        val conversations = result.data.data.map {
+                            it.copy(isItemSelected = selectedItems.contains(it.messageId))
+                        }
                         _uiState.value =
                             _uiState.value.copy(
-                                conversations = result.data.data.reversed(),
+                                conversations = conversations.reversed(),
                                 isSearchEnabled = false
                             )
                     }
@@ -194,11 +199,16 @@ class ConversationViewModel @Inject constructor(
         }
     }
 
-    private fun updateMessageSelectionStatus(item: ConversationEntity) {
-        val conversations = _uiState.value.conversations.toMutableList()
-        val index = conversations.indexOf(item)
-        conversations[index] = item.copy(isItemSelected = !item.isItemSelected)
-        _uiState.value = _uiState.value.copy(conversations = conversations)
+    private fun toggleMessageSelection(item: ConversationEntity) {
+        val updatedList = _uiState.value.conversations.map {
+            if (it.messageId == item.messageId) {
+                it.copy(isItemSelected = !it.isItemSelected)
+            } else {
+                it
+            }
+        }
+
+        _uiState.value = _uiState.value.copy(conversations = updatedList)
     }
 
     private fun clearSelectedMessage() {

@@ -43,7 +43,6 @@ import com.friend.ui.preview.LightPreview
 fun ChatListSection(
     modifier: Modifier = Modifier,
     items: List<ChatItemApiEntity>,
-    selectedUsers: List<String>,
     hasMorePage: Boolean,
     onItemClicked: (ChatItemApiEntity) -> Unit,
     onLoadMore: () -> Unit
@@ -75,7 +74,7 @@ fun ChatListSection(
                     .clickable {
                         onItemClicked.invoke(item)
                     },
-                isItemSelected = selectedUsers.contains(item.toUsername),
+                isItemSelected = item.isItemSelected,
                 onItemClicked = {
                     onItemClicked.invoke(item)
                 }

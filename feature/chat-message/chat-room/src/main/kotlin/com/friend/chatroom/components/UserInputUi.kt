@@ -152,21 +152,22 @@ fun AttachedFilePreviewUi(
     Box(
         modifier = modifier
             .appPaddingSymmetric(SpacingToken.medium)
-            .width(IconSizeToken.large)
-            .height(IconSizeToken.mediumLarge)
+            .width(IconSizeToken.huge)
+            .height(IconSizeToken.huge)
             .background(
                 color = MaterialTheme.surfaceColors.white,
-                shape = RoundedCornerShape(RadiusToken.small)
+                shape = RoundedCornerShape(RadiusToken.medium)
             )
+            .clip(RoundedCornerShape(RadiusToken.medium))
     ) {
         bitmap?.let {
             BitmapImageLoader(
                 bitmap = it,
-                modifier = Modifier
+                modifier = modifier
                     .matchParentSize()
                     .background(
                         color = MaterialTheme.surfaceColors.white,
-                        shape = RoundedCornerShape(RadiusToken.small)
+                        shape = RoundedCornerShape(RadiusToken.medium)
                     )
             )
         }

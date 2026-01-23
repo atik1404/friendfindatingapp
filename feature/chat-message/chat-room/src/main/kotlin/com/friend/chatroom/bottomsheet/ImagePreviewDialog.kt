@@ -40,8 +40,6 @@ fun ImagePreviewDialog(onDismiss: () -> Unit, url: String) {
                 .pointerInput(Unit) {
                     detectTransformGestures { _, pan, zoom, _ ->
                         scale = (scale * zoom).coerceIn(1f, 5f)
-
-                        // Only allow panning if zoomed in
                         if (scale > 1f) {
                             offset += pan
                         } else {

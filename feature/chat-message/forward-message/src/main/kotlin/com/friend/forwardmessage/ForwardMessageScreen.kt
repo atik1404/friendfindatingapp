@@ -45,7 +45,7 @@ fun ForwardMessageScreen(
         contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
             AppToolbar(
-                title = stringResource(Res.string.title_friend_fin),
+                title = stringResource(Res.string.title_forward_message),
                 onBackClick = {
                     onBackButtonClicked.invoke()
                 })
@@ -90,7 +90,6 @@ fun ForwardMessageScreen(
                     ChatListSection(
                         hasMorePage = uiState.hasMorePage,
                         items = uiState.filteredItems,
-                        selectedUsers = uiState.selectedUsers,
                         onLoadMore = {
                             action.invoke(UiAction.FetchChatList)
                         },

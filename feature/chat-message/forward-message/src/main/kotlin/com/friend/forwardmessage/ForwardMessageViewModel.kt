@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 import com.friend.designsystem.R as Res
 
@@ -35,7 +34,7 @@ class ForwardMessageViewModel @Inject constructor(
         when (it) {
             UiAction.FetchChatList -> fetchChatList()
             is UiAction.SearchByKeyword -> onSearchKeywordChange(it.value)
-            is UiAction.UpdateSelection -> updateSelection(it.username)
+            is UiAction.UpdateSelection -> toggleSelection(it.username)
             UiAction.LoadMore -> fetchChatList()
             is UiAction.ForwardMessages -> forwardMessage(it.messageIds)
         }
@@ -87,30 +86,27 @@ class ForwardMessageViewModel @Inject constructor(
         }
     }
 
-    private fun updateSelection(username: String) {
-        execute {
-            val currentState = _uiState.value
-            val usernames = mutableListOf<String>()
-            usernames.addAll(currentState.selectedUsers)
-            if(usernames.contains(username))
-                usernames.add(username)
-            else usernames.remove(username)
-            _uiState.update {
-                it.copy(selectedUsers = usernames)
+    private fun toggleSelection(username: String) {
+        val updatedList = _uiState.value.data.map {
+            if (it.toUsername == username) {
+                it.copy(isItemSelected = !it.isItemSelected)
+            } else {
+                it
             }
         }
+        _uiState.value = _uiState.value.copy(data = updatedList)
     }
 
     private fun forwardMessage(messageIds: List<String>) {
         execute {
-            if (_uiState.value.selectedUsers.isEmpty()) {
+            if (!_uiState.value.data.any { it.isItemSelected }) {
                 showToastMessage(UiText.StringRes(Res.string.error_invalid_selected_items))
                 return@execute
             }
             val params = ForwardMessageApiUseCase.Params(
                 fromUsername = sharedPrefHelper.getString(SpKey.userName),
                 ids = messageIds,
-                toUsernames = _uiState.value.selectedUsers
+                toUsernames = _uiState.value.data.filter { it.isItemSelected }.map { it.toUsername }
             )
 
             forwardMessageApiUseCase.execute(params).collect { result ->
