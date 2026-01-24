@@ -22,7 +22,10 @@ fun VideoPlayerScreenRoute(
         exoPlayer = viewModel.player,
         onStart = viewModel::onStart,
         onStop = viewModel::onStop,
-        onForward = viewModel::seekBy,
-        onClose = onBackClick
+        onClose = onBackClick,
+        onSeek = viewModel::seekTo,
+        onTogglePlayPause = viewModel::togglePlayPause,
+        onForward3s = viewModel::seekForward,
+        onBackward3s = viewModel::seekBackward
     )
 }

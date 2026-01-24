@@ -16,11 +16,14 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val SEEK_DELTA_MS = 3000L
+
 @HiltViewModel
 class VideoPlayerViewModel @Inject constructor(app: Application) : BaseViewModel() {
 
     private val _uiState = MutableStateFlow(VideoUiState())
     val uiState: StateFlow<VideoUiState> = _uiState
+
 
     val player: ExoPlayer = ExoPlayer.Builder(app.applicationContext).build().apply {
         repeatMode = Player.REPEAT_MODE_OFF
@@ -67,7 +70,23 @@ class VideoPlayerViewModel @Inject constructor(app: Application) : BaseViewModel
     fun pause() = player.pause()
 
     fun togglePlayPause() {
-        if (player.isPlaying) pause() else play()
+        val state = _uiState.value
+        if (player.isPlaying) player.pause() else {
+            if (state.positionMs == state.durationMs) {
+                seekTo(0L)
+            }
+            play()
+        }
+    }
+
+    fun seekForward() {
+        val target = player.currentPosition + SEEK_DELTA_MS
+        seekTo(target)
+    }
+
+    fun seekBackward() {
+        val target = player.currentPosition - SEEK_DELTA_MS
+        seekTo(target)
     }
 
     fun seekTo(positionMs: Long) {
@@ -76,18 +95,11 @@ class VideoPlayerViewModel @Inject constructor(app: Application) : BaseViewModel
         _uiState.update { it.copy(positionMs = safe) }
     }
 
-    fun seekBy(deltaMs: Long) {
-        seekTo(player.currentPosition + deltaMs)
-    }
-
     fun onStop() {
-        // Common UX: pause when leaving screen/background
         pause()
     }
 
     fun onStart() {
-        // Optional: resume if you want
-        // play()
         startProgressUpdates()
     }
 

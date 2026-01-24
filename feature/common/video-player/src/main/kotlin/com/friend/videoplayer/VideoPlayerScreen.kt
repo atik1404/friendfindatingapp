@@ -3,15 +3,26 @@ package com.friend.videoplayer
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Pause
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.SkipNext
+import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -19,6 +30,11 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,12 +47,16 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
+import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
+import com.friend.designsystem.theme.surfaceColors
 import com.friend.ui.common.AppToolbar
+import com.friend.ui.components.AppIconButton
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AppText
 import com.friend.ui.preview.LightPreview
+import kotlinx.coroutines.delay
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,7 +67,10 @@ fun VideoPlayerScreen(
     onClose: () -> Unit,
     onStart: () -> Unit,
     onStop: () -> Unit,
-    onForward: (Long) -> Unit,
+    onSeek: (Long) -> Unit, // Renamed from onForward for clarity
+    onTogglePlayPause: () -> Unit,
+    onForward3s: () -> Unit,
+    onBackward3s: () -> Unit
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
@@ -60,6 +83,14 @@ fun VideoPlayerScreen(
         }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
+    var isControlRowVisible by remember { mutableStateOf(false) }
+    LaunchedEffect(isControlRowVisible) {
+        if (isControlRowVisible) {
+            delay(2000L)
+            isControlRowVisible = false
+        }
     }
 
     AppScaffold(
@@ -75,7 +106,16 @@ fun VideoPlayerScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(14.dp)),
+                .background(
+                    MaterialTheme.colorScheme.surfaceVariant,
+                    RoundedCornerShape(14.dp)
+                )
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) {
+                    isControlRowVisible = !isControlRowVisible
+                },
             contentAlignment = Alignment.Center
         ) {
             AndroidView(
@@ -95,6 +135,14 @@ fun VideoPlayerScreen(
                 CircularProgressIndicator()
             }
 
+            if (isControlRowVisible)
+                ButtonsUi(
+                    isPlaying = state.isPlaying,
+                    onTogglePlayPause = onTogglePlayPause,
+                    onForward3s = onForward3s,
+                    onBackward3s = onBackward3s
+                )
+
             val duration = state.durationMs.takeIf { it > 0L } ?: 0L
             val position = state.positionMs.coerceIn(0L, duration)
 
@@ -106,9 +154,8 @@ fun VideoPlayerScreen(
             ) {
                 Slider(
                     value = if (duration > 0) position.toFloat() else 0f,
-                    valueRange = 0f..(duration.takeIf { it > 0 }?.toFloat() ?: 0f),
-                    onValueChange = { onForward.invoke(it.toLong()) },
-                    enabled = duration > 0
+                    valueRange = 0f..(duration.toFloat().coerceAtLeast(1f)),
+                    onValueChange = { onSeek(it.toLong()) }
                 )
 
                 Row(
@@ -130,6 +177,59 @@ fun VideoPlayerScreen(
     }
 }
 
+@Composable
+private fun ButtonsUi(
+    isPlaying: Boolean,
+    onTogglePlayPause: () -> Unit,
+    onForward3s: () -> Unit,
+    onBackward3s: () -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // Backward 3s
+        AppIconButton(
+            iconSize = IconSizeToken.medium,
+            modifier = Modifier
+                .background(
+                    color = MaterialTheme.surfaceColors.primary.copy(alpha = .5f),
+                    shape = CircleShape
+                ),
+            vectorIcon = Icons.Default.SkipPrevious,
+            onClick = onBackward3s,
+            tint = MaterialTheme.surfaceColors.white
+        )
+
+        Spacer(Modifier.width(SpacingToken.tiny))
+        // Play/Pause
+        AppIconButton(
+            iconSize = IconSizeToken.medium,
+            onClick = onTogglePlayPause,
+            modifier = Modifier.background(
+                color = MaterialTheme.surfaceColors.primary.copy(alpha = .5f),
+                shape = CircleShape
+            ),
+            vectorIcon = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
+            tint = MaterialTheme.surfaceColors.white
+        )
+        Spacer(Modifier.width(SpacingToken.tiny))
+        // Forward 3s
+        AppIconButton(
+            iconSize = IconSizeToken.medium,
+            modifier = Modifier
+                .background(
+                    color = MaterialTheme.surfaceColors.primary.copy(alpha = .5f),
+                    shape = CircleShape
+                ),
+            onClick = onForward3s,
+            vectorIcon = Icons.Default.SkipNext,
+            tint = MaterialTheme.surfaceColors.white
+        )
+    }
+}
+
 private fun formatMs(ms: Long): String {
     val totalSeconds = (ms / 1000).coerceAtLeast(0)
     val minutes = totalSeconds / 60
@@ -140,12 +240,22 @@ private fun formatMs(ms: Long): String {
 @Composable
 @LightPreview
 private fun ScreenPreview() {
-    VideoPlayerScreen(
-        state = VideoUiState(),
-        exoPlayer = ExoPlayer.Builder(LocalContext.current).build(),
-        onClose = {},
-        onStart = {},
-        onStop = {},
-        onForward = {},
+//    VideoPlayerScreen(
+//        state = VideoUiState(),
+//        exoPlayer = ExoPlayer.Builder(LocalContext.current).build(),
+//        onClose = {},
+//        onStart = {},
+//        onStop = {},
+//        onSeek = {},
+//        onTogglePlayPause = {},
+//        onForward3s = {},
+//        onBackward3s = {}
+//    )
+
+    ButtonsUi(
+        isPlaying = true,
+        onTogglePlayPause = {},
+        onForward3s = {},
+        onBackward3s = {}
     )
 }
