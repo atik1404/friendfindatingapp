@@ -75,6 +75,7 @@
     <string name="action_gallery">Gallery</string>
     <string name="action_camera">Camera</string>
     <string name="action_unblock">Unblock</string>
+    <string name="action_go_to_setting">Settings</string>
 
     <string name="label_or">OR</string>
     <string name="label_username">Username</string>
@@ -167,9 +168,10 @@
     <string name="msg_greeting_good_evening">Good Evening</string>
     <string name="msg_everything_set_for_you">Everything’s in place for you</string>
     <string name="msg_private_profile">This profile is visible for friends only!</string>
+    <string name="msg_notification_permission">Please enable notification permission from settings</string>
+
+
     <string name="error_user_blocked">This user is blocked, you can\'t send message to this user.</string>
-
-
     <string name="error_invalid_username">Please enter a valid username.</string>
     <string name="error_invalid_name">Please enter your name.</string>
     <string name="error_invalid_password">Password must be at least 10 characters long.</string>

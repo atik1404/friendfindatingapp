@@ -126,8 +126,7 @@ dependencies {
         implementation(timber)
 
         implementation(platform(firebase.bom))
-        implementation(firebase.analytics)
-        implementation(firebase.crashlytics)
+        implementation(bundles.firebase)
 
         implementation(libs.play.services.ads)
 
