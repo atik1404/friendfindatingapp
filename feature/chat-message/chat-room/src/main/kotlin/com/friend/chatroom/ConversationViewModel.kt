@@ -1,6 +1,8 @@
 package com.friend.chatroom
 
+import android.app.Application
 import androidx.lifecycle.viewModelScope
+import com.friend.chatroom.utils.AudioRecorder
 import com.friend.common.base.BaseViewModel
 import com.friend.common.utils.FilesUtils
 import com.friend.domain.apiusecase.chatmessage.DeleteMessagesApiUseCase
@@ -20,12 +22,14 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 import com.friend.designsystem.R as Res
 
 @HiltViewModel
 class ConversationViewModel @Inject constructor(
+    private val application: Application,
     private val fetchConversationsApiUseCase: FetchConversationsApiUseCase,
     private val searchConversationApiUseCase: SearchConversationApiUseCase,
     private val deleteMessagesApiUseCase: DeleteMessagesApiUseCase,
@@ -38,6 +42,11 @@ class ConversationViewModel @Inject constructor(
     val uiEvent = _uiEvent.receiveAsFlow()
 
     private var pollingJob: Job? = null
+
+    private val audioRecorder = AudioRecorder()
+
+    private val _lastRecordedFile = MutableStateFlow<File?>(null)
+    val lastRecordedFile = _lastRecordedFile.asStateFlow()
 
     val action: (UiAction) -> Unit = { action ->
         when (action) {
@@ -56,6 +65,11 @@ class ConversationViewModel @Inject constructor(
             is UiAction.OnChangeAudioAttachment -> onChangeAudioFile(action.file)
             is UiAction.OnChangeImageAttachment -> onChangeImageFile(action.file)
             is UiAction.OnChangeVideoAttachment -> onChangeVideoFile(action.file)
+            UiAction.OnCancelRecording -> cancelRecording()
+            UiAction.OnStartRecording -> startRecording()
+            UiAction.OnStopRecording -> {
+                stopRecording()
+            }
         }
     }
 
@@ -111,6 +125,7 @@ class ConversationViewModel @Inject constructor(
             val currentState = _uiState.value.messageContent
             val videoDuration = FilesUtils.getFileDurationMs(currentState.video)
             val audioDuration = FilesUtils.getFileDurationMs(currentState.audio)
+
             val params = SendMessageApiUseCase.Params(
                 toUsername = username,
                 content = currentState.textMessage,
@@ -120,6 +135,8 @@ class ConversationViewModel @Inject constructor(
                 audio = currentState.audio,
                 audioDuration = audioDuration?.toString()
             )
+            Timber.e("params: $params")
+
             sendMessageApiUseCase.execute(params).collect { result ->
                 when (result) {
                     is ApiResult.Error -> showToastMessage(UiText.Dynamic(result.message))
@@ -255,5 +272,29 @@ class ConversationViewModel @Inject constructor(
                 it.copy(messageContent = it.messageContent.copy(video = file))
             }
         }
+    }
+
+    private fun startRecording() {
+        val file = audioRecorder.start(application)
+        _lastRecordedFile.value = file
+    }
+
+    private fun stopRecording() {
+        _lastRecordedFile.value = audioRecorder.stop()
+        _uiState.update {
+            it.copy(messageContent = it.messageContent.copy(audio = _lastRecordedFile.value))
+        }
+    }
+
+    private fun cancelRecording() {
+        _lastRecordedFile.value = null
+        _uiState.update {
+            it.copy(messageContent = it.messageContent.copy(audio = null))
+        }
+    }
+
+    override fun onCleared() {
+        audioRecorder.release()
+        super.onCleared()
     }
 }

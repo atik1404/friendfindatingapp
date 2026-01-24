@@ -1,10 +1,12 @@
 package com.friend.chatroom.components
 
 import android.graphics.Bitmap
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,17 +21,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.friend.common.utils.FilesUtils.convertToFile
-import com.friend.designsystem.R as Res
 import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.RadiusToken
 import com.friend.designsystem.spacing.SpacingToken
@@ -38,7 +43,6 @@ import com.friend.designsystem.spacing.appPadding
 import com.friend.designsystem.spacing.appPaddingHorizontal
 import com.friend.designsystem.spacing.appPaddingSymmetric
 import com.friend.designsystem.theme.backgroundColors
-import com.friend.designsystem.theme.buttonColors
 import com.friend.designsystem.theme.strokeColors
 import com.friend.designsystem.theme.surfaceColors
 import com.friend.designsystem.theme.textFieldColors
@@ -48,87 +52,76 @@ import com.friend.ui.components.AppIconButton
 import com.friend.ui.components.BitmapImageLoader
 import com.friend.ui.preview.LightPreview
 import java.io.File
+import com.friend.designsystem.R as Res
 
 @Composable
 fun UserInputForm(
     modifier: Modifier,
     textMessage: String,
+    isSendEnable: Boolean = false,
     onTextChange: (String) -> Unit,
     onClickAttachment: () -> Unit,
     onCaptureImage: (File) -> Unit,
     onSendTextMessage: (String) -> Unit,
-    isSendEnable: Boolean = false,
+    onStartRecording: () -> Unit,
+    onStopRecording: () -> Unit,
+    onCancelRecording: () -> Unit,
 ) {
-    val context = LocalContext.current
+    val swipeOffset = remember { mutableFloatStateOf(0f) }
+    var isRecordingMessage by remember { mutableStateOf(false) }
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .height(IntrinsicSize.Min)
             .appPaddingHorizontal(SpacingToken.tiny),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start,
     ) {
-        Row(
+        AnimatedContent(
+            targetState = isRecordingMessage,
+            label = "text-field",
             modifier = Modifier
                 .weight(1f)
-                .height(IntrinsicSize.Min)
-                .background(
-                    color = MaterialTheme.backgroundColors.white,
-                    shape = RoundedCornerShape(SpacingToken.extraLarge)
-                )
-                .appPaddingHorizontal(SpacingToken.tiny),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            AppBaseTextField(
-                singleLine = false,
-                maxLines = 3,
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
-                shape = RoundedCornerShape(SpacingToken.extraLarge),
-                onValueChange = onTextChange,
-                value = textMessage,
-                placeholder = stringResource(Res.string.hint_write_something_here),
-                colors = MaterialTheme.textFieldColors.transparentOutlinedTextField
-            )
-
-            AppIconButton(
-                modifier = Modifier.size(IconSizeToken.large),
-                onClick = onClickAttachment,
-                vectorIcon = Icons.Default.AttachFile
-            )
-
-            Spacer(Modifier.width(SpacingToken.tiny))
-
-            CaptureImage(
-                onCaptured = {
-                    val file = it.convertToFile(context)
-                    file?.let { f ->
-                        onCaptureImage.invoke(f)
-                    }
-                },
-                onError = {}
-            ) {
-                AppIconButton(
-                    modifier = Modifier.size(IconSizeToken.large),
-                    onClick = it,
-                    vectorIcon = Icons.Default.CameraAlt
-                )
+                .fillMaxHeight(),
+        ) { recording ->
+            Box(Modifier.fillMaxWidth()) {
+                if (recording) {
+                    RecordingIndicator { swipeOffset.floatValue }
+                } else {
+                    UserInputTextField(
+                        modifier = Modifier,
+                        textMessage = textMessage,
+                        onTextChange = onTextChange,
+                        onClickAttachment = onClickAttachment,
+                        onCaptureImage = onCaptureImage
+                    )
+                }
             }
         }
 
         Spacer(Modifier.width(SpacingToken.tiny))
 
         if (!isSendEnable) {
-            AppIconButton(
-                modifier = Modifier
-                    .background(
-                        color = MaterialTheme.buttonColors.primaryButton.disabledContainerColor,
-                        shape = CircleShape
-                    )
-                    .size(IconSizeToken.mediumLarge),
-                onClick = {},
-                vectorIcon = Icons.Default.Mic
+            RecordButton(
+                recording = isRecordingMessage,
+                swipeOffset = { swipeOffset.floatValue },
+                onSwipeOffsetChange = { offset -> swipeOffset.floatValue = offset },
+                onStartRecording = {
+                    val consumed = !isRecordingMessage
+                    isRecordingMessage = true
+                    onStartRecording.invoke()
+                    consumed
+                },
+                onFinishRecording = {
+                    // handle end of recording
+                    isRecordingMessage = false
+                    onStopRecording.invoke()
+                },
+                onCancelRecording = {
+                    isRecordingMessage = false
+                    onCancelRecording.invoke()
+                },
+                modifier = Modifier.fillMaxHeight(),
             )
         } else {
             AppIconButton(
@@ -138,6 +131,65 @@ fun UserInputForm(
                     onSendTextMessage.invoke(textMessage)
                 },
                 vectorIcon = Icons.Default.Send
+            )
+        }
+    }
+}
+
+@Composable
+private fun BoxScope.UserInputTextField(
+    modifier: Modifier = Modifier,
+    textMessage: String,
+    onTextChange: (String) -> Unit,
+    onClickAttachment: () -> Unit,
+    onCaptureImage: (File) -> Unit,
+) {
+    val context = LocalContext.current
+    Row(
+        modifier = modifier
+            .height(IntrinsicSize.Min)
+            .background(
+                color = MaterialTheme.backgroundColors.white,
+                shape = RoundedCornerShape(SpacingToken.extraLarge)
+            )
+            .appPaddingHorizontal(SpacingToken.tiny),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        AppBaseTextField(
+            singleLine = false,
+            maxLines = 3,
+            modifier = modifier
+                .weight(1f)
+                .fillMaxHeight(),
+            shape = RoundedCornerShape(SpacingToken.extraLarge),
+            onValueChange = onTextChange,
+            value = textMessage,
+            placeholder = stringResource(Res.string.hint_write_something_here),
+            colors = MaterialTheme.textFieldColors.transparentOutlinedTextField
+        )
+
+        AppIconButton(
+            modifier = modifier.size(IconSizeToken.large),
+            onClick = onClickAttachment,
+            vectorIcon = Icons.Default.AttachFile
+        )
+
+        Spacer(modifier.width(SpacingToken.tiny))
+
+        CaptureImage(
+            onCaptured = {
+                val file = it.convertToFile(context)
+                file?.let { f ->
+                    onCaptureImage.invoke(f)
+                }
+            },
+            onError = {}
+        ) {
+            AppIconButton(
+                modifier = modifier.size(IconSizeToken.large),
+                onClick = it,
+                vectorIcon = Icons.Default.CameraAlt
             )
         }
     }
@@ -194,9 +246,7 @@ fun AttachedFilePreviewUi(
 @Composable
 @LightPreview
 private fun ScreenPreview() {
-    AttachedFilePreviewUi(
-
-    )
+    AttachedFilePreviewUi()
 }
 
 @Composable
@@ -209,6 +259,9 @@ private fun InputBoxPreview() {
         onCaptureImage = {},
         onSendTextMessage = {},
         modifier = Modifier,
-        isSendEnable = true
+        isSendEnable = false,
+        onStartRecording = {},
+        onStopRecording = {},
+        onCancelRecording = {}
     )
 }

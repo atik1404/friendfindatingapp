@@ -205,6 +205,19 @@ fun ConversationScreen(
                     },
                     onSendTextMessage = {
                         onAction.invoke(UiAction.SendMessage(toUsername))
+                    },
+                    onStartRecording = {
+                        Timber.e("Recording: onStartRecording")
+                        onAction.invoke(UiAction.OnStartRecording)
+                    },
+                    onStopRecording = {
+                        Timber.e("Recording: onStopRecording")
+                        onAction.invoke(UiAction.OnStopRecording)
+                        onAction.invoke(UiAction.SendMessage(toUsername))
+                    },
+                    onCancelRecording = {
+                        Timber.e("Recording: onCancelRecording")
+                        onAction.invoke(UiAction.OnCancelRecording)
                     }
                 )
             }

@@ -41,6 +41,9 @@ sealed interface UiAction {
     data object OnClearSearch : UiAction
     data object OnClearMessageSelection : UiAction
     data object DeleteMessages : UiAction
+    data object OnStartRecording : UiAction
+    data object OnStopRecording : UiAction
+    data object OnCancelRecording : UiAction
     data class SendMessage(val toUsername: String) : UiAction
     data class OnChangeTextMessage(val message: String) : UiAction
     data class OnChangeImageAttachment(val file: File?) : UiAction
