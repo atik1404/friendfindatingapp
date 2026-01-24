@@ -3,6 +3,7 @@ package com.friend.home
 import com.friend.common.base.BaseViewModel
 import com.friend.common.constant.AppConstants
 import com.friend.common.constant.Gender
+import com.friend.domain.apiusecase.auth.UpdateFcmTokenApiUseCase
 import com.friend.domain.apiusecase.search.FetchFriendSuggestionApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.sharedpref.SharedPrefHelper
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val sharedPrefHelper: SharedPrefHelper,
     private val fetchFriendSuggestionApiUseCase: FetchFriendSuggestionApiUseCase,
+    private val updateFcmTokenApiUseCase: UpdateFcmTokenApiUseCase,
 ) : BaseViewModel() {
     private val _fullName = MutableStateFlow("")
     val fullName: StateFlow<String> = _fullName.asStateFlow()
@@ -58,6 +60,7 @@ class HomeViewModel @Inject constructor(
     }
 
     init {
+        updateFcmToken()
         fetchFriendSuggestions()
     }
 
@@ -188,5 +191,18 @@ class HomeViewModel @Inject constructor(
     /** Update only the form part of the UiState in a single place to reduce repetition. */
     private inline fun updateForm(transform: (FilterUiState) -> FilterUiState) {
         _filterUiState.update { state -> transform(state) }
+    }
+
+    private fun updateFcmToken() {
+        execute {
+            updateFcmTokenApiUseCase.execute(sharedPrefHelper.getString(SpKey.fcmToken))
+                .collect { result ->
+                    when (result) {
+                        is ApiResult.Error -> {}
+                        is ApiResult.Loading -> {}
+                        is ApiResult.Success -> {}
+                    }
+                }
+        }
     }
 }

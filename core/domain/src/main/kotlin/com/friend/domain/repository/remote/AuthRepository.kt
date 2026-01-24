@@ -15,4 +15,5 @@ interface AuthRepository {
     suspend fun performRegistration(params: PostRegistrationApiUseCase.Params): Flow<ApiResult<String>>
     suspend fun performForgotPassword(params: String): Flow<ApiResult<String>>
     suspend fun performLogout(params: PostLogoutApiUseCase.Params): Flow<ApiResult<String>>
+    suspend fun updateFcmToken(token: String): Flow<ApiResult<String>>
 }

@@ -105,4 +105,12 @@ class AuthRepoImpl @Inject constructor(
             }, mapper = logoutApiMapper
         )
     }
+
+    override suspend fun updateFcmToken(token: String): Flow<ApiResult<String>> {
+        return mapFromApiResponse(
+            result = networkBoundResources.downloadData {
+                apiServices.updateFcmToken(token)
+            }, mapper = commonApiMapper
+        )
+    }
 }

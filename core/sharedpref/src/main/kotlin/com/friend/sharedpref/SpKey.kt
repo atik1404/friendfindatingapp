@@ -7,6 +7,7 @@ object SpKey {
     const val authToken = "authToken"
     const val tokenExpireAt = "tokenExpireAt"
     const val refreshToken = "refreshToken"
+    const val fcmToken = "fcmToken"
 
     const val userName = "userName"
     const val fullName = "fullName"

@@ -49,4 +49,9 @@ interface AuthApiServices {
     suspend fun performUserDelete(
         @Query("deleteReason") params: String
     ): Response<CommonApiResponse>
+
+    @POST("v1/UpdateNotificationToken")
+    suspend fun updateFcmToken(
+        @Query("token") token: String
+    ): Response<CommonApiResponse>
 }

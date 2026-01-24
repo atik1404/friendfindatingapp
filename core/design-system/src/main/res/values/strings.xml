@@ -2,6 +2,15 @@
 <resources>
     <string name="application_name">Dating</string>
 
+    <string name="custom_sound_notification_channel_name">Custom-Sound-Notification_Channel</string>
+    <string name="default_notification_channel_name">Default-Notification_Channel</string>
+
+    <string name="default_notification_id">Default-Notification-ID-4</string>
+    <string name="custom_sound_on_vibration_on_notification_id">Custom-Sound-Notification-ID-7</string>
+    <string name="custom_sound_on_vibration_off_notification_id">Custom-Sound-Notification-ID-8</string>
+    <string name="custom_sound_off_vibration_on_notification_id">Custom-Sound-Notification-ID-9</string>
+    <string name="custom_sound_off_vibration_off_notification_id">Custom-Sound-Notification-ID-10</string>
+
     <string name="AdmobAppId">ca-app-pub-3432824199077306~5758884091</string>
     <string name="BannerAdsUnitId">ca-app-pub-3432824199077306/3324531097</string>
     <string name="Interestitial_Ads_ID">ca-app-pub-3432824199077306/96983677501234</string>
