@@ -172,7 +172,7 @@
     <string name="msg_everything_set_for_you">Everything’s in place for you</string>
     <string name="msg_private_profile">This profile is visible for friends only!</string>
     <string name="msg_notification_permission">Please enable notification permission from settings</string>
-    <string name="msg_swipe_to_cancel">Swipe to cancel</string>
+    <string name="msg_swipe_to_cancel">Swipe left to cancel &amp; up to locked</string>
     <string name="msg_hold_to_record">Touch and hold to record</string>
 
 

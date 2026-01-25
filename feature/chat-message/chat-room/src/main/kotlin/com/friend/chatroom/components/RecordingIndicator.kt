@@ -36,6 +36,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.friend.designsystem.theme.surfaceColors
+import com.friend.designsystem.theme.textColors
+import com.friend.designsystem.typography.AppTypography
 import com.friend.ui.components.AppText
 import kotlinx.coroutines.delay
 import kotlin.math.absoluteValue
@@ -89,6 +91,7 @@ fun RecordingIndicator(
                 "$min:$sec"
             },
             Modifier.alignByBaseline(),
+            textColor = MaterialTheme.textColors.brand
         )
         Box(
             Modifier
@@ -114,18 +117,13 @@ fun RecordingIndicator(
                 )
             } else
                 AppText(
-                    leading = {
-                        Icon(
-                            painter = painterResource(Res.drawable.ic_arrow_back),
-                            contentDescription = null,
-                        )
-                    },
                     modifier = Modifier
                         .align(Alignment.Center)
                         .graphicsLayer {
                             translationX = swipeOffset() / 2
                             alpha = 1 - (swipeOffset().absoluteValue / swipeThreshold)
                         },
+                    textStyle = AppTypography.bodySmall,
                     alignment = TextAlign.Center,
                     fontWeight = FontWeight.Light,
                     text = stringResource(Res.string.msg_swipe_to_cancel),
