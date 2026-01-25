@@ -12,7 +12,6 @@ import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,7 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RichTooltip
-import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TooltipState
@@ -41,18 +39,20 @@ import com.friend.designsystem.spacing.appPadding
 import com.friend.designsystem.theme.surfaceColors
 import com.friend.ui.components.AppText
 import kotlinx.coroutines.launch
-import kotlin.math.abs
+import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecordButton(
     recording: Boolean,
+    isLocked: Boolean,
     swipeOffset: () -> Float,
     onSwipeOffsetChange: (Float) -> Unit,
     onStartRecording: () -> Boolean,
     onFinishRecording: () -> Unit,
     onCancelRecording: () -> Unit,
+    onLockRecording: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val transition = updateTransition(targetState = recording, label = "record")
@@ -94,15 +94,17 @@ fun RecordButton(
         TooltipBox(
             positionProvider = TooltipDefaults.rememberRichTooltipPositionProvider(),
             tooltip = {
-                RichTooltip {
-                    AppText(stringResource(Res.string.msg_hold_to_record))
-                }
+                if (!isLocked)
+                    RichTooltip {
+                        AppText(stringResource(Res.string.msg_hold_to_record))
+                    }
+                else onFinishRecording.invoke()
             },
             enableUserInput = false,
             state = tooltipState,
         ) {
             Icon(
-                painterResource(id = Res.drawable.ic_mic),
+                painterResource(id = if (isLocked) Res.drawable.ic_stop_circle else Res.drawable.ic_mic),
                 contentDescription = "Record voice message",
                 tint = iconColor.value,
                 modifier = modifier
@@ -112,7 +114,9 @@ fun RecordButton(
                     )
                     .sizeIn(minWidth = 45.dp, minHeight = 6.dp)
                     .appPadding(SpacingToken.medium)
-                    .clickable { }
+                    .clickable {
+                        if (isLocked) onFinishRecording.invoke()
+                    }
                     .voiceRecordingGesture(
                         horizontalSwipeProgress = swipeOffset,
                         onSwipeProgressChanged = onSwipeOffsetChange,
@@ -120,6 +124,8 @@ fun RecordButton(
                         onStartRecording = onStartRecording,
                         onFinishRecording = onFinishRecording,
                         onCancelRecording = onCancelRecording,
+                        onLockRecording = onLockRecording,
+                        isLocked = isLocked
                     ),
             )
         }
@@ -133,15 +139,20 @@ private fun Modifier.voiceRecordingGesture(
     onStartRecording: () -> Boolean = { false },
     onFinishRecording: () -> Unit = {},
     onCancelRecording: () -> Unit = {},
+    onLockRecording: () -> Unit,
+    isLocked: Boolean, // Ensure this is used in the logic below
     swipeToCancelThreshold: Dp = 200.dp,
-    verticalThreshold: Dp = 80.dp,
+    lockThreshold: Dp = 100.dp,
 ): Modifier = this
-    .pointerInput(Unit) { detectTapGestures { onClick() } }
-    .pointerInput(Unit) {
+    .pointerInput(isLocked) { detectTapGestures { onClick() } }
+    .pointerInput(isLocked) {
+        // If already locked, we don't want to start a new drag-to-record session
+        if (isLocked) return@pointerInput
+
         var offsetY = 0f
         var dragging = false
         val swipeToCancelThresholdPx = swipeToCancelThreshold.toPx()
-        val verticalThresholdPx = verticalThreshold.toPx()
+        val lockThresholdPx = lockThreshold.toPx()
 
         detectDragGesturesAfterLongPress(
             onDragStart = {
@@ -151,27 +162,37 @@ private fun Modifier.voiceRecordingGesture(
                 onStartRecording()
             },
             onDragCancel = {
-                onCancelRecording()
+                // ONLY cancel if we didn't successfully lock
+                if (dragging && !isLocked) {
+                    //onCancelRecording()
+                }
                 dragging = false
             },
             onDragEnd = {
-                if (dragging) {
+                // ONLY finish if we didn't successfully lock
+                if (dragging && !isLocked) {
                     onFinishRecording()
                 }
                 dragging = false
             },
             onDrag = { change, dragAmount ->
-                if (dragging) {
-                    onSwipeProgressChanged(horizontalSwipeProgress() + dragAmount.x)
+                if (dragging && !isLocked) {
+                    change.consume()
                     offsetY += dragAmount.y
-                    val offsetX = horizontalSwipeProgress()
-                    if (
-                        offsetX < 0 &&
-                        abs(offsetX) >= swipeToCancelThresholdPx &&
-                        abs(offsetY) <= verticalThresholdPx
-                    ) {
-                        onCancelRecording()
+                    val offsetX = horizontalSwipeProgress() + dragAmount.x
+                    onSwipeProgressChanged(offsetX)
+
+                    // Check for Lock threshold
+                    if (offsetY < -lockThresholdPx) {
+                        onLockRecording()
+                        // We don't set dragging = false here because
+                        // the pointerInput(isLocked) key change will
+                        // reset this detector anyway.
+                    }
+                    // Check for Cancel threshold
+                    else if (offsetX < -swipeToCancelThresholdPx) {
                         dragging = false
+                        onCancelRecording()
                     }
                 }
             },

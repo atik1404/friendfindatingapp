@@ -63,3 +63,7 @@ sealed interface PasswordChangeIoResult {
     data object InvalidConfirmPassword : PasswordChangeIoResult
     data object PasswordNotMatched : PasswordChangeIoResult
 }
+
+sealed interface SendMessageIoResult {
+    data object InvalidMessage : SendMessageIoResult
+}

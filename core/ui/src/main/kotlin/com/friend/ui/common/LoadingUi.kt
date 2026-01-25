@@ -59,7 +59,23 @@ fun LoadingAnimation(
 }
 
 @Composable
+fun TypingAnimation(
+    modifier: Modifier = Modifier
+) {
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.RawRes(Res.raw.anim_typing)
+    )
+
+    LottieAnimation(
+        composition = composition,
+        iterations = LottieConstants.IterateForever,
+        modifier = modifier
+            .size(80.dp)
+    )
+}
+
+@Composable
 @LightPreview
 private fun ScreenPreview() {
-    LoadingUi()
+    TypingAnimation()
 }

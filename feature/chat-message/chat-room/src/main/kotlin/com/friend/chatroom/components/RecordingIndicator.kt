@@ -6,12 +6,16 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +30,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.friend.designsystem.theme.surfaceColors
@@ -38,7 +44,11 @@ import kotlin.time.Duration.Companion.seconds
 import com.friend.designsystem.R as Res
 
 @Composable
-fun RecordingIndicator(swipeOffset: () -> Float) {
+fun RecordingIndicator(
+    isLocked: Boolean,
+    swipeOffset: () -> Float,
+    onCancelRecording: () -> Unit
+) {
     var duration by remember { mutableStateOf(Duration.ZERO) }
     LaunchedEffect(Unit) {
         while (true) {
@@ -87,17 +97,39 @@ fun RecordingIndicator(swipeOffset: () -> Float) {
                 .clipToBounds(),
         ) {
             val swipeThreshold = with(LocalDensity.current) { 200.dp.toPx() }
-            Text(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .graphicsLayer {
-                        translationX = swipeOffset() / 2
-                        alpha = 1 - (swipeOffset().absoluteValue / swipeThreshold)
+            if (isLocked) {
+                AppText(
+                    leading = {
+                        Icon(
+                            Icons.Default.Clear,
+                            contentDescription = null,
+                            tint = MaterialTheme.surfaceColors.redBase
+                        )
                     },
-                textAlign = TextAlign.Center,
-                text = stringResource(Res.string.msg_swipe_to_cancel),
-                style = MaterialTheme.typography.bodyLarge,
-            )
+                    text = stringResource(Res.string.action_cancel),
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .clickable { if (isLocked) onCancelRecording() },
+                    textColor = MaterialTheme.colorScheme.error
+                )
+            } else
+                AppText(
+                    leading = {
+                        Icon(
+                            painter = painterResource(Res.drawable.ic_arrow_back),
+                            contentDescription = null,
+                        )
+                    },
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .graphicsLayer {
+                            translationX = swipeOffset() / 2
+                            alpha = 1 - (swipeOffset().absoluteValue / swipeThreshold)
+                        },
+                    alignment = TextAlign.Center,
+                    fontWeight = FontWeight.Light,
+                    text = stringResource(Res.string.msg_swipe_to_cancel),
+                )
         }
     }
 }

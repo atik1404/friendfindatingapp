@@ -40,7 +40,9 @@ import com.friend.common.utils.FilesUtils
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingOnly
 import com.friend.designsystem.theme.dividerColors
+import com.friend.ui.common.LoadingAnimation
 import com.friend.ui.common.LoadingUi
+import com.friend.ui.common.TypingAnimation
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.preview.LightPreview
 import kotlinx.coroutines.launch
@@ -94,7 +96,8 @@ fun ConversationScreen(
         ) {
             Column(
                 modifier = modifier
-                    .fillMaxSize()
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 TopBarUiSection(
                     modifier = modifier
@@ -188,6 +191,9 @@ fun ConversationScreen(
                     )
                     Spacer(modifier = modifier.height(SpacingToken.medium))
                 }
+
+                if (uiState.isIncoming)
+                    TypingAnimation()
 
                 UserInputForm(
                     modifier = Modifier

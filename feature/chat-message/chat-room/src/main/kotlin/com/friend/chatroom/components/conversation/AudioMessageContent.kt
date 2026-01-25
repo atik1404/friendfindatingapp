@@ -14,11 +14,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import com.friend.chatroom.utils.AudioPlayerController
 import com.friend.common.dateparser.DateTimeParser
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingHorizontal
 import com.friend.designsystem.theme.surfaceColors
+import com.friend.designsystem.theme.textColors
 import com.friend.ui.common.RoundedLinearProgressWithThumb
 import com.friend.ui.components.AppIconButton
 import com.friend.ui.components.AppText
@@ -62,7 +64,10 @@ fun AudioMessageContent(
 
         Spacer(modifier = Modifier.width(SpacingToken.small))
 
-        AppText(text = DateTimeParser.convertMillisToTime(duration))
+        AppText(
+            text = DateTimeParser.convertMillisToTime(duration),
+            fontWeight = FontWeight.Light
+        )
 
     }
 }

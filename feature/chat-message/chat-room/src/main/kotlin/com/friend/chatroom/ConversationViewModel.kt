@@ -10,6 +10,7 @@ import com.friend.domain.apiusecase.chatmessage.FetchConversationsApiUseCase
 import com.friend.domain.apiusecase.chatmessage.SearchConversationApiUseCase
 import com.friend.domain.apiusecase.chatmessage.SendMessageApiUseCase
 import com.friend.domain.base.ApiResult
+import com.friend.domain.validator.SendMessageIoResult
 import com.friend.entity.chatmessage.ConversationEntity
 import com.friend.ui.common.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,6 +36,7 @@ class ConversationViewModel @Inject constructor(
     private val deleteMessagesApiUseCase: DeleteMessagesApiUseCase,
     private val sendMessageApiUseCase: SendMessageApiUseCase,
 ) : BaseViewModel() {
+    val ioError get() = sendMessageApiUseCase.ioError.receiveAsFlow()
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
 
@@ -46,7 +48,7 @@ class ConversationViewModel @Inject constructor(
     private val audioRecorder = AudioRecorder()
 
     private val _lastRecordedFile = MutableStateFlow<File?>(null)
-    val lastRecordedFile = _lastRecordedFile.asStateFlow()
+    private var totalConversationLength = 0
 
     val action: (UiAction) -> Unit = { action ->
         when (action) {
@@ -73,13 +75,17 @@ class ConversationViewModel @Inject constructor(
         }
     }
 
+    init {
+        handelIoError()
+    }
+
     fun startPolling(toUsername: String) {
         if (pollingJob?.isActive == true) return
 
         pollingJob = viewModelScope.launch {
             while (isActive) {
                 fetchMessages(toUsername)
-                delay(10_000L)
+                delay(6_000L)
             }
         }
     }
@@ -106,17 +112,33 @@ class ConversationViewModel @Inject constructor(
                         val selectedItems =
                             _uiState.value.conversations.filter { it.isItemSelected }
                                 .map { it.messageId }.toSet()
+
                         val conversations = result.data.data.map {
                             it.copy(isItemSelected = selectedItems.contains(it.messageId))
                         }
-                        _uiState.value =
-                            _uiState.value.copy(
-                                conversations = conversations.reversed(),
-                                isSearchEnabled = false
-                            )
+                        val isMyMessage = conversations.last().isMyMessage
+
+                        if (totalConversationLength != 0 && totalConversationLength < conversations.size && !isMyMessage) {
+                            showIncomingMessageLoading()
+                            delay(500)
+                            updateConversations(conversations)
+                            _uiEvent.send(UiEvent.ResetScroll)
+                        } else updateConversations(conversations)
+
+                        totalConversationLength = conversations.size
                     }
                 }
             }
+        }
+    }
+
+    private fun updateConversations(conversation: List<ConversationEntity>) {
+        _uiState.update {
+            it.copy(
+                conversations = conversation.reversed(),
+                isSearchEnabled = false,
+                isIncoming = false
+            )
         }
     }
 
@@ -131,11 +153,10 @@ class ConversationViewModel @Inject constructor(
                 content = currentState.textMessage,
                 image = currentState.image,
                 video = currentState.video,
-                videoDuration = videoDuration?.toString(),
+                videoDuration = videoDuration,
                 audio = currentState.audio,
-                audioDuration = audioDuration?.toString()
+                audioDuration = audioDuration
             )
-            Timber.e("params: $params")
 
             sendMessageApiUseCase.execute(params).collect { result ->
                 when (result) {
@@ -150,10 +171,12 @@ class ConversationViewModel @Inject constructor(
                     is ApiResult.Success -> {
                         val conversations = _uiState.value.conversations.toMutableList()
                         conversations.add(0, result.data)
-                        _uiState.value = _uiState.value.copy(
-                            conversations = conversations,
-                            messageContent = MessageState()
-                        )
+                        _uiState.update {
+                            it.copy(
+                                conversations = conversations,
+                                messageContent = MessageState()
+                            )
+                        }
                         _uiEvent.send(UiEvent.ResetScroll)
                     }
                 }
@@ -200,6 +223,11 @@ class ConversationViewModel @Inject constructor(
                         _uiState.value.copy(isLoading = result.loading)
 
                     is ApiResult.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                conversations = emptyList(),
+                            )
+                        }
                         clearSelectedMessage()
                         _uiEvent.send(UiEvent.DeleteMessageComplete)
                     }
@@ -296,5 +324,21 @@ class ConversationViewModel @Inject constructor(
     override fun onCleared() {
         audioRecorder.release()
         super.onCleared()
+    }
+
+    private fun handelIoError() {
+        execute {
+            ioError.collect { error ->
+                when (error) {
+                    SendMessageIoResult.InvalidMessage -> _uiState.value = _uiState.value.copy(
+                        messageContent = MessageState()
+                    )
+                }
+            }
+        }
+    }
+
+    private fun showIncomingMessageLoading() {
+        _uiState.value = _uiState.value.copy(isIncoming = true)
     }
 }

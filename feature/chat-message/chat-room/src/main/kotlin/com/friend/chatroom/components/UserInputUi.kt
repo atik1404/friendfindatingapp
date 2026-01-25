@@ -68,6 +68,9 @@ fun UserInputForm(
 ) {
     val swipeOffset = remember { mutableFloatStateOf(0f) }
     var isRecordingMessage by remember { mutableStateOf(false) }
+    // New state to track if the recording is in "Locked/Hands-free" mode
+    var isLocked by remember { mutableStateOf(false) }
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -85,7 +88,17 @@ fun UserInputForm(
         ) { recording ->
             Box(Modifier.fillMaxWidth()) {
                 if (recording) {
-                    RecordingIndicator { swipeOffset.floatValue }
+                    RecordingIndicator(
+                        isLocked = isLocked,
+                        onCancelRecording = {
+                            isRecordingMessage = false
+                            onCancelRecording.invoke()
+                            isLocked = false
+                        },
+                        swipeOffset = {
+                            swipeOffset.floatValue
+                        }
+                    )
                 } else {
                     UserInputTextField(
                         textMessage = textMessage,
@@ -102,22 +115,29 @@ fun UserInputForm(
         if (!isSendEnable) {
             RecordButton(
                 recording = isRecordingMessage,
+                isLocked = isLocked,
                 swipeOffset = { swipeOffset.floatValue },
                 onSwipeOffsetChange = { offset -> swipeOffset.floatValue = offset },
                 onStartRecording = {
                     val consumed = !isRecordingMessage
-                    isRecordingMessage = true
-                    onStartRecording.invoke()
+                    if (consumed) {
+                        isRecordingMessage = true
+                        onStartRecording.invoke()
+                    }
                     consumed
                 },
                 onFinishRecording = {
-                    // handle end of recording
                     isRecordingMessage = false
+                    isLocked = false
                     onStopRecording.invoke()
                 },
                 onCancelRecording = {
                     isRecordingMessage = false
                     onCancelRecording.invoke()
+                    isLocked = false
+                },
+                onLockRecording = {
+                    isLocked = true
                 },
                 modifier = Modifier.fillMaxHeight(),
             )

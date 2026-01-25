@@ -20,6 +20,7 @@ data class MessageState(
 data class UiState(
     val conversations: List<ConversationEntity> = emptyList(),
     val isLoading: Boolean = false,
+    val isIncoming: Boolean = false,
     val error: String = "",
     val isSearchEnabled: Boolean = false,
     val searchKey: String = "",
