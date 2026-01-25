@@ -28,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.friend.chatroom.bottomsheet.DeleteMessageBottomSheet
 import com.friend.chatroom.components.AnimatedAttachmentType
@@ -38,13 +39,15 @@ import com.friend.chatroom.components.TopBarUiSection
 import com.friend.chatroom.components.UserInputForm
 import com.friend.chatroom.components.conversation.JumpToBottom
 import com.friend.common.utils.FilesUtils
+import com.friend.designsystem.R as Res
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingOnly
 import com.friend.designsystem.theme.dividerColors
-import com.friend.ui.common.LoadingAnimation
+import com.friend.designsystem.theme.textColors
 import com.friend.ui.common.LoadingUi
 import com.friend.ui.common.TypingAnimation
 import com.friend.ui.components.AppScaffold
+import com.friend.ui.components.AppText
 import com.friend.ui.preview.LightPreview
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -108,6 +111,7 @@ fun ConversationScreen(
                         .imePadding(),
                     fullName = fullName,
                     userImage = imageUrl,
+                    isBlocked = uiState.isBlocked,
                     onProfileImageClicked = onNavigateToProfileScreen,
                     onBackButtonClicked = onBackButtonClicked,
                     onSearchCanceled = {
@@ -152,7 +156,8 @@ fun ConversationScreen(
                         .weight(1f),
                     isItemSelectionEnable = isItemSelectionEnable,
                     onLongPress = {
-                        isItemSelectionEnable = true
+                        if (!uiState.isBlocked)
+                            isItemSelectionEnable = true
                     },
                     onItemSelected = {
                         onAction.invoke(UiAction.UpdateMessageSelectionStatus(it))
@@ -195,7 +200,14 @@ fun ConversationScreen(
                 if (uiState.isIncoming)
                     TypingAnimation()
 
-                UserInputForm(
+                if (uiState.isBlocked) {
+                    Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+                    AppText(
+                        text = stringResource(Res.string.error_user_blocked),
+                        textColor = MaterialTheme.textColors.error
+                    )
+                } else UserInputForm(
                     modifier = Modifier
                         .appPaddingOnly(bottom = SpacingToken.medium),
                     isSendEnable = uiState.messageContent.isSendEnable,

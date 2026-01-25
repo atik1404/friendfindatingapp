@@ -121,9 +121,9 @@ class ConversationViewModel @Inject constructor(
                         if (totalConversationLength != 0 && totalConversationLength < conversations.size && !isMyMessage) {
                             showIncomingMessageLoading()
                             delay(500)
-                            updateConversations(conversations)
+                            updateConversations(conversations, result.data.isBlocked)
                             _uiEvent.send(UiEvent.ResetScroll)
-                        } else updateConversations(conversations)
+                        } else updateConversations(conversations, result.data.isBlocked)
 
                         totalConversationLength = conversations.size
                     }
@@ -132,12 +132,13 @@ class ConversationViewModel @Inject constructor(
         }
     }
 
-    private fun updateConversations(conversation: List<ConversationEntity>) {
+    private fun updateConversations(conversation: List<ConversationEntity>, isBlocked: Boolean) {
         _uiState.update {
             it.copy(
                 conversations = conversation.reversed(),
                 isSearchEnabled = false,
-                isIncoming = false
+                isIncoming = false,
+                isBlocked = isBlocked
             )
         }
     }

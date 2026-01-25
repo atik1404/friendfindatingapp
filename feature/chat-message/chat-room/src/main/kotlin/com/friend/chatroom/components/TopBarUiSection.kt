@@ -14,6 +14,7 @@ import com.friend.ui.components.PopupMenuType
 fun TopBarUiSection(
     fullName: String,
     userImage: String,
+    isBlocked: Boolean,
     modifier: Modifier,
     onBackButtonClicked: () -> Unit,
     onProfileImageClicked: () -> Unit,
@@ -40,6 +41,7 @@ fun TopBarUiSection(
             }
         )
     else ProfileInfoHeader(
+        isBlocked = isBlocked,
         fullName = fullName,
         userImage = userImage,
         modifier = modifier,

@@ -23,6 +23,7 @@ data class UiState(
     val isIncoming: Boolean = false,
     val error: String = "",
     val isSearchEnabled: Boolean = false,
+    val isBlocked: Boolean = false,
     val searchKey: String = "",
     val messageContent: MessageState = MessageState()
 ) {

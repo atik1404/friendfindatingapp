@@ -39,6 +39,7 @@ fun ProfileInfoHeader(
     modifier: Modifier,
     fullName: String,
     userImage: String,
+    isBlocked: Boolean,
     backToChatListScreen: () -> Unit,
     onProfileImageClicked: () -> Unit,
     onMenuClicked: (PopupMenuType) -> Unit,
@@ -79,19 +80,32 @@ fun ProfileInfoHeader(
 
         Spacer(modifier = Modifier.width(SpacingToken.small))
 
-
-        if (isItemSelectionEnable) {
-            Row {
-                AppIconButton(vectorIcon = Icons.Default.ForwardToInbox, onClick = onForwardMessage, tint = MaterialTheme.surfaceColors.graySoft)
-                AppIconButton(vectorIcon = Icons.Default.Delete, onClick = onDeleteMessage, tint = MaterialTheme.surfaceColors.graySoft)
-                AppIconButton(vectorIcon = Icons.Default.Clear, onClick = onSelectionCancel, tint = MaterialTheme.surfaceColors.graySoft)
+        if (!isBlocked) {
+            if (isItemSelectionEnable) {
+                Row {
+                    AppIconButton(
+                        vectorIcon = Icons.Default.ForwardToInbox,
+                        onClick = onForwardMessage,
+                        tint = MaterialTheme.surfaceColors.graySoft
+                    )
+                    AppIconButton(
+                        vectorIcon = Icons.Default.Delete,
+                        onClick = onDeleteMessage,
+                        tint = MaterialTheme.surfaceColors.graySoft
+                    )
+                    AppIconButton(
+                        vectorIcon = Icons.Default.Clear,
+                        onClick = onSelectionCancel,
+                        tint = MaterialTheme.surfaceColors.graySoft
+                    )
+                }
+            } else {
+                AppPopupMenu(
+                    icon = Icons.Default.MoreVert,
+                    menuItems = ChatRoomPopupMenu,
+                    onClick = onMenuClicked
+                )
             }
-        } else {
-            AppPopupMenu(
-                icon = Icons.Default.MoreVert,
-                menuItems = ChatRoomPopupMenu,
-                onClick = onMenuClicked
-            )
         }
     }
 }
