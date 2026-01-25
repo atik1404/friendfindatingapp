@@ -4,13 +4,11 @@ import android.app.Activity
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.ContentResolver
 import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.net.toUri
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -46,14 +44,14 @@ class BaseApplication : Application(),
 
         setupNotificationChannels()
         getFirebaseToken()
-//
-//        MobileAds.initialize(this)
-//
-//        registerActivityLifecycleCallbacks(this)
-//        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-//
-//        appOpenAdManager = AppOpenAdManager(APP_OPEN_TEST_AD_UNIT_ID)
-//        appOpenAdManager.loadAd(this)
+
+        MobileAds.initialize(this)
+
+        registerActivityLifecycleCallbacks(this)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+
+        appOpenAdManager = AppOpenAdManager(APP_OPEN_TEST_AD_UNIT_ID)
+        appOpenAdManager.loadAd(this)
     }
 
     override fun onStart(owner: LifecycleOwner) {
