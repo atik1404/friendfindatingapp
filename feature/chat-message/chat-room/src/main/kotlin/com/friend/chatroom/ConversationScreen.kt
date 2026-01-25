@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import com.friend.chatroom.bottomsheet.DeleteMessageBottomSheet
 import com.friend.chatroom.components.AnimatedAttachmentType
 import com.friend.chatroom.components.AttachedFilePreviewUi
 import com.friend.chatroom.components.ConversionsUiSection
@@ -68,6 +69,7 @@ fun ConversationScreen(
 ) {
     var isItemSelectionEnable by remember { mutableStateOf(false) }
     var isAttachmentExpanded by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
 
@@ -133,10 +135,8 @@ fun ConversationScreen(
                         }
                     },
                     onDeleteMessage = {
-                        if (uiState.isAnyItemSelected) {
-                            isItemSelectionEnable = false
-                            onAction.invoke(UiAction.DeleteMessages)
-                        }
+                        if (uiState.isAnyItemSelected)
+                            showDeleteDialog = true
                     }
                 )
 
@@ -255,6 +255,17 @@ fun ConversationScreen(
             )
         }
     }
+
+    if (showDeleteDialog)
+        DeleteMessageBottomSheet(
+            onDelete = {
+                isItemSelectionEnable = false
+                onAction.invoke(UiAction.DeleteMessages)
+            },
+            onDismissRequest = {
+                showDeleteDialog = false
+            }
+        )
 }
 
 @Composable

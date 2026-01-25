@@ -44,6 +44,7 @@
     <string name="title_member_ship">Membership plan</string>
     <string name="title_forward_message">Forward Message</string>
     <string name="title_video">Video</string>
+    <string name="title_delete_message">Delete Message?</string>
 
     <string name="title_something_wrong">Request failed</string>
     <string name="title_data_empty">Try a different search</string>
@@ -147,6 +148,7 @@
     <string name="msg_remove_ads">Remove Ads!</string>
     <string name="msg_remove_ads_description">Vip members got totally ad-free experience!</string>
     <string name="msg_find_more">Find friends ad-free</string>
+    <string name="msg_delete_message">Are you sure you want to delete selected message(s)? If yes, click on the button below.</string>
 
     <string name="msg_top_of_inbox">Top of the inbox!</string>
     <string name="msg_top_of_inbox_description">your message will be seen in top message of the inbox!</string>
@@ -210,7 +212,7 @@
     <string name="menu_report_user">Report User</string>
     <string name="menu_report_abuse">Report Abuse</string>
     <string name="menu_message_forward">Message Forward</string>
-    <string name="menu_delete_message">Delete Message(s)</string>
+    <string name="menu_delete_message">Delete Message</string>
     <string name="menu_message_search">Message Search</string>
     <string name="menu_block_user">Block this user</string>
     <string name="menu_unblock_user">Unblock this user</string>

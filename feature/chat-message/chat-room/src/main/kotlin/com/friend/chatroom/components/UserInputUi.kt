@@ -50,6 +50,8 @@ import com.friend.ui.components.AppBaseTextField
 import com.friend.ui.components.AppIconButton
 import com.friend.ui.components.BitmapImageLoader
 import com.friend.ui.preview.LightPreview
+import com.friend.ui.rememberPermissionAction
+import timber.log.Timber
 import java.io.File
 import com.friend.designsystem.R as Res
 
@@ -70,6 +72,10 @@ fun UserInputForm(
     var isRecordingMessage by remember { mutableStateOf(false) }
     // New state to track if the recording is in "Locked/Hands-free" mode
     var isLocked by remember { mutableStateOf(false) }
+
+    val withMicPermission = rememberPermissionAction(
+        permission = android.Manifest.permission.RECORD_AUDIO,
+    )
 
     Row(
         modifier = modifier
@@ -120,10 +126,13 @@ fun UserInputForm(
                 onSwipeOffsetChange = { offset -> swipeOffset.floatValue = offset },
                 onStartRecording = {
                     val consumed = !isRecordingMessage
-                    if (consumed) {
-                        isRecordingMessage = true
-                        onStartRecording.invoke()
+                    withMicPermission {
+                        if (consumed) {
+                            isRecordingMessage = true
+                            onStartRecording.invoke()
+                        }
                     }
+
                     consumed
                 },
                 onFinishRecording = {

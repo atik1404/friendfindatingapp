@@ -24,6 +24,7 @@ import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
 import com.friend.designsystem.theme.backgroundColors
+import com.friend.designsystem.theme.surfaceColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.ui.components.AppIconButton
@@ -81,9 +82,9 @@ fun ProfileInfoHeader(
 
         if (isItemSelectionEnable) {
             Row {
-                AppIconButton(vectorIcon = Icons.Default.ForwardToInbox, onClick = onForwardMessage)
-                AppIconButton(vectorIcon = Icons.Default.Delete, onClick = onDeleteMessage)
-                AppIconButton(vectorIcon = Icons.Default.Clear, onClick = onSelectionCancel)
+                AppIconButton(vectorIcon = Icons.Default.ForwardToInbox, onClick = onForwardMessage, tint = MaterialTheme.surfaceColors.graySoft)
+                AppIconButton(vectorIcon = Icons.Default.Delete, onClick = onDeleteMessage, tint = MaterialTheme.surfaceColors.graySoft)
+                AppIconButton(vectorIcon = Icons.Default.Clear, onClick = onSelectionCancel, tint = MaterialTheme.surfaceColors.graySoft)
             }
         } else {
             AppPopupMenu(
