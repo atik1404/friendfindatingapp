@@ -40,6 +40,7 @@ enum class PersonalMenu {
     CHANGE_PASSWORD,
     VIP_MEMBERSHIP,
     CONTACT_US,
+    DELETE_ACCOUNT,
     LOGOUT,
     EXIT_APP,
 }

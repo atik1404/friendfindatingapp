@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ContactPage
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Logout
@@ -102,6 +103,13 @@ fun MenuCard(
         }
 
         MenuItem(
+            icon = Icons.Default.Delete,
+            menu = stringResource(Res.string.menu_delete_account)
+        ) {
+            clickedOnMenu.invoke(PersonalMenu.DELETE_ACCOUNT)
+        }
+
+        MenuItem(
             icon = Icons.Default.Logout,
             menu = stringResource(Res.string.action_logout)
         ) {
@@ -136,7 +144,10 @@ private fun MenuItem(
         Spacer(modifier = Modifier.width(SpacingToken.small))
         AppText(menu, textStyle = AppTypography.bodyMedium, fontWeight = FontWeight.Medium)
         Spacer(modifier = Modifier.weight(1f))
-        Icon(Icons.Default.KeyboardArrowRight, contentDescription = "", modifier = Modifier.size(
-            IconSizeToken.large), tint = MaterialTheme.surfaceColors.graySoft)
+        Icon(
+            Icons.Default.KeyboardArrowRight, contentDescription = "", modifier = Modifier.size(
+                IconSizeToken.large
+            ), tint = MaterialTheme.surfaceColors.graySoft
+        )
     }
 }

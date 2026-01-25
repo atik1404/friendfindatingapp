@@ -16,4 +16,6 @@ interface ProfileManageRepository {
     suspend fun performAbuseReport(params: PostAbuseReportApiUseCase.Params): Flow<ApiResult<String>>
     suspend fun performBlockUnblock(params: String): Flow<ApiResult<String>>
     suspend fun performProfileImageUpdate(params: PostProfileImageApiUseCase.Params): Flow<ApiResult<String>>
+
+    suspend fun performDeleteAccount(reason: String): Flow<ApiResult<String>>
 }

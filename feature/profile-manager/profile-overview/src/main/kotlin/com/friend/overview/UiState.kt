@@ -18,4 +18,5 @@ sealed class UiEvent {
 
 sealed class UiAction {
     object PerformLogout : UiAction()
+    object PerformDeleteAccount : UiAction()
 }

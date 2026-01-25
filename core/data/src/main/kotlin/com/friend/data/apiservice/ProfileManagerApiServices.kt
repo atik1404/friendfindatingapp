@@ -51,4 +51,9 @@ interface ProfileManagerApiServices {
     suspend fun performBlockUnblock(
         @Query("blockedUser") username: String,
     ): Response<CommonApiResponse>
+
+    @POST("v1/UserDelete")
+    suspend fun performDeleteAccount(
+        @Query("deleteReason") deleteReason: String,
+    ): Response<CommonApiResponse>
 }

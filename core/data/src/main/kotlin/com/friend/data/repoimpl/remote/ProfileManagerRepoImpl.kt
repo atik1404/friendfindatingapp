@@ -92,4 +92,12 @@ class ProfileManagerRepoImpl @Inject constructor(
             }, mapper = commonApiMapper
         )
     }
+
+    override suspend fun performDeleteAccount(reason: String): Flow<ApiResult<String>> {
+        return mapFromApiResponse(
+            result = networkBoundResources.downloadData {
+                apiServices.performDeleteAccount(reason)
+            }, mapper = commonApiMapper
+        )
+    }
 }
