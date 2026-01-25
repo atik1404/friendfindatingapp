@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipBox
@@ -32,8 +33,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.friend.designsystem.spacing.SpacingToken
+import com.friend.designsystem.spacing.appPadding
+import com.friend.designsystem.theme.surfaceColors
+import com.friend.ui.components.AppText
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import com.friend.designsystem.R as Res
@@ -65,7 +71,7 @@ fun RecordButton(
         label = "record-scale",
         targetValueByState = { rec ->
             if (rec) contentColorFor(LocalContentColor.current)
-            else LocalContentColor.current
+            else MaterialTheme.surfaceColors.white
         },
     )
 
@@ -81,7 +87,7 @@ fun RecordButton(
                     scaleY = scale.value
                 }
                 .clip(CircleShape)
-                .background(LocalContentColor.current),
+                .background(MaterialTheme.surfaceColors.primary.copy(alpha = .5f)),
         )
         val scope = rememberCoroutineScope()
         val tooltipState = remember { TooltipState() }
@@ -89,7 +95,7 @@ fun RecordButton(
             positionProvider = TooltipDefaults.rememberRichTooltipPositionProvider(),
             tooltip = {
                 RichTooltip {
-                    Text("Touch and hold to record")
+                    AppText(stringResource(Res.string.msg_hold_to_record))
                 }
             },
             enableUserInput = false,
@@ -100,8 +106,12 @@ fun RecordButton(
                 contentDescription = "Record voice message",
                 tint = iconColor.value,
                 modifier = modifier
-                    .sizeIn(minWidth = 56.dp, minHeight = 6.dp)
-                    .padding(18.dp)
+                    .background(
+                        MaterialTheme.surfaceColors.primary.copy(alpha = .5f),
+                        CircleShape,
+                    )
+                    .sizeIn(minWidth = 45.dp, minHeight = 6.dp)
+                    .appPadding(SpacingToken.medium)
                     .clickable { }
                     .voiceRecordingGesture(
                         horizontalSwipeProgress = swipeOffset,

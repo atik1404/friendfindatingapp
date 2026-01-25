@@ -24,16 +24,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.friend.designsystem.theme.surfaceColors
 import com.friend.ui.components.AppText
 import kotlinx.coroutines.delay
 import kotlin.math.absoluteValue
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
+import com.friend.designsystem.R as Res
 
 @Composable
 fun RecordingIndicator(swipeOffset: () -> Float) {
@@ -51,8 +53,8 @@ fun RecordingIndicator(swipeOffset: () -> Float) {
         val infiniteTransition = rememberInfiniteTransition(label = "pulse")
 
         val animatedPulse = infiniteTransition.animateFloat(
-            initialValue = 1f,
-            targetValue = 0.2f,
+            initialValue = 1.5f,
+            targetValue = 0.5f,
             animationSpec = infiniteRepeatable(
                 tween(2000),
                 repeatMode = RepeatMode.Reverse,
@@ -68,7 +70,7 @@ fun RecordingIndicator(swipeOffset: () -> Float) {
                     scaleY = animatedPulse.value
                 }
                 .clip(CircleShape)
-                .background(Color.Red),
+                .background(MaterialTheme.surfaceColors.primary),
         )
         AppText(
             duration.toComponents { minutes, seconds, _ ->
@@ -93,7 +95,7 @@ fun RecordingIndicator(swipeOffset: () -> Float) {
                         alpha = 1 - (swipeOffset().absoluteValue / swipeThreshold)
                     },
                 textAlign = TextAlign.Center,
-                text = "Swipe to cancel",
+                text = stringResource(Res.string.msg_swipe_to_cancel),
                 style = MaterialTheme.typography.bodyLarge,
             )
         }
