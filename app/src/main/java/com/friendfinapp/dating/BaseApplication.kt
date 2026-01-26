@@ -27,7 +27,6 @@ import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.HiltAndroidApp
-import dagger.hilt.android.internal.Contexts.getApplication
 import timber.log.Timber
 import javax.inject.Inject
 import com.friend.designsystem.R as Res
@@ -64,16 +63,23 @@ class BaseApplication : Application(),
         if (BuildConfig.DEBUG)
             Timber.plant(Timber.DebugTree())
 
+        appOpenAdManager = AppOpenAdManager(appOpenAdId)
+        MobileAds.initialize(this)
+
+        registerActivityLifecycleCallbacks(this)
+        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+
         setupNotificationChannels()
         getFirebaseToken()
-
         startConnection()
     }
 
     override fun onStart(owner: LifecycleOwner) {
         super.onStart(owner)
-        currentActivity?.let { activity ->
-            appOpenAdManager.showAdIfAvailable(activity)
+        if (!BuildConfig.DEBUG && !AppConstants.isPremiumUser) {
+            currentActivity?.let { activity ->
+                appOpenAdManager.showAdIfAvailable(activity)
+            }
         }
     }
 
@@ -184,7 +190,11 @@ class BaseApplication : Application(),
         billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    checkActivePurchases(billingClient)
+                    checkActivePurchases(billingClient) { isPremium ->
+                        if (!BuildConfig.DEBUG && !isPremium) {
+                            appOpenAdManager.loadAd(this@BaseApplication)
+                        }
+                    }
                 }
             }
 
@@ -193,31 +203,23 @@ class BaseApplication : Application(),
         })
     }
 
-    fun checkActivePurchases(billingClient: BillingClient) {
-        if (!billingClient.isReady) return
+    fun checkActivePurchases(billingClient: BillingClient, onResult: (Boolean) -> Unit) {
+        if (!billingClient.isReady) {
+            onResult(false)
+            return
+        }
 
         val params = QueryPurchasesParams.newBuilder()
             .setProductType(BillingClient.ProductType.SUBS)
             .build()
 
         billingClient.queryPurchasesAsync(params) { billingResult, purchases ->
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                val hasActivePurchase = purchases.any {
-                    it.purchaseState == Purchase.PurchaseState.PURCHASED
-                }
-                Timber.e("hasActivePurchase: $hasActivePurchase")
-                AppConstants.isPremiumUser = hasActivePurchase
+            val hasActivePurchase =
+                billingResult.responseCode == BillingClient.BillingResponseCode.OK &&
+                        purchases.any { it.purchaseState == Purchase.PurchaseState.PURCHASED }
 
-                if (!BuildConfig.DEBUG && !hasActivePurchase) {
-                    MobileAds.initialize(this)
-
-                    registerActivityLifecycleCallbacks(this)
-                    ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-
-                    appOpenAdManager = AppOpenAdManager(appOpenAdId)
-                    appOpenAdManager.loadAd(this)
-                }
-            }
+            AppConstants.isPremiumUser = hasActivePurchase
+            onResult(hasActivePurchase)
         }
     }
 
@@ -225,7 +227,6 @@ class BaseApplication : Application(),
         p0: BillingResult,
         p1: List<Purchase?>?
     ) {
-        TODO("Not yet implemented")
     }
 }
 
