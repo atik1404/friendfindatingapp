@@ -7,9 +7,7 @@ android {
 }
 
 dependencies {
-    //implementation(projects.library.sharedpref)
-    //implementation(projects.core.designSystem)
-    //implementation(projects.core.model.entity)
+    implementation(projects.core.di)
 
     implementation(libs.timber)
     implementation(libs.bundles.core.ui)

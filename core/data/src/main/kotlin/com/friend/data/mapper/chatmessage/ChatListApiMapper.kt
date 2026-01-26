@@ -2,14 +2,14 @@ package com.friend.data.mapper.chatmessage
 
 import com.friend.apiresponse.chatmessage.ChatListApiResponse
 import com.friend.data.mapper.Mapper
-import com.friend.di.qualifier.AppImageBaseUrl
+import com.friend.di.qualifier.AppFileBaseUrl
 import com.friend.entity.chatmessage.ChatItemApiEntity
 import javax.inject.Inject
 
 class ChatListApiMapper @Inject constructor() :
     Mapper<ChatListApiResponse, List<ChatItemApiEntity>> {
     @Inject
-    @AppImageBaseUrl
+    @AppFileBaseUrl
     lateinit var imageBaseUrl: String
     override fun mapFromApiResponse(response: ChatListApiResponse): List<ChatItemApiEntity> {
         return response.data?.map { item ->

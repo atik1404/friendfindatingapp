@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import com.friend.designsystem.theme.backgroundColors
 import com.friend.ui.ads.BannerAds
 
-
 @Composable
 fun AppScaffold(
     modifier: Modifier = Modifier,

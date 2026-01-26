@@ -45,11 +45,6 @@ interface AuthApiServices {
         @Body params: PostLogoutApiUseCase.Params
     ): Response<LogoutApiResponse>
 
-    @POST("v1/UserDelete")
-    suspend fun performUserDelete(
-        @Query("deleteReason") params: String
-    ): Response<CommonApiResponse>
-
     @POST("v1/UpdateNotificationToken")
     suspend fun updateFcmToken(
         @Query("token") token: String

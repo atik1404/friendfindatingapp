@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.friend.di.qualifier.AppOpenAdId
 import com.friend.sharedpref.SharedPrefHelper
 import com.friend.sharedpref.SpKey
 import com.google.android.gms.ads.MobileAds
@@ -25,13 +26,12 @@ import com.friend.designsystem.R as Res
 @HiltAndroidApp
 class BaseApplication : Application(),
     Application.ActivityLifecycleCallbacks, DefaultLifecycleObserver {
-
     @Inject
     lateinit var sharedPrefHelper: SharedPrefHelper
 
-    // TEST App Open Ad Unit ID (replace with your real one before release)
-    // Dedicated test ID from Google docs:
-    private val APP_OPEN_TEST_AD_UNIT_ID = "ca-app-pub-3940256099942544/9257395921"
+    @Inject
+    @AppOpenAdId
+    lateinit var appOpenAdId: String
 
     private lateinit var appOpenAdManager: AppOpenAdManager
     private var currentActivity: Activity? = null
@@ -51,7 +51,7 @@ class BaseApplication : Application(),
             registerActivityLifecycleCallbacks(this)
             ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
-            appOpenAdManager = AppOpenAdManager(APP_OPEN_TEST_AD_UNIT_ID)
+            appOpenAdManager = AppOpenAdManager(appOpenAdId)
             appOpenAdManager.loadAd(this)
         }
     }

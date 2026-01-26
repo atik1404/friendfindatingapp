@@ -37,12 +37,12 @@ class LoginViewModel @Inject constructor(
             is UiAction.UsernameChanged -> onUserNameChanged(it.value)
             is UiAction.PasswordChanged -> onPasswordChanged(it.value)
             is UiAction.ShowErrorMessage -> showToastMessage(it.value)
-            is UiAction.PerformGoogleLogin -> performGoogleLoginApi(it.email)
-            UiAction.PerformLogin -> performLoginApi()
+            is UiAction.PerformGoogleLogin -> performGoogleLogin(it.email)
+            UiAction.PerformLogin -> performLogin()
         }
     }
 
-    private fun performLoginApi() {
+    private fun performLogin() {
         val current = _uiState.value
         val params = PostLoginApiUseCase.Params(
             current.username.value,
@@ -63,7 +63,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun performGoogleLoginApi(email: String) {
+    private fun performGoogleLogin(email: String) {
         execute {
             postGoogleLoginApiUseCase.execute(email).collect { result ->
                 when (result) {

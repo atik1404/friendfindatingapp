@@ -3,7 +3,7 @@ package com.friend.data.mapper.profilemanager
 import com.friend.apiresponse.profilemanager.ProfileApiResponse
 import com.friend.common.constant.Gender
 import com.friend.data.mapper.Mapper
-import com.friend.di.qualifier.AppImageBaseUrl
+import com.friend.di.qualifier.AppFileBaseUrl
 import com.friend.entity.profilemanager.BlockedUserEntity
 import com.friend.entity.profilemanager.ProfileApiEntity
 import com.friend.sharedpref.SharedPrefHelper
@@ -14,7 +14,7 @@ class ProfileApiMapper @Inject constructor() :
     Mapper<ProfileApiResponse, ProfileApiEntity> {
 
     @Inject
-    @AppImageBaseUrl
+    @AppFileBaseUrl
     lateinit var imageBaseUrl: String
 
     override fun mapFromApiResponse(response: ProfileApiResponse): ProfileApiEntity {

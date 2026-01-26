@@ -3,7 +3,7 @@ package com.friend.data.mapper.chatmessage
 import com.friend.apiresponse.chatmessage.SendMessageApiResponse
 import com.friend.common.extfun.tryParseInt
 import com.friend.data.mapper.Mapper
-import com.friend.di.qualifier.AppImageBaseUrl
+import com.friend.di.qualifier.AppFileBaseUrl
 import com.friend.entity.chatmessage.ConversationEntity
 import javax.inject.Inject
 
@@ -11,7 +11,7 @@ class SendMessageApiMapper @Inject constructor() :
     Mapper<SendMessageApiResponse, ConversationEntity> {
 
     @Inject
-    @AppImageBaseUrl
+    @AppFileBaseUrl
     lateinit var imageBaseUrl: String
 
     override fun mapFromApiResponse(response: SendMessageApiResponse): ConversationEntity {

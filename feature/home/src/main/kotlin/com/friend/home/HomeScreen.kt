@@ -33,7 +33,6 @@ import com.friend.entity.search.FriendSuggestionApiEntity
 import com.friend.home.components.PersonItemCardSection
 import com.friend.home.components.ProfileSummarySection
 import com.friend.home.components.SearchBarSection
-import com.friend.ui.ads.BannerAds
 import com.friend.ui.common.ErrorType
 import com.friend.ui.common.ErrorUi
 import com.friend.ui.common.LoadingAnimation

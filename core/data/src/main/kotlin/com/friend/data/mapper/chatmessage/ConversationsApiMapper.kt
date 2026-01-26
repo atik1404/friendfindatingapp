@@ -5,7 +5,7 @@ import com.friend.common.dateparser.DateTimeParser
 import com.friend.common.dateparser.DateTimePatterns
 import com.friend.common.extfun.tryParseInt
 import com.friend.data.mapper.Mapper
-import com.friend.di.qualifier.AppImageBaseUrl
+import com.friend.di.qualifier.AppFileBaseUrl
 import com.friend.entity.chatmessage.ConversationEntity
 import com.friend.entity.chatmessage.ConversationApiEntity
 import com.friend.sharedpref.SharedPrefHelper
@@ -17,7 +17,7 @@ class ConversationsApiMapper @Inject constructor(
 ) : Mapper<ConversationApiResponse, ConversationApiEntity> {
 
     @Inject
-    @AppImageBaseUrl
+    @AppFileBaseUrl
     lateinit var fileBaseUrl: String
 
     override fun mapFromApiResponse(response: ConversationApiResponse): ConversationApiEntity {
