@@ -2,6 +2,7 @@ package com.friend.ui.components
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -33,7 +34,9 @@ fun AppScaffold(
         topBar = topBar,
         bottomBar = {
             if (isAdsVisible)
-                BannerAds()
+                BannerAds(
+                    modifier = modifier.navigationBarsPadding()
+                )
         },
         snackbarHost = snackbarHost,
         floatingActionButton = floatingActionButton,
