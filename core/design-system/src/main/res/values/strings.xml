@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="application_name">Dating</string>
+    <string name="application_name">FriendFin</string>
 
     <string name="custom_sound_notification_channel_name">Custom-Sound-Notification_Channel</string>
     <string name="default_notification_channel_name">Default-Notification_Channel</string>

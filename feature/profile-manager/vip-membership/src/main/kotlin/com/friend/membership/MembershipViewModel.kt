@@ -30,14 +30,15 @@ class BillingViewModel @Inject constructor(
     private val sku3 = "com.friendfin.premium"
 
     // Initialize the BillingClient
-    private val _billingClient: BillingClient = BillingClient.newBuilder(getApplication(application))
-        .setListener(this)
-        .enablePendingPurchases(
-            PendingPurchasesParams.newBuilder()
-                .enableOneTimeProducts()
-                .build()
-        )
-        .build()
+    private val _billingClient: BillingClient =
+        BillingClient.newBuilder(getApplication(application))
+            .setListener(this)
+            .enablePendingPurchases(
+                PendingPurchasesParams.newBuilder()
+                    .enableOneTimeProducts()
+                    .build()
+            )
+            .build()
 
     // State to hold the list of products (SKUs)
     private val _productDetailsList = MutableStateFlow<List<ProductDetails>>(emptyList())
@@ -55,14 +56,12 @@ class BillingViewModel @Inject constructor(
         _billingClient.startConnection(object : BillingClientStateListener {
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    Timber.e("onBillingSetupFinished")
                     _isBillingReady.value = true
                     querySkuDetails() // Replaces your loadAllSKUs
                 }
             }
 
             override fun onBillingServiceDisconnected() {
-                Timber.e("onBillingServiceDisconnected")
                 _isBillingReady.value = false
             }
         })
@@ -141,11 +140,7 @@ class BillingViewModel @Inject constructor(
 
     // Helper to launch purchase flow from UI
     fun launchPurchaseFlow(activity: Activity, productDetails: ProductDetails) {
-        val offer = productDetails.subscriptionOfferDetails?.firstOrNull()
-        if(offer == null){
-            Timber.e("Offer is null")
-            return
-        }
+        val offer = productDetails.subscriptionOfferDetails?.firstOrNull() ?: return
         val flowParams = BillingFlowParams.newBuilder()
             .setProductDetailsParamsList(
                 listOf(

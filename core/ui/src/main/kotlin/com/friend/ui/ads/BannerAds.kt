@@ -28,7 +28,7 @@ import com.google.android.gms.ads.LoadAdError
 @Composable
 fun BannerAds(
     modifier: Modifier = Modifier,
-    adUnitId: String = "ca-app-pub-3940256099942544/6300978111"//stringResource(Res.string.BannerAdsUnitId)
+    adUnitId: String = stringResource(Res.string.BannerAdsUnitId)
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current

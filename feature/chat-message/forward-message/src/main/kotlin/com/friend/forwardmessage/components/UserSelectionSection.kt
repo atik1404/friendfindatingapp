@@ -26,10 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.friend.common.constant.AppConstants
 import com.friend.designsystem.spacing.RadiusToken
 import com.friend.designsystem.spacing.SpacingToken
-import com.friend.designsystem.spacing.appPadding
-import com.friend.designsystem.spacing.appPaddingOnly
 import com.friend.designsystem.spacing.appPaddingSymmetric
-import com.friend.designsystem.spacing.appPaddingVertical
 import com.friend.designsystem.theme.backgroundColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
@@ -40,7 +37,7 @@ import com.friend.ui.components.NetworkImageLoader
 import com.friend.ui.preview.LightPreview
 
 @Composable
-fun ChatListSection(
+fun UserSelectionSection(
     modifier: Modifier = Modifier,
     items: List<ChatItemApiEntity>,
     hasMorePage: Boolean,
@@ -67,7 +64,7 @@ fun ChatListSection(
             items = items,
             //key = { it.toUsername }
         ) { item ->
-            ChatListItem(
+            UserItem(
                 item = item,
                 modifier = modifier
                     .fillMaxWidth()
@@ -84,7 +81,7 @@ fun ChatListSection(
 }
 
 @Composable
-private fun ChatListItem(
+private fun UserItem(
     isItemSelected: Boolean,
     modifier: Modifier = Modifier,
     item: ChatItemApiEntity,
@@ -137,7 +134,7 @@ private fun ChatListItem(
 @Composable
 @LightPreview
 private fun ScreenPreview() {
-    ChatListItem(
+    UserItem(
         item = ChatItemApiEntity(
             toUsername = "Atik Faysal",
             notificationToken = "",

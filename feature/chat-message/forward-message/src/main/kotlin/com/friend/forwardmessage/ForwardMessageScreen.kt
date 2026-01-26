@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingSymmetric
 import com.friend.entity.chatmessage.ChatItemApiEntity
-import com.friend.forwardmessage.components.ChatListSection
+import com.friend.forwardmessage.components.UserSelectionSection
 import com.friend.forwardmessage.components.SearchBarSection
 import com.friend.ui.common.AppToolbar
 import com.friend.ui.common.ErrorType
@@ -87,7 +87,7 @@ fun ForwardMessageScreen(
                     }
                     Spacer(modifier = Modifier.height(SpacingToken.medium))
 
-                    ChatListSection(
+                    UserSelectionSection(
                         hasMorePage = uiState.hasMorePage,
                         items = uiState.filteredItems,
                         onLoadMore = {

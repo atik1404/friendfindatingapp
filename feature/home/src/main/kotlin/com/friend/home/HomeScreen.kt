@@ -27,6 +27,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.friend.common.constant.AppConstants
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
 import com.friend.entity.search.FriendSuggestionApiEntity
@@ -166,11 +167,10 @@ private fun PersonList(
     onLoadMore: () -> Unit,
 ) {
     val listState = rememberLazyGridState()
-    LaunchedEffect(listState, items, 10) {
+    LaunchedEffect(listState, items, AppConstants.DATA_PER_PAGE) {
         snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
             .collect { lastVisible ->
                 val lastIndex = items.lastIndex
-                //Timber.e("---> LastVisible: $lastVisible LastIndex: $lastIndex")
                 if (lastVisible != null && lastVisible == lastIndex && hasMoreSize) {
                     onLoadMore.invoke()
                 }
