@@ -6,7 +6,7 @@ ksp = "2.2.20-2.0.4"
 firebasecrashlyticsplugin = "3.0.6"
 firebasePerfplugin = "2.0.2"
 firebaseBomVersion = "34.8.0"
-googlePermission = "0.34.0"
+googlePermission = "0.37.3"
 
 googleServices = "4.4.4"
 

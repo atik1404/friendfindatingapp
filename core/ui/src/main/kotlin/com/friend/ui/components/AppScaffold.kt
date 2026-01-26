@@ -11,6 +11,7 @@ import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.friend.common.constant.AppConstants
 import com.friend.designsystem.theme.backgroundColors
 import com.friend.ui.ads.BannerAds
 
@@ -32,10 +33,8 @@ fun AppScaffold(
         modifier = modifier,
         topBar = topBar,
         bottomBar = {
-            if (isAdsVisible)
-                BannerAds(
-                    modifier = modifier.navigationBarsPadding()
-                )
+            if (isAdsVisible && !AppConstants.isPremiumUser)
+                BannerAds(modifier = modifier.navigationBarsPadding())
         },
         snackbarHost = snackbarHost,
         floatingActionButton = floatingActionButton,

@@ -131,6 +131,7 @@ dependencies {
         implementation(libs.play.services.ads)
 
         implementation(libs.android.image.cropper)
+        implementation(libs.billing)
 
         testImplementation(test.junit)
         androidTestImplementation(test.extjunit)

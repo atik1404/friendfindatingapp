@@ -12,6 +12,14 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.PendingPurchasesParams
+import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.PurchasesUpdatedListener
+import com.android.billingclient.api.QueryPurchasesParams
+import com.friend.common.constant.AppConstants
 import com.friend.di.qualifier.AppOpenAdId
 import com.friend.sharedpref.SharedPrefHelper
 import com.friend.sharedpref.SpKey
@@ -19,13 +27,14 @@ import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.HiltAndroidApp
+import dagger.hilt.android.internal.Contexts.getApplication
 import timber.log.Timber
 import javax.inject.Inject
 import com.friend.designsystem.R as Res
 
 @HiltAndroidApp
 class BaseApplication : Application(),
-    Application.ActivityLifecycleCallbacks, DefaultLifecycleObserver {
+    Application.ActivityLifecycleCallbacks, DefaultLifecycleObserver, PurchasesUpdatedListener {
     @Inject
     lateinit var sharedPrefHelper: SharedPrefHelper
 
@@ -36,6 +45,19 @@ class BaseApplication : Application(),
     private lateinit var appOpenAdManager: AppOpenAdManager
     private var currentActivity: Activity? = null
 
+    private val billingClient: BillingClient by lazy {
+        BillingClient.newBuilder(this)
+            .setListener { billingResult, purchases ->
+                // Handle purchase updates here
+            }
+            .enablePendingPurchases(
+                PendingPurchasesParams.newBuilder()
+                    .enableOneTimeProducts()
+                    .build()
+            )
+            .build()
+    }
+
     override fun onCreate() {
         super<Application>.onCreate()
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -45,15 +67,7 @@ class BaseApplication : Application(),
         setupNotificationChannels()
         getFirebaseToken()
 
-        if (!BuildConfig.DEBUG) {
-            MobileAds.initialize(this)
-
-            registerActivityLifecycleCallbacks(this)
-            ProcessLifecycleOwner.get().lifecycle.addObserver(this)
-
-            appOpenAdManager = AppOpenAdManager(appOpenAdId)
-            appOpenAdManager.loadAd(this)
-        }
+        startConnection()
     }
 
     override fun onStart(owner: LifecycleOwner) {
@@ -164,6 +178,54 @@ class BaseApplication : Application(),
             Timber.e("fcmToken: ${task.result}")
             sharedPrefHelper.putString(SpKey.fcmToken, task.result ?: "")
         })
+    }
+
+    private fun startConnection() {
+        billingClient.startConnection(object : BillingClientStateListener {
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    checkActivePurchases(billingClient)
+                }
+            }
+
+            override fun onBillingServiceDisconnected() {
+            }
+        })
+    }
+
+    fun checkActivePurchases(billingClient: BillingClient) {
+        if (!billingClient.isReady) return
+
+        val params = QueryPurchasesParams.newBuilder()
+            .setProductType(BillingClient.ProductType.SUBS)
+            .build()
+
+        billingClient.queryPurchasesAsync(params) { billingResult, purchases ->
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                val hasActivePurchase = purchases.any {
+                    it.purchaseState == Purchase.PurchaseState.PURCHASED
+                }
+                Timber.e("hasActivePurchase: $hasActivePurchase")
+                AppConstants.isPremiumUser = hasActivePurchase
+
+                if (!BuildConfig.DEBUG && !hasActivePurchase) {
+                    MobileAds.initialize(this)
+
+                    registerActivityLifecycleCallbacks(this)
+                    ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+
+                    appOpenAdManager = AppOpenAdManager(appOpenAdId)
+                    appOpenAdManager.loadAd(this)
+                }
+            }
+        }
+    }
+
+    override fun onPurchasesUpdated(
+        p0: BillingResult,
+        p1: List<Purchase?>?
+    ) {
+        TODO("Not yet implemented")
     }
 }
 

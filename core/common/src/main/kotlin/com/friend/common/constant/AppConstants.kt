@@ -1,8 +1,10 @@
 package com.friend.common.constant
 
 object AppConstants {
-    const val DATA_PER_PAGE = 10
-    const val WEB_CLIENT_ID = "176628957073-lll0macf6raivbvguuic9m9aoiuop4tn.apps.googleusercontent.com"
+    const val DATA_PER_PAGE = 50
+    var isPremiumUser: Boolean = false
+    const val WEB_CLIENT_ID =
+        "176628957073-lll0macf6raivbvguuic9m9aoiuop4tn.apps.googleusercontent.com"
 
     var BodyTypes = listOf("Slim", "Athletic", "Normal", "Few extra pounds")
     var LookingFor = listOf(

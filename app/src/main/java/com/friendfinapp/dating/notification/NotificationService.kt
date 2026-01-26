@@ -35,7 +35,7 @@ class PushNotificationService : FirebaseMessagingService() {
         )
 
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(Res.drawable.ic_app_logo) // Ensure this icon exists
+            .setSmallIcon(Res.drawable.ic_app_notification) // Ensure this icon exists
             .setContentTitle(title)
             .setContentText(message)
             .setAutoCancel(true) // Removes notification after click
