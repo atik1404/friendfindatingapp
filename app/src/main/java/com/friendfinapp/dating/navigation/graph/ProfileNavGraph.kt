@@ -36,7 +36,7 @@ object ProfileNavGraph {
                 navigateToPrivacyPolicyScreen = { backStack.add(CommonScreens.PrivacyPolicyNavScreen) },
                 navigateToChangePasswordScreen = { backStack.add(ProfileScreens.ChangePasswordNavScreen) },
                 navigateToPersonalSettingScreen = { backStack.add(ProfileScreens.PersonalSettingNavScreen) },
-                exitApp = {backStack.clear()}
+                exitApp = { backStack.clear() }
             )
         }
         entry<ProfileScreens.ProfileNavScreen> { key ->
@@ -56,8 +56,14 @@ object ProfileNavGraph {
                 onBackButtonClicked = {
                     backStack.removeLastOrNull()
                 },
-                onNavigateToMessageRoom = {
-                    backStack.add(ChatMessageScreens.ChatListNavScreen)
+                onNavigateToMessageRoom = { username, fullName, profilePicture ->
+                    backStack.add(
+                        ChatMessageScreens.ConversationNavScreen(
+                            toUsername = username,
+                            fullName = fullName,
+                            imageUrl = profilePicture
+                        )
+                    )
                 },
                 navigateToReportAbuse = {
                     backStack.add(ProfileScreens.ReportUserNavScreen(key.username))

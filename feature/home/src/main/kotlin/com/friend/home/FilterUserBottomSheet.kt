@@ -34,7 +34,7 @@ import com.friend.designsystem.theme.buttonColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.ui.common.GenderSelection
-import com.friend.ui.common.ShowBottomSheet
+import com.friend.ui.common.bottomsheet.ShowBottomSheet
 import com.friend.ui.components.AppBaseTextField
 import com.friend.ui.components.AppCheckbox
 import com.friend.ui.components.AppElevatedButton

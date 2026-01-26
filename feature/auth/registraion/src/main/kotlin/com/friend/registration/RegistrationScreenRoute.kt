@@ -22,7 +22,8 @@ fun RegistrationRoute(
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        viewModel.action(UiAction.OnChangeEmail(email))
+        if (email.isNotEmpty())
+            viewModel.action(UiAction.OnChangeEmail(email))
 
         viewModel.uiEvent.collect { event ->
             when (event) {

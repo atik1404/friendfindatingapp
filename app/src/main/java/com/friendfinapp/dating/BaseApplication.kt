@@ -45,13 +45,15 @@ class BaseApplication : Application(),
         setupNotificationChannels()
         getFirebaseToken()
 
-        MobileAds.initialize(this)
+        if (!BuildConfig.DEBUG) {
+            MobileAds.initialize(this)
 
-        registerActivityLifecycleCallbacks(this)
-        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+            registerActivityLifecycleCallbacks(this)
+            ProcessLifecycleOwner.get().lifecycle.addObserver(this)
 
-        appOpenAdManager = AppOpenAdManager(APP_OPEN_TEST_AD_UNIT_ID)
-        appOpenAdManager.loadAd(this)
+            appOpenAdManager = AppOpenAdManager(APP_OPEN_TEST_AD_UNIT_ID)
+            appOpenAdManager.loadAd(this)
+        }
     }
 
     override fun onStart(owner: LifecycleOwner) {

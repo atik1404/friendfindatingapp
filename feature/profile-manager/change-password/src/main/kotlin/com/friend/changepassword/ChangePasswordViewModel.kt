@@ -20,7 +20,6 @@ import com.friend.designsystem.R as Res
 class ChangePasswordViewModel @Inject constructor(
     private val postPasswordChangeApiUseCase: PostPasswordChangeApiUseCase,
 ) : BaseViewModel() {
-
     private val ioError = postPasswordChangeApiUseCase.ioError.receiveAsFlow()
     private val _uiState = MutableStateFlow(UiState())
     val uiState = _uiState.asStateFlow()
@@ -63,8 +62,8 @@ class ChangePasswordViewModel @Inject constructor(
         val current = _uiState.value
         val params = PostPasswordChangeApiUseCase.Params(
             oldPassword = current.oldPassword.value,
-            current.oldPassword.value,
             current.newPassword.value,
+            current.confirmPassword.value,
         )
 
         execute {

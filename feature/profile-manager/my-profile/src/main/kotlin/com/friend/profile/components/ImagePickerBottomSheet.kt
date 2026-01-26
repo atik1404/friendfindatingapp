@@ -22,7 +22,7 @@ import com.friend.designsystem.spacing.appPaddingHorizontal
 import com.friend.designsystem.spacing.appPaddingVertical
 import com.friend.ui.common.CaptureImage
 import com.friend.ui.common.ImageFilePicker
-import com.friend.ui.common.ShowBottomSheet
+import com.friend.ui.common.bottomsheet.ShowBottomSheet
 import com.friend.ui.components.AppText
 import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res

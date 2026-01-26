@@ -14,7 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
-import com.friend.ui.common.ShowBottomSheet
+import com.friend.ui.common.bottomsheet.ShowBottomSheet
 import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppText
 import com.friend.ui.components.ResourceImageLoader

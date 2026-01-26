@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
@@ -54,11 +56,15 @@ fun AppToolbar(
 ) {
     val navigationIconComposable: @Composable () -> Unit = leadingIcon ?: {
         if (onBackClick != null) {
-            IconButton(onClick = onBackClick) {
+            IconButton(
+                onClick = onBackClick,
+                modifier = modifier
+                    .width(IconSizeToken.huge)
+                    .height(IconSizeToken.extraLarge)
+            ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBackIosNew,
                     contentDescription = "Back",
-                    modifier = Modifier.size(IconSizeToken.large)
                 )
             }
         }

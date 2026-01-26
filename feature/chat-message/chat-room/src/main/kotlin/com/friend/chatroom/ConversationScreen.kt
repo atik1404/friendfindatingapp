@@ -50,7 +50,6 @@ import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.AppText
 import com.friend.ui.preview.LightPreview
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 private val JumpToBottomThreshold = 56.dp
 
@@ -173,7 +172,6 @@ fun ConversationScreen(
                         onAction.invoke(UiAction.OnChangeImageAttachment(it))
                     },
                     pickVideo = {
-                        Timber.e("videoDuration: ${FilesUtils.getFileDurationMs(it)}")
                         isAttachmentExpanded = false
                         onAction.invoke(UiAction.OnChangeVideoAttachment(it))
                         onAction.invoke(UiAction.SendMessage(toUsername))
@@ -225,16 +223,13 @@ fun ConversationScreen(
                         onAction.invoke(UiAction.SendMessage(toUsername))
                     },
                     onStartRecording = {
-                        Timber.e("Recording: onStartRecording")
                         onAction.invoke(UiAction.OnStartRecording)
                     },
                     onStopRecording = {
-                        Timber.e("Recording: onStopRecording")
                         onAction.invoke(UiAction.OnStopRecording)
                         onAction.invoke(UiAction.SendMessage(toUsername))
                     },
                     onCancelRecording = {
-                        Timber.e("Recording: onCancelRecording")
                         onAction.invoke(UiAction.OnCancelRecording)
                     }
                 )

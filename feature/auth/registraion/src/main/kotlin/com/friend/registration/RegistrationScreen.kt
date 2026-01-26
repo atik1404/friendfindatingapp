@@ -194,18 +194,6 @@ fun RegistrationScreen(
                         addSpace = true,
                         onClick = privacyPolicyClicked
                     ),
-                    ColoredTextSegment(
-                        text = stringResource(Res.string.msg_and),
-                        color = MaterialTheme.textColors.secondary,
-                        style = AppTypography.bodyMedium,
-                        addSpace = true
-                    ),
-                    ColoredTextSegment(
-                        text = stringResource(Res.string.label_term_and_condition),
-                        color = MaterialTheme.textColors.brand,
-                        style = AppTypography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                        onClick = privacyPolicyClicked
-                    ),
                 )
                 MultiColorText(segments = segments)
             }

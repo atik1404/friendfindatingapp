@@ -1,5 +1,6 @@
 package com.friend.otherprofile.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +14,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -23,6 +28,7 @@ import com.friend.designsystem.spacing.appPaddingOnly
 import com.friend.designsystem.theme.backgroundColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
+import com.friend.ui.common.bottomsheet.ImagePreviewDialog
 import com.friend.ui.components.AppIconButton
 import com.friend.ui.components.AppText
 import com.friend.ui.components.NetworkImageLoader
@@ -39,6 +45,8 @@ fun ProfileHeaderSection(
     onSendMsgClicked: () -> Unit,
 ) {
     val picSize = ImageSizeToken.profilePictureLarge
+
+    var imagePreviewDialog by remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -60,7 +68,11 @@ fun ProfileHeaderSection(
             NetworkImageLoader(
                 url = profilePicture,
                 shape = CircleShape,
-                modifier = Modifier.size(picSize)
+                modifier = Modifier
+                    .size(picSize)
+                    .clickable {
+                        imagePreviewDialog = true
+                    }
             )
 
             Spacer(modifier = modifier.width(SpacingToken.medium))
@@ -90,7 +102,7 @@ fun ProfileHeaderSection(
                 )
             }
 
-            if(!isBlocked){
+            if (!isBlocked) {
                 AppIconButton(
                     resourceIcon = Res.drawable.ic_chat_bubble,
                     onClick = {
@@ -99,6 +111,13 @@ fun ProfileHeaderSection(
                 )
             }
         }
+    }
+
+    if (imagePreviewDialog) {
+        ImagePreviewDialog(
+            onDismiss = { imagePreviewDialog = false },
+            url = profilePicture
+        )
     }
 }
 

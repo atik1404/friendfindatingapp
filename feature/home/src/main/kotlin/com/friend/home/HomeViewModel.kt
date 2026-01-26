@@ -83,7 +83,7 @@ class HomeViewModel @Inject constructor(
                 country = filterBy.country,
                 state = filterBy.state,
                 city = filterBy.city,
-                username = filterBy.username,
+                username = filterBy.username.trim(),
                 isOnlineUser = filterBy.isOnlineUser,
                 isPhotoRequired = filterBy.isPhotoRequired,
                 bodyType = filterBy.bodyType,

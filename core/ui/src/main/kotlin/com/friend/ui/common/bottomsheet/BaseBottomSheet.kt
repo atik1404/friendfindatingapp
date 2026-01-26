@@ -1,4 +1,4 @@
-package com.friend.ui.common
+package com.friend.ui.common.bottomsheet
 
 import AppDivider
 import androidx.compose.foundation.layout.Arrangement

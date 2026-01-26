@@ -13,7 +13,7 @@ import com.friend.ui.showToastMessage
 fun OtherProfileScreenRouter(
     username: String,
     onBackButtonClicked: () -> Unit,
-    onNavigateToMessageRoom: () -> Unit,
+    onNavigateToMessageRoom: (String, String, String) -> Unit,
     navigateToReportAbuse: () -> Unit,
     viewModel: OtherProfileViewModel = hiltViewModel()
 ) {
@@ -39,7 +39,13 @@ fun OtherProfileScreenRouter(
         isBlocked = isBlocked,
         username = username,
         onBackButtonClicked = onBackButtonClicked,
-        navigateToMessageRoom = onNavigateToMessageRoom,
+        navigateToMessageRoom = { username, fullName, profilePicture->
+            onNavigateToMessageRoom.invoke(
+                username,
+                fullName,
+                profilePicture
+            )
+        },
         navigateToReportAbuse = navigateToReportAbuse,
         uiAction = {
             viewModel.action(it)

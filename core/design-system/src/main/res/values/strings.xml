@@ -45,6 +45,7 @@
     <string name="title_forward_message">Forward Message</string>
     <string name="title_video">Video</string>
     <string name="title_delete_message">Delete Message?</string>
+    <string name="title_need_permission">Permission Required</string>
 
     <string name="title_something_wrong">Request failed</string>
     <string name="title_data_empty">Try a different search</string>
@@ -76,7 +77,7 @@
     <string name="action_gallery">Gallery</string>
     <string name="action_camera">Camera</string>
     <string name="action_unblock">Unblock</string>
-    <string name="action_go_to_setting">Settings</string>
+    <string name="action_go_to_setting">Open Settings</string>
 
     <string name="label_or">OR</string>
     <string name="label_username">Username</string>
@@ -111,8 +112,7 @@
     <string name="label_seeking_for">Who is seeking</string>
     <string name="label_am_looking_for">I am looking for</string>
     <string name="label_why_report_user">Tell use why you want to report this user?</string>
-    <string name="label_privacy_policy">Privacy Policy</string>
-    <string name="label_term_and_condition">Terms &amp; Condition</string>
+    <string name="label_privacy_policy">Privacy Policy &amp; Terms Condition</string>
     <string name="label_blocked_list">Blocked list</string>
 
     <string name="hint_user_name">Enter Username</string>
@@ -150,6 +150,7 @@
     <string name="msg_find_more">Find friends ad-free</string>
     <string name="msg_delete_message">Are you sure you want to delete selected message(s)? If yes, click on the button below.</string>
     <string name="msg_delete_account">Are you sure you want to delete your account?</string>
+    <string name="msg_permission_needed">this app needs access to your %s. This allows us to provide a seamless experience and enable all the app\'s capabilities.</string>
 
     <string name="msg_top_of_inbox">Top of the inbox!</string>
     <string name="msg_top_of_inbox_description">your message will be seen in top message of the inbox!</string>

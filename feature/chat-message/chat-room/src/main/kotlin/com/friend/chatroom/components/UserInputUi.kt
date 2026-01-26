@@ -46,6 +46,7 @@ import com.friend.designsystem.theme.strokeColors
 import com.friend.designsystem.theme.surfaceColors
 import com.friend.designsystem.theme.textFieldColors
 import com.friend.ui.common.CaptureImage
+import com.friend.ui.common.bottomsheet.RuntimePermissionBottomSheet
 import com.friend.ui.components.AppBaseTextField
 import com.friend.ui.components.AppIconButton
 import com.friend.ui.components.BitmapImageLoader
@@ -72,10 +73,21 @@ fun UserInputForm(
     var isRecordingMessage by remember { mutableStateOf(false) }
     // New state to track if the recording is in "Locked/Hands-free" mode
     var isLocked by remember { mutableStateOf(false) }
+    var showPermissionDialog by remember { mutableStateOf(false) }
 
     val withMicPermission = rememberPermissionAction(
         permission = android.Manifest.permission.RECORD_AUDIO,
-    )
+    ) {
+        showPermissionDialog = true
+    }
+
+    if (showPermissionDialog) {
+        RuntimePermissionBottomSheet(
+            onDismissRequest = {
+                showPermissionDialog = false
+            }
+        )
+    }
 
     Row(
         modifier = modifier

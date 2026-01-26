@@ -139,9 +139,9 @@ class RegistrationViewModel @Inject constructor(
             val current = _formUiState.value
 
             val params = PostRegistrationApiUseCase.Params(
-                username = current.form.username.value,
+                username = current.form.username.value.trim(),
                 password = current.form.password.value,
-                email = current.form.email.value,
+                email = current.form.email.value.trim(),
                 name = current.form.name.value,
                 zipCode = current.form.postCode.value,
                 gender = current.form.gender?.value ?: -1,

@@ -41,7 +41,7 @@ fun OtherProfileScreen(
     isBlocked: Boolean,
     uiAction: (UiAction) -> Unit,
     onBackButtonClicked: () -> Unit,
-    navigateToMessageRoom: () -> Unit,
+    navigateToMessageRoom: (String, String, String) -> Unit,
     navigateToReportAbuse: () -> Unit,
 ) {
     AppScaffold(
@@ -88,7 +88,13 @@ fun OtherProfileScreen(
                         .verticalScroll(rememberScrollState())
                         .appPadding(SpacingToken.small),
                     data = uiState.data,
-                    onSendMsgClicked = navigateToMessageRoom
+                    onSendMsgClicked = {
+                        navigateToMessageRoom.invoke(
+                            uiState.data.profile.userName,
+                            uiState.data.profile.fullName,
+                            uiState.data.profile.profilePicture
+                        )
+                    }
                 )
             }
 
@@ -177,7 +183,7 @@ private fun ScreenPreview() {
             )
         ),
         onBackButtonClicked = {},
-        navigateToMessageRoom = {},
+        navigateToMessageRoom = { a, b, c -> },
         navigateToReportAbuse = {},
         username = "",
         isBlocked = false,

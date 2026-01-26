@@ -19,6 +19,5 @@ dependencies {
     implementation(libs.coil.okkhttp)
 
     implementation(libs.play.services.ads)
-
-    implementation("com.google.accompanist:accompanist-permissions:0.34.0")
+    implementation(libs.google.permission)
 }

@@ -1,4 +1,4 @@
-package com.friend.chatroom.bottomsheet
+package com.friend.ui.common.bottomsheet
 
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box

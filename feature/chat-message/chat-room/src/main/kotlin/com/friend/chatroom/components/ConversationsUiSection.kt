@@ -22,7 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import com.friend.chatroom.bottomsheet.ImagePreviewDialog
+import com.friend.ui.common.bottomsheet.ImagePreviewDialog
 import com.friend.chatroom.components.conversation.ConversationBody
 import com.friend.chatroom.components.conversation.bubbleColorPair
 import com.friend.chatroom.components.conversation.bubbleCornerShape
