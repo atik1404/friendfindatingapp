@@ -37,7 +37,11 @@ fun HomeRoute(
             viewModel.action(it)
         },
         navigateToProfileScreen = navigateToProfileScreen,
-        navigateToOtherProfileScreen = { navigateToOtherProfileScreen.invoke(it) },
+        navigateToOtherProfileScreen = {
+            if (it == viewModel.getUsername())//if current user
+                navigateToProfileScreen.invoke()//navigate to profile screen
+            else navigateToOtherProfileScreen.invoke(it)//navigate to other profile screen
+        },
         navigateToMembershipScreen = navigateToMembershipScreen
     )
 }

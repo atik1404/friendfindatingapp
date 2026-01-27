@@ -205,4 +205,7 @@ class HomeViewModel @Inject constructor(
                 }
         }
     }
+
+    fun getUsername() =
+        sharedPrefHelper.getString(SpKey.userName)
 }
