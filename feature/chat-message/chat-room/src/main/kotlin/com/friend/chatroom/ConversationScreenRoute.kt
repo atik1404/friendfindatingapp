@@ -33,6 +33,7 @@ fun ConversationScreenRoute(
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
+        viewModel.action(OnClearMessageSelection)
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is UiEvent.ShowToastMessage ->

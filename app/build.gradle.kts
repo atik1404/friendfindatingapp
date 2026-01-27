@@ -125,6 +125,10 @@ dependencies {
         debugImplementation(leakcanary)
         implementation(timber)
 
+        implementation(coil)
+        implementation(coil.okkhttp)
+        implementation(coil.video)
+
         implementation(platform(firebase.bom))
         implementation(bundles.firebase)
 

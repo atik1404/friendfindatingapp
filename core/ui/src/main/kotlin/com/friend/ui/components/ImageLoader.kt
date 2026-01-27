@@ -22,8 +22,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import coil3.ImageLoader
+import coil3.SingletonImageLoader
 import coil3.compose.AsyncImage
-import coil3.compose.LocalPlatformContext
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -61,24 +61,38 @@ fun NetworkImageLoader(
     @DrawableRes errorRes: Int? = Res.drawable.image_loader,
     shape: Shape = RoundedCornerShape(RadiusToken.none),
     contentScale: ContentScale = ContentScale.Crop,
+    crossfade: Boolean = false,
+    memoryCachePolicy: CachePolicy = CachePolicy.ENABLED,
+    diskCachePolicy: CachePolicy = CachePolicy.ENABLED,
 ) {
+    val context = LocalContext.current
+    val imageLoader = remember(context) { SingletonImageLoader.get(context) }
+
+    val placeholderPainter = placeholderRes?.let { painterResource(it) }
+    val errorPainter = errorRes?.let { painterResource(it) }
+
+    val request = remember(url, crossfade, memoryCachePolicy, diskCachePolicy) {
+        if (url.isBlank()) null
+        else ImageRequest.Builder(context)
+            .data(url)
+            .crossfade(crossfade)
+            .memoryCachePolicy(memoryCachePolicy)
+            .diskCachePolicy(diskCachePolicy)
+            .build()
+    }
+
     Box(
-        modifier = modifier
-            .clip(shape),
+        modifier = modifier.clip(shape),
         contentAlignment = Alignment.Center
     ) {
         when {
-            url.isNotEmpty() -> {
+            request != null -> {
                 AsyncImage(
-                    model = ImageRequest.Builder(LocalPlatformContext.current)
-                        .data(url)
-                        .crossfade(true)
-                        .diskCachePolicy(CachePolicy.ENABLED)
-                        .memoryCachePolicy(CachePolicy.ENABLED)
-                        .build(),
+                    model = request,
+                    imageLoader = imageLoader,
                     contentDescription = stringResource(Res.string.msg_image_content_description),
-                    placeholder = placeholderRes?.let { painterResource(it) },
-                    error = errorRes?.let { painterResource(it) },
+                    placeholder = placeholderPainter,
+                    error = errorPainter,
                     contentScale = contentScale,
                     modifier = Modifier.matchParentSize()
                 )
@@ -105,10 +119,9 @@ fun NetworkImageLoader(
             }
 
             else -> {
-                // Optional: fallback placeholder background (if no url + no name)
-                placeholderRes?.let {
+                placeholderPainter?.let {
                     Image(
-                        painter = painterResource(it),
+                        painter = it,
                         contentDescription = null,
                         contentScale = contentScale,
                         modifier = Modifier.matchParentSize()
@@ -117,11 +130,10 @@ fun NetworkImageLoader(
             }
         }
 
-        if (isLoading) {
-            CircularProgressIndicator()
-        }
+        if (isLoading) CircularProgressIndicator()
     }
 }
+
 
 @Composable
 fun BitmapImageLoader(

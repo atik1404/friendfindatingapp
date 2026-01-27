@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Context
 import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
@@ -12,6 +13,13 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import coil3.ImageLoader
+import coil3.PlatformContext
+import coil3.SingletonImageLoader
+import coil3.disk.DiskCache
+import coil3.disk.directory
+import coil3.memory.MemoryCache
+import coil3.video.VideoFrameDecoder
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingResult
@@ -33,7 +41,8 @@ import com.friend.designsystem.R as Res
 
 @HiltAndroidApp
 class BaseApplication : Application(),
-    Application.ActivityLifecycleCallbacks, DefaultLifecycleObserver, PurchasesUpdatedListener {
+    Application.ActivityLifecycleCallbacks, DefaultLifecycleObserver, PurchasesUpdatedListener,
+    SingletonImageLoader.Factory {
     @Inject
     lateinit var sharedPrefHelper: SharedPrefHelper
 
@@ -227,6 +236,26 @@ class BaseApplication : Application(),
         p0: BillingResult,
         p1: List<Purchase?>?
     ) {
+    }
+
+    override fun newImageLoader(context: Context): ImageLoader {
+        return ImageLoader.Builder(context)
+            .components {
+                // Needed for video thumbnails
+                add(VideoFrameDecoder.Factory())
+            }
+            .memoryCache {
+                MemoryCache.Builder()
+                    .maxSizePercent(context, 0.25)
+                    .build()
+            }
+            .diskCache {
+                DiskCache.Builder()
+                    .directory(context.cacheDir.resolve("image_cache"))
+                    .maxSizePercent(0.08)
+                    .build()
+            }
+            .build()
     }
 }
 
