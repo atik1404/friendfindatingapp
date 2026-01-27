@@ -53,7 +53,13 @@ object ChatMessageNavGraph {
                         )
                     )
                 },
-                onNavigateToPlayerScreen = { url -> backStack.add(CommonScreens.VideoPlayerNavScreen(url)) }
+                onNavigateToPlayerScreen = { url ->
+                    backStack.add(
+                        CommonScreens.VideoPlayerNavScreen(
+                            url
+                        )
+                    )
+                }
             )
         }
 
@@ -61,6 +67,17 @@ object ChatMessageNavGraph {
             ForwardMessageScreenRoute(
                 onBackButtonClicked = {
                     backStack.removeLastOrNull()
+                },
+                navigateToConversationScreen = { toUsername, imageUrl, fullName ->
+                    backStack.removeLastOrNull()
+                    backStack.removeLastOrNull()
+                    backStack.add(
+                        ChatMessageScreens.ConversationNavScreen(
+                            toUsername = toUsername,
+                            fullName = fullName,
+                            imageUrl = imageUrl
+                        )
+                    )
                 },
                 messages = key.messages,
             )

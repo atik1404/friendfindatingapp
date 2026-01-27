@@ -13,6 +13,7 @@ import com.friend.ui.showToastMessage
 fun ForwardMessageScreenRoute(
     messages: List<String>,
     onBackButtonClicked: () -> Unit,
+    navigateToConversationScreen: (String, String, String) -> Unit,
     viewModel: ForwardMessageViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -22,7 +23,19 @@ fun ForwardMessageScreenRoute(
         viewModel.action.invoke(UiAction.FetchChatList)
         viewModel.uiEvent.collect { event ->
             when (event) {
-                UiEvent.ForwardMessageComplete -> onBackButtonClicked.invoke()
+                UiEvent.ForwardMessageComplete -> {
+                    if (uiState.data.filter { it.isItemSelected }.size > 1)
+                        onBackButtonClicked.invoke()
+                    else {
+                        val selectedUser = uiState.data.first { it.isItemSelected }
+                        navigateToConversationScreen.invoke(
+                            selectedUser.toUsername,
+                            selectedUser.userImage,
+                            selectedUser.fullName
+                        )
+                    }
+                }
+
                 is UiEvent.ShowToastMessage -> context.showToastMessage(
                     event.message.asString(
                         context
