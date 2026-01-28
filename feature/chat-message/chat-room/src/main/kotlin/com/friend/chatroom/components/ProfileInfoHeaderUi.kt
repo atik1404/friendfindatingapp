@@ -40,6 +40,7 @@ fun ProfileInfoHeader(
     fullName: String,
     userImage: String,
     isBlocked: Boolean,
+    isAdministrator: Boolean,
     backToChatListScreen: () -> Unit,
     onProfileImageClicked: () -> Unit,
     onMenuClicked: (PopupMenuType) -> Unit,
@@ -80,7 +81,7 @@ fun ProfileInfoHeader(
 
         Spacer(modifier = Modifier.width(SpacingToken.small))
 
-        if (!isBlocked) {
+        if (!isBlocked && !isAdministrator) {
             if (isItemSelectionEnable) {
                 Row {
                     AppIconButton(

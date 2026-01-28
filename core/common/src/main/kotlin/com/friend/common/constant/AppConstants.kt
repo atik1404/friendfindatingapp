@@ -3,6 +3,8 @@ package com.friend.common.constant
 object AppConstants {
     const val DATA_PER_PAGE = 50
     var isPremiumUser: Boolean = false
+    val ADMIN = "admin"
+
     const val WEB_CLIENT_ID =
         "176628957073-lll0macf6raivbvguuic9m9aoiuop4tn.apps.googleusercontent.com"
 

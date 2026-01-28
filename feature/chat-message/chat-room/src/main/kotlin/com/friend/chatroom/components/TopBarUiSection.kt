@@ -15,6 +15,7 @@ fun TopBarUiSection(
     fullName: String,
     userImage: String,
     isBlocked: Boolean,
+    isAdministrator: Boolean,
     modifier: Modifier,
     onBackButtonClicked: () -> Unit,
     onProfileImageClicked: () -> Unit,
@@ -42,6 +43,7 @@ fun TopBarUiSection(
         )
     else ProfileInfoHeader(
         isBlocked = isBlocked,
+        isAdministrator = isAdministrator,
         fullName = fullName,
         userImage = userImage,
         modifier = modifier,

@@ -9,8 +9,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.friend.chatroom.UiAction.*
-import com.friend.entity.chatmessage.ChatItemApiEntity
+import com.friend.chatroom.UiAction.FetchMessages
+import com.friend.chatroom.UiAction.OnClearMessageSelection
+import com.friend.common.constant.AppConstants
 import com.friend.ui.common.asString
 import com.friend.ui.showToastMessage
 import kotlinx.coroutines.launch
@@ -25,7 +26,7 @@ fun ConversationScreenRoute(
     onNavigateToPlayerScreen: (String) -> Unit,
     onNavigateToReportScreen: (String) -> Unit,
     onNavigateToForwardMessageScreen: (List<String>) -> Unit,
-    viewModel: ConversationViewModel = hiltViewModel()
+    viewModel: ConversationViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -62,7 +63,8 @@ fun ConversationScreenRoute(
         imageUrl = imageUrl,
         onBackButtonClicked = onBackButtonClicked,
         onNavigateToProfileScreen = {
-            onNavigateToProfileScreen.invoke(toUsername)
+            if (toUsername != AppConstants.ADMIN)
+                onNavigateToProfileScreen.invoke(toUsername)
         },
         onAction = {
             viewModel.action(it)

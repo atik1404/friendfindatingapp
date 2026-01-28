@@ -38,6 +38,7 @@ import com.friend.chatroom.components.SearchResultCountUi
 import com.friend.chatroom.components.TopBarUiSection
 import com.friend.chatroom.components.UserInputForm
 import com.friend.chatroom.components.conversation.JumpToBottom
+import com.friend.common.constant.AppConstants
 import com.friend.common.utils.FilesUtils
 import com.friend.designsystem.R as Res
 import com.friend.designsystem.spacing.SpacingToken
@@ -72,6 +73,9 @@ fun ConversationScreen(
     var isItemSelectionEnable by remember { mutableStateOf(false) }
     var isAttachmentExpanded by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
+    val isAdministrator = remember(toUsername) {
+        toUsername == AppConstants.ADMIN
+    }
 
     val scope = rememberCoroutineScope()
 
@@ -111,6 +115,7 @@ fun ConversationScreen(
                     fullName = fullName,
                     userImage = imageUrl,
                     isBlocked = uiState.isBlocked,
+                    isAdministrator = isAdministrator,
                     onProfileImageClicked = onNavigateToProfileScreen,
                     onBackButtonClicked = onBackButtonClicked,
                     onSearchCanceled = {
@@ -155,7 +160,7 @@ fun ConversationScreen(
                         .weight(1f),
                     isItemSelectionEnable = isItemSelectionEnable,
                     onLongPress = {
-                        if (!uiState.isBlocked)
+                        if (!uiState.isBlocked && !isAdministrator)
                             isItemSelectionEnable = true
                     },
                     onItemSelected = {
@@ -197,6 +202,10 @@ fun ConversationScreen(
 
                 if (uiState.isIncoming)
                     TypingAnimation()
+
+                if (isAdministrator) {
+                    return@Column
+                }
 
                 if (uiState.isBlocked) {
                     Spacer(modifier = Modifier.height(SpacingToken.medium))
