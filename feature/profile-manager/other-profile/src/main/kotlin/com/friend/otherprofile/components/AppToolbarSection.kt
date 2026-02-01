@@ -16,6 +16,7 @@ import com.friend.ui.components.ProfilePopupMenu
 @Composable
 fun AppToolbarSection(
     modifier: Modifier = Modifier,
+    username: String,
     isBlocked: Boolean,
     onBackButtonClicked: () -> Unit,
     navigateToReportAbuse: () -> Unit,
@@ -24,7 +25,7 @@ fun AppToolbarSection(
 ) {
     AppToolbar(
         modifier = modifier,
-        title = stringResource(Res.string.title_profile),
+        title = username,//stringResource(Res.string.title_profile),
         onBackClick = {
             onBackButtonClicked.invoke()
         },

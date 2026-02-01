@@ -47,6 +47,7 @@ fun OtherProfileScreen(
         contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
             AppToolbarSection(
+                username = username,
                 isBlocked = isBlocked,
                 onBackButtonClicked = onBackButtonClicked,
                 navigateToReportAbuse = navigateToReportAbuse,
