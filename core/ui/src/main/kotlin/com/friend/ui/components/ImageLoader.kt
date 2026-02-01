@@ -57,8 +57,8 @@ fun NetworkImageLoader(
     url: String,
     name: String? = null,
     isLoading: Boolean = false,
-    @DrawableRes placeholderRes: Int? = Res.drawable.image_loader,
-    @DrawableRes errorRes: Int? = Res.drawable.image_loader,
+    @DrawableRes placeholderRes: Int? = Res.drawable.image_loading_placeholder,
+    @DrawableRes errorRes: Int? = Res.drawable.image_loading_placeholder,
     shape: Shape = RoundedCornerShape(RadiusToken.none),
     contentScale: ContentScale = ContentScale.Crop,
     crossfade: Boolean = false,
@@ -154,8 +154,8 @@ fun BitmapImageLoader(
 fun VideoThumbnailLoader(
     modifier: Modifier = Modifier,
     videoUrl: String,
-    @DrawableRes placeholderRes: Int? = Res.drawable.image_loader,
-    @DrawableRes errorRes: Int? = Res.drawable.image_loader,
+    @DrawableRes placeholderRes: Int? = Res.drawable.image_loading_placeholder,
+    @DrawableRes errorRes: Int? = Res.drawable.image_loading_placeholder,
     shape: Shape = RoundedCornerShape(RadiusToken.none),
     contentScale: ContentScale = ContentScale.Crop,
 ) {

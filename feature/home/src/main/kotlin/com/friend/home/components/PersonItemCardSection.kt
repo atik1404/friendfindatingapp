@@ -43,7 +43,7 @@ fun PersonItemCardSection(
         AppText(
             text = person.fullName,
             textStyle = AppTypography.bodySmall,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.ExtraBold,
             textColor = MaterialTheme.textColors.white,
             modifier = modifier
                 .appPaddingSymmetric(
@@ -51,7 +51,7 @@ fun PersonItemCardSection(
                     vertical = SpacingToken.micro
                 )
                 .background(
-                    MaterialTheme.surfaceColors.tertiary.copy(alpha = .1f),
+                    MaterialTheme.surfaceColors.tertiary.copy(alpha = .3f),
                     shape = RoundedCornerShape(SpacingToken.medium)
                 )
                 .appPaddingSymmetric(
