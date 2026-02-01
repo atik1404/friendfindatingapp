@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
 import com.friend.designsystem.theme.textColors
@@ -38,6 +40,7 @@ import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.ColoredTextSegment
 import com.friend.ui.components.MultiColorText
+import com.friend.ui.components.ResourceImageLoader
 import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
 
@@ -194,6 +197,26 @@ fun RegistrationScreen(
                     ),
                 )
                 MultiColorText(segments = segments)
+            }
+
+            Spacer(modifier = modifier.height(SpacingToken.medium))
+
+            Column(
+                modifier = modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                ResourceImageLoader(
+                    modifier = modifier.size(IconSizeToken.large),
+                    imageResId = Res.drawable.img_captcha,
+                    contentDescription = stringResource(Res.string.msg_not_robot),
+                )
+                AppCheckbox(
+                    checked = state.form.isCaptchaVerified,
+                    onCheckedChange = {
+                        uiAction.invoke(UiAction.RecaptchaValidation)
+                    },
+                    label = stringResource(Res.string.msg_not_robot)
+                )
             }
 
             Spacer(modifier = modifier.height(SpacingToken.medium))

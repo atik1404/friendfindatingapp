@@ -1,13 +1,23 @@
 package com.friend.di.authrefresh
 
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 
 
-data class RefreshTokenApiResponse(val token: String)
+data class RefreshTokenApiParams(val refreshToken: String)
+
+data class RefreshTokenApiResponse(val data: RefreshTokenResponse?)
+data class RefreshTokenResponse(
+    val authToken: String?,
+    val expireAt: String?,
+    val refreshToken: String?,
+)
+
 interface AuthRefreshApiService {
-    @GET("v1/refresh-token")
-    fun refreshToken(): Call<RefreshTokenApiResponse>
+    @POST("api/Auth/v1/RefreshToken")
+    fun refreshToken(@Body params: RefreshTokenApiParams): Call<RefreshTokenApiResponse>
 }
 
 class AuthRefreshServiceHolder {

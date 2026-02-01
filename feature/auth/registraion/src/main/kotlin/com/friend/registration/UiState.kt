@@ -20,6 +20,7 @@ data class FormData(
     val state: StateApiEntity? = null,
     val city: CityApiEntity? = null,
     val isAgree: Boolean = false,
+    val isCaptchaVerified: Boolean = false,
 )
 
 data class UiState(
@@ -49,6 +50,7 @@ sealed class UiAction {
     data class CheckPrivacyPolicy(val value: Boolean) : UiAction()
     data class SelectBirthDate(val value: String) : UiAction()
     data class ShowDatePicker(val isVisible: Boolean) : UiAction()
+    object RecaptchaValidation : UiAction()
     object PerformRegistration : UiAction()
     object PerformLogin : UiAction()
     object FetchCountry : UiAction()

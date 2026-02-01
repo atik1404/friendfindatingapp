@@ -66,6 +66,7 @@ class RegistrationViewModel @Inject constructor(
             is UiAction.SelectInterestedIn -> onChangeInterest(it.value)
             is UiAction.CheckPrivacyPolicy -> onAgreedPolicy(it.value)
             is UiAction.ShowDatePicker -> onShowDatePicker(it.isVisible)
+            UiAction.RecaptchaValidation -> onRecaptchaVerified()
         }
     }
 
@@ -137,6 +138,13 @@ class RegistrationViewModel @Inject constructor(
     private fun performRegistration() {
         execute {
             val current = _formUiState.value
+
+            if (!current.form.isCaptchaVerified) {
+                setToastMessage(
+                    UiText.StringRes(Res.string.error_not_robot)
+                )
+                return@execute
+            }
 
             val params = PostRegistrationApiUseCase.Params(
                 username = current.form.username.value.trim(),
@@ -254,6 +262,17 @@ class RegistrationViewModel @Inject constructor(
     private fun onChangeInterest(value: Gender) = updateForm { it.copy(interestedIn = value) }
 
     private fun onAgreedPolicy(value: Boolean) = updateForm { it.copy(isAgree = value) }
+
+    private fun onRecaptchaVerified() {
+        execute {
+            setLoading(true)
+            handleRecaptcha { isVerified ->
+                setLoading(false)
+                updateForm { it.copy(isCaptchaVerified = isVerified) }
+            }
+        }
+    }
+
 
     private fun onShowDatePicker(value: Boolean) {
         execute {

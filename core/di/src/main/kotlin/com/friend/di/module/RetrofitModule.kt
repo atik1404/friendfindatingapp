@@ -37,7 +37,8 @@ object RetrofitModule {
     @Singleton
     @JvmStatic
     fun provideConverterFactory(gson: Gson): GsonConverterFactory {
-        return GsonConverterFactory.create(gson)
+        return GsonConverterFactory
+            .create(gson)
     }
 
     @Singleton
@@ -45,6 +46,8 @@ object RetrofitModule {
     @JvmStatic
     fun provideGson(): Gson {
         val gsonBuilder = GsonBuilder()
-        return gsonBuilder.create()
+        return gsonBuilder
+            .disableHtmlEscaping()
+            .create()
     }
 }
