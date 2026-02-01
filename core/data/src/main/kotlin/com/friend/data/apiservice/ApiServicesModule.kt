@@ -1,5 +1,7 @@
 package com.friend.data.apiservice
 
+import com.friend.di.authrefresh.AuthRefreshApiService
+import com.friend.di.authrefresh.AuthRefreshServiceHolder
 import com.friend.di.qualifier.AppBaseUrl
 import dagger.Module
 import dagger.Provides
@@ -17,7 +19,9 @@ object ApiServicesModule {
     @Singleton
     fun provideCredentialApiService(
         @AppBaseUrl retrofit: Retrofit,
+        authRefreshServiceHolder: AuthRefreshServiceHolder,
     ): AuthApiServices {
+        authRefreshServiceHolder.setAuthRefreshApi(retrofit.create(AuthRefreshApiService::class.java))
         return retrofit.create(AuthApiServices::class.java)
     }
 
@@ -25,7 +29,9 @@ object ApiServicesModule {
     @Singleton
     fun provideSearchApiService(
         @AppBaseUrl retrofit: Retrofit,
+        authRefreshServiceHolder: AuthRefreshServiceHolder,
     ): SearchApiServices {
+        authRefreshServiceHolder.setAuthRefreshApi(retrofit.create(AuthRefreshApiService::class.java))
         return retrofit.create(SearchApiServices::class.java)
     }
 
@@ -33,7 +39,9 @@ object ApiServicesModule {
     @Singleton
     fun provideProfileManagerApiService(
         @AppBaseUrl retrofit: Retrofit,
+        authRefreshServiceHolder: AuthRefreshServiceHolder,
     ): ProfileManagerApiServices {
+        authRefreshServiceHolder.setAuthRefreshApi(retrofit.create(AuthRefreshApiService::class.java))
         return retrofit.create(ProfileManagerApiServices::class.java)
     }
 
@@ -41,7 +49,9 @@ object ApiServicesModule {
     @Singleton
     fun provideChatMessagesApiService(
         @AppBaseUrl retrofit: Retrofit,
+        authRefreshServiceHolder: AuthRefreshServiceHolder,
     ): ChatMessageApiServices {
+        authRefreshServiceHolder.setAuthRefreshApi(retrofit.create(AuthRefreshApiService::class.java))
         return retrofit.create(ChatMessageApiServices::class.java)
     }
 }
