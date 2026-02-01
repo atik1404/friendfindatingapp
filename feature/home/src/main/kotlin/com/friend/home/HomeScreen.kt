@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -29,7 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.friend.common.constant.AppConstants
 import com.friend.designsystem.spacing.SpacingToken
-import com.friend.designsystem.spacing.appPadding
+import com.friend.designsystem.spacing.appPaddingHorizontal
 import com.friend.entity.search.FriendSuggestionApiEntity
 import com.friend.home.components.PersonItemCardSection
 import com.friend.home.components.ProfileSummarySection
@@ -65,9 +64,8 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(padding)
                 .consumeWindowInsets(padding)
-                .navigationBarsPadding()
                 .imePadding()
-                .appPadding(SpacingToken.medium)
+                .appPaddingHorizontal(SpacingToken.medium)
         ) {
             Column(
                 modifier = Modifier

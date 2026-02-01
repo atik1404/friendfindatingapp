@@ -1,7 +1,14 @@
 package com.friend.ui.components
 
+import AppDivider
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
@@ -12,7 +19,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.friend.common.constant.AppConstants
+import com.friend.designsystem.spacing.SpacingToken
+import com.friend.designsystem.spacing.appPaddingVertical
 import com.friend.designsystem.theme.backgroundColors
+import com.friend.designsystem.theme.dividerColors
 import com.friend.ui.ads.BannerAds
 
 @Composable
@@ -20,7 +30,7 @@ fun AppScaffold(
     modifier: Modifier = Modifier,
     topBar: @Composable () -> Unit = {},
     isAdsVisible: Boolean = true,
-    //bottomBar: @Composable () -> Unit = {},
+    bottomBar: @Composable () -> Unit = {},
     snackbarHost: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
@@ -32,16 +42,33 @@ fun AppScaffold(
     Scaffold(
         modifier = modifier,
         topBar = topBar,
-        bottomBar = {
-            if (isAdsVisible && !AppConstants.isPremiumUser)
-                BannerAds(modifier = modifier.navigationBarsPadding())
-        },
+        bottomBar = bottomBar,
         snackbarHost = snackbarHost,
         floatingActionButton = floatingActionButton,
         floatingActionButtonPosition = floatingActionButtonPosition,
         containerColor = containerColor,
         contentColor = contentColor,
         contentWindowInsets = contentWindowInsets,
-        content = content
-    )
+    ) { padding ->
+        Column(modifier = Modifier.fillMaxSize()) {
+            Box(modifier = Modifier.weight(1f)) {
+                val topPadding = padding.calculateTopPadding()
+
+                content(PaddingValues(top = topPadding))
+            }
+
+            if (isAdsVisible && !AppConstants.isPremiumUser) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .appPaddingVertical(SpacingToken.micro)
+                        .navigationBarsPadding() // Keeps ad visible above gestures
+                ) {
+                    AppDivider(color = MaterialTheme.dividerColors.primary)
+                    Spacer(modifier = modifier.height(SpacingToken.micro))
+                    BannerAds(modifier = Modifier.fillMaxWidth())
+                }
+            }
+        }
+    }
 }

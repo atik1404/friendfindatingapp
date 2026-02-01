@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.rememberScrollState
@@ -69,7 +68,6 @@ fun ProfileScreen(
             is UiState.ShowProfileData -> {
                 ProfileUi(
                     modifier = modifier
-                        .navigationBarsPadding()         // keep content above system nav bar
                         .imePadding()                    // lift content when keyboard shows
                         .verticalScroll(rememberScrollState())
                         .appPadding(SpacingToken.small),

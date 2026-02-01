@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.rememberScrollState
@@ -67,7 +66,6 @@ fun RegistrationScreen(
                 .fillMaxSize()              // from Scaffold
                 .padding(padding)
                 .consumeWindowInsets(padding)    // prevent double-inset consumption downstream
-                .navigationBarsPadding()         // keep content above system nav bar
                 .imePadding()                    // lift content when keyboard shows
                 .verticalScroll(rememberScrollState()) // simple, contents are small; LazyColumn not necessary
                 .appPadding(SpacingToken.small),

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,9 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.friend.chatlist.components.ChatListSection
 import com.friend.chatlist.components.SearchBarSection
-import com.friend.common.dateparser.DateTimeParser
 import com.friend.designsystem.spacing.SpacingToken
-import com.friend.designsystem.spacing.appPaddingSymmetric
+import com.friend.designsystem.spacing.appPaddingHorizontal
 import com.friend.entity.chatmessage.ChatItemApiEntity
 import com.friend.ui.common.AppToolbar
 import com.friend.ui.common.ErrorType
@@ -28,7 +26,6 @@ import com.friend.ui.common.ErrorUi
 import com.friend.ui.common.LoadingAnimation
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.preview.LightPreview
-import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,11 +51,10 @@ fun ChatListScreen(
                 .fillMaxSize()
                 .padding(padding)
                 .consumeWindowInsets(padding)
-                .navigationBarsPadding()
                 .imePadding()
-                .appPaddingSymmetric(
+                .appPaddingHorizontal(
                     horizontal = SpacingToken.extraSmall,
-                    vertical = SpacingToken.medium
+                    //vertical = SpacingToken.medium
                 )
         ) {
             if (uiState.isLoading)
@@ -85,6 +81,7 @@ fun ChatListScreen(
 
             if (uiState.isFetchSuccess) {
                 Column {
+                    Spacer(modifier = Modifier.height(SpacingToken.medium))
                     SearchBarSection(searchKeyword = uiState.searchKeyword) {
                         action.invoke(UiAction.SearchByKeyword(it))
                     }
@@ -97,7 +94,6 @@ fun ChatListScreen(
                             action.invoke(UiAction.FetchChatList)
                         },
                         onItemClicked = { entity ->
-                            Timber.e("currentDate: ${DateTimeParser.nowLocalDateTime()}")
                             navigateToChatRoom.invoke(entity)
                         }
                     )

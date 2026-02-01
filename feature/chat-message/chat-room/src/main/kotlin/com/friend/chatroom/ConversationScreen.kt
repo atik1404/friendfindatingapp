@@ -110,7 +110,6 @@ fun ConversationScreen(
                 TopBarUiSection(
                     modifier = modifier
                         .statusBarsPadding()
-                        .navigationBarsPadding()
                         .imePadding(),
                     fullName = fullName,
                     userImage = imageUrl,

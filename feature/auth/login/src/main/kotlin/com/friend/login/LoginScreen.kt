@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.rememberScrollState
@@ -37,7 +36,6 @@ import com.friend.designsystem.R as Res
  * - Provides email/password login form
  * - Shows copyright text
  * - Renders a banner ad at the bottom
- *
  * Layout is built with [ConstraintLayout] and supports:
  * - Safe drawing insets
  * - Navigation bar padding
@@ -66,7 +64,6 @@ fun LoginScreen(
                 .fillMaxSize()
                 .padding(padding)                // Apply scaffold-provided padding
                 .consumeWindowInsets(padding)    // Consume to avoid double-insets downstream
-                .navigationBarsPadding()         // Keep content above navigation bar
                 .imePadding()                    // Push content above keyboard
                 .verticalScroll(rememberScrollState()) // Allow scroll on small screens
         ) {
