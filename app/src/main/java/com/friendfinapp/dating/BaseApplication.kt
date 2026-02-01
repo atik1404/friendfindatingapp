@@ -14,7 +14,6 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import coil3.ImageLoader
-import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import coil3.disk.DiskCache
 import coil3.disk.directory
@@ -46,6 +45,8 @@ class BaseApplication : Application(),
     @Inject
     lateinit var sharedPrefHelper: SharedPrefHelper
 
+    private var lastBackgroundTime: Long = 0L
+
     @Inject
     @AppOpenAdId
     lateinit var appOpenAdId: String
@@ -55,7 +56,7 @@ class BaseApplication : Application(),
 
     private val billingClient: BillingClient by lazy {
         BillingClient.newBuilder(this)
-            .setListener { billingResult, purchases ->
+            .setListener { _, _ ->
                 // Handle purchase updates here
             }
             .enablePendingPurchases(
@@ -83,9 +84,14 @@ class BaseApplication : Application(),
         startConnection()
     }
 
+    override fun onStop(owner: LifecycleOwner) {
+        lastBackgroundTime = System.currentTimeMillis()
+    }
+
     override fun onStart(owner: LifecycleOwner) {
         super.onStart(owner)
-        if (!BuildConfig.DEBUG && !AppConstants.isPremiumUser) {
+        val elapsed = System.currentTimeMillis() - lastBackgroundTime
+        if (!AppConstants.isPremiumUser && (lastBackgroundTime == 0L || elapsed > 60_000)) {
             currentActivity?.let { activity ->
                 appOpenAdManager.showAdIfAvailable(activity)
             }
@@ -159,7 +165,7 @@ class BaseApplication : Application(),
         channelName: String,
         soundUri: Uri? = null,
         vibrationPattern: LongArray? = null,
-        isEnableVibration: Boolean = true
+        isEnableVibration: Boolean = true,
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
@@ -200,7 +206,7 @@ class BaseApplication : Application(),
             override fun onBillingSetupFinished(billingResult: BillingResult) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     checkActivePurchases(billingClient) { isPremium ->
-                        if (!BuildConfig.DEBUG && !isPremium) {
+                        if (!isPremium) {
                             appOpenAdManager.loadAd(this@BaseApplication)
                         }
                     }
@@ -234,7 +240,7 @@ class BaseApplication : Application(),
 
     override fun onPurchasesUpdated(
         p0: BillingResult,
-        p1: List<Purchase?>?
+        p1: List<Purchase?>?,
     ) {
     }
 
