@@ -1,6 +1,7 @@
 package com.friend.overview
 
 data class UserInfo(
+    val fullname: String = "",
     val username: String = "",
     val email: String = "",
     val image: String = "",

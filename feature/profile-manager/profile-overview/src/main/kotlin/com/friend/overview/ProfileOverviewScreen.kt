@@ -61,7 +61,8 @@ fun ProfileOverviewScreen(
             ) {
                 ProfileSummaryUi(
                     modifier = Modifier,
-                    name = userInfo.username,
+                    username = userInfo.username,
+                    name = userInfo.fullname,
                     image = userInfo.image,
                     email = userInfo.email,
                 ) {

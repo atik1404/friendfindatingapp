@@ -2,6 +2,7 @@ package com.friend.overview.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.friend.common.utils.BillingManager
 import com.friend.designsystem.spacing.IconSizeToken
@@ -30,9 +32,7 @@ import com.friend.designsystem.spacing.ImageSizeToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.StrokeTokens
 import com.friend.designsystem.spacing.appPadding
-import com.friend.designsystem.spacing.appPaddingHorizontal
 import com.friend.designsystem.spacing.appPaddingOnly
-import com.friend.designsystem.spacing.appPaddingSymmetric
 import com.friend.designsystem.spacing.appPaddingVertical
 import com.friend.designsystem.theme.backgroundColors
 import com.friend.designsystem.theme.strokeColors
@@ -42,14 +42,17 @@ import com.friend.designsystem.typography.AppTypography
 import com.friend.ui.components.AppIconButton
 import com.friend.ui.components.AppText
 import com.friend.ui.components.NetworkImageLoader
+import com.friend.designsystem.R as Res
+
 
 @Composable
 fun ProfileSummaryUi(
     modifier: Modifier,
+    username: String,
     name: String,
     image: String,
     email: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     val isPro by BillingManager.isSubscribed.collectAsState()
 
@@ -71,7 +74,11 @@ fun ProfileSummaryUi(
         ) {
             val picSize = ImageSizeToken.profilePictureSmall
             Box(
-                modifier = modifier.size(picSize)
+                modifier = modifier
+                    .size(picSize)
+                    .clickable {
+                        onClick.invoke()
+                    }
             ) {
                 NetworkImageLoader(
                     url = image,
@@ -105,7 +112,11 @@ fun ProfileSummaryUi(
                 modifier = Modifier.width(SpacingToken.medium)
             )
 
-            Column {
+            Column(
+                modifier = modifier.clickable {
+                    onClick.invoke()
+                }
+            ) {
                 AppText(
                     text = name,
                     textStyle = AppTypography.titleMedium,
@@ -118,8 +129,12 @@ fun ProfileSummaryUi(
                 )
 
                 AppText(
-                    text = email,
-                    textStyle = AppTypography.bodyMedium,
+                    text = stringResource(
+                        Res.string.placeholder_add_two_value_with_divider,
+                        email,
+                        username
+                    ),
+                    textStyle = AppTypography.bodySmall,
                     fontWeight = FontWeight.Light,
                     textColor = MaterialTheme.textColors.primary,
                 )

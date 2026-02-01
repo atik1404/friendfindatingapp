@@ -230,6 +230,7 @@
 
 
     <string name="placeholder_greeting_message">%s, %s</string>
+    <string name="placeholder_add_two_value_with_divider">%s | %s</string>
     <string name="placeholder_message_search_result_count">%s result(s) found for %s</string>
 
     <!--    String resource naming convention-->

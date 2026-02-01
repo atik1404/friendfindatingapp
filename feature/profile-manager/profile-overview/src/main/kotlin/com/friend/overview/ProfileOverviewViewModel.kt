@@ -19,7 +19,7 @@ import javax.inject.Inject
 class ProfileOverviewViewModel @Inject constructor(
     private val logoutApiUseCase: PostLogoutApiUseCase,
     private val deleteAccountApiUseCase: DeleteAccountApiUseCase,
-    private val sharedPrefHelper: SharedPrefHelper
+    private val sharedPrefHelper: SharedPrefHelper,
 ) : BaseViewModel() {
     private val _uiState = MutableStateFlow<UiState>(UiState.Loading(false))
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -40,7 +40,8 @@ class ProfileOverviewViewModel @Inject constructor(
     init {
         _userInfo.update {
             UserInfo(
-                username = sharedPrefHelper.getString(SpKey.fullName),
+                username = sharedPrefHelper.getString(SpKey.userName),
+                fullname = sharedPrefHelper.getString(SpKey.fullName),
                 email = sharedPrefHelper.getString(SpKey.email),
                 image = sharedPrefHelper.getString(SpKey.profilePicture),
                 isLoginByGoogle = sharedPrefHelper.getBoolean(SpKey.isLoginByGoogle)
