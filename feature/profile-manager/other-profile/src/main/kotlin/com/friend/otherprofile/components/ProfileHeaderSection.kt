@@ -39,6 +39,7 @@ import com.friend.designsystem.R as Res
 fun ProfileHeaderSection(
     modifier: Modifier = Modifier,
     isBlocked: Boolean,
+    username: String,
     fullName: String,
     email: String,
     profilePicture: String,
@@ -94,7 +95,7 @@ fun ProfileHeaderSection(
                 )
 
                 AppText(
-                    text = email,
+                    text = username,
                     textStyle = AppTypography.bodyMedium,
                     fontWeight = FontWeight.Light,
                     textColor = MaterialTheme.textColors.primary,
@@ -127,6 +128,7 @@ private fun ScreenPreview() {
     ProfileHeaderSection(
         fullName = "Tom Cruise",
         email = "tom@gmail.com",
+        username = "tom@",
         profilePicture = "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
         onSendMsgClicked = {},
         isBlocked = false

@@ -59,6 +59,7 @@ import com.friend.designsystem.R as Res
 fun ProfileHeaderSection(
     modifier: Modifier = Modifier,
     fullName: String,
+    username: String,
     email: String,
     isImageLoading: Boolean,
     profilePicture: String,
@@ -77,7 +78,7 @@ fun ProfileHeaderSection(
             file?.let {
                 onImageSelected.invoke(file)
             }?.run { Timber.e("Image picker error") }
-        }else {
+        } else {
             Timber.e("Image picker error")
         }
     }
@@ -170,8 +171,12 @@ fun ProfileHeaderSection(
                 )
 
                 AppText(
-                    text = email,
-                    textStyle = AppTypography.bodyMedium,
+                    text = stringResource(
+                        Res.string.placeholder_add_two_value_with_divider,
+                        email,
+                        username
+                    ),
+                    textStyle = AppTypography.bodySmall,
                     fontWeight = FontWeight.Light,
                     textColor = MaterialTheme.textColors.primary,
                     maxLines = 2
@@ -179,10 +184,10 @@ fun ProfileHeaderSection(
             }
 
             AppTextButton(
-                text = stringResource(Res.string.action_edit_profile),
+                text = stringResource(Res.string.action_edit),
                 onClick = onEditClick,
                 textColor = MaterialTheme.textColors.brand,
-                fontWeight = FontWeight.Light
+                fontWeight = FontWeight.Light,
             )
         }
     }
@@ -194,6 +199,7 @@ private fun ScreenPreview() {
     ProfileHeaderSection(
         fullName = "Tom Cruise",
         email = "tom@gmail.com",
+        username = "tom@gmail",
         isImageLoading = true,
         profilePicture = "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
         onEditClick = {},

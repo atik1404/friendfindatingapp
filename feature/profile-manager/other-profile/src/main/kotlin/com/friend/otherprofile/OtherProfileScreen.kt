@@ -122,6 +122,7 @@ private fun ProfileUi(
             modifier = Modifier,
             isBlocked = data.isBlocked,
             fullName = data.profile.fullName,
+            username = data.profile.userName,
             email = data.profile.email,
             profilePicture = data.profile.profilePicture,
             onSendMsgClicked = onSendMsgClicked

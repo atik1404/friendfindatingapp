@@ -5,7 +5,7 @@ import androidx.compose.ui.unit.dp
 object ImageSizeToken {
     val profilePictureSmall = 50.dp
     val profilePictureMedium = 70.dp
-    val profilePictureLarge = 100.dp
+    val profilePictureLarge = 80.dp
 
     val bannerLarge = 8.dp
     val bannerSmall = 8.dp

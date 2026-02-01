@@ -73,6 +73,7 @@
     <string name="action_monthly">1 Month</string>
     <string name="action_manage_subscription">Manage Subscription</string>
     <string name="action_edit_profile">Edit Profile</string>
+    <string name="action_edit">Edit</string>
     <string name="action_retry">Try again</string>
     <string name="action_gallery">Gallery</string>
     <string name="action_camera">Camera</string>

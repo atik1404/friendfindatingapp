@@ -100,6 +100,7 @@ private fun ProfileUi(
     ) {
         ProfileHeaderSection(
             modifier = Modifier,
+            username = data.userName,
             fullName = data.fullName,
             email = data.email,
             isImageLoading = isImageLoading,
