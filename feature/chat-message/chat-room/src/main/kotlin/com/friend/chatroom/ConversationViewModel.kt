@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 import com.friend.designsystem.R as Res
@@ -85,7 +84,7 @@ class ConversationViewModel @Inject constructor(
         pollingJob = viewModelScope.launch {
             while (isActive) {
                 fetchMessages(toUsername)
-                delay(6_000L)
+                delay(10_000L)
             }
         }
     }

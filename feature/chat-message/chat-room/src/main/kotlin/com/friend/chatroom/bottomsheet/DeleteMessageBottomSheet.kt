@@ -44,6 +44,7 @@ fun DeleteMessageBottomSheet(
                 text = stringResource(Res.string.menu_delete_message),
                 onClick = {
                     onDelete.invoke()
+                    onDismissRequest.invoke()
                 },
             )
         }
