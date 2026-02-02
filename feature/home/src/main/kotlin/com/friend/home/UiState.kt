@@ -26,6 +26,10 @@ data class FilterUiState(
     val smoking: String? = null,
     val drinking: String? = null,
     val isSearchApply: Boolean = false,
+
+    val countries: List<CountryApiEntity> = emptyList(),
+    val states: List<StateApiEntity> = emptyList(),
+    val cities: List<CityApiEntity> = emptyList(),
 )
 
 data class UiState(
@@ -35,10 +39,6 @@ data class UiState(
     val isLoadingMore: Boolean = false,
     val pageNo: Int = 0,
     val hasMorePage: Boolean = true,
-
-    val countries: List<CountryApiEntity> = emptyList(),
-    val states: List<StateApiEntity> = emptyList(),
-    val cities: List<CityApiEntity> = emptyList(),
 )
 
 sealed interface UiAction {

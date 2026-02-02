@@ -227,8 +227,10 @@ class HomeViewModel @Inject constructor(
                     is ApiResult.Error -> {}
                     is ApiResult.Loading -> {}
                     is ApiResult.Success -> {
-                        _uiState.update {
-                            it.copy(countries = result.data)
+                        _filterUiState.update {
+                            it.copy(
+                                countries = result.data
+                            )
                         }
                     }
                 }
@@ -245,7 +247,7 @@ class HomeViewModel @Inject constructor(
                     is ApiResult.Error -> {}
                     is ApiResult.Loading -> {}
                     is ApiResult.Success -> {
-                        _uiState.update {
+                        _filterUiState.update {
                             it.copy(states = result.data)
                         }
                     }
@@ -271,7 +273,7 @@ class HomeViewModel @Inject constructor(
                         is ApiResult.Error -> {}
                         is ApiResult.Loading -> {}
                         is ApiResult.Success -> {
-                            _uiState.update {
+                            _filterUiState.update {
                                 it.copy(cities = result.data)
                             }
                         }

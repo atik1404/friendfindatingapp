@@ -143,10 +143,11 @@ fun ProfileInformationSection(
             )
 
             LabeledValue(
-                title = stringResource(Res.string.label_country),
-                value = data.country,
+                title = stringResource(Res.string.label_title),
+                value = data.title,
                 modifier = Modifier.weight(1f),
-                alignment = Alignment.End
+                alignment = Alignment.End,
+                maxLines = 5
             )
         }
 
@@ -156,9 +157,16 @@ fun ProfileInformationSection(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             LabeledValue(
+                title = stringResource(Res.string.label_country),
+                value = data.country,
+                modifier = Modifier.weight(1f),
+            )
+
+            LabeledValue(
                 title = stringResource(Res.string.label_city),
                 value = data.city,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                alignment = Alignment.CenterHorizontally,
             )
 
             LabeledValue(

@@ -14,10 +14,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -33,6 +29,7 @@ import com.friend.designsystem.spacing.appPaddingHorizontal
 import com.friend.designsystem.theme.buttonColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
+import com.friend.home.components.AddressSection
 import com.friend.ui.common.GenderSelection
 import com.friend.ui.common.bottomsheet.ShowBottomSheet
 import com.friend.ui.components.AppBaseTextField
@@ -62,7 +59,7 @@ fun FilterUserBottomSheet(
     ) {
         FilterUi(
             modifier = modifier,
-            filterUiState = filterUiState,
+            state = filterUiState,
             onAction = onAction,
             onResetFilter = {
                 onAction.invoke(UiAction.ResetFilter)
@@ -78,7 +75,7 @@ fun FilterUserBottomSheet(
 @Composable
 private fun FilterUi(
     modifier: Modifier = Modifier,
-    filterUiState: FilterUiState,
+    state: FilterUiState,
     onAction: (UiAction) -> Unit,
     onSearchApply: () -> Unit,
     onResetFilter: () -> Unit,
@@ -92,7 +89,7 @@ private fun FilterUi(
                 .verticalScroll(rememberScrollState())
         ) {
             AppOutlineTextField(
-                text = filterUiState.username,
+                text = state.username,
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(Res.string.label_username),
                 placeholder = stringResource(Res.string.hint_user_name),
@@ -115,8 +112,8 @@ private fun FilterUi(
             Spacer(Modifier.height(SpacingToken.micro))
 
             AgeRangeUi(
-                minAge = filterUiState.fromAge,
-                maxAge = filterUiState.toAge,
+                minAge = state.fromAge,
+                maxAge = state.toAge,
                 onFromAgeChange = { onAction.invoke(UiAction.OnChangeFromAge(it)) },
                 onToAgeChange = { onAction.invoke(UiAction.OnChangeToAge(it)) },
             )
@@ -125,7 +122,7 @@ private fun FilterUi(
 
             GenderSelection(
                 title = stringResource(Res.string.label_am_looking_for),
-                selectedValue = Gender.fromValue(filterUiState.gender).name,
+                selectedValue = Gender.fromValue(state.gender).name,
             ) {
                 onAction.invoke(UiAction.OnChangeGender(it))
             }
@@ -134,13 +131,31 @@ private fun FilterUi(
 
             GenderSelection(
                 title = stringResource(Res.string.label_seeking_for),
-                selectedValue = Gender.fromValue(filterUiState.interestedIn).name,
+                selectedValue = Gender.fromValue(state.interestedIn).name,
             ) {
                 onAction.invoke(UiAction.OnChangeInterested(it))
             }
 
-            //Spacer(modifier = Modifier.height(SpacingToken.medium))
-            //AddressField()
+            Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+            AddressSection(
+                modifier = modifier,
+                selectedCountry = state.country ?: "",
+                selectedState = state.state ?: "",
+                selectedCity = state.city ?: "",
+                countries = state.countries,
+                states = state.states,
+                cities = state.cities,
+                onCountryChange = {
+                    onAction.invoke(UiAction.OnSelectCountry(it))
+                },
+                onStateChange = {
+                    onAction.invoke(UiAction.OnSelectState(it))
+                },
+                onCityChange = {
+                    onAction.invoke(UiAction.OnSelectCity(it))
+                }
+            )
 
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
@@ -154,7 +169,7 @@ private fun FilterUi(
                     label = stringResource(Res.string.label_body_type),
                     placeholder = stringResource(Res.string.hint_select_item),
                     onValueChange = { onAction.invoke(UiAction.BodyTypeChanged(it)) },
-                    value = filterUiState.bodyType ?: ""
+                    value = state.bodyType ?: ""
                 )
 
                 Spacer(modifier = Modifier.width(SpacingToken.medium))
@@ -165,7 +180,7 @@ private fun FilterUi(
                     label = stringResource(Res.string.label_looking_for),
                     placeholder = stringResource(Res.string.hint_select_item),
                     onValueChange = { onAction.invoke(UiAction.LookingForChanged(it)) },
-                    value = filterUiState.lookingFor ?: ""
+                    value = state.lookingFor ?: ""
                 )
             }
             Spacer(Modifier.height(SpacingToken.medium))
@@ -180,7 +195,7 @@ private fun FilterUi(
                     label = stringResource(Res.string.label_height),
                     placeholder = stringResource(Res.string.hint_select_item),
                     onValueChange = { onAction.invoke(UiAction.HeightChanged(it)) },
-                    value = filterUiState.height ?: ""
+                    value = state.height ?: ""
                 )
 
                 Spacer(modifier = Modifier.width(SpacingToken.medium))
@@ -191,7 +206,7 @@ private fun FilterUi(
                     label = stringResource(Res.string.label_weight),
                     placeholder = stringResource(Res.string.hint_select_item),
                     onValueChange = { onAction.invoke(UiAction.WeightChanged(it)) },
-                    value = filterUiState.weight ?: ""
+                    value = state.weight ?: ""
                 )
             }
 
@@ -207,7 +222,7 @@ private fun FilterUi(
                     label = stringResource(Res.string.label_eyes),
                     placeholder = stringResource(Res.string.hint_select_item),
                     onValueChange = { onAction.invoke(UiAction.EyesChanged(it)) },
-                    value = filterUiState.eyes ?: ""
+                    value = state.eyes ?: ""
                 )
 
                 Spacer(modifier = Modifier.width(SpacingToken.medium))
@@ -218,7 +233,7 @@ private fun FilterUi(
                     label = stringResource(Res.string.label_hair),
                     placeholder = stringResource(Res.string.hint_select_item),
                     onValueChange = { onAction.invoke(UiAction.HairChanged(it)) },
-                    value = filterUiState.hair ?: ""
+                    value = state.hair ?: ""
                 )
             }
 
@@ -235,7 +250,7 @@ private fun FilterUi(
                     label = stringResource(Res.string.label_smoking),
                     placeholder = stringResource(Res.string.hint_select_item),
                     onValueChange = { onAction.invoke(UiAction.SmokingChanged(it)) },
-                    value = filterUiState.smoking ?: ""
+                    value = state.smoking ?: ""
                 )
 
                 Spacer(modifier = Modifier.width(SpacingToken.medium))
@@ -246,7 +261,7 @@ private fun FilterUi(
                     label = stringResource(Res.string.label_drinking),
                     placeholder = stringResource(Res.string.hint_select_item),
                     onValueChange = { onAction.invoke(UiAction.DrinkingChanged(it)) },
-                    value = filterUiState.drinking ?: ""
+                    value = state.drinking ?: ""
                 )
             }
 
@@ -257,7 +272,7 @@ private fun FilterUi(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 AppCheckbox(
-                    checked = filterUiState.isOnlineUser,
+                    checked = state.isOnlineUser,
                     onCheckedChange = { onAction.invoke(UiAction.OnlineUserChanged(it)) },
                     label = stringResource(Res.string.msg_online_user_only)
                 )
@@ -265,7 +280,7 @@ private fun FilterUi(
                 Spacer(modifier = Modifier.height(SpacingToken.extraSmall))
 
                 AppCheckbox(
-                    checked = filterUiState.isPhotoRequired,
+                    checked = state.isPhotoRequired,
                     onCheckedChange = { onAction.invoke(UiAction.PhotoRequiredChanged(it)) },
                     label = stringResource(Res.string.msg_photo_required)
                 )
@@ -348,62 +363,10 @@ private fun AgeRangeUi(
 }
 
 @Composable
-private fun AddressField() {
-    var text by remember { mutableStateOf("") }
-
-    val cities = listOf(
-        "Dhaka",
-        "Chattogram",
-        "Rajshahi",
-        "Khulna",
-        "Sylhet",
-        "Barishal",
-        "Rangpur",
-        "Mymensingh"
-    )
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        AutoCompleteTextField(
-            allOptions = cities,
-            modifier = Modifier.fillMaxWidth(),
-            label = stringResource(Res.string.label_country),
-            placeholder = stringResource(Res.string.hint_select_item),
-            onValueChange = { text = it },
-            value = text
-        )
-
-        Spacer(modifier = Modifier.height(SpacingToken.medium))
-
-        Row {
-            AutoCompleteTextField(
-                allOptions = cities,
-                modifier = Modifier.weight(1f),
-                label = stringResource(Res.string.label_state),
-                placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { text = it },
-                value = text
-            )
-
-            Spacer(modifier = Modifier.width(SpacingToken.medium))
-
-            AutoCompleteTextField(
-                allOptions = cities,
-                modifier = Modifier.weight(1f),
-                label = stringResource(Res.string.label_city),
-                placeholder = stringResource(Res.string.hint_select_item),
-                onValueChange = { text = it },
-                value = text
-            )
-        }
-    }
-}
-
-@Composable
 @LightPreview
 private fun ScreenPreview() {
     FilterUi(
-        filterUiState = FilterUiState(),
+        state = FilterUiState(),
         onAction = {},
         onSearchApply = {},
         onResetFilter = {},
