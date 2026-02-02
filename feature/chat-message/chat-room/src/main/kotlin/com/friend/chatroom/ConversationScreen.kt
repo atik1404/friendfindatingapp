@@ -112,6 +112,7 @@ fun ConversationScreen(
                         .statusBarsPadding()
                         .imePadding(),
                     fullName = fullName,
+                    username = toUsername,
                     userImage = imageUrl,
                     isBlocked = uiState.isBlocked,
                     isAdministrator = isAdministrator,

@@ -7,12 +7,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.friend.chatroom.bottomsheet.ReportUserBottomSheet
 import com.friend.ui.components.PopupMenuType
+import com.friend.designsystem.R as Res
 
 @Composable
 fun TopBarUiSection(
     fullName: String,
+    username: String,
     userImage: String,
     isBlocked: Boolean,
     isAdministrator: Boolean,
@@ -44,7 +47,11 @@ fun TopBarUiSection(
     else ProfileInfoHeader(
         isBlocked = isBlocked,
         isAdministrator = isAdministrator,
-        fullName = fullName,
+        fullName = stringResource(
+            Res.string.placeholder_add_two_value_with_divider,
+            fullName,
+            username
+        ),
         userImage = userImage,
         modifier = modifier,
         backToChatListScreen = onBackButtonClicked,
