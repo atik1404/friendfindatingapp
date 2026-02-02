@@ -4,8 +4,14 @@ import com.friend.common.base.BaseViewModel
 import com.friend.common.constant.AppConstants
 import com.friend.common.constant.Gender
 import com.friend.domain.apiusecase.auth.UpdateFcmTokenApiUseCase
+import com.friend.domain.apiusecase.search.FetchCityApiUseCase
+import com.friend.domain.apiusecase.search.FetchCountriesUseCase
 import com.friend.domain.apiusecase.search.FetchFriendSuggestionApiUseCase
+import com.friend.domain.apiusecase.search.FetchStateApiUseCase
 import com.friend.domain.base.ApiResult
+import com.friend.entity.search.CityApiEntity
+import com.friend.entity.search.CountryApiEntity
+import com.friend.entity.search.StateApiEntity
 import com.friend.sharedpref.SharedPrefHelper
 import com.friend.sharedpref.SpKey
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +26,9 @@ class HomeViewModel @Inject constructor(
     private val sharedPrefHelper: SharedPrefHelper,
     private val fetchFriendSuggestionApiUseCase: FetchFriendSuggestionApiUseCase,
     private val updateFcmTokenApiUseCase: UpdateFcmTokenApiUseCase,
+    private val fetchCityApiUseCase: FetchCityApiUseCase,
+    private val fetchStateApiUseCase: FetchStateApiUseCase,
+    private val fetchCountryApiUseCase: FetchCountriesUseCase,
 ) : BaseViewModel() {
     private val _fullName = MutableStateFlow("")
     val fullName: StateFlow<String> = _fullName.asStateFlow()
@@ -56,10 +65,14 @@ class HomeViewModel @Inject constructor(
             UiAction.SetCurrentUserInfo -> setCurrentUserInfo()
             UiAction.ResetFilter -> onResetFilter()
             UiAction.OnFilterApply -> onFilterApply()
+            is UiAction.OnSelectCity -> onChangeCity(it.value)
+            is UiAction.OnSelectCountry -> onChangeCountry(it.value)
+            is UiAction.OnSelectState -> onChangeState(it.value)
         }
     }
 
     init {
+        fetchCountries()
         updateFcmToken()
         fetchFriendSuggestions()
     }
@@ -204,6 +217,79 @@ class HomeViewModel @Inject constructor(
                     }
                 }
         }
+    }
+
+
+    private fun fetchCountries() {
+        execute {
+            fetchCountryApiUseCase.execute().collect { result ->
+                when (result) {
+                    is ApiResult.Error -> {}
+                    is ApiResult.Loading -> {}
+                    is ApiResult.Success -> {
+                        _uiState.update {
+                            it.copy(countries = result.data)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun fetchStates() {
+        execute {
+            val current = _filterUiState.value
+            val selectedCountry = current.country ?: ""
+            fetchStateApiUseCase.execute(selectedCountry).collect { result ->
+                when (result) {
+                    is ApiResult.Error -> {}
+                    is ApiResult.Loading -> {}
+                    is ApiResult.Success -> {
+                        _uiState.update {
+                            it.copy(states = result.data)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun fetchCities() {
+        execute {
+            val current = _filterUiState.value
+            val selectedCountry = current.country ?: ""
+            val selectedState = current.state ?: ""
+
+            fetchCityApiUseCase.execute(
+                FetchCityApiUseCase.Params(
+                    selectedCountry,
+                    selectedState
+                )
+            )
+                .collect { result ->
+                    when (result) {
+                        is ApiResult.Error -> {}
+                        is ApiResult.Loading -> {}
+                        is ApiResult.Success -> {
+                            _uiState.update {
+                                it.copy(cities = result.data)
+                            }
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun onChangeCity(value: CityApiEntity) = updateForm { it.copy(city = value.value) }
+
+    private fun onChangeState(value: StateApiEntity) {
+        updateForm { it.copy(state = value.value, city = null) }
+        fetchCities()
+    }
+
+    private fun onChangeCountry(value: CountryApiEntity) {
+        updateForm { it.copy(country = value.value, state = null, city = null) }
+        fetchStates()
     }
 
     fun getUsername() =

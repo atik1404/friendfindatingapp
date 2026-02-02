@@ -1,7 +1,10 @@
 package com.friend.home
 
 import com.friend.common.constant.Gender
+import com.friend.entity.search.CityApiEntity
+import com.friend.entity.search.CountryApiEntity
 import com.friend.entity.search.FriendSuggestionApiEntity
+import com.friend.entity.search.StateApiEntity
 
 data class FilterUiState(
     val gender: Int = 1,
@@ -32,6 +35,10 @@ data class UiState(
     val isLoadingMore: Boolean = false,
     val pageNo: Int = 0,
     val hasMorePage: Boolean = true,
+
+    val countries: List<CountryApiEntity> = emptyList(),
+    val states: List<StateApiEntity> = emptyList(),
+    val cities: List<CityApiEntity> = emptyList(),
 )
 
 sealed interface UiAction {
@@ -54,4 +61,7 @@ sealed interface UiAction {
     data class LookingForChanged(val value: String) : UiAction
     data class PhotoRequiredChanged(val value: Boolean) : UiAction
     data class OnlineUserChanged(val value: Boolean) : UiAction
+    data class OnSelectCountry(val value: CountryApiEntity) : UiAction
+    data class OnSelectState(val value: StateApiEntity) : UiAction
+    data class OnSelectCity(val value: CityApiEntity) : UiAction
 }
