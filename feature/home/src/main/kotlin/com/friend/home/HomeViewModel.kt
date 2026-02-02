@@ -41,7 +41,13 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private val _filterUiState =
-        MutableStateFlow(FilterUiState())
+        MutableStateFlow(
+            FilterUiState(
+                country = sharedPrefHelper.getString(SpKey.country),
+                state = sharedPrefHelper.getString(SpKey.state),
+                city = sharedPrefHelper.getString(SpKey.city),
+            )
+        )
     val filterUiState: StateFlow<FilterUiState> = _filterUiState.asStateFlow()
 
     val action: (UiAction) -> Unit = {
@@ -73,6 +79,9 @@ class HomeViewModel @Inject constructor(
 
     init {
         fetchCountries()
+        fetchStates()
+        fetchCities()
+
         updateFcmToken()
         fetchFriendSuggestions()
     }
@@ -181,6 +190,9 @@ class HomeViewModel @Inject constructor(
 
             _filterUiState.value = FilterUiState(
                 isSearchApply = false,
+                country = sharedPrefHelper.getString(SpKey.country),
+                state = sharedPrefHelper.getString(SpKey.state),
+                city = sharedPrefHelper.getString(SpKey.city),
             )
             fetchFriendSuggestions()
         }
@@ -218,7 +230,6 @@ class HomeViewModel @Inject constructor(
                 }
         }
     }
-
 
     private fun fetchCountries() {
         execute {
