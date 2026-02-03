@@ -23,7 +23,7 @@ class ChatListViewModel @Inject constructor(
             UiAction.FetchChatList -> fetchChatList()
             is UiAction.SearchByKeyword -> onSearchKeywordChange(it.value)
             UiAction.LoadMore -> fetchChatList()
-            UiAction.ResetState -> _uiState.value = UiState()
+            UiAction.ResetState -> resetState()
         }
     }
 
