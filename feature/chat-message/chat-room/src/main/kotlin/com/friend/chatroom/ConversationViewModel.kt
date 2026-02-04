@@ -101,11 +101,7 @@ class ConversationViewModel @Inject constructor(
                     is ApiResult.Error -> _uiState.value =
                         _uiState.value.copy(error = result.message)
 
-                    is ApiResult.Loading -> {
-                        if (!_uiState.value.isAlreadyFetched)
-                            _uiState.value =
-                                _uiState.value.copy(isLoading = result.loading)
-                    }
+                    is ApiResult.Loading -> {}
 
                     is ApiResult.Success -> {
                         val selectedItems =
@@ -115,9 +111,9 @@ class ConversationViewModel @Inject constructor(
                         val conversations = result.data.data.map {
                             it.copy(isItemSelected = selectedItems.contains(it.messageId))
                         }
-                        val isMyMessage = conversations.last().isMyMessage
+                        val isMyMessage = conversations.lastOrNull()?.isMyMessage
 
-                        if (totalConversationLength != 0 && totalConversationLength < conversations.size && !isMyMessage) {
+                        if (totalConversationLength != 0 && totalConversationLength < conversations.size && isMyMessage == false) {
                             showIncomingMessageLoading()
                             delay(500)
                             updateConversations(conversations, result.data.isBlocked)
@@ -137,7 +133,8 @@ class ConversationViewModel @Inject constructor(
                 conversations = conversation.reversed(),
                 isSearchEnabled = false,
                 isIncoming = false,
-                isBlocked = isBlocked
+                isBlocked = isBlocked,
+                error = "",
             )
         }
     }

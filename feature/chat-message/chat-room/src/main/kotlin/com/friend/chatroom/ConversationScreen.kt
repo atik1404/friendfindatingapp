@@ -45,6 +45,7 @@ import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingOnly
 import com.friend.designsystem.theme.dividerColors
 import com.friend.designsystem.theme.textColors
+import com.friend.ui.common.ErrorUi
 import com.friend.ui.common.LoadingUi
 import com.friend.ui.common.TypingAnimation
 import com.friend.ui.components.AppScaffold
@@ -240,6 +241,16 @@ fun ConversationScreen(
                     },
                     onCancelRecording = {
                         onAction.invoke(UiAction.OnCancelRecording)
+                    }
+                )
+            }
+
+            if (uiState.error.isNotEmpty()) {
+                ErrorUi(
+                    message = uiState.error,
+                    modifier = modifier.align(Alignment.Center),
+                    onRetry = {
+                        onAction.invoke(UiAction.FetchMessages(toUsername))
                     }
                 )
             }

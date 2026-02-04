@@ -68,7 +68,7 @@ fun OtherProfileScreen(
                     .consumeWindowInsets(padding),
                 message = uiState.message
             ) {
-                uiAction.invoke(PerformBlockUnblock(username))
+                uiAction.invoke(UiAction.FetchProfile(username = username))
             }
 
             UiState.Loading -> LoadingUi(
@@ -183,7 +183,7 @@ private fun ScreenPreview() {
             )
         ),
         onBackButtonClicked = {},
-        navigateToMessageRoom = { a, b, c -> },
+        navigateToMessageRoom = { _, _, _ -> },
         navigateToReportAbuse = {},
         username = "",
         isBlocked = false,
