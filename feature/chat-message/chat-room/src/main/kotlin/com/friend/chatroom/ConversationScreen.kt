@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -93,14 +92,12 @@ fun ConversationScreen(
 
     AppScaffold(
         contentWindowInsets = WindowInsets.safeDrawing,
-        isAdsVisible = false
     ) { padding ->
         Box(
             modifier = modifier
                 .fillMaxSize()
                 .padding(padding)
                 .consumeWindowInsets(padding)
-                .navigationBarsPadding()
                 .imePadding()
         ) {
             Column(

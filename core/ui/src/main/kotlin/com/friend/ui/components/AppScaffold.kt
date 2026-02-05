@@ -57,18 +57,8 @@ fun AppScaffold(
                 content(PaddingValues(top = topPadding))
             }
 
-            if (isAdsVisible && !AppConstants.isPremiumUser) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .appPaddingVertical(SpacingToken.micro)
-                        .navigationBarsPadding() // Keeps ad visible above gestures
-                ) {
-                    AppDivider(color = MaterialTheme.dividerColors.primary)
-                    Spacer(modifier = modifier.height(SpacingToken.micro))
-                    BannerAds(modifier = Modifier.fillMaxWidth())
-                }
-            }
+            if (isAdsVisible && !AppConstants.isPremiumUser)
+                BannerAds(modifier = Modifier.fillMaxWidth())
         }
     }
 }

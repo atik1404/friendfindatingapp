@@ -1,7 +1,12 @@
 package com.friend.ui.ads
 
+import AppDivider
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -17,6 +22,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.friend.designsystem.spacing.SpacingToken
+import com.friend.designsystem.spacing.appPaddingVertical
+import com.friend.designsystem.theme.dividerColors
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
@@ -27,7 +35,7 @@ import com.friend.designsystem.R as Res
 @Composable
 fun BannerAds(
     modifier: Modifier = Modifier,
-    adUnitId: String = stringResource(Res.string.BannerAdsUnitId)//"ca-app-pub-3940256099942544/6300978111",
+    adUnitId: String = "ca-app-pub-3940256099942544/6300978111",
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -74,11 +82,21 @@ fun BannerAds(
         }
     }
 
-    if (isLoaded)
-        AndroidView(
-            factory = { adView },
-            modifier = modifier
+    if (isLoaded){
+        Column(
+            modifier = Modifier
                 .fillMaxWidth()
-                .height(50.dp)
-        )
+                .appPaddingVertical(SpacingToken.micro)
+                .navigationBarsPadding() // Keeps ad visible above gestures
+        ) {
+            AppDivider(color = MaterialTheme.dividerColors.primary)
+            Spacer(modifier = modifier.height(SpacingToken.micro))
+            AndroidView(
+                factory = { adView },
+                modifier = modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+            )
+        }
+    }
 }

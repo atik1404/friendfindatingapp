@@ -53,6 +53,7 @@ fun FilterUserBottomSheet(
     ShowBottomSheet(
         heightRatio = .7f,
         cancellable = false,
+        isExpand = true,
         onDismissRequest = onDismissRequest,
         title = stringResource(Res.string.title_individual_search),
         titleColor = MaterialTheme.textColors.primary

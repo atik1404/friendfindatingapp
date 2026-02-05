@@ -88,8 +88,8 @@ private fun BlockedUserItem(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         NetworkImageLoader(
-            url = "https://images.mubicdn.net/images/cast_member/2184/cache-2992-1547409411/image-w856.jpg",
-            name = "ABCD",
+            url = user.userImage,
+            name = user.fullName,
             shape = CircleShape,
             modifier = modifier.size(IconSizeToken.large)
         )

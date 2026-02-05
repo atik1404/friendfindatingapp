@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,15 +39,17 @@ fun ShowBottomSheet(
     titleColor: Color = MaterialTheme.textColors.primary,
     onDismissRequest: () -> Unit,
     cancellable: Boolean = true,
+    isExpand: Boolean = false,
     heightRatio: Float = 0.75f,
     content: @Composable () -> Unit
 ) {
-    val sheetState = rememberStandardBottomSheetState(
-        skipHiddenState = !cancellable,
+    val sheetState = rememberModalBottomSheetState( // Use Modal state for ModalBottomSheet
+        skipPartiallyExpanded = isExpand, // Forces it to go straight to full height
         confirmValueChange = { target ->
-            !(!cancellable && target == SheetValue.Hidden) // don't let it hide
+            !(!cancellable && target == SheetValue.Hidden)
         }
     )
+
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,

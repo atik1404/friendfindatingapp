@@ -101,7 +101,10 @@ class ConversationViewModel @Inject constructor(
                     is ApiResult.Error -> _uiState.value =
                         _uiState.value.copy(error = result.message)
 
-                    is ApiResult.Loading -> {}
+                    is ApiResult.Loading -> {
+                        if (!_uiState.value.isAlreadyFetched)
+                            _uiState.update {  it.copy(isLoading = result.loading) }
+                    }
 
                     is ApiResult.Success -> {
                         val selectedItems =

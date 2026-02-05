@@ -67,7 +67,7 @@ fun BirthDateSelection(
     modifier: Modifier = Modifier
 ) {
     AppOutlineTextField(
-        text = DateTimeParser.parseToPattern(selectedDate, DateTimePatterns.DMY_TEXT),
+        text = DateTimeParser.parseToPattern(selectedDate, DateTimePatterns.MDY_TEXT_COMMA),
         modifier = modifier.fillMaxWidth(),
         title = stringResource(Res.string.label_date_of_birth),
         placeholder = stringResource(Res.string.hint_dob),

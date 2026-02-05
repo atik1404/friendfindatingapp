@@ -16,11 +16,12 @@ import androidx.compose.ui.res.stringResource
 import com.friend.common.dateparser.DateTimeParser
 import com.friend.common.dateparser.DateTimePatterns
 import com.friend.designsystem.spacing.RadiusToken
-import com.friend.designsystem.R as Res
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
 import com.friend.designsystem.theme.backgroundColors
 import com.friend.entity.profilemanager.ProfileApiEntity
+import com.friend.ui.preview.LightPreview
+import com.friend.designsystem.R as Res
 
 @Composable
 fun ProfileInformationSection(
@@ -143,8 +144,8 @@ fun ProfileInformationSection(
             )
 
             LabeledValue(
-                title = stringResource(Res.string.label_title),
-                value = data.title,
+                title = stringResource(Res.string.label_looking_for),
+                value = data.lookingFor,
                 modifier = Modifier.weight(1f),
                 alignment = Alignment.End,
                 maxLines = 5
@@ -160,23 +161,34 @@ fun ProfileInformationSection(
                 title = stringResource(Res.string.label_country),
                 value = data.country,
                 modifier = Modifier.weight(1f),
+                maxLines = 3
             )
 
             LabeledValue(
                 title = stringResource(Res.string.label_city),
                 value = data.city,
                 modifier = Modifier.weight(1f),
-                alignment = Alignment.CenterHorizontally
+                alignment = Alignment.CenterHorizontally,
+                maxLines = 3
             )
 
             LabeledValue(
                 title = stringResource(Res.string.label_state),
                 value = data.state,
                 modifier = Modifier.weight(1f),
-                alignment = Alignment.End
+                alignment = Alignment.End,
+                maxLines = 3
             )
         }
 
+        Spacer(modifier = Modifier.height(SpacingToken.medium))
+
+        LabeledValue(
+            title = stringResource(Res.string.label_title),
+            value = data.title,
+            modifier = Modifier.fillMaxWidth(),
+            maxLines = 5
+        )
         Spacer(modifier = Modifier.height(SpacingToken.medium))
 
         LabeledValue(
@@ -204,4 +216,37 @@ fun ProfileInformationSection(
             maxLines = 5
         )
     }
+}
+
+@LightPreview
+@Composable
+private fun ScreenPreview() {
+    ProfileInformationSection(
+        data = ProfileApiEntity(
+            userName = "Tom Cruise",
+            fullName = "Tom Cruise",
+            gender = "Male",
+            birthdate = "September 29, 1995",
+            email = "tom@gmail.com",
+            interestedIn = "Female",
+            country = "Bangladesh",
+            state = "Dhaka",
+            city = "Dhaka",
+            zipCode = "",
+            profilePicture = "https://images.mubicdn.net/images/cast_member/2184/cache-",
+            bodyType = "",
+            drinking = "",
+            eyes = "",
+            hair = "",
+            height = "",
+            interests = "",
+            lookingFor = "",
+            smoking = "",
+            aboutYou = "",
+            title = "",
+            weight = "",
+            whatsUp = "",
+            isProfileComplete = false
+        )
+    )
 }

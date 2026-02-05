@@ -21,7 +21,7 @@ object AppConstants {
     var Hairs = listOf("Brown", "Blond", "Black", "Gray", "White", "Red", "Bald")
     var Smoking = listOf("No", "Sometimes", "Often", "Smoker", "Total addict")
     var Drinking = listOf("No", "Often", "Only in company", "Daily", "Alcoholic")
-    var interest = listOf("Computer", "Music", "Nature", "Adventure", "Movie", "Chat", "Sports")
+    var interest = listOf("Computers", "Music", "Nature", "Adventures", "Sport", "Movies", "Chat")
 
     var Height = listOf(
         "4' 0\" - 121cm",

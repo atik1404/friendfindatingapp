@@ -1,25 +1,20 @@
 package com.friend.policy
 
-import androidx.compose.foundation.layout.Column
+import android.view.ViewGroup
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import com.friend.designsystem.spacing.SpacingToken
-import com.friend.designsystem.spacing.appPadding
+import androidx.compose.ui.viewinterop.AndroidView
 import com.friend.ui.common.AppToolbar
 import com.friend.ui.components.AppScaffold
-import com.friend.ui.components.AppText
 import com.friend.ui.preview.LightPreview
-import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,26 +25,47 @@ fun PrivacyPolicyScreen(
         contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
             AppToolbar(
-                title = stringResource(Res.string.title_privacy_policy),
-                onBackClick = {
-                    onBackClick.invoke()
-                })
-        }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .consumeWindowInsets(padding)
-                .verticalScroll(rememberScrollState())
-                .imePadding()
-                .appPadding(SpacingToken.medium)
-        ) {
-            AppText(
-                text = stringResource(Res.string.msg_privacy_policy),
-                maxLines = Int.MAX_VALUE
+                title = "",
+                onBackClick = onBackClick,
             )
         }
+    ) { padding ->
+        AndroidView(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize(),
+            factory = { context ->
+                WebView(context).apply {
+                    layoutParams = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                    )
+
+                    // Disable interactions
+                    isClickable = false
+                    isLongClickable = false
+                    setOnLongClickListener { true }
+                    isHapticFeedbackEnabled = false
+
+                    settings.apply {
+                        javaScriptEnabled = false
+                        setSupportZoom(false)
+                        displayZoomControls = false
+                    }
+
+                    webViewClient = object : WebViewClient() {
+                        override fun shouldOverrideUrlLoading(
+                            view: WebView?,
+                            request: WebResourceRequest?
+                        ): Boolean {
+                            // Block all link/email navigation
+                            return true
+                        }
+                    }
+                    loadUrl("file:///android_asset/privacy_policy.html")
+                }
+            }
+        )
     }
 }
 
