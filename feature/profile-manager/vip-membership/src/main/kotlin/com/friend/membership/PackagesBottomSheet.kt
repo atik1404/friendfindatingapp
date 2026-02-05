@@ -75,6 +75,15 @@ private fun PackageDetails(
             fontWeight = FontWeight.Bold
         )
 
+        Spacer(modifier = modifier.height(SpacingToken.extraSmall))
+
+        AppText(
+            text = stringResource(Res.string.msg_vip_member),
+            fontWeight = FontWeight.Light,
+            maxLines = 3,
+            alignment = TextAlign.Center
+        )
+
         Spacer(modifier = modifier.height(SpacingToken.huge))
 
         AppElevatedButton(

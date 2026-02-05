@@ -162,6 +162,7 @@
     <string name="msg_search_members_from_other_countries">Search members from other countries!</string>
     <string name="msg_search_members_from_other_countries_description">you can search members not only from your country but also from other countries. There is no limit.</string>
     <string name="msg_get_more_in_vip">Get more with VIP membership</string>
+    <string name="msg_vip_member">Users will be able to use the application without viewing any advertisements.</string>
     <string name="msg_forgot_password_instruction">Enter your email address below and we will send you instructions to reset your password.</string>
     <string name="msg_reset_your_password">Reset your password</string>
     <string name="msg_jump_to_bottom">Jump to Bottom</string>
