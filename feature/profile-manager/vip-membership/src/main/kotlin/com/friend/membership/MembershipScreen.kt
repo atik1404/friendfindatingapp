@@ -43,6 +43,7 @@ fun MembershipScreen(
     monthlySubscription: () -> Unit,
     yearlySubscription: () -> Unit,
     manageSubscription: () -> Unit,
+    privacyPolicyClicked: () -> Unit,
 ) {
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
     AppScaffold(
@@ -104,6 +105,10 @@ fun MembershipScreen(
                     manageSubscription = {
                         showBottomSheet = false
                         manageSubscription.invoke()
+                    },
+                    privacyPolicyClicked = {
+                        privacyPolicyClicked.invoke()
+                        showBottomSheet = false
                     }
                 )
         }
@@ -146,5 +151,6 @@ private fun ScreenPreview() {
         monthlySubscription = {},
         yearlySubscription = {},
         manageSubscription = {},
+        privacyPolicyClicked = {},
     )
 }

@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.friend.common.utils.BillingManager
 import com.friend.ui.common.LoadingUi
 import com.friend.ui.showToastMessage
@@ -19,16 +20,17 @@ import com.friend.designsystem.R as Res
 @Composable
 fun MembershipScreenRoute(
     onBackClick: () -> Unit,
+    privacyPolicyClicked: () -> Unit,
     viewModel: BillingViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val activity = context as? Activity
 
-    val products by viewModel.productDetailsList.collectAsState()
-    val isBillingReady by viewModel.isBillingReady.collectAsState()
+    val products by viewModel.productDetailsList.collectAsStateWithLifecycle()
+    val isBillingReady by viewModel.isBillingReady.collectAsStateWithLifecycle()
 
-    val isPro by BillingManager.isSubscribed.collectAsState()
-    val activeSku by BillingManager.activeSku.collectAsState()
+    val isPro by BillingManager.isSubscribed.collectAsStateWithLifecycle()
+    val activeSku by BillingManager.activeSku.collectAsStateWithLifecycle()
 
     val noActiveSubscription = stringResource(Res.string.error_no_active_subscription)
 
@@ -52,6 +54,7 @@ fun MembershipScreenRoute(
                     activity?.startActivity(browserIntent)
                 } else
                     context.showToastMessage(noActiveSubscription)
-            }
+            },
+            privacyPolicyClicked = privacyPolicyClicked,
         )
 }

@@ -35,7 +35,7 @@ import com.friend.designsystem.R as Res
 @Composable
 fun BannerAds(
     modifier: Modifier = Modifier,
-    adUnitId: String = "ca-app-pub-3940256099942544/6300978111",
+    adUnitId: String = stringResource(Res.string.BannerAdsUnitId)//"ca-app-pub-3940256099942544/6300978111",
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current

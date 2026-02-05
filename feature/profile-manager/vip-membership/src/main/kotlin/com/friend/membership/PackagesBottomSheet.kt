@@ -6,17 +6,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
+import com.friend.designsystem.theme.textColors
+import com.friend.designsystem.typography.AppTypography
 import com.friend.ui.common.bottomsheet.ShowBottomSheet
 import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppText
+import com.friend.ui.components.ColoredTextSegment
+import com.friend.ui.components.MultiColorText
 import com.friend.ui.components.ResourceImageLoader
 import com.friend.ui.preview.LightPreview
 import com.friend.designsystem.R as Res
@@ -27,54 +33,93 @@ fun PackagesBottomSheet(
     onDismissRequest: () -> Unit = {},
     monthlySubscription: () -> Unit,
     yearlySubscription: () -> Unit,
-    manageSubscription: () -> Unit
+    manageSubscription: () -> Unit,
+    privacyPolicyClicked: () -> Unit,
 ) {
     ShowBottomSheet(
         onDismissRequest = onDismissRequest,
+        isExpand = true,
         title = stringResource(Res.string.title_member_ship),
     ) {
-        Column(
-            modifier = modifier.appPadding(SpacingToken.medium),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            ResourceImageLoader(
-                imageResId = Res.drawable.img_vip,
-                modifier = modifier.size(IconSizeToken.extraLarge)
-            )
+        PackageDetails(
+            modifier = modifier,
+            monthlySubscription = monthlySubscription,
+            yearlySubscription = yearlySubscription,
+            manageSubscription = manageSubscription,
+            privacyPolicyClicked = privacyPolicyClicked,
+        )
+    }
+}
 
-            Spacer(modifier = Modifier.height(SpacingToken.medium))
+@Composable
+private fun PackageDetails(
+    modifier: Modifier = Modifier,
+    monthlySubscription: () -> Unit,
+    yearlySubscription: () -> Unit,
+    manageSubscription: () -> Unit,
+    privacyPolicyClicked: () -> Unit,
+) {
+    Column(
+        modifier = modifier.appPadding(SpacingToken.medium),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        ResourceImageLoader(
+            imageResId = Res.drawable.img_vip,
+            modifier = modifier.size(IconSizeToken.extraLarge)
+        )
 
-            AppText(
-                text = stringResource(Res.string.msg_get_more_in_vip),
-                fontWeight = FontWeight.Bold
-            )
+        Spacer(modifier = Modifier.height(SpacingToken.medium))
 
-            Spacer(modifier = modifier.height(SpacingToken.huge))
+        AppText(
+            text = stringResource(Res.string.msg_get_more_in_vip),
+            fontWeight = FontWeight.Bold
+        )
 
-            AppElevatedButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(Res.string.action_monthly),
-                onClick = monthlySubscription,
-            )
+        Spacer(modifier = modifier.height(SpacingToken.huge))
 
-            Spacer(modifier = Modifier.height(SpacingToken.medium))
+        AppElevatedButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(Res.string.placeholder_monthly, "$8.99"),
+            onClick = monthlySubscription,
+        )
 
-            AppElevatedButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(Res.string.action_yearly),
-                onClick = yearlySubscription,
-            )
+        Spacer(modifier = Modifier.height(SpacingToken.medium))
 
-            Spacer(modifier = Modifier.height(SpacingToken.medium))
+        AppElevatedButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(Res.string.placeholder_yearly, "$59.99"),
+            onClick = yearlySubscription,
+        )
 
-            AppElevatedButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(Res.string.action_manage_subscription),
-                onClick = manageSubscription,
-            )
+        Spacer(modifier = Modifier.height(SpacingToken.medium))
 
-            Spacer(modifier = modifier.height(SpacingToken.hugePlus))
-        }
+        AppElevatedButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(Res.string.action_manage_subscription),
+            onClick = manageSubscription,
+        )
+
+        Spacer(modifier = modifier.height(SpacingToken.large))
+
+
+        val segments = listOf(
+            ColoredTextSegment(
+                text = stringResource(Res.string.msg_auto_renew),
+                color = MaterialTheme.textColors.secondary,
+                style = AppTypography.bodySmall.copy(fontWeight = FontWeight.Light),
+                addSpace = true
+            ),
+            ColoredTextSegment(
+                text = stringResource(Res.string.label_privacy_policy),
+                color = MaterialTheme.textColors.brand,
+                style = AppTypography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                addSpace = true,
+                onClick = privacyPolicyClicked
+            ),
+        )
+        MultiColorText(segments = segments)
+
+        Spacer(modifier = modifier.height(SpacingToken.large))
     }
 }
 
@@ -82,9 +127,10 @@ fun PackagesBottomSheet(
 @Composable
 @LightPreview
 fun ModalPreview() {
-    PackagesBottomSheet(
+    PackageDetails(
         monthlySubscription = {},
         yearlySubscription = {},
+        privacyPolicyClicked = {},
         manageSubscription = {}
     )
 }

@@ -69,8 +69,6 @@
     <string name="action_search">Search</string>
     <string name="action_reset">Reset all</string>
     <string name="action_activate_vip_membership">Activate VIP Membership</string>
-    <string name="action_yearly">Yearly - Popular</string>
-    <string name="action_monthly">1 Month</string>
     <string name="action_manage_subscription">Manage Subscription</string>
     <string name="action_edit_profile">Edit Profile</string>
     <string name="action_edit">Edit</string>
@@ -113,7 +111,7 @@
     <string name="label_seeking_for">Who is seeking</string>
     <string name="label_am_looking_for">I am looking for</string>
     <string name="label_why_report_user">Tell use why you want to report this user?</string>
-    <string name="label_privacy_policy">Privacy Policy &amp; Terms Condition</string>
+    <string name="label_privacy_policy">Privacy Policy and Terms &amp; Conditions</string>
     <string name="label_blocked_list">Blocked list</string>
 
     <string name="hint_user_name">Enter Username</string>
@@ -141,6 +139,7 @@
     <string name="msg_dating_app">The Dating App</string>
     <string name="msg_copyright">\@All rights reserved by FriendFin</string>
     <string name="msg_agree_with_term_condition">I agree to the</string>
+    <string name="msg_auto_renew">Auto-renews at the end of the period. Cancel anytime in Google Play Settings.</string>
     <string name="msg_and"> and </string>
     <string name="msg_report_abuse">Are you sure you want to report this user for abuse? If so, click on the button below</string>
     <string name="msg_online_user_only">Online user only</string>
@@ -235,6 +234,8 @@
     <string name="placeholder_greeting_message">%s, %s</string>
     <string name="placeholder_add_two_value_with_divider">%s | %s</string>
     <string name="placeholder_message_search_result_count">%s result(s) found for %s</string>
+    <string name="placeholder_yearly">%s for 12 Months</string>
+    <string name="placeholder_monthly">%s for 1 Month</string>
 
     <!--    String resource naming convention-->
     <!--    https://github.com/leapfrogtechnology/android-guidelines/blob/master/ResourcesGuidelines.md-->

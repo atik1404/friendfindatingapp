@@ -104,6 +104,9 @@ object ProfileNavGraph {
             MembershipScreenRoute(
                 onBackClick = {
                     backStack.removeLastOrNull()
+                },
+                privacyPolicyClicked = {
+                    backStack.add(CommonScreens.PrivacyPolicyNavScreen)
                 }
             )
         }
