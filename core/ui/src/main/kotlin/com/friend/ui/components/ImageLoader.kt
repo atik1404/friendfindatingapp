@@ -9,26 +9,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import coil3.ImageLoader
-import coil3.SingletonImageLoader
-import coil3.compose.AsyncImage
-import coil3.request.CachePolicy
-import coil3.request.ImageRequest
-import coil3.request.crossfade
-import coil3.video.VideoFrameDecoder
-import coil3.video.videoFrameMicros
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.friend.common.extfun.initialsOf
 import com.friend.designsystem.spacing.RadiusToken
 import com.friend.designsystem.theme.surfaceColors
@@ -51,6 +44,7 @@ fun ResourceImageLoader(
     )
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun NetworkImageLoader(
     modifier: Modifier = Modifier,
@@ -62,40 +56,30 @@ fun NetworkImageLoader(
     shape: Shape = RoundedCornerShape(RadiusToken.none),
     contentScale: ContentScale = ContentScale.Crop,
     crossfade: Boolean = false,
-    memoryCachePolicy: CachePolicy = CachePolicy.ENABLED,
-    diskCachePolicy: CachePolicy = CachePolicy.ENABLED,
 ) {
-    val context = LocalContext.current
-    val imageLoader = remember(context) { SingletonImageLoader.get(context) }
 
     val placeholderPainter = placeholderRes?.let { painterResource(it) }
-    val errorPainter = errorRes?.let { painterResource(it) }
-
-    val request = remember(url, crossfade, memoryCachePolicy, diskCachePolicy) {
-        if (url.isBlank()) null
-        else ImageRequest.Builder(context)
-            .data(url)
-            .crossfade(crossfade)
-            .memoryCachePolicy(memoryCachePolicy)
-            .diskCachePolicy(diskCachePolicy)
-            .build()
-    }
 
     Box(
         modifier = modifier.clip(shape),
         contentAlignment = Alignment.Center
     ) {
         when {
-            request != null -> {
-                AsyncImage(
-                    model = request,
-                    imageLoader = imageLoader,
+            url.isNotEmpty() -> {
+                GlideImage(
+                    model = url,
                     contentDescription = stringResource(Res.string.msg_image_content_description),
-                    placeholder = placeholderPainter,
-                    error = errorPainter,
+                    modifier = Modifier.matchParentSize(),
                     contentScale = contentScale,
-                    modifier = Modifier.matchParentSize()
-                )
+                ) {
+                    it
+                        .placeholder(placeholderRes ?: 0)
+                        .error(errorRes ?: 0)
+                        .let { request ->
+                            if (crossfade) request.transition(DrawableTransitionOptions.withCrossFade())
+                            else request
+                        }
+                }
             }
 
             !name.isNullOrBlank() -> {
@@ -150,6 +134,7 @@ fun BitmapImageLoader(
     )
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun VideoThumbnailLoader(
     modifier: Modifier = Modifier,
@@ -158,27 +143,25 @@ fun VideoThumbnailLoader(
     @DrawableRes errorRes: Int? = Res.drawable.image_loading_placeholder,
     shape: Shape = RoundedCornerShape(RadiusToken.none),
     contentScale: ContentScale = ContentScale.Crop,
+    crossfade: Boolean = false,
 ) {
-    val context = LocalContext.current
-
-    val imageLoader = remember {
-        ImageLoader.Builder(context)
-            .components { add(VideoFrameDecoder.Factory()) }
-            .build()
+    Box(
+        modifier = modifier.clip(shape),
+        contentAlignment = Alignment.Center
+    ) {
+        GlideImage(
+            model = videoUrl,
+            contentDescription = stringResource(Res.string.msg_image_content_description),
+            modifier = modifier,
+            contentScale = contentScale,
+        ) {
+            it.placeholder(placeholderRes ?: 0)
+                .error(errorRes ?: 0)
+                .frame(1000000)
+                .let { request ->
+                    if (crossfade) request.transition(DrawableTransitionOptions.withCrossFade())
+                    else request
+                }
+        }
     }
-
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(videoUrl)
-            .crossfade(true)
-            .videoFrameMicros(1000000)
-            .build(),
-        imageLoader = imageLoader,
-        contentDescription = stringResource(Res.string.msg_image_content_description),
-        placeholder = placeholderRes?.let { painterResource(it) },
-        error = errorRes?.let { painterResource(it) },
-        contentScale = contentScale,
-        modifier = modifier
-            .clip(shape)
-    )
 }

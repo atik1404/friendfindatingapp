@@ -54,6 +54,7 @@ androidSpinkit = "1.4.0"
 
 picassoVersion = "2.71828"
 coil = "3.3.0"
+glide = "1.0.0-beta01"
 circleImageViewVersion = "3.1.0"
 androidImageCropper = "4.7.0"
 
@@ -168,9 +169,16 @@ leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", v
 dot-indicator = { group = "com.google.accompanist", name = "accompanist-pager-indicators", version.ref = "viewPagerDotIndicatorVersion" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timberVersion" }
 dateced = { group = "com.github.kamrul3288", name = "dateced", version.ref = "dateced" }
+
+
+glide-image-loader = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+glide-annotation = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+glide-compose = { group = "com.github.bumptech.glide", name = "compose", version.ref = "glide" }
+
 coil = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 coil-okkhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 coil-video = { group = "io.coil-kt.coil3", name = "coil-video", version.ref = "coil" }
+
 date-picker = { group = "com.wdullaer", name = "materialdatetimepicker", version.ref = "datePicker" }
 
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBomVersion" }
