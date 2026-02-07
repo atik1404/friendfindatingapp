@@ -149,7 +149,7 @@ object DateTimeParser {
     fun parseToPattern(
         raw: String,
         outputPattern: String,
-        zoneId: ZoneId = ZoneId.systemDefault(),
+        zoneId: ZoneId = ZoneOffset.UTC,
         locale: Locale = Locale.getDefault()
     ): String {
         val outputFormatter = DateTimeFormatter.ofPattern(outputPattern, locale)
@@ -267,7 +267,7 @@ object DateTimeParser {
 
     fun convertMillisToDate(millis: Long, dateFormat: String): String {
         val formatter = DateTimeFormatter.ofPattern(dateFormat)
-            .withZone(ZoneId.systemDefault())
+            .withZone(ZoneOffset.UTC)
         return formatter.format(Instant.ofEpochMilli(millis))
     }
 

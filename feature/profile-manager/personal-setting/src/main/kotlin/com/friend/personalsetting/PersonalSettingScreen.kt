@@ -30,6 +30,7 @@ import com.friend.ui.components.AppElevatedButton
 import com.friend.ui.components.AppOutlineTextField
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.preview.LightPreview
+import timber.log.Timber
 import com.friend.designsystem.R as Res
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,6 +91,7 @@ fun PersonalSettingScreen(
             BirthDateSelection(
                 selectedDate = state.form.dateOfBirth.value,
                 onSelected = {
+                    Timber.e("dateOfBirth: $it")
                     onAction.invoke(UiAction.SelectBirthDate(it))
                 },
                 showDatePicker = state.showDatePicker,
