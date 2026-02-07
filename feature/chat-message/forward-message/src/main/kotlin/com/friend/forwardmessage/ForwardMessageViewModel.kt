@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 import com.friend.designsystem.R as Res
 
@@ -45,8 +46,7 @@ class ForwardMessageViewModel @Inject constructor(
             val currentState = _uiState.value
             chatListApiUseCase.execute(currentState.pageNo).collect { result ->
                 when (result) {
-                    is ApiResult.Error -> _uiState.value =
-                        _uiState.value.copy(error = result.message)
+                    is ApiResult.Error -> _uiState.update { it.copy(error = result.message) }
 
                     is ApiResult.Loading -> {
                         if (currentState.data.isEmpty())
@@ -55,11 +55,13 @@ class ForwardMessageViewModel @Inject constructor(
                                 isLoadingMore = false,
                                 error = ""
                             )
-                        else _uiState.value =
-                            _uiState.value.copy(
+                        else _uiState.update {
+                            it.copy(
                                 isLoadingMore = result.loading, isLoading = false,
                                 error = ""
                             )
+                        }
+
                     }
 
                     is ApiResult.Success -> {

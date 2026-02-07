@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.friend.common.extfun.getGreetingText
 import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.SpacingToken
+import com.friend.designsystem.theme.surfaceColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.ui.components.AppIconButton
@@ -80,6 +81,7 @@ fun ProfileSummarySection(
 
         AppIconButton(
             resourceIcon = Res.drawable.ic_chat_bubble,
+            tint = MaterialTheme.surfaceColors.primary,
             onClick = {
                 navigateToChatListScreen.invoke()
             },

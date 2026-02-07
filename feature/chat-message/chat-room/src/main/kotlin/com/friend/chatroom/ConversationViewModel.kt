@@ -12,6 +12,8 @@ import com.friend.domain.apiusecase.chatmessage.SendMessageApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.validator.SendMessageIoResult
 import com.friend.entity.chatmessage.ConversationEntity
+import com.friend.sharedpref.SharedPrefHelper
+import com.friend.sharedpref.SpKey
 import com.friend.ui.common.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -34,9 +36,14 @@ class ConversationViewModel @Inject constructor(
     private val searchConversationApiUseCase: SearchConversationApiUseCase,
     private val deleteMessagesApiUseCase: DeleteMessagesApiUseCase,
     private val sendMessageApiUseCase: SendMessageApiUseCase,
+    private val sharedPrefHelper: SharedPrefHelper,
 ) : BaseViewModel() {
     val ioError get() = sendMessageApiUseCase.ioError.receiveAsFlow()
-    private val _uiState = MutableStateFlow(UiState())
+    private val _uiState = MutableStateFlow(
+        UiState(
+            fromUsername = sharedPrefHelper.getString(SpKey.userName)
+        )
+    )
     val uiState = _uiState.asStateFlow()
 
     private val _uiEvent = Channel<UiEvent>()
@@ -103,7 +110,7 @@ class ConversationViewModel @Inject constructor(
 
                     is ApiResult.Loading -> {
                         if (!_uiState.value.isAlreadyFetched)
-                            _uiState.update {  it.copy(isLoading = result.loading) }
+                            _uiState.update { it.copy(isLoading = result.loading) }
                     }
 
                     is ApiResult.Success -> {

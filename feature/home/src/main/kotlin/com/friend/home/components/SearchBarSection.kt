@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.friend.designsystem.spacing.IconSizeToken
+import com.friend.designsystem.theme.iconColors
+import com.friend.designsystem.theme.surfaceColors
 import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.ui.components.AppIconButton
@@ -32,7 +34,8 @@ fun SearchBarSection(
     ) {
         AppIconButton(
             vectorIcon = Icons.Default.Dashboard,
-            onClick = navigateToOverviewScreen
+            onClick = navigateToOverviewScreen,
+            tint = MaterialTheme.surfaceColors.primary
         )
         Spacer(modifier = Modifier.weight(1f))
         AppText(
@@ -51,7 +54,8 @@ fun SearchBarSection(
         Spacer(modifier = Modifier.weight(1f))
         AppIconButton(
             resourceIcon = Res.drawable.ic_filter,
-            onClick = showBottomSheet
+            onClick = showBottomSheet,
+            tint = MaterialTheme.surfaceColors.primary
         )
     }
 }

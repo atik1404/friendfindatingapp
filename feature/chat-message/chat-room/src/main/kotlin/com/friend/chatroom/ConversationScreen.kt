@@ -74,7 +74,7 @@ fun ConversationScreen(
     var isAttachmentExpanded by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
     val isAdministrator = remember(toUsername) {
-        toUsername == AppConstants.ADMIN
+        toUsername == AppConstants.ADMIN || toUsername == uiState.fromUsername
     }
 
     val scope = rememberCoroutineScope()
@@ -296,7 +296,9 @@ fun ConversationScreen(
 @LightPreview
 private fun ScreenPreview() {
     ConversationScreen(
-        uiState = UiState(),
+        uiState = UiState(
+            fromUsername = ""
+        ),
         listState = rememberLazyListState(),
         toUsername = "",
         fullName = "",

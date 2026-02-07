@@ -18,6 +18,7 @@ data class MessageState(
 }
 
 data class UiState(
+    val fromUsername: String,
     val conversations: List<ConversationEntity> = emptyList(),
     val isLoading: Boolean = false,
     val isIncoming: Boolean = false,
