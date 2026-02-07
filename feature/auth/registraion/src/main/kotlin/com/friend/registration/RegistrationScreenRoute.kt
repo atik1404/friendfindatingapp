@@ -2,7 +2,6 @@ package com.friend.registration
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -13,6 +12,7 @@ import com.friend.ui.showToastMessage
 @Composable
 fun RegistrationRoute(
     email: String,
+    displayName: String,
     onBackButtonClicked: () -> Unit,
     navigateToProfileCompletion: () -> Unit,
     privacyPolicyClicked: () -> Unit,
@@ -22,8 +22,12 @@ fun RegistrationRoute(
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
+
         if (email.isNotEmpty())
             viewModel.action(UiAction.OnChangeEmail(email))
+
+        if (displayName.isNotEmpty())
+            viewModel.action(UiAction.OnChangeName(displayName))
 
         viewModel.uiEvent.collect { event ->
             when (event) {

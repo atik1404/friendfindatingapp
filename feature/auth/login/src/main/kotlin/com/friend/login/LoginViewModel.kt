@@ -37,7 +37,7 @@ class LoginViewModel @Inject constructor(
             is UiAction.UsernameChanged -> onUserNameChanged(it.value)
             is UiAction.PasswordChanged -> onPasswordChanged(it.value)
             is UiAction.ShowErrorMessage -> showToastMessage(it.value)
-            is UiAction.PerformGoogleLogin -> performGoogleLogin(it.email)
+            is UiAction.PerformGoogleLogin -> performGoogleLogin(it.email, it.displayName)
             UiAction.PerformLogin -> performLogin()
         }
     }
@@ -63,21 +63,21 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun performGoogleLogin(email: String) {
+    private fun performGoogleLogin(email: String, displayName: String) {
         execute {
             postGoogleLoginApiUseCase.execute(email).collect { result ->
                 when (result) {
                     is ApiResult.Success -> {
                         if (result.data.isUserExist)
                             fetchProfile()
-                        else _uiEvent.send(UiEvent.NavigateToRegistration(email))
+                        else _uiEvent.send(UiEvent.NavigateToRegistration(email, displayName))
                     }
 
                     is ApiResult.Loading -> onLoading(result.loading)
 
                     is ApiResult.Error -> {
                         showToastMessage(result.message)
-                        _uiEvent.send(UiEvent.NavigateToRegistration(email))
+                        _uiEvent.send(UiEvent.NavigateToRegistration(email, displayName))
                     }
                 }
             }

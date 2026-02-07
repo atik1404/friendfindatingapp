@@ -8,12 +8,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.friend.ui.showToastMessage
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginRoute(
-    navigateToRegistration: (String) -> Unit,
+    navigateToRegistration: (String, String) -> Unit,
     navigateToForgotPassword: () -> Unit,
     navigateToHome: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
@@ -24,15 +23,12 @@ fun LoginRoute(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect { effect ->
             when (effect) {
-                is UiEvent.ShowMessage -> {
-                    Timber.e("Error signing in00: ${effect.message}")
-                    context.showToastMessage(effect.message)
-                }
-
-                is UiEvent.NavigateToHome ->
-                    navigateToHome()
-
-                is UiEvent.NavigateToRegistration -> navigateToRegistration.invoke(effect.email)
+                is UiEvent.ShowMessage -> context.showToastMessage(effect.message)
+                is UiEvent.NavigateToHome -> navigateToHome()
+                is UiEvent.NavigateToRegistration -> navigateToRegistration.invoke(
+                    effect.email,
+                    effect.displayName
+                )
             }
         }
     }
@@ -41,7 +37,7 @@ fun LoginRoute(
         state = state,
         onEvent = viewModel.action,
         navigateToRegistration = {
-            navigateToRegistration.invoke("")
+            navigateToRegistration.invoke("", "")
         },
         navigateToForgotPassword = navigateToForgotPassword,
     )

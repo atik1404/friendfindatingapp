@@ -35,8 +35,8 @@ object AuthNavGraph {
 
         entry(AuthScreens.LoginNavScreen) {
             LoginRoute(
-                navigateToRegistration = { email ->
-                    backStack.add(AuthScreens.RegistrationNavScreen(email))
+                navigateToRegistration = { email, name ->
+                    backStack.add(AuthScreens.RegistrationNavScreen(email, name))
                 },
                 navigateToForgotPassword = {
                     backStack.add(AuthScreens.ForgotPasswordNavScreen)
@@ -59,11 +59,12 @@ object AuthNavGraph {
         entry<AuthScreens.RegistrationNavScreen> { key ->
             RegistrationRoute(
                 email = key.email,
+                displayName = key.displayName,
                 onBackButtonClicked = {
                     backStack.removeLastOrNull()
                 },
                 navigateToProfileCompletion = {
-                    backStack.remove(AuthScreens.RegistrationNavScreen(key.email))
+                    backStack.remove(AuthScreens.RegistrationNavScreen(key.email, key.displayName))
                     backStack.add(ProfileScreens.ProfileCompletionNavScreen)
                 },
                 privacyPolicyClicked = {

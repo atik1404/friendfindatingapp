@@ -13,7 +13,7 @@ data class UiState(
 sealed interface UiEvent {
     data class ShowMessage(val message: String) : UiEvent
     object NavigateToHome : UiEvent
-    data class NavigateToRegistration(val email: String) : UiEvent
+    data class NavigateToRegistration(val email: String, val displayName: String = "") : UiEvent
 }
 
 sealed class UiAction {
