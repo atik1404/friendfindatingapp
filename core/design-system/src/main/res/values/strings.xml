@@ -44,7 +44,7 @@
     <string name="title_member_ship">Membership plan</string>
     <string name="title_forward_message">Forward Message</string>
     <string name="title_video">Video</string>
-    <string name="title_delete_message">Delete Message?</string>
+    <string name="title_delete_message">Delete Message(s)</string>
     <string name="title_need_permission">Permission Required</string>
 
     <string name="title_something_wrong">Request failed</string>

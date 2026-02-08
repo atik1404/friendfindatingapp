@@ -80,8 +80,9 @@ fun ProfileSummarySection(
         )
 
         AppIconButton(
+            tint = MaterialTheme.surfaceColors.graySoft,
             resourceIcon = Res.drawable.ic_chat_bubble,
-            tint = MaterialTheme.surfaceColors.primary,
+            iconSize = IconSizeToken.large,
             onClick = {
                 navigateToChatListScreen.invoke()
             },

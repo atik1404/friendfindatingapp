@@ -61,6 +61,14 @@ val ChatRoomPopupMenu = listOf(
 //    ),
 )
 
+val MessageSearchMenu = listOf(
+    PopupMenu(
+        icon = Icons.Default.Search,
+        menu = Res.string.menu_message_search,
+        menuType = PopupMenuType.MessageSearch
+    ),
+)
+
 val ProfilePopupMenu = listOf(
     PopupMenu(
         icon = Icons.Default.Report,

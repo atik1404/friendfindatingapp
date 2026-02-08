@@ -242,16 +242,6 @@ fun ConversationScreen(
                 )
             }
 
-            if (uiState.error.isNotEmpty()) {
-                ErrorUi(
-                    message = uiState.error,
-                    modifier = modifier.align(Alignment.Center),
-                    onRetry = {
-                        onAction.invoke(UiAction.FetchMessages(toUsername))
-                    }
-                )
-            }
-
             if (uiState.isLoading || uiState.messageContent.isSending)
                 LoadingUi()
 

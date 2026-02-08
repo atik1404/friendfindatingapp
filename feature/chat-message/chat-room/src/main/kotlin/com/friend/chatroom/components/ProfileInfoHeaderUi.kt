@@ -31,6 +31,7 @@ import com.friend.ui.components.AppIconButton
 import com.friend.ui.components.AppPopupMenu
 import com.friend.ui.components.AppText
 import com.friend.ui.components.ChatRoomPopupMenu
+import com.friend.ui.components.MessageSearchMenu
 import com.friend.ui.components.NetworkImageLoader
 import com.friend.ui.components.PopupMenuType
 
@@ -81,7 +82,7 @@ fun ProfileInfoHeader(
 
         Spacer(modifier = Modifier.width(SpacingToken.small))
 
-        if (!isBlocked && !isAdministrator) {
+        if (!isBlocked) {
             if (isItemSelectionEnable) {
                 Row {
                     AppIconButton(
@@ -103,7 +104,7 @@ fun ProfileInfoHeader(
             } else {
                 AppPopupMenu(
                     icon = Icons.Default.MoreVert,
-                    menuItems = ChatRoomPopupMenu,
+                    menuItems = if (isAdministrator) MessageSearchMenu else ChatRoomPopupMenu,
                     onClick = onMenuClicked
                 )
             }

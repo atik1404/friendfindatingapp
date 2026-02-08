@@ -71,6 +71,7 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxSize()
             ) {
+                Spacer(Modifier.height(SpacingToken.medium))
                 SearchBarSection(
                     navigateToOverviewScreen = navigateToOverviewScreen,
                     showBottomSheet = {
