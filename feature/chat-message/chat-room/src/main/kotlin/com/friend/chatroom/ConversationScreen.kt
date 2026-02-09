@@ -44,7 +44,6 @@ import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingOnly
 import com.friend.designsystem.theme.dividerColors
 import com.friend.designsystem.theme.textColors
-import com.friend.ui.common.ErrorUi
 import com.friend.ui.common.LoadingUi
 import com.friend.ui.common.TypingAnimation
 import com.friend.ui.components.AppScaffold
@@ -158,7 +157,7 @@ fun ConversationScreen(
                         .weight(1f),
                     isItemSelectionEnable = isItemSelectionEnable,
                     onLongPress = {
-                        if (!uiState.isBlocked && !isAdministrator)
+                        if (!uiState.isBlocked)
                             isItemSelectionEnable = true
                     },
                     onItemSelected = {

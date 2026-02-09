@@ -115,11 +115,11 @@ class ForwardMessageViewModel @Inject constructor(
                 when (result) {
                     is ApiResult.Error -> showToastMessage(UiText.Dynamic(result.message))
 
-                    is ApiResult.Loading -> _uiState.value =
-                        _uiState.value.copy(
-                            isLoadingMore = false, isLoading = result.loading,
-                            error = ""
+                    is ApiResult.Loading -> _uiState.update {
+                        it.copy(
+                            isLoading = result.loading,
                         )
+                    }
 
                     is ApiResult.Success -> {
                         showToastMessage(UiText.Dynamic(result.data))

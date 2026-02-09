@@ -103,6 +103,7 @@ class ConversationViewModel @Inject constructor(
 
     private fun fetchMessages(toUsername: String) {
         execute {
+            if (_uiState.value.isSearchEnabled) return@execute
             fetchConversationsApiUseCase.execute(toUsername).collect { result ->
                 when (result) {
                     is ApiResult.Error -> _uiState.value =
@@ -230,12 +231,13 @@ class ConversationViewModel @Inject constructor(
                         _uiState.value.copy(isLoading = result.loading)
 
                     is ApiResult.Success -> {
+                        clearSelectedMessage()
+                        clearSearch()
                         _uiState.update {
                             it.copy(
                                 conversations = emptyList(),
                             )
                         }
-                        clearSelectedMessage()
                         _uiEvent.send(UiEvent.DeleteMessageComplete)
                     }
                 }
@@ -244,11 +246,7 @@ class ConversationViewModel @Inject constructor(
     }
 
     private fun clearSearch() {
-        execute {
-            _uiState.update {
-                it.copy(isSearchEnabled = false, searchKey = "")
-            }
-        }
+        _uiState.value = _uiState.value.copy(isSearchEnabled = false, searchKey = "")
     }
 
     private fun toggleMessageSelection(item: ConversationEntity) {
