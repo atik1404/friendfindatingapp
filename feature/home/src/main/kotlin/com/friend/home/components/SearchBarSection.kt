@@ -36,7 +36,7 @@ fun SearchBarSection(
             vectorIcon = Icons.Default.Dashboard,
             onClick = navigateToOverviewScreen,
             tint = MaterialTheme.surfaceColors.graySoft,
-            iconSize = IconSizeToken.large
+            iconSize = IconSizeToken.medium
         )
         Spacer(modifier = Modifier.weight(1f))
         AppText(
@@ -57,7 +57,7 @@ fun SearchBarSection(
             resourceIcon = Res.drawable.ic_filter,
             onClick = showBottomSheet,
             tint = MaterialTheme.surfaceColors.graySoft,
-            iconSize = IconSizeToken.large
+            iconSize = IconSizeToken.medium
         )
     }
 }

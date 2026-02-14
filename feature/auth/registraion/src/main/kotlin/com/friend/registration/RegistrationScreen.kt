@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +23,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import com.friend.designsystem.spacing.IconSizeToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPadding
@@ -37,6 +41,7 @@ import com.friend.ui.common.GenderSelection
 import com.friend.ui.common.LoadingUi
 import com.friend.ui.components.AppCheckbox
 import com.friend.ui.components.AppElevatedButton
+import com.friend.ui.components.AppOutlineTextField
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.components.ColoredTextSegment
 import com.friend.ui.components.MultiColorText
@@ -74,26 +79,51 @@ fun RegistrationScreen(
                 .appPadding(SpacingToken.small),
         ) {
 
-            NameSection(
-                modifier = modifier,
-                userName = state.form.username,
-                fullName = state.form.name,
-                onUserNameChange = {
-                    uiAction.invoke(UiAction.OnChangeUserName(it))
-                },
-                onFullNameChange = {
+            AppOutlineTextField(
+                text = state.form.name.value,
+                error = if (state.form.name.isDirty) stringResource(Res.string.error_invalid_name) else null,
+                modifier = modifier.fillMaxWidth(),
+                title = stringResource(Res.string.label_full_name),
+                placeholder = stringResource(Res.string.hint_full_name),
+                onValueChange = {
                     uiAction.invoke(UiAction.OnChangeName(it))
-                }
+                },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next,
+                ),
             )
 
             Spacer(modifier = modifier.height(SpacingToken.medium))
 
-            EmailSection(
-                text = state.form.email,
+            AppOutlineTextField(
+                text = state.form.email.value,
+                modifier = modifier.fillMaxWidth(),
+                error = if (state.form.email.isDirty) stringResource(Res.string.error_invalid_email) else null,
+                title = stringResource(Res.string.label_email),
+                placeholder = stringResource(Res.string.hint_email),
                 onValueChange = {
                     uiAction.invoke(UiAction.OnChangeEmail(it))
                 },
-                modifier = modifier,
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next,
+                ),
+            )
+
+            Spacer(modifier = modifier.height(SpacingToken.medium))
+
+            AppOutlineTextField(
+                text = state.form.username.value,
+                error = if (state.form.username.isDirty) stringResource(Res.string.error_invalid_username) else null,
+                //modifier = modifier.weight(1f),
+                title = stringResource(Res.string.label_username),
+                placeholder = stringResource(Res.string.hint_user_name),
+                onValueChange = {
+                    uiAction.invoke(UiAction.OnChangeUserName(it))
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next,
+                ),
             )
 
             Spacer(modifier = modifier.height(SpacingToken.medium))

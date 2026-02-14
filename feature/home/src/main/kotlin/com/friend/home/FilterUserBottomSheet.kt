@@ -184,32 +184,6 @@ private fun FilterUi(
                     value = state.lookingFor ?: ""
                 )
             }
-            Spacer(Modifier.height(SpacingToken.medium))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                AutoCompleteTextField(
-                    allOptions = AppConstants.Height,
-                    modifier = Modifier.weight(1f),
-                    label = stringResource(Res.string.label_height),
-                    placeholder = stringResource(Res.string.hint_select_item),
-                    onValueChange = { onAction.invoke(UiAction.HeightChanged(it)) },
-                    value = state.height ?: ""
-                )
-
-                Spacer(modifier = Modifier.width(SpacingToken.medium))
-
-                AutoCompleteTextField(
-                    allOptions = AppConstants.Weight,
-                    modifier = Modifier.weight(1f),
-                    label = stringResource(Res.string.label_weight),
-                    placeholder = stringResource(Res.string.hint_select_item),
-                    onValueChange = { onAction.invoke(UiAction.WeightChanged(it)) },
-                    value = state.weight ?: ""
-                )
-            }
 
             Spacer(Modifier.height(SpacingToken.medium))
 

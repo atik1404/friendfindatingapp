@@ -15,6 +15,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.friend.ui.common.AppToolbar
 import com.friend.ui.components.AppScaffold
 import com.friend.ui.preview.LightPreview
+import androidx.core.net.toUri
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,15 +42,12 @@ fun PrivacyPolicyScreen(
                         ViewGroup.LayoutParams.MATCH_PARENT
                     )
 
-                    // Disable interactions
-                    isClickable = false
-                    isLongClickable = false
-                    setOnLongClickListener { true }
-                    isHapticFeedbackEnabled = false
-
+                    // Basic settings
                     settings.apply {
-                        javaScriptEnabled = false
-                        setSupportZoom(false)
+                        javaScriptEnabled =
+                            false // Keep false for security if just displaying static HTML
+                        setSupportZoom(true)      // Usually good for readability
+                        builtInZoomControls = true
                         displayZoomControls = false
                     }
 
@@ -58,8 +56,22 @@ fun PrivacyPolicyScreen(
                             view: WebView?,
                             request: WebResourceRequest?
                         ): Boolean {
-                            // Block all link/email navigation
-                            return true
+                            val url = request?.url?.toString() ?: return false
+
+                            // If it's a web link or email, open it in an External App
+                            if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith(
+                                    "mailto:"
+                                )
+                            ) {
+                                val intent = android.content.Intent(
+                                    android.content.Intent.ACTION_VIEW,
+                                    url.toUri()
+                                )
+                                context.startActivity(intent)
+                                return true // We handled it by opening the browser
+                            }
+
+                            return false // Allow the WebView to handle internal loads (like your local asset)
                         }
                     }
                     loadUrl("file:///android_asset/privacy_policy.html")

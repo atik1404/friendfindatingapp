@@ -71,7 +71,7 @@ class ForwardMessageViewModel @Inject constructor(
                         val hasMorePage = result.data.size >= AppConstants.DATA_PER_PAGE
 
                         _uiState.value = _uiState.value.copy(
-                            data = updatedItems,
+                            data = updatedItems.filter { it.toUsername != AppConstants.ADMIN },
                             pageNo = pageNo,
                             hasMorePage = hasMorePage,
                             error = ""

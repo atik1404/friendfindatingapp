@@ -21,8 +21,6 @@ data class FilterUiState(
     val lookingFor: String? = null,
     val eyes: String? = null,
     val hair: String? = null,
-    val height: String? = null,
-    val weight: String? = null,
     val smoking: String? = null,
     val drinking: String? = null,
     val isSearchApply: Boolean = false,
@@ -51,8 +49,6 @@ sealed interface UiAction {
     data class OnChangeInterested(val value: Gender) : UiAction
     data class OnChangeFromAge(val value: String) : UiAction
     data class OnChangeToAge(val value: String) : UiAction
-    data class HeightChanged(val value: String) : UiAction
-    data class WeightChanged(val value: String) : UiAction
     data class EyesChanged(val value: String) : UiAction
     data class HairChanged(val value: String) : UiAction
     data class SmokingChanged(val value: String) : UiAction

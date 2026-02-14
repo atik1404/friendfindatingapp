@@ -101,7 +101,7 @@ fun ProfileInformationSection(
         ) {
             LabeledValue(
                 title = stringResource(Res.string.label_eyes),
-                value = "Black",
+                value = data.eyes,
                 modifier = Modifier.weight(1f)
             )
 

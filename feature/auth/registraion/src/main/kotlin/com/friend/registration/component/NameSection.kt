@@ -14,15 +14,16 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.domain.base.TextInput
+import com.friend.registration.UiAction
 import com.friend.ui.components.AppOutlineTextField
 import com.friend.designsystem.R as Res
 
 @Composable
 fun NameSection(
     fullName: TextInput,
-    userName: TextInput,
+    email: TextInput,
     onFullNameChange: (String) -> Unit,
-    onUserNameChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -31,21 +32,6 @@ fun NameSection(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        AppOutlineTextField(
-            text = userName.value,
-            error = if (userName.isDirty) stringResource(Res.string.error_invalid_username) else null,
-            modifier = modifier.weight(1f),
-            title = stringResource(Res.string.label_username),
-            placeholder = stringResource(Res.string.hint_user_name),
-            onValueChange = onUserNameChange,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next,
-            ),
-        )
-
-        Spacer(modifier = modifier.width(SpacingToken.medium))
-
         AppOutlineTextField(
             text = fullName.value,
             error = if (fullName.isDirty) stringResource(Res.string.error_invalid_name) else null,
@@ -56,6 +42,16 @@ fun NameSection(
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next,
             ),
+        )
+
+        Spacer(modifier = modifier.width(SpacingToken.medium))
+
+        EmailSection(
+            modifier = modifier.weight(1f),
+            text = email,
+            onValueChange = {
+                onEmailChange.invoke(it)
+            },
         )
     }
 }

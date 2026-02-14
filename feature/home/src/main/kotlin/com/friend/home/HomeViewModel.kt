@@ -57,14 +57,12 @@ class HomeViewModel @Inject constructor(
             is UiAction.DrinkingChanged -> onChangeDrinking(it.value)
             is UiAction.EyesChanged -> onChangeEyes(it.value)
             is UiAction.HairChanged -> onChangeHair(it.value)
-            is UiAction.HeightChanged -> onChangeHeight(it.value)
             is UiAction.OnChangeFromAge -> onChangeFromAge(it.value)
             is UiAction.OnChangeGender -> onChangeGender(it.value)
             is UiAction.OnChangeInterested -> onChangeInterested(it.value)
             is UiAction.OnChangeToAge -> onChangeToAge(it.value)
             is UiAction.OnChangeUsername -> onChangeUserName(it.value)
             is UiAction.SmokingChanged -> onChangeSmoking(it.value)
-            is UiAction.WeightChanged -> onChangeWeight(it.value)
             is UiAction.OnlineUserChanged -> onChangeOnlineUser(it.value)
             is UiAction.PhotoRequiredChanged -> onChangePhotoRequired(it.value)
             is UiAction.LookingForChanged -> onChangeLookingFor(it.value)
@@ -157,10 +155,6 @@ class HomeViewModel @Inject constructor(
     private fun onChangeFromAge(value: String) = updateForm { it.copy(fromAge = value) }
 
     private fun onChangeToAge(value: String) = updateForm { it.copy(toAge = value) }
-
-    private fun onChangeHeight(value: String) = updateForm { it.copy(height = value) }
-
-    private fun onChangeWeight(value: String) = updateForm { it.copy(weight = value) }
 
     private fun onChangeLookingFor(value: String) = updateForm { it.copy(lookingFor = value) }
     private fun onChangeBodyType(value: String) = updateForm { it.copy(bodyType = value) }
