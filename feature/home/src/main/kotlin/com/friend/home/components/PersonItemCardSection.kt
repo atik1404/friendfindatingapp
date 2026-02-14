@@ -51,7 +51,7 @@ fun PersonItemCardSection(
                     vertical = SpacingToken.micro
                 )
                 .background(
-                    MaterialTheme.surfaceColors.tertiary.copy(alpha = .3f),
+                    MaterialTheme.surfaceColors.tertiary.copy(alpha = .6f),
                     shape = RoundedCornerShape(SpacingToken.medium)
                 )
                 .appPaddingSymmetric(
