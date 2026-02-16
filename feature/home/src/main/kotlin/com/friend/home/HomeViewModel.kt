@@ -101,7 +101,7 @@ class HomeViewModel @Inject constructor(
                 fromAge = filterBy.fromAge,
                 toAge = filterBy.toAge,
                 country = filterBy.country,
-                state = filterBy.state,
+                state = if (filterBy.state == AppConstants.STATE_ALL) null else filterBy.state,
                 city = filterBy.city,
                 username = filterBy.username.trim(),
                 isOnlineUser = filterBy.isOnlineUser,
@@ -182,11 +182,15 @@ class HomeViewModel @Inject constructor(
                 data = emptyList()
             )
 
+
             _filterUiState.value = FilterUiState(
                 isSearchApply = false,
                 country = sharedPrefHelper.getString(SpKey.country),
                 state = sharedPrefHelper.getString(SpKey.state),
                 city = sharedPrefHelper.getString(SpKey.city),
+                countries = _filterUiState.value.countries,
+                states = _filterUiState.value.states,
+                cities = _filterUiState.value.cities,
             )
             fetchFriendSuggestions()
         }
@@ -270,7 +274,7 @@ class HomeViewModel @Inject constructor(
             fetchCityApiUseCase.execute(
                 FetchCityApiUseCase.Params(
                     selectedCountry,
-                    selectedState
+                    if (selectedState == AppConstants.STATE_ALL) "" else selectedState
                 )
             )
                 .collect { result ->
@@ -290,7 +294,7 @@ class HomeViewModel @Inject constructor(
     private fun onChangeCity(value: CityApiEntity) = updateForm { it.copy(city = value.value) }
 
     private fun onChangeState(value: StateApiEntity) {
-        updateForm { it.copy(state = value.value, city = null) }
+        updateForm { it.copy(state = value.value.ifEmpty { AppConstants.STATE_ALL }, city = null) }
         fetchCities()
     }
 

@@ -5,6 +5,8 @@ object AppConstants {
     var isPremiumUser: Boolean = false
     val ADMIN = "admin"
 
+    val STATE_ALL = "All"
+
     const val WEB_CLIENT_ID =
         "176628957073-lll0macf6raivbvguuic9m9aoiuop4tn.apps.googleusercontent.com"
 
