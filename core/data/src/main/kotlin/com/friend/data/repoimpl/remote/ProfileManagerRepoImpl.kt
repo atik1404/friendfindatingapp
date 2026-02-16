@@ -28,6 +28,14 @@ class ProfileManagerRepoImpl @Inject constructor(
     private val commonApiMapper: CommonApiMapper,
     private val otherProfileApiMapper: OtherProfileApiMapper,
 ) : ProfileManageRepository {
+    override suspend fun updateOnlineStatus(): Flow<ApiResult<String>> {
+        return mapFromApiResponse(
+            result = networkBoundResources.downloadData {
+                apiServices.updateOnlineStatus()
+            }, mapper = commonApiMapper
+        )
+    }
+
     override suspend fun fetchProfile(): Flow<ApiResult<ProfileApiEntity>> {
         return mapFromApiResponse(
             result = networkBoundResources.downloadData {

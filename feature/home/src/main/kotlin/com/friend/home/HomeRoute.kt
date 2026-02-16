@@ -24,6 +24,7 @@ fun HomeRoute(
 
     LaunchedEffect(Unit) {
         viewModel.action(UiAction.SetCurrentUserInfo)
+        viewModel.updateOnlineStatus()
     }
 
     HomeScreen(

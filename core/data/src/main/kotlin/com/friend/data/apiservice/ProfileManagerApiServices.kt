@@ -16,18 +16,22 @@ import retrofit2.http.Part
 import retrofit2.http.Query
 
 interface ProfileManagerApiServices {
+    @POST("v1/UserOnlineUpdate")
+    suspend fun updateOnlineStatus(
+    ): Response<CommonApiResponse>
+
     @GET("api/Profile/v1/GetProfileInformation")
     suspend fun fetchProfile(
     ): Response<ProfileApiResponse>
 
     @GET("api/Profile/v1/GetOtherProfileInformation")
     suspend fun fetchOtherProfile(
-        @Query("otherUsername") username: String
+        @Query("otherUsername") username: String,
     ): Response<OtherProfileApiResponse>
 
     @POST("api/Profile/v1/UpdateProfileInformation")
     suspend fun performProfileUpdate(
-        @Body params: PostProfileUpdateApiUseCase.Params
+        @Body params: PostProfileUpdateApiUseCase.Params,
     ): Response<CommonApiResponse>
 
     @Multipart
@@ -44,7 +48,7 @@ interface ProfileManagerApiServices {
 
     @POST("v1/AbuseReport")
     suspend fun performReportAbuse(
-        @Body params: PostAbuseReportApiUseCase.Params
+        @Body params: PostAbuseReportApiUseCase.Params,
     ): Response<CommonApiResponse>
 
     @POST("v1/BlockUnblock")

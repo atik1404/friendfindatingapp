@@ -4,6 +4,7 @@ import com.friend.common.base.BaseViewModel
 import com.friend.common.constant.AppConstants
 import com.friend.common.constant.Gender
 import com.friend.domain.apiusecase.auth.UpdateFcmTokenApiUseCase
+import com.friend.domain.apiusecase.profilemanager.UpdateOnlineStatusApiUseCase
 import com.friend.domain.apiusecase.search.FetchCityApiUseCase
 import com.friend.domain.apiusecase.search.FetchCountriesUseCase
 import com.friend.domain.apiusecase.search.FetchFriendSuggestionApiUseCase
@@ -29,6 +30,7 @@ class HomeViewModel @Inject constructor(
     private val fetchCityApiUseCase: FetchCityApiUseCase,
     private val fetchStateApiUseCase: FetchStateApiUseCase,
     private val fetchCountryApiUseCase: FetchCountriesUseCase,
+    private val updateOnlineStatusApiUseCase: UpdateOnlineStatusApiUseCase,
 ) : BaseViewModel() {
     private val _fullName = MutableStateFlow("")
     val fullName: StateFlow<String> = _fullName.asStateFlow()
@@ -305,4 +307,16 @@ class HomeViewModel @Inject constructor(
 
     fun getUsername() =
         sharedPrefHelper.getString(SpKey.userName)
+
+    fun updateOnlineStatus() {
+        execute {
+            updateOnlineStatusApiUseCase.execute().collect { result ->
+                when (result) {
+                    is ApiResult.Error<*> -> {}
+                    is ApiResult.Loading<*> -> {}
+                    is ApiResult.Success<*> -> {}
+                }
+            }
+        }
+    }
 }

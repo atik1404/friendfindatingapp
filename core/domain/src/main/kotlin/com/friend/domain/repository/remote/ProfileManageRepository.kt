@@ -10,6 +10,7 @@ import com.friend.entity.profilemanager.ProfileApiEntity
 import kotlinx.coroutines.flow.Flow
 
 interface ProfileManageRepository {
+    suspend fun updateOnlineStatus(): Flow<ApiResult<String>>
     suspend fun fetchProfile(): Flow<ApiResult<ProfileApiEntity>>
     suspend fun otherProfile(username: String): Flow<ApiResult<OtherProfileApiEntity>>
     suspend fun performProfileUpdate(params: PostProfileUpdateApiUseCase.Params): Flow<ApiResult<String>>
