@@ -103,7 +103,7 @@ class HomeViewModel @Inject constructor(
                 fromAge = filterBy.fromAge,
                 toAge = filterBy.toAge,
                 country = filterBy.country,
-                state = if (filterBy.state == AppConstants.STATE_ALL) null else filterBy.state,
+                state = if (filterBy.state == AppConstants.STATE_ALL) "" else filterBy.state,
                 city = filterBy.city,
                 username = filterBy.username.trim(),
                 isOnlineUser = filterBy.isOnlineUser,
