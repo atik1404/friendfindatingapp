@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import java.io.File
 import javax.inject.Inject
+import com.friend.designsystem.R as Res
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
@@ -65,7 +66,7 @@ class ProfileViewModel @Inject constructor(
                     is ApiResult.Error -> _imageUiSate.update { it.copy(error = result.message) }
                     is ApiResult.Loading -> _imageUiSate.update { it.copy(isLoading = result.loading) }
                     is ApiResult.Success -> {
-                        _uiEvent.send(UiEvent.ShowToastMessage(UiText.Dynamic(result.data)))
+                        _uiEvent.send(UiEvent.ShowToastMessage(UiText.StringRes(Res.string.msg_picture_need_admin_approval)))
                         _imageUiSate.update { it.copy(error = null) }
                         fetchProfile()
                     }
@@ -87,16 +88,7 @@ class ProfileViewModel @Inject constructor(
                     )
 
                     is ApiResult.Loading -> _uiSate.value = UiState.Loading
-                    is ApiResult.Success -> {
-                        _uiEvent.send(
-                            UiEvent.ShowToastMessage(
-                                UiText.Dynamic(
-                                    result.data
-                                )
-                            )
-                        )
-                        fetchProfile()
-                    }
+                    is ApiResult.Success -> fetchProfile()
                 }
             }
         }

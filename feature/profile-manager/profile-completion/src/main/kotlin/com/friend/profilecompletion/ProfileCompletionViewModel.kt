@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
-import timber.log.Timber
 import javax.inject.Inject
 import com.friend.designsystem.R as Res
 
@@ -60,7 +59,6 @@ class ProfileCompletionViewModel @Inject constructor(
 
     private fun defaultValue() {
         val interests = sharedPrefHelper.getString(SpKey.interests).split(":")
-        Timber.e("interests: $interests")
         updateForm { state ->
             state.copy(
                 height = sharedPrefHelper.getString(SpKey.height),
@@ -112,7 +110,7 @@ class ProfileCompletionViewModel @Inject constructor(
                     is ApiResult.Error -> setToastMessage(UiText.Dynamic(result.message))
                     is ApiResult.Loading -> setLoading(result.loading)
                     is ApiResult.Success -> {
-                        setToastMessage(UiText.Dynamic(result.data))
+                        //setToastMessage(UiText.Dynamic(result.data))
                         fetchProfile()
                     }
                 }
