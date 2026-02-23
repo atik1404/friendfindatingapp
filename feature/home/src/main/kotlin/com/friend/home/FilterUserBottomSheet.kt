@@ -48,8 +48,10 @@ fun FilterUserBottomSheet(
     filterUiState: FilterUiState,
     onAction: (UiAction) -> Unit,
     onDismissRequest: () -> Unit = {},
-    onSearchApply: () -> Unit
+    onSearchApply: () -> Unit,
 ) {
+    val filter = filterUiState
+
     ShowBottomSheet(
         heightRatio = .7f,
         cancellable = false,
@@ -60,7 +62,7 @@ fun FilterUserBottomSheet(
     ) {
         FilterUi(
             modifier = modifier,
-            state = filterUiState,
+            state = filter,
             onAction = onAction,
             onResetFilter = {
                 onAction.invoke(UiAction.ResetFilter)
@@ -81,6 +83,7 @@ private fun FilterUi(
     onSearchApply: () -> Unit,
     onResetFilter: () -> Unit,
 ) {
+    var filter = state
     Box(
         modifier = modifier
             .appPadding(SpacingToken.medium)
@@ -94,7 +97,7 @@ private fun FilterUi(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(Res.string.label_username),
                 placeholder = stringResource(Res.string.hint_user_name),
-                onValueChange = { onAction.invoke(UiAction.OnChangeUsername(it)) },
+                onValueChange = { filter = filter.copy(username = it) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next,
@@ -115,8 +118,8 @@ private fun FilterUi(
             AgeRangeUi(
                 minAge = state.fromAge,
                 maxAge = state.toAge,
-                onFromAgeChange = { onAction.invoke(UiAction.OnChangeFromAge(it)) },
-                onToAgeChange = { onAction.invoke(UiAction.OnChangeToAge(it)) },
+                onFromAgeChange = { filter = filter.copy(fromAge = it) },
+                onToAgeChange = { filter = filter.copy(toAge = it) },
             )
 
             Spacer(Modifier.height(SpacingToken.medium))
@@ -125,7 +128,8 @@ private fun FilterUi(
                 title = stringResource(Res.string.label_am_looking_for),
                 selectedValue = Gender.fromValue(state.gender).name,
             ) {
-                onAction.invoke(UiAction.OnChangeGender(it))
+                filter = filter.copy(gender = it.value)
+                //onAction.invoke(UiAction.OnChangeGender(it))
             }
 
             Spacer(modifier = Modifier.height(SpacingToken.medium))
@@ -134,7 +138,8 @@ private fun FilterUi(
                 title = stringResource(Res.string.label_seeking_for),
                 selectedValue = Gender.fromValue(state.interestedIn).name,
             ) {
-                onAction.invoke(UiAction.OnChangeInterested(it))
+                filter = filter.copy(interestedIn = it.value)
+                //onAction.invoke(UiAction.OnChangeInterested(it))
             }
 
             Spacer(modifier = Modifier.height(SpacingToken.medium))
@@ -148,13 +153,16 @@ private fun FilterUi(
                 states = state.states,
                 cities = state.cities,
                 onCountryChange = {
-                    onAction.invoke(UiAction.OnSelectCountry(it))
+                    //onAction.invoke(UiAction.OnSelectCountry(it))
+                    filter = filter.copy(country = it.value)
                 },
                 onStateChange = {
-                    onAction.invoke(UiAction.OnSelectState(it))
+                    //onAction.invoke(UiAction.OnSelectState(it))
+                    filter = filter.copy(state = it.value)
                 },
                 onCityChange = {
-                    onAction.invoke(UiAction.OnSelectCity(it))
+                    //onAction.invoke(UiAction.OnSelectCity(it))
+                    filter = filter.copy(city = it.value)
                 }
             )
 
