@@ -55,22 +55,10 @@ class HomeViewModel @Inject constructor(
     val action: (UiAction) -> Unit = {
         when (it) {
             UiAction.FetchFriendSuggestion -> fetchFriendSuggestions()
-            is UiAction.BodyTypeChanged -> onChangeBodyType(it.value)
-            is UiAction.DrinkingChanged -> onChangeDrinking(it.value)
-            is UiAction.EyesChanged -> onChangeEyes(it.value)
-            is UiAction.HairChanged -> onChangeHair(it.value)
-            is UiAction.OnChangeFromAge -> onChangeFromAge(it.value)
-            is UiAction.OnChangeGender -> onChangeGender(it.value)
-            is UiAction.OnChangeInterested -> onChangeInterested(it.value)
-            is UiAction.OnChangeToAge -> onChangeToAge(it.value)
-            is UiAction.OnChangeUsername -> onChangeUserName(it.value)
-            is UiAction.SmokingChanged -> onChangeSmoking(it.value)
             is UiAction.OnlineUserChanged -> onChangeOnlineUser(it.value)
-            is UiAction.PhotoRequiredChanged -> onChangePhotoRequired(it.value)
-            is UiAction.LookingForChanged -> onChangeLookingFor(it.value)
             UiAction.SetCurrentUserInfo -> setCurrentUserInfo()
             UiAction.ResetFilter -> onResetFilter()
-            UiAction.OnFilterApply -> onFilterApply()
+            is UiAction.OnFilterApply -> onFilterApply(it.value)
             is UiAction.OnSelectCity -> onChangeCity(it.value)
             is UiAction.OnSelectCountry -> onChangeCountry(it.value)
             is UiAction.OnSelectState -> onChangeState(it.value)
@@ -152,25 +140,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun onChangeUserName(value: String) = updateForm { it.copy(username = value) }
-
-    private fun onChangeFromAge(value: String) = updateForm { it.copy(fromAge = value) }
-
-    private fun onChangeToAge(value: String) = updateForm { it.copy(toAge = value) }
-
-    private fun onChangeLookingFor(value: String) = updateForm { it.copy(lookingFor = value) }
-    private fun onChangeBodyType(value: String) = updateForm { it.copy(bodyType = value) }
-
-    private fun onChangeEyes(value: String) = updateForm { it.copy(eyes = value) }
-
-    private fun onChangeHair(value: String) = updateForm { it.copy(hair = value) }
-
-    private fun onChangeSmoking(value: String) = updateForm { it.copy(smoking = value) }
-
-    private fun onChangeDrinking(value: String) = updateForm { it.copy(drinking = value) }
-
-    private fun onChangePhotoRequired(value: Boolean) =
-        updateForm { it.copy(isPhotoRequired = value) }
 
     private fun onChangeOnlineUser(value: Boolean) = updateForm { it.copy(isOnlineUser = value) }
 
@@ -184,28 +153,28 @@ class HomeViewModel @Inject constructor(
                 data = emptyList()
             )
 
-
             _filterUiState.value = FilterUiState(
                 isSearchApply = false,
                 country = sharedPrefHelper.getString(SpKey.country),
                 state = sharedPrefHelper.getString(SpKey.state),
                 city = sharedPrefHelper.getString(SpKey.city),
-                countries = _filterUiState.value.countries,
-                states = _filterUiState.value.states,
-                cities = _filterUiState.value.cities,
             )
             fetchFriendSuggestions()
+            fetchCountries()
+            fetchStates()
+            fetchCities()
+
         }
     }
 
-    private fun onFilterApply() {
+    private fun onFilterApply(filter: FilterUiState) {
         execute {
             _uiState.value = _uiState.value.copy(
                 pageNo = 0,
                 hasMorePage = true,
                 data = emptyList()
             )
-            updateForm { it.copy(isSearchApply = true) }
+            updateForm { filter.copy(isSearchApply = true) }
             fetchFriendSuggestions()
         }
     }
@@ -296,12 +265,12 @@ class HomeViewModel @Inject constructor(
     private fun onChangeCity(value: CityApiEntity) = updateForm { it.copy(city = value.value) }
 
     private fun onChangeState(value: StateApiEntity) {
-        updateForm { it.copy(state = value.value.ifEmpty { AppConstants.STATE_ALL }, city = null) }
+        //updateForm { it.copy(state = value.value.ifEmpty { AppConstants.STATE_ALL }, city = null) }
         fetchCities()
     }
 
     private fun onChangeCountry(value: CountryApiEntity) {
-        updateForm { it.copy(country = value.value, state = null, city = null) }
+        //updateForm { it.copy(country = value.value, state = null, city = null) }
         fetchStates()
     }
 

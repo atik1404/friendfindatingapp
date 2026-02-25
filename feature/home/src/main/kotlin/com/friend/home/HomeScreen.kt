@@ -137,7 +137,7 @@ fun HomeScreen(
             onAction = onEvent,
             onSearchApply = {
                 showFilterBottomSheet = false
-                onEvent.invoke(UiAction.OnFilterApply)
+                onEvent.invoke(UiAction.OnFilterApply(it))
             },
             onDismissRequest = {
                 showFilterBottomSheet = false

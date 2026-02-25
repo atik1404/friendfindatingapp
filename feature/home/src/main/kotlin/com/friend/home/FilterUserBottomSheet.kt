@@ -14,6 +14,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -48,12 +52,10 @@ fun FilterUserBottomSheet(
     filterUiState: FilterUiState,
     onAction: (UiAction) -> Unit,
     onDismissRequest: () -> Unit = {},
-    onSearchApply: () -> Unit,
+    onSearchApply: (FilterUiState) -> Unit,
 ) {
-    val filter = filterUiState
-
     ShowBottomSheet(
-        heightRatio = .7f,
+        heightRatio = .8f,
         cancellable = false,
         isExpand = true,
         onDismissRequest = onDismissRequest,
@@ -62,14 +64,14 @@ fun FilterUserBottomSheet(
     ) {
         FilterUi(
             modifier = modifier,
-            state = filter,
+            state = filterUiState,
             onAction = onAction,
             onResetFilter = {
                 onAction.invoke(UiAction.ResetFilter)
                 onDismissRequest.invoke()
             },
             onSearchApply = {
-                onSearchApply.invoke()
+                onSearchApply.invoke(filterUiState)
             }
         )
     }
@@ -80,10 +82,11 @@ private fun FilterUi(
     modifier: Modifier = Modifier,
     state: FilterUiState,
     onAction: (UiAction) -> Unit,
-    onSearchApply: () -> Unit,
+    onSearchApply: (FilterUiState) -> Unit,
     onResetFilter: () -> Unit,
 ) {
-    var filter = state
+    var filter by remember(state) { mutableStateOf(state) }
+
     Box(
         modifier = modifier
             .appPadding(SpacingToken.medium)
@@ -93,7 +96,7 @@ private fun FilterUi(
                 .verticalScroll(rememberScrollState())
         ) {
             AppOutlineTextField(
-                text = state.username,
+                text = filter.username,
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(Res.string.label_username),
                 placeholder = stringResource(Res.string.hint_user_name),
@@ -116,8 +119,8 @@ private fun FilterUi(
             Spacer(Modifier.height(SpacingToken.micro))
 
             AgeRangeUi(
-                minAge = state.fromAge,
-                maxAge = state.toAge,
+                minAge = filter.fromAge,
+                maxAge = filter.toAge,
                 onFromAgeChange = { filter = filter.copy(fromAge = it) },
                 onToAgeChange = { filter = filter.copy(toAge = it) },
             )
@@ -126,7 +129,7 @@ private fun FilterUi(
 
             GenderSelection(
                 title = stringResource(Res.string.label_am_looking_for),
-                selectedValue = Gender.fromValue(state.gender).name,
+                selectedValue = Gender.fromValue(filter.gender).name,
             ) {
                 filter = filter.copy(gender = it.value)
                 //onAction.invoke(UiAction.OnChangeGender(it))
@@ -136,7 +139,7 @@ private fun FilterUi(
 
             GenderSelection(
                 title = stringResource(Res.string.label_seeking_for),
-                selectedValue = Gender.fromValue(state.interestedIn).name,
+                selectedValue = Gender.fromValue(filter.interestedIn).name,
             ) {
                 filter = filter.copy(interestedIn = it.value)
                 //onAction.invoke(UiAction.OnChangeInterested(it))
@@ -146,19 +149,23 @@ private fun FilterUi(
 
             AddressSection(
                 modifier = modifier,
-                selectedCountry = state.country ?: "",
-                selectedState = state.state ?: "",
-                selectedCity = state.city ?: "",
-                countries = state.countries,
+                selectedCountry = filter.country ?: "",
+                selectedState = filter.state ?: "",
+                selectedCity = filter.city ?: "",
+                countries = filter.countries,
                 states = state.states,
                 cities = state.cities,
                 onCountryChange = {
-                    //onAction.invoke(UiAction.OnSelectCountry(it))
-                    filter = filter.copy(country = it.value)
+                    onAction.invoke(UiAction.OnSelectCountry(it))
+                    filter = filter.copy(
+                        country = it.value,
+                        state = null,
+                        city = null,
+                    )
                 },
                 onStateChange = {
-                    //onAction.invoke(UiAction.OnSelectState(it))
-                    filter = filter.copy(state = it.value)
+                    onAction.invoke(UiAction.OnSelectState(it))
+                    filter = filter.copy(state = it.value, city = null)
                 },
                 onCityChange = {
                     //onAction.invoke(UiAction.OnSelectCity(it))
@@ -177,8 +184,8 @@ private fun FilterUi(
                     modifier = Modifier.weight(1f),
                     label = stringResource(Res.string.label_body_type),
                     placeholder = stringResource(Res.string.hint_select_item),
-                    onValueChange = { onAction.invoke(UiAction.BodyTypeChanged(it)) },
-                    value = state.bodyType ?: ""
+                    onValueChange = { filter = filter.copy(bodyType = it) },
+                    value = filter.bodyType ?: ""
                 )
 
                 Spacer(modifier = Modifier.width(SpacingToken.medium))
@@ -188,8 +195,8 @@ private fun FilterUi(
                     modifier = Modifier.weight(1f),
                     label = stringResource(Res.string.label_looking_for),
                     placeholder = stringResource(Res.string.hint_select_item),
-                    onValueChange = { onAction.invoke(UiAction.LookingForChanged(it)) },
-                    value = state.lookingFor ?: ""
+                    onValueChange = { filter = filter.copy(lookingFor = it) },
+                    value = filter.lookingFor ?: ""
                 )
             }
 
@@ -204,7 +211,7 @@ private fun FilterUi(
                     modifier = Modifier.weight(1f),
                     label = stringResource(Res.string.label_eyes),
                     placeholder = stringResource(Res.string.hint_select_item),
-                    onValueChange = { onAction.invoke(UiAction.EyesChanged(it)) },
+                    onValueChange = { filter = filter.copy(eyes = it) },
                     value = state.eyes ?: ""
                 )
 
@@ -215,7 +222,7 @@ private fun FilterUi(
                     modifier = Modifier.weight(1f),
                     label = stringResource(Res.string.label_hair),
                     placeholder = stringResource(Res.string.hint_select_item),
-                    onValueChange = { onAction.invoke(UiAction.HairChanged(it)) },
+                    onValueChange = { filter = filter.copy(hair = it) },
                     value = state.hair ?: ""
                 )
             }
@@ -232,7 +239,7 @@ private fun FilterUi(
                     modifier = Modifier.weight(1f),
                     label = stringResource(Res.string.label_smoking),
                     placeholder = stringResource(Res.string.hint_select_item),
-                    onValueChange = { onAction.invoke(UiAction.SmokingChanged(it)) },
+                    onValueChange = { filter = filter.copy(smoking = it) },
                     value = state.smoking ?: ""
                 )
 
@@ -243,7 +250,7 @@ private fun FilterUi(
                     modifier = Modifier.weight(1f),
                     label = stringResource(Res.string.label_drinking),
                     placeholder = stringResource(Res.string.hint_select_item),
-                    onValueChange = { onAction.invoke(UiAction.DrinkingChanged(it)) },
+                    onValueChange = { filter = filter.copy(drinking = it) },
                     value = state.drinking ?: ""
                 )
             }
@@ -256,7 +263,7 @@ private fun FilterUi(
             ) {
                 AppCheckbox(
                     checked = state.isOnlineUser,
-                    onCheckedChange = { onAction.invoke(UiAction.OnlineUserChanged(it)) },
+                    onCheckedChange = { filter = filter.copy(isOnlineUser = it) },
                     label = stringResource(Res.string.msg_online_user_only)
                 )
 
@@ -264,7 +271,7 @@ private fun FilterUi(
 
                 AppCheckbox(
                     checked = state.isPhotoRequired,
-                    onCheckedChange = { onAction.invoke(UiAction.PhotoRequiredChanged(it)) },
+                    onCheckedChange = { filter = filter.copy(isPhotoRequired = it) },
                     label = stringResource(Res.string.msg_photo_required)
                 )
             }
@@ -290,7 +297,7 @@ private fun FilterUi(
             AppElevatedButton(
                 modifier = modifier.weight(1f),
                 text = stringResource(Res.string.action_search),
-                onClick = onSearchApply,
+                onClick = { onSearchApply.invoke(filter) },
             )
         }
     }
@@ -350,8 +357,8 @@ private fun AgeRangeUi(
 private fun ScreenPreview() {
     FilterUi(
         state = FilterUiState(),
-        onAction = {},
         onSearchApply = {},
         onResetFilter = {},
+        onAction = {}
     )
 }
