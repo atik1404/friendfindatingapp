@@ -48,6 +48,7 @@ fun HomeScreen(
     profilePicture: String,
     uiState: UiState,
     filterUiState: FilterUiState,
+    locationState: LocationState,
     onEvent: (UiAction) -> Unit,
     navigateToChatListScreen: () -> Unit,
     navigateToOverviewScreen: () -> Unit,
@@ -134,6 +135,7 @@ fun HomeScreen(
     if (showFilterBottomSheet)
         FilterUserBottomSheet(
             filterUiState = filterUiState,
+            locationState = locationState,
             onAction = onEvent,
             onSearchApply = {
                 showFilterBottomSheet = false
@@ -220,6 +222,7 @@ private fun ScreenPreview() {
         navigateToOtherProfileScreen = { },
         onEvent = {},
         filterUiState = FilterUiState(),
+        locationState = LocationState(),
         uiState = UiState(isLoadingMore = true),
         navigateToMembershipScreen = {}
         //state = UiState.Error("No data found"),

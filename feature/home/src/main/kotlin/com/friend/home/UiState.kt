@@ -1,6 +1,5 @@
 package com.friend.home
 
-import com.friend.common.constant.Gender
 import com.friend.entity.search.CityApiEntity
 import com.friend.entity.search.CountryApiEntity
 import com.friend.entity.search.FriendSuggestionApiEntity
@@ -11,9 +10,9 @@ data class FilterUiState(
     val interestedIn: Int = 2,
     val fromAge: String = "18",
     val toAge: String = "99",
-    val country: String? = null,
-    val state: String? = null,
-    val city: String? = null,
+    val country: String = "",
+    val state: String = "",
+    val city: String = "",
     val username: String = "",
     val isOnlineUser: Boolean = false,
     val isPhotoRequired: Boolean = false,
@@ -24,10 +23,6 @@ data class FilterUiState(
     val smoking: String? = null,
     val drinking: String? = null,
     val isSearchApply: Boolean = false,
-
-    val countries: List<CountryApiEntity> = emptyList(),
-    val states: List<StateApiEntity> = emptyList(),
-    val cities: List<CityApiEntity> = emptyList(),
 )
 
 data class UiState(
@@ -39,14 +34,17 @@ data class UiState(
     val hasMorePage: Boolean = true,
 )
 
+data class LocationState(
+    val countries: List<CountryApiEntity> = emptyList(),
+    val states: List<StateApiEntity> = emptyList(),
+    val cities: List<CityApiEntity> = emptyList(),
+)
+
 sealed interface UiAction {
-    object SetCurrentUserInfo : UiAction
+    object CurrentUserInfo : UiAction
     object FetchFriendSuggestion : UiAction
     object ResetFilter : UiAction
     data class OnFilterApply(val value: FilterUiState) : UiAction
-
-    data class OnlineUserChanged(val value: Boolean) : UiAction
-    data class OnSelectCountry(val value: CountryApiEntity) : UiAction
-    data class OnSelectState(val value: StateApiEntity) : UiAction
-    data class OnSelectCity(val value: CityApiEntity) : UiAction
+    data class FetchState(val country: String) : UiAction
+    data class FetchCity(val country: String, val state: String) : UiAction
 }

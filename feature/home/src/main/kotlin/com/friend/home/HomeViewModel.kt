@@ -2,7 +2,6 @@ package com.friend.home
 
 import com.friend.common.base.BaseViewModel
 import com.friend.common.constant.AppConstants
-import com.friend.common.constant.Gender
 import com.friend.domain.apiusecase.auth.UpdateFcmTokenApiUseCase
 import com.friend.domain.apiusecase.profilemanager.UpdateOnlineStatusApiUseCase
 import com.friend.domain.apiusecase.search.FetchCityApiUseCase
@@ -10,9 +9,6 @@ import com.friend.domain.apiusecase.search.FetchCountriesUseCase
 import com.friend.domain.apiusecase.search.FetchFriendSuggestionApiUseCase
 import com.friend.domain.apiusecase.search.FetchStateApiUseCase
 import com.friend.domain.base.ApiResult
-import com.friend.entity.search.CityApiEntity
-import com.friend.entity.search.CountryApiEntity
-import com.friend.entity.search.StateApiEntity
 import com.friend.sharedpref.SharedPrefHelper
 import com.friend.sharedpref.SpKey
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,8 +34,7 @@ class HomeViewModel @Inject constructor(
     private val _profilePicture = MutableStateFlow("")
     val profilePicture: StateFlow<String> = _profilePicture.asStateFlow()
 
-    private val _uiState =
-        MutableStateFlow(UiState())
+    private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private val _filterUiState =
@@ -52,29 +47,40 @@ class HomeViewModel @Inject constructor(
         )
     val filterUiState: StateFlow<FilterUiState> = _filterUiState.asStateFlow()
 
+    private val _location = MutableStateFlow(LocationState())
+    val location: StateFlow<LocationState> = _location.asStateFlow()
+
     val action: (UiAction) -> Unit = {
         when (it) {
             UiAction.FetchFriendSuggestion -> fetchFriendSuggestions()
-            is UiAction.OnlineUserChanged -> onChangeOnlineUser(it.value)
-            UiAction.SetCurrentUserInfo -> setCurrentUserInfo()
+            UiAction.CurrentUserInfo -> currentUserInfo()
             UiAction.ResetFilter -> onResetFilter()
             is UiAction.OnFilterApply -> onFilterApply(it.value)
-            is UiAction.OnSelectCity -> onChangeCity(it.value)
-            is UiAction.OnSelectCountry -> onChangeCountry(it.value)
-            is UiAction.OnSelectState -> onChangeState(it.value)
+            is UiAction.FetchCity -> fetchCities(it.country, it.state)
+            is UiAction.FetchState -> fetchStates(it.country)
         }
     }
 
     init {
         fetchCountries()
-        fetchStates()
-        fetchCities()
-
         updateFcmToken()
         fetchFriendSuggestions()
     }
 
-    private fun setCurrentUserInfo() {
+    private fun updateFcmToken() {
+        execute {
+            updateFcmTokenApiUseCase.execute(sharedPrefHelper.getString(SpKey.fcmToken))
+                .collect { result ->
+                    when (result) {
+                        is ApiResult.Error -> {}
+                        is ApiResult.Loading -> {}
+                        is ApiResult.Success -> {}
+                    }
+                }
+        }
+    }
+
+    private fun currentUserInfo() {
         _fullName.value = sharedPrefHelper.getString(SpKey.fullName)
         _profilePicture.value = sharedPrefHelper.getString(SpKey.profilePicture)
     }
@@ -140,10 +146,17 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-
-    private fun onChangeOnlineUser(value: Boolean) = updateForm { it.copy(isOnlineUser = value) }
-
-    private fun onChangeGender(value: Gender) = updateForm { it.copy(gender = value.value) }
+    private fun onFilterApply(filter: FilterUiState) {
+        execute {
+            _uiState.value = _uiState.value.copy(
+                pageNo = 0,
+                hasMorePage = true,
+                data = emptyList()
+            )
+            _filterUiState.value = filter.copy(isSearchApply = true)
+            fetchFriendSuggestions()
+        }
+    }
 
     private fun onResetFilter() {
         execute {
@@ -160,43 +173,6 @@ class HomeViewModel @Inject constructor(
                 city = sharedPrefHelper.getString(SpKey.city),
             )
             fetchFriendSuggestions()
-            fetchCountries()
-            fetchStates()
-            fetchCities()
-
-        }
-    }
-
-    private fun onFilterApply(filter: FilterUiState) {
-        execute {
-            _uiState.value = _uiState.value.copy(
-                pageNo = 0,
-                hasMorePage = true,
-                data = emptyList()
-            )
-            updateForm { filter.copy(isSearchApply = true) }
-            fetchFriendSuggestions()
-        }
-    }
-
-    private fun onChangeInterested(value: Gender) =
-        updateForm { it.copy(interestedIn = value.value) }
-
-    /** Update only the form part of the UiState in a single place to reduce repetition. */
-    private inline fun updateForm(transform: (FilterUiState) -> FilterUiState) {
-        _filterUiState.update { state -> transform(state) }
-    }
-
-    private fun updateFcmToken() {
-        execute {
-            updateFcmTokenApiUseCase.execute(sharedPrefHelper.getString(SpKey.fcmToken))
-                .collect { result ->
-                    when (result) {
-                        is ApiResult.Error -> {}
-                        is ApiResult.Loading -> {}
-                        is ApiResult.Success -> {}
-                    }
-                }
         }
     }
 
@@ -207,9 +183,11 @@ class HomeViewModel @Inject constructor(
                     is ApiResult.Error -> {}
                     is ApiResult.Loading -> {}
                     is ApiResult.Success -> {
-                        _filterUiState.update {
+                        _location.update {
                             it.copy(
-                                countries = result.data
+                                countries = result.data,
+                                states = emptyList(),
+                                cities = emptyList()
                             )
                         }
                     }
@@ -218,17 +196,15 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun fetchStates() {
+    private fun fetchStates(selectedCountry: String) {
         execute {
-            val current = _filterUiState.value
-            val selectedCountry = current.country ?: ""
             fetchStateApiUseCase.execute(selectedCountry).collect { result ->
                 when (result) {
                     is ApiResult.Error -> {}
                     is ApiResult.Loading -> {}
                     is ApiResult.Success -> {
-                        _filterUiState.update {
-                            it.copy(states = result.data)
+                        _location.update {
+                            it.copy(states = result.data, cities = emptyList())
                         }
                     }
                 }
@@ -236,12 +212,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun fetchCities() {
+    private fun fetchCities(selectedCountry: String, selectedState: String) {
         execute {
-            val current = _filterUiState.value
-            val selectedCountry = current.country ?: ""
-            val selectedState = current.state ?: ""
-
             fetchCityApiUseCase.execute(
                 FetchCityApiUseCase.Params(
                     selectedCountry,
@@ -253,7 +225,7 @@ class HomeViewModel @Inject constructor(
                         is ApiResult.Error -> {}
                         is ApiResult.Loading -> {}
                         is ApiResult.Success -> {
-                            _filterUiState.update {
+                            _location.update {
                                 it.copy(cities = result.data)
                             }
                         }
@@ -262,30 +234,11 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun onChangeCity(value: CityApiEntity) = updateForm { it.copy(city = value.value) }
-
-    private fun onChangeState(value: StateApiEntity) {
-        //updateForm { it.copy(state = value.value.ifEmpty { AppConstants.STATE_ALL }, city = null) }
-        fetchCities()
-    }
-
-    private fun onChangeCountry(value: CountryApiEntity) {
-        //updateForm { it.copy(country = value.value, state = null, city = null) }
-        fetchStates()
-    }
-
-    fun getUsername() =
-        sharedPrefHelper.getString(SpKey.userName)
+    fun getUsername() = sharedPrefHelper.getString(SpKey.userName)
 
     fun updateOnlineStatus() {
         execute {
-            updateOnlineStatusApiUseCase.execute().collect { result ->
-                when (result) {
-                    is ApiResult.Error<*> -> {}
-                    is ApiResult.Loading<*> -> {}
-                    is ApiResult.Success<*> -> {}
-                }
-            }
+            updateOnlineStatusApiUseCase.execute().collect { }
         }
     }
 }

@@ -50,6 +50,7 @@ import com.friend.designsystem.R as Res
 fun FilterUserBottomSheet(
     modifier: Modifier = Modifier,
     filterUiState: FilterUiState,
+    locationState: LocationState,
     onAction: (UiAction) -> Unit,
     onDismissRequest: () -> Unit = {},
     onSearchApply: (FilterUiState) -> Unit,
@@ -64,14 +65,15 @@ fun FilterUserBottomSheet(
     ) {
         FilterUi(
             modifier = modifier,
-            state = filterUiState,
             onAction = onAction,
+            filterUiState = filterUiState,
+            locationState = locationState,
             onResetFilter = {
                 onAction.invoke(UiAction.ResetFilter)
                 onDismissRequest.invoke()
             },
-            onSearchApply = {
-                onSearchApply.invoke(filterUiState)
+            onSearchApply = { state ->
+                onSearchApply.invoke(state)
             }
         )
     }
@@ -80,12 +82,13 @@ fun FilterUserBottomSheet(
 @Composable
 private fun FilterUi(
     modifier: Modifier = Modifier,
-    state: FilterUiState,
+    filterUiState: FilterUiState,
+    locationState: LocationState,
     onAction: (UiAction) -> Unit,
     onSearchApply: (FilterUiState) -> Unit,
     onResetFilter: () -> Unit,
 ) {
-    var filter by remember(state) { mutableStateOf(state) }
+    var filter by remember(filterUiState) { mutableStateOf(filterUiState) }
 
     Box(
         modifier = modifier
@@ -132,7 +135,6 @@ private fun FilterUi(
                 selectedValue = Gender.fromValue(filter.gender).name,
             ) {
                 filter = filter.copy(gender = it.value)
-                //onAction.invoke(UiAction.OnChangeGender(it))
             }
 
             Spacer(modifier = Modifier.height(SpacingToken.medium))
@@ -142,33 +144,37 @@ private fun FilterUi(
                 selectedValue = Gender.fromValue(filter.interestedIn).name,
             ) {
                 filter = filter.copy(interestedIn = it.value)
-                //onAction.invoke(UiAction.OnChangeInterested(it))
             }
 
             Spacer(modifier = Modifier.height(SpacingToken.medium))
 
             AddressSection(
                 modifier = modifier,
-                selectedCountry = filter.country ?: "",
-                selectedState = filter.state ?: "",
-                selectedCity = filter.city ?: "",
-                countries = filter.countries,
-                states = state.states,
-                cities = state.cities,
+                selectedCountry = filter.country,
+                selectedState = filter.state,
+                selectedCity = filter.city,
+                countries = locationState.countries,
+                states = locationState.states,
+                cities = locationState.cities,
                 onCountryChange = {
-                    onAction.invoke(UiAction.OnSelectCountry(it))
+                    onAction.invoke(UiAction.FetchState(it.value))
                     filter = filter.copy(
                         country = it.value,
-                        state = null,
-                        city = null,
+                        state = "",
+                        city = "",
                     )
                 },
                 onStateChange = {
-                    onAction.invoke(UiAction.OnSelectState(it))
-                    filter = filter.copy(state = it.value, city = null)
+                    onAction.invoke(
+                        UiAction.FetchCity(
+                            country = filter.country,
+                            state = it.value
+                        )
+                    )
+                    filter =
+                        filter.copy(state = it.value.ifEmpty { AppConstants.STATE_ALL }, city = "")
                 },
                 onCityChange = {
-                    //onAction.invoke(UiAction.OnSelectCity(it))
                     filter = filter.copy(city = it.value)
                 }
             )
@@ -212,7 +218,7 @@ private fun FilterUi(
                     label = stringResource(Res.string.label_eyes),
                     placeholder = stringResource(Res.string.hint_select_item),
                     onValueChange = { filter = filter.copy(eyes = it) },
-                    value = state.eyes ?: ""
+                    value = filter.eyes ?: ""
                 )
 
                 Spacer(modifier = Modifier.width(SpacingToken.medium))
@@ -223,7 +229,7 @@ private fun FilterUi(
                     label = stringResource(Res.string.label_hair),
                     placeholder = stringResource(Res.string.hint_select_item),
                     onValueChange = { filter = filter.copy(hair = it) },
-                    value = state.hair ?: ""
+                    value = filter.hair ?: ""
                 )
             }
 
@@ -240,7 +246,7 @@ private fun FilterUi(
                     label = stringResource(Res.string.label_smoking),
                     placeholder = stringResource(Res.string.hint_select_item),
                     onValueChange = { filter = filter.copy(smoking = it) },
-                    value = state.smoking ?: ""
+                    value = filter.smoking ?: ""
                 )
 
                 Spacer(modifier = Modifier.width(SpacingToken.medium))
@@ -251,7 +257,7 @@ private fun FilterUi(
                     label = stringResource(Res.string.label_drinking),
                     placeholder = stringResource(Res.string.hint_select_item),
                     onValueChange = { filter = filter.copy(drinking = it) },
-                    value = state.drinking ?: ""
+                    value = filter.drinking ?: ""
                 )
             }
 
@@ -262,7 +268,7 @@ private fun FilterUi(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 AppCheckbox(
-                    checked = state.isOnlineUser,
+                    checked = filter.isOnlineUser,
                     onCheckedChange = { filter = filter.copy(isOnlineUser = it) },
                     label = stringResource(Res.string.msg_online_user_only)
                 )
@@ -270,7 +276,7 @@ private fun FilterUi(
                 Spacer(modifier = Modifier.height(SpacingToken.extraSmall))
 
                 AppCheckbox(
-                    checked = state.isPhotoRequired,
+                    checked = filter.isPhotoRequired,
                     onCheckedChange = { filter = filter.copy(isPhotoRequired = it) },
                     label = stringResource(Res.string.msg_photo_required)
                 )
@@ -356,9 +362,10 @@ private fun AgeRangeUi(
 @LightPreview
 private fun ScreenPreview() {
     FilterUi(
-        state = FilterUiState(),
+        filterUiState = FilterUiState(),
         onSearchApply = {},
         onResetFilter = {},
-        onAction = {}
+        onAction = {},
+        locationState = LocationState()
     )
 }

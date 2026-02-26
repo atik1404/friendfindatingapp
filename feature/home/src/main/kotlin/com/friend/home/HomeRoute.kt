@@ -21,9 +21,10 @@ fun HomeRoute(
     val profilePicture by viewModel.profilePicture.collectAsState()
     val uiSate by viewModel.uiState.collectAsState()
     val filterUiSate by viewModel.filterUiState.collectAsStateWithLifecycle()
+    val locationUiSate by viewModel.location.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.action(UiAction.SetCurrentUserInfo)
+        viewModel.action(UiAction.CurrentUserInfo)
         viewModel.updateOnlineStatus()
     }
 
@@ -32,6 +33,7 @@ fun HomeRoute(
         profilePicture = profilePicture,
         uiState = uiSate,
         filterUiState = filterUiSate,
+        locationState = locationUiSate,
         navigateToChatListScreen = navigateToChatListScreen,
         navigateToOverviewScreen = navigateToOverviewScreen,
         onEvent = {
