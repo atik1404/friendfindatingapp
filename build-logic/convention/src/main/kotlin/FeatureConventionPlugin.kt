@@ -1,5 +1,5 @@
 
-import com.android.build.gradle.LibraryExtension
+import com.android.build.api.dsl.LibraryExtension
 import com.friendfinapp.AppConfig
 import com.friendfinapp.libs
 import org.gradle.api.Plugin

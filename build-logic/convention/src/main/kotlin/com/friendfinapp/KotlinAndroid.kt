@@ -15,15 +15,15 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
  * Configure base Kotlin with Android options
  */
 internal fun Project.configureKotlinAndroid(
-    commonExtension: CommonExtension<*, *, *, *, *, *>,
+    commonExtension: CommonExtension,
 ) {
     commonExtension.apply {
         compileSdk = AppConfig.compileSdkVersion
 
-        defaultConfig {
+        defaultConfig.apply {
             minSdk = AppConfig.minimumSdkVersion
         }
-        compileOptions {
+        compileOptions.apply {
             sourceCompatibility = AppConfig.compatibilityVersion
             targetCompatibility = AppConfig.compatibilityVersion
             isCoreLibraryDesugaringEnabled = true

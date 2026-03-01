@@ -6,7 +6,6 @@ plugins {
 android {
     namespace = "com.friend.cache"
 }
-
 dependencies {
     implementation(projects.core.domain)
 }
