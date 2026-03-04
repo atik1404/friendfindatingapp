@@ -15,7 +15,7 @@ class FeatureConventionPlugin : Plugin<Project> {
                 apply("android.library")
                 apply("android.library.compose")
                 apply("android.hilt")
-                apply("org.jetbrains.kotlin.plugin.compose")
+                //apply("org.jetbrains.kotlin.plugin.compose")
             }
             extensions.configure<LibraryExtension> {
                 defaultConfig {

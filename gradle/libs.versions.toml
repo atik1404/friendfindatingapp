@@ -1,5 +1,5 @@
 [versions]
-androidGradlePlugin = "9.0.1"
+androidGradlePlugin = "9.1.0"
 kotlin = "2.3.10"
 ksp = "2.3.4"
 
@@ -398,3 +398,4 @@ android-features = { id = "android.features", version = "unspecified" }
 android-firebase = { id = "android.firebase", version = "unspecified" }
 android-hilt = { id = "android.hilt", version = "unspecified" }
 android-core-library = { id = "android.library", version = "unspecified" }
+jvm-library = { id = "jvm.library", version = "unspecified" }
