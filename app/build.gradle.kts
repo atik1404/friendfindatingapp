@@ -139,3 +139,7 @@ dependencies {
     }
 
 }
+
+configurations.all {
+    exclude(group = "org.chromium.net")
+}
