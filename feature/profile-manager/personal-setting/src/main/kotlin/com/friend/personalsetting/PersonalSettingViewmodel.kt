@@ -187,7 +187,7 @@ class PersonalSettingViewmodel @Inject constructor(
                     is ApiResult.Error -> setToastMessage(UiText.Dynamic(result.message))
                     is ApiResult.Loading -> _formUiState.update { it.copy(isSubmitting = result.loading) }
                     is ApiResult.Success -> {
-                        setToastMessage(UiText.Dynamic(result.data))
+                        //setToastMessage(UiText.Dynamic(result.data))
                         fetchProfile()
                     }
                 }
@@ -291,8 +291,18 @@ class PersonalSettingViewmodel @Inject constructor(
                     }
 
                     ProfileCompletionIoResult.InvalidGender -> setToastMessage(UiText.StringRes(Res.string.error_invalid_gender))
-                    ProfileCompletionIoResult.InvalidInterestedIn -> setToastMessage(UiText.StringRes(Res.string.error_invalid_interest_in))
-                    ProfileCompletionIoResult.InvalidBirthDate -> setToastMessage(UiText.StringRes(Res.string.error_invalid_birth_date))
+                    ProfileCompletionIoResult.InvalidInterestedIn -> setToastMessage(
+                        UiText.StringRes(
+                            Res.string.error_invalid_interest_in
+                        )
+                    )
+
+                    ProfileCompletionIoResult.InvalidBirthDate -> setToastMessage(
+                        UiText.StringRes(
+                            Res.string.error_invalid_birth_date
+                        )
+                    )
+
                     ProfileCompletionIoResult.InvalidCountry -> setToastMessage(UiText.StringRes(Res.string.error_invalid_country))
                     ProfileCompletionIoResult.InvalidState -> setToastMessage(UiText.StringRes(Res.string.error_invalid_state))
                     ProfileCompletionIoResult.InvalidCity -> setToastMessage(UiText.StringRes(Res.string.error_invalid_city))
