@@ -121,10 +121,7 @@ class ForwardMessageViewModel @Inject constructor(
                         )
                     }
 
-                    is ApiResult.Success -> {
-                        showToastMessage(UiText.Dynamic(result.data))
-                        _uiEvent.send(UiEvent.ForwardMessageComplete)
-                    }
+                    is ApiResult.Success -> _uiEvent.send(UiEvent.ForwardMessageComplete)
                 }
             }
         }
