@@ -87,6 +87,7 @@ lottieVersion = "6.7.1"
 
 playServicesAds = "25.0.0"
 playServicesAuth = "21.5.1"
+playServicesCronet = "18.0.1"
 playServicesRecaptcha = "18.9.0-beta01"
 playServicesSafetynet = "18.1.0"
 playAppUpdateVersionVersion = "2.0.1"
@@ -208,6 +209,7 @@ photoview = { module = "com.github.chrisbanes:PhotoView", version.ref = "photovi
 
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+play-services-cronet = { module = "com.google.android.gms:play-services-cronet", version.ref = "playServicesCronet" }
 play-services-recaptcha = { module = "com.google.android.recaptcha:recaptcha", version.ref = "playServicesRecaptcha" }
 play-services-safetynet = { module = "com.google.android.gms:play-services-safetynet", version.ref = "playServicesSafetynet" }
 

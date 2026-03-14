@@ -72,3 +72,7 @@
 
 # If you use Firebase
 -keep class com.google.firebase.** { *; }
+
+-keep class org.chromium.net.** { *; }
+-dontwarn org.chromium.net.**
+-keep class com.google.android.gms.internal.recaptcha.** { *; }

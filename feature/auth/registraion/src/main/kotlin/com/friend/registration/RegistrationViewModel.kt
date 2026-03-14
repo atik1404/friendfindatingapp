@@ -38,7 +38,7 @@ class RegistrationViewModel @Inject constructor(
     private val postRegistrationApiUseCase: PostRegistrationApiUseCase,
     private val postLoginApiUseCase: PostLoginApiUseCase,
     private val sharedPrefHelper: SharedPrefHelper,
-    private val application: Application
+    private val application: Application,
 ) : BaseViewModel() {
     val ioError get() = postRegistrationApiUseCase.ioError.receiveAsFlow()
 
@@ -358,7 +358,7 @@ class RegistrationViewModel @Inject constructor(
     }
 
     private fun handleRecaptcha(
-        onResult: (Boolean) -> Unit = {}
+        onResult: (Boolean) -> Unit = {},
     ) {
         execute {
             val siteKey = "6LeMdEksAAAAAHbOZMR-HfHgBTggNHpvdizahH83"
