@@ -97,7 +97,7 @@ private fun ChatListItem(
     ) {
         NetworkImageLoader(
             url = item.userImage,
-            name = item.toUsername,
+            name = item.fullName,
             modifier = Modifier
                 .size(50.dp),
             shape = CircleShape
