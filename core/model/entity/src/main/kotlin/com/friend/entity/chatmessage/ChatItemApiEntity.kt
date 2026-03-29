@@ -7,5 +7,6 @@ data class ChatItemApiEntity(
     val fullName: String,
     val lastMessage: String,
     val dateTime: String,
+    val readableDateTime: String = "",
     val isItemSelected: Boolean = false
 )

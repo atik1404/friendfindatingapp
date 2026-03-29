@@ -25,8 +25,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.friend.common.constant.AppConstants
-import com.friend.common.dateparser.DateTimePatterns
-import com.friend.common.dateparser.DateTimeParser
 import com.friend.designsystem.spacing.RadiusToken
 import com.friend.designsystem.spacing.SpacingToken
 import com.friend.designsystem.spacing.appPaddingSymmetric
@@ -134,12 +132,11 @@ private fun ChatListItem(
 
         AppText(
             modifier = Modifier
-                .weight(.5f)
                 .align(alignment = Alignment.CenterVertically),
-            text = DateTimeParser.parseToPattern(item.dateTime, DateTimePatterns.TIME_12_HM_AMPM),
+            text = item.readableDateTime,
             textStyle = AppTypography.bodySmall,
-            fontWeight = FontWeight.Medium,
-            textColor = MaterialTheme.textColors.primary,
+            fontWeight = FontWeight.Light,
+            textColor = MaterialTheme.textColors.secondary,
         )
     }
 }
@@ -154,7 +151,8 @@ private fun ScreenPreview() {
             userImage = "",
             fullName = "Tom Cruise",
             lastMessage = "Hi, How are you?Hi, How are you?Hi, How are you?Hi, How are you?",
-            dateTime = "2025-12-16"
+            dateTime = "2025-12-16",
+            readableDateTime = "2025-12-16",
         )
     )
 }
