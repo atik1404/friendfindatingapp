@@ -87,9 +87,7 @@ lottieVersion = "6.7.1"
 
 playServicesAds = "25.1.0"
 playServicesAuth = "21.5.1"
-playServicesCronet = "18.1.1"
-playServicesRecaptcha = "18.9.0-beta01"
-playServicesSafetynet = "18.1.0"
+playServicesRecaptcha = "18.8.0"
 playAppUpdateVersionVersion = "2.0.1"
 googleCredential = "1.6.0-rc02"
 googleAuthId = "1.2.0"
@@ -171,9 +169,6 @@ dot-indicator = { group = "com.google.accompanist", name = "accompanist-pager-in
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timberVersion" }
 dateced = { group = "com.github.kamrul3288", name = "dateced", version.ref = "dateced" }
 
-
-glide-image-loader = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
-glide-annotation = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
 glide-compose = { group = "com.github.bumptech.glide", name = "compose", version.ref = "glide" }
 
 coil = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
@@ -209,9 +204,7 @@ photoview = { module = "com.github.chrisbanes:PhotoView", version.ref = "photovi
 
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
-play-services-cronet = { module = "com.google.android.gms:play-services-cronet", version.ref = "playServicesCronet" }
-play-services-recaptcha = { module = "com.google.android.recaptcha:recaptcha", version.ref = "playServicesRecaptcha" }
-play-services-safetynet = { module = "com.google.android.gms:play-services-safetynet", version.ref = "playServicesSafetynet" }
+play-services-recaptcha = { group = "com.google.android.recaptcha", name = "recaptcha", version.ref = "playServicesRecaptcha" }
 
 androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "googleCredential" }
 androidx-credentials-service-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "googleCredential" }
