@@ -66,14 +66,17 @@ class BaseApplication : Application(),
             Timber.plant(Timber.DebugTree())
 
         appOpenAdManager = AppOpenAdManager(appOpenAdId)
-        MobileAds.initialize(this)
 
-        registerActivityLifecycleCallbacks(this)
-        ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+        if (!BuildConfig.DEBUG) {
+            MobileAds.initialize(this)
+
+            registerActivityLifecycleCallbacks(this)
+            ProcessLifecycleOwner.get().lifecycle.addObserver(this)
+            startConnection()
+        }
 
         setupNotificationChannels()
         getFirebaseToken()
-        startConnection()
     }
 
     override fun onStop(owner: LifecycleOwner) {
