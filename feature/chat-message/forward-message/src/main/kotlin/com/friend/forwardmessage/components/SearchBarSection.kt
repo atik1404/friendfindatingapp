@@ -22,7 +22,7 @@ fun SearchBarSection(
     AppBaseTextField(
         value = searchKeyword,
         modifier = Modifier.fillMaxWidth(),
-        placeholder = stringResource(Res.string.hint_search_here),
+        placeholder = stringResource(Res.string.hint_search_by_username),
         onValueChange = { onSearchKeywordChange.invoke(it) },
         colors = MaterialTheme.textFieldColors.outlinedTextField,
         shape = RoundedCornerShape(SpacingToken.medium),
