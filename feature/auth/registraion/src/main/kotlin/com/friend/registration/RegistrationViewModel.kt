@@ -19,6 +19,8 @@ import com.friend.sharedpref.SpKey
 import com.friend.ui.common.UiText
 import com.google.android.recaptcha.Recaptcha
 import com.google.android.recaptcha.RecaptchaAction
+import com.google.android.recaptcha.RecaptchaClient
+import com.google.android.recaptcha.RecaptchaException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,8 +40,9 @@ class RegistrationViewModel @Inject constructor(
     private val postRegistrationApiUseCase: PostRegistrationApiUseCase,
     private val postLoginApiUseCase: PostLoginApiUseCase,
     private val sharedPrefHelper: SharedPrefHelper,
-    private val application: Application
+    private val application: Application,
 ) : BaseViewModel() {
+    private var recaptchaClient: RecaptchaClient? = null
     val ioError get() = postRegistrationApiUseCase.ioError.receiveAsFlow()
 
     private val _formUiState = MutableStateFlow(UiState())
@@ -71,6 +74,7 @@ class RegistrationViewModel @Inject constructor(
     }
 
     init {
+        initializeRecaptchaClient()
         fetchCountries()
         bindIoError()
     }
@@ -357,16 +361,30 @@ class RegistrationViewModel @Inject constructor(
         }
     }
 
+
+    private fun initializeRecaptchaClient() {
+        execute {
+            try {
+                val siteKey = "6LeMdEksAAAAAHbOZMR-HfHgBTggNHpvdizahH83"
+                recaptchaClient = Recaptcha.fetchClient(application, siteKey)
+            } catch (e: RecaptchaException) {
+                Timber.e("Recaptcha error: ${e.message}")
+            }
+        }
+    }
+
     private fun handleRecaptcha(
-        onResult: (Boolean) -> Unit = {}
+        onResult: (Boolean) -> Unit = {},
     ) {
         execute {
-            val siteKey = "6LeMdEksAAAAAHbOZMR-HfHgBTggNHpvdizahH83"
+            val client = recaptchaClient
+            if (client == null) {
+                Timber.e("Recaptcha client is not initialized yet")
+                onResult(false)
+                return@execute
+            }
 
-            val recaptchaClient =
-                Recaptcha.fetchClient(application = application, siteKey = siteKey)
-
-            recaptchaClient.execute(RecaptchaAction.LOGIN)
+            client.execute(RecaptchaAction.LOGIN, timeout = 10_000L)
                 .onSuccess {
                     Timber.e("Recaptcha response: $it")
                     onResult.invoke(true)

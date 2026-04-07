@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -32,8 +32,6 @@ import com.friend.designsystem.theme.textColors
 import com.friend.designsystem.typography.AppTypography
 import com.friend.registration.component.AddressSection
 import com.friend.registration.component.BirthDateSelection
-import com.friend.registration.component.EmailSection
-import com.friend.registration.component.NameSection
 import com.friend.registration.component.PasswordSection
 import com.friend.ui.common.AppToolbar
 import com.friend.ui.common.ErrorUi
@@ -75,6 +73,7 @@ fun RegistrationScreen(
                 .padding(padding)
                 .consumeWindowInsets(padding)    // prevent double-inset consumption downstream
                 .imePadding()                    // lift content when keyboard shows
+                .navigationBarsPadding()
                 .verticalScroll(rememberScrollState()) // simple, contents are small; LazyColumn not necessary
                 .appPadding(SpacingToken.small),
         ) {

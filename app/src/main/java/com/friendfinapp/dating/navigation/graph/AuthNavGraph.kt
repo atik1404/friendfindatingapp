@@ -64,7 +64,7 @@ object AuthNavGraph {
                     backStack.removeLastOrNull()
                 },
                 navigateToProfileCompletion = {
-                    backStack.remove(AuthScreens.RegistrationNavScreen(key.email, key.displayName))
+                    backStack.removeLastOrNull()
                     backStack.add(ProfileScreens.ProfileCompletionNavScreen)
                 },
                 privacyPolicyClicked = {
