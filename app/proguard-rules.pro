@@ -76,3 +76,14 @@
 -keep class org.chromium.net.** { *; }
 -dontwarn org.chromium.net.**
 -keep class com.google.android.gms.internal.recaptcha.** { *; }
+
+# WorkManager internal Room database
+-keep class androidx.work.impl.WorkDatabase_Impl { *; }
+-keep class androidx.work.impl.model.** { *; }
+
+# Keep Room database implementations
+-keep class * extends androidx.room.RoomDatabase
+-keep class **_Impl { *; }
+
+# App Startup
+-keep class androidx.startup.** { *; }

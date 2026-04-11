@@ -3,9 +3,9 @@ androidGradlePlugin = "9.1.0"
 kotlin = "2.3.20"
 ksp = "2.3.4"
 
-firebasecrashlyticsplugin = "3.0.6"
+firebasecrashlyticsplugin = "3.0.7"
 firebasePerfplugin = "2.0.2"
-firebaseBomVersion = "34.11.0"
+firebaseBomVersion = "34.12.0"
 googlePermission = "0.37.3"
 
 googleServices = "4.4.4"
@@ -23,10 +23,10 @@ constraintlayout = "1.1.1"
 runtime = "1.10.6"
 
 androidxComposeNavigation = "2.9.7"
-nav3Core = "1.0.1"
+nav3Core = "1.1.0"
 lifecycleViewmodelNav3 = "2.10.0"
 kotlinSerialization = "2.1.21"
-kotlinxSerializationCore = "1.10.0"
+kotlinxSerializationCore = "1.11.0"
 material3AdaptiveNav3 = "1.0.0-SNAPSHOT"
 
 appcompatVersion = "1.7.1"
@@ -89,7 +89,7 @@ playServicesAds = "25.1.0"
 playServicesAuth = "21.5.1"
 playServicesRecaptcha = "18.8.0"
 playAppUpdateVersionVersion = "2.0.1"
-googleCredential = "1.6.0-rc02"
+googleCredential = "1.6.0"
 googleAuthId = "1.2.0"
 
 
