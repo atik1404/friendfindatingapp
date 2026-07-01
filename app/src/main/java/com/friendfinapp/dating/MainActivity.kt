@@ -17,6 +17,9 @@ import com.friend.common.extfun.showAlertDialog
 import com.friend.common.utils.BillingManager
 import com.friend.designsystem.theme.AppTheme
 import com.friendfinapp.dating.navigation.AppNavConfiguration
+import com.microsoft.clarity.Clarity
+import com.microsoft.clarity.ClarityConfig
+import com.microsoft.clarity.models.LogLevel
 import dagger.hilt.android.AndroidEntryPoint
 import com.friend.designsystem.R as Res
 
@@ -57,6 +60,16 @@ class MainActivity : ComponentActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
+
+        initClarity()
+    }
+
+    private fun initClarity() {
+        val config = ClarityConfig(
+            projectId = "wknl2nfwez",
+            logLevel = LogLevel.None // Note: Use "LogLevel.Verbose" value while testing to debug initialization issues.
+        )
+        Clarity.initialize(applicationContext, config)
     }
 
     override fun onResume() {

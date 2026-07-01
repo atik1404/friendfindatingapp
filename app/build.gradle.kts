@@ -133,6 +133,8 @@ dependencies {
         implementation(libs.android.image.cropper)
         implementation(libs.billing)
 
+        implementation(libs.crarity.compose)
+
         testImplementation(test.junit)
         androidTestImplementation(test.extjunit)
         androidTestImplementation(test.espresso)

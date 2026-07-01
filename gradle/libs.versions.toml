@@ -92,6 +92,8 @@ playAppUpdateVersionVersion = "2.0.1"
 googleCredential = "1.6.0"
 googleAuthId = "1.2.0"
 
+clarityCompose = "3.8.3"
+
 
 espressoVersion = "3.7.0"
 junitVersion = "4.13.2"
@@ -227,6 +229,7 @@ exoplayer-compose = { module = "androidx.media3:media3-ui-compose", version.ref 
 androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "multidex" }
 androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
 
+crarity-compose = { group = "com.microsoft.clarity", name = "clarity-compose", version.ref = "clarityCompose" }
 
 test-junit = { group = "junit", name = "junit", version.ref = "junitVersion" }
 test-extjunit = { group = "androidx.test.ext", name = "junit", version.ref = "junitExtVersion" }
