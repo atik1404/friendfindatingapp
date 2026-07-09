@@ -50,7 +50,7 @@ class SentryAnalyticsManager @Inject constructor(
         runCatching {
             SentryAndroid.init(context) { options ->
                 // ----- Release & environment -------------------------------
-                options.dsn = BuildConfig.SENTRY_DSN // empty => SDK stays disabled
+                options.dsn = "https://30dd7e043a8d131bd041e995441b7ae6@o4511648182894592.ingest.de.sentry.io/4511659756093520"
                 options.environment = BuildConfig.SENTRY_ENVIRONMENT
                 options.release = BuildConfig.SENTRY_RELEASE
                 options.isDebug = BuildConfig.DEBUG
@@ -64,7 +64,7 @@ class SentryAnalyticsManager @Inject constructor(
                 options.isAttachViewHierarchy = true
                 // Screenshots can leak PII; keep off (Session Replay already
                 // provides masked visual context).
-                options.isAttachScreenshot = false
+                options.isAttachScreenshot = true
 
                 // ----- Performance monitoring & tracing --------------------
                 options.tracesSampleRate = BuildConfig.SENTRY_TRACES_SAMPLE_RATE
@@ -117,7 +117,7 @@ class SentryAnalyticsManager @Inject constructor(
         runCatching {
             val user = User().apply {
                 id = userId
-                username = sharedPref.getString(SpKey.fullName).ifBlank { userId }
+                username = sharedPref.getString(SpKey.userName).ifBlank { userId }
                 // Email is PII: only attach when explicitly allowed.
                 if (sendPii) email = sharedPref.getString(SpKey.email).ifBlank { null }
             }

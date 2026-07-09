@@ -9,6 +9,8 @@ import com.friend.videoplayer.VideoPlayerScreenRoute
 import com.friendfinapp.dating.navigation.ChatMessageScreens
 import com.friendfinapp.dating.navigation.CommonScreens
 import com.friendfinapp.dating.navigation.ProfileScreens
+import io.sentry.Sentry
+
 
 object CommonNavGraph {
     fun register(
@@ -18,6 +20,11 @@ object CommonNavGraph {
         entry(CommonScreens.HomeNavScreen) {
             HomeRoute(
                 navigateToChatListScreen = {
+                    try {
+                        throw Exception("This is a test.")
+                    } catch (e: Exception) {
+                        Sentry.captureException(e)
+                    }
                     backStack.add(ChatMessageScreens.ChatListNavScreen)
                 },
                 navigateToProfileScreen = {
