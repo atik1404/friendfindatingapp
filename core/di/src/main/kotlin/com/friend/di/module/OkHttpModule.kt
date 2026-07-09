@@ -7,6 +7,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.sentry.okhttp.SentryOkHttpEventListener
+import io.sentry.okhttp.SentryOkHttpInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import timber.log.Timber
@@ -37,6 +39,12 @@ object OkHttpModule {
             .connectTimeout(timeOut.toLong(), TimeUnit.SECONDS)
             .readTimeout(timeOut.toLong(), TimeUnit.SECONDS)
             .writeTimeout(timeOut.toLong(), TimeUnit.SECONDS)
+            // Sentry: records HTTP breadcrumbs and creates client spans for
+            // distributed tracing (DNS/SSL/request/response). No-op until
+            // Sentry is initialized. Sensitive headers are scrubbed in
+            // beforeSend/beforeBreadcrumb.
+            .eventListener(SentryOkHttpEventListener())
+            .addInterceptor(SentryOkHttpInterceptor())
         httpClient.authenticator(refreshToken)
         httpClient.addInterceptor(loggerInterceptor)
         httpClient.addInterceptor { chain ->

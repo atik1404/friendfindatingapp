@@ -1,25 +1,39 @@
 package com.friendfinapp.dating.analytics
 
 import com.friend.common.analytics.AnalyticsService
-import dagger.Binds
+import com.friend.common.observability.MonitoringService
+import com.friendfinapp.dating.observability.SentryAnalyticsManager
+import com.friendfinapp.dating.observability.SentryMonitoringService
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 /**
- * Binds the single application-wide [AnalyticsService] implementation.
+ * Provides the application-wide observability bindings.
  *
- * Because the binding lives in the app's [SingletonComponent], the same
- * singleton is injected everywhere (ViewModels in feature modules,
- * infrastructure such as the network layer, and the Application/Activity),
- * while callers only ever depend on the [AnalyticsService] abstraction.
+ * - [AnalyticsService] is a [CompositeAnalyticsService] that fans out to both
+ *   Clarity and Sentry. Because it lives in the [SingletonComponent], the same
+ *   singleton is injected everywhere (feature ViewModels, the network layer,
+ *   the Application/Activity) while callers depend only on the abstraction.
+ *   Sentry is listed first so it is initialized as early as possible to capture
+ *   startup issues.
+ * - [MonitoringService] exposes Sentry's reliability/performance APIs
+ *   (exceptions, logs, spans).
  */
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class AnalyticsModule {
+object AnalyticsModule {
 
-    @Binds
+    @Provides
     @Singleton
-    abstract fun bindAnalyticsService(impl: ClarityAnalyticsManager): AnalyticsService
+    fun provideAnalyticsService(
+        sentry: SentryAnalyticsManager,
+        clarity: ClarityAnalyticsManager,
+    ): AnalyticsService = CompositeAnalyticsService(listOf(sentry, clarity))
+
+    @Provides
+    @Singleton
+    fun provideMonitoringService(impl: SentryMonitoringService): MonitoringService = impl
 }

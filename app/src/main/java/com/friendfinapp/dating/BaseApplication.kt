@@ -80,16 +80,18 @@ class BaseApplication : Application(),
 
     override fun onCreate() {
         super<Application>.onCreate()
+
+        // Initialize observability FIRST (Sentry + Clarity, once each) so crashes
+        // during the rest of startup are captured, then observe the process
+        // lifecycle for session start/end + foreground/background.
+        analytics.initialize()
+        ProcessLifecycleOwner.get().lifecycle.addObserver(analyticsLifecycleObserver)
+
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         if (BuildConfig.DEBUG)
             Timber.plant(Timber.DebugTree())
 
         appOpenAdManager = AppOpenAdManager(appOpenAdId)
-
-        // Initialize analytics once, at process startup, then observe the
-        // process lifecycle for session start/end + foreground/background.
-        analytics.initialize()
-        ProcessLifecycleOwner.get().lifecycle.addObserver(analyticsLifecycleObserver)
 
         if (!BuildConfig.DEBUG) {
             MobileAds.initialize(this)

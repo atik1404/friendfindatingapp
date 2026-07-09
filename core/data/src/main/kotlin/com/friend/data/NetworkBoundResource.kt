@@ -3,6 +3,10 @@ package com.friend.data
 import com.friend.common.analytics.AnalyticsEvent
 import com.friend.common.analytics.AnalyticsParam
 import com.friend.common.analytics.AnalyticsService
+import com.friend.common.observability.BreadcrumbCategory
+import com.friend.common.observability.LogSeverity
+import com.friend.common.observability.MonitoringService
+import com.friend.common.observability.ObservabilityKey
 import com.friend.domain.base.ApiResult
 import com.google.gson.JsonParser
 import kotlinx.coroutines.CoroutineDispatcher
@@ -21,6 +25,7 @@ import javax.net.ssl.SSLHandshakeException
 
 class NetworkBoundResource @Inject constructor(
     private val analytics: AnalyticsService,
+    private val monitoring: MonitoringService,
 ) {
 
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -60,6 +65,12 @@ class NetworkBoundResource @Inject constructor(
     }
 
     private fun reportApiFailure(statusCode: Int, endpoint: String) {
+        // Status code + endpoint path only — never request/response bodies.
+        val context = mapOf(
+            ObservabilityKey.MODULE to "network",
+            ObservabilityKey.STATUS_CODE to statusCode.toString(),
+            ObservabilityKey.ENDPOINT to endpoint,
+        )
         analytics.logEvent(
             AnalyticsEvent.API_FAILURE,
             mapOf(
@@ -67,14 +78,30 @@ class NetworkBoundResource @Inject constructor(
                 AnalyticsParam.ENDPOINT to endpoint,
             ),
         )
+        monitoring.log(
+            level = LogSeverity.WARNING,
+            message = "API failure $statusCode $endpoint",
+            category = BreadcrumbCategory.NETWORK,
+            attributes = context,
+        )
     }
 
     private fun reportNetworkError(throwable: Throwable) {
+        val errorType = throwable.javaClass.simpleName ?: "Unknown"
         analytics.logEvent(
             AnalyticsEvent.ERROR_OCCURRED,
             mapOf(
-                AnalyticsParam.ERROR_TYPE to (throwable.javaClass.simpleName ?: "Unknown"),
+                AnalyticsParam.ERROR_TYPE to errorType,
                 AnalyticsParam.STATUS_CODE to code(throwable).toString(),
+            ),
+        )
+        // Capture the exception itself (non-fatal) with non-PII context.
+        monitoring.captureException(
+            throwable,
+            mapOf(
+                ObservabilityKey.MODULE to "network",
+                ObservabilityKey.ERROR_TYPE to errorType,
+                ObservabilityKey.STATUS_CODE to code(throwable).toString(),
             ),
         )
     }

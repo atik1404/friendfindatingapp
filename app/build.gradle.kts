@@ -1,5 +1,22 @@
 import com.friendfinapp.AppConfig
 
+/**
+ * Resolves a Sentry setting from (in order) an environment variable, then a
+ * Gradle project property (e.g. in ~/.gradle/gradle.properties or -P flag),
+ * then the supplied default. This keeps DSN/secrets out of source control and
+ * lets Development / Staging / Production builds differ purely by configuration.
+ */
+fun sentryConfig(name: String, default: String): String =
+    System.getenv(name) ?: (project.findProperty(name) as String?) ?: default
+
+/** Short Git commit SHA for release/commit tracking; "unknown" if unavailable. */
+val gitCommitSha: String = runCatching {
+    ProcessBuilder("git", "rev-parse", "--short", "HEAD")
+        .directory(rootDir)
+        .start()
+        .inputStream.bufferedReader().readText().trim()
+}.getOrDefault("unknown").ifBlank { "unknown" }
+
 plugins {
     alias(libs.plugins.android.core.application)
     alias(libs.plugins.android.compose.convention.plugin)
@@ -23,6 +40,18 @@ android {
         testInstrumentationRunner = AppConfig.testInstrumentationRunner
 
         multiDexEnabled = true
+
+        // ----- Sentry: values shared by all build types -------------------
+        // Release convention: name@version+build (Sentry-recommended format).
+        buildConfigField(
+            "String",
+            "SENTRY_RELEASE",
+            "\"${AppConfig.applicationId}@${AppConfig.versionName}+${AppConfig.versionCode}\"",
+        )
+        buildConfigField("String", "GIT_COMMIT", "\"$gitCommitSha\"")
+        // DSN comes from env/property so it is never committed. Empty => Sentry
+        // stays disabled (safe no-op) for local builds without a DSN.
+        buildConfigField("String", "SENTRY_DSN", "\"${sentryConfig("SENTRY_DSN", "")}\"")
     }
 
     signingConfigs {
@@ -41,6 +70,33 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            // Development: full sampling for local debugging, PII allowed on
+            // the developer's own device.
+            buildConfigField(
+                "String", "SENTRY_ENVIRONMENT",
+                "\"${sentryConfig("SENTRY_ENVIRONMENT", "development")}\"",
+            )
+            buildConfigField(
+                "double", "SENTRY_TRACES_SAMPLE_RATE",
+                sentryConfig("SENTRY_TRACES_SAMPLE_RATE", "1.0"),
+            )
+            buildConfigField(
+                "double", "SENTRY_PROFILE_SAMPLE_RATE",
+                sentryConfig("SENTRY_PROFILE_SAMPLE_RATE", "1.0"),
+            )
+            buildConfigField(
+                "double", "SENTRY_REPLAY_SESSION_SAMPLE_RATE",
+                sentryConfig("SENTRY_REPLAY_SESSION_SAMPLE_RATE", "1.0"),
+            )
+            buildConfigField(
+                "double", "SENTRY_REPLAY_ON_ERROR_SAMPLE_RATE",
+                sentryConfig("SENTRY_REPLAY_ON_ERROR_SAMPLE_RATE", "1.0"),
+            )
+            buildConfigField(
+                "boolean", "SENTRY_SEND_PII",
+                sentryConfig("SENTRY_SEND_PII", "true"),
+            )
         }
 
         release {
@@ -50,6 +106,34 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
+            )
+
+            // Production defaults: reduced sampling to minimize overhead and
+            // PII disabled. Override per environment (e.g. Staging) via
+            // SENTRY_ENVIRONMENT / SENTRY_*_SAMPLE_RATE env vars in CI.
+            buildConfigField(
+                "String", "SENTRY_ENVIRONMENT",
+                "\"${sentryConfig("SENTRY_ENVIRONMENT", "production")}\"",
+            )
+            buildConfigField(
+                "double", "SENTRY_TRACES_SAMPLE_RATE",
+                sentryConfig("SENTRY_TRACES_SAMPLE_RATE", "0.2"),
+            )
+            buildConfigField(
+                "double", "SENTRY_PROFILE_SAMPLE_RATE",
+                sentryConfig("SENTRY_PROFILE_SAMPLE_RATE", "0.2"),
+            )
+            buildConfigField(
+                "double", "SENTRY_REPLAY_SESSION_SAMPLE_RATE",
+                sentryConfig("SENTRY_REPLAY_SESSION_SAMPLE_RATE", "0.1"),
+            )
+            buildConfigField(
+                "double", "SENTRY_REPLAY_ON_ERROR_SAMPLE_RATE",
+                sentryConfig("SENTRY_REPLAY_ON_ERROR_SAMPLE_RATE", "1.0"),
+            )
+            buildConfigField(
+                "boolean", "SENTRY_SEND_PII",
+                sentryConfig("SENTRY_SEND_PII", "false"),
             )
         }
     }
@@ -134,6 +218,9 @@ dependencies {
         implementation(libs.billing)
 
         implementation(libs.crarity.compose)
+
+        // Sentry: crashes, tracing, profiling, session replay, logs.
+        implementation(libs.sentry.android)
 
         testImplementation(test.junit)
         androidTestImplementation(test.extjunit)

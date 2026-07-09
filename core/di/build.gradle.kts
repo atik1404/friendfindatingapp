@@ -7,6 +7,9 @@ dependencies {
     api(projects.core.sharedpref)
     implementation(libs.bundles.network)
     implementation(libs.timber)
+
+    // Sentry OkHttp integration: HTTP breadcrumbs + client spans/tracing.
+    implementation(libs.sentry.okhttp)
 }
 
 android {

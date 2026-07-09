@@ -94,6 +94,8 @@ googleAuthId = "1.2.0"
 
 clarityCompose = "3.8.3"
 
+sentry = "8.48.0"
+
 
 espressoVersion = "3.7.0"
 junitVersion = "4.13.2"
@@ -230,6 +232,10 @@ androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "mult
 androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
 
 crarity-compose = { group = "com.microsoft.clarity", name = "clarity-compose", version.ref = "clarityCompose" }
+
+# Sentry (observability: crashes, tracing, profiling, session replay, logs)
+sentry-android = { group = "io.sentry", name = "sentry-android", version.ref = "sentry" }
+sentry-okhttp = { group = "io.sentry", name = "sentry-okhttp", version.ref = "sentry" }
 
 test-junit = { group = "junit", name = "junit", version.ref = "junitVersion" }
 test-extjunit = { group = "androidx.test.ext", name = "junit", version.ref = "junitExtVersion" }
