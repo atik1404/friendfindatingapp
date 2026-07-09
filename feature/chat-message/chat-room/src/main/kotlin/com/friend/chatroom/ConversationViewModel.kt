@@ -3,6 +3,10 @@ package com.friend.chatroom
 import android.app.Application
 import androidx.lifecycle.viewModelScope
 import com.friend.chatroom.utils.AudioRecorder
+import com.friend.common.analytics.AnalyticsEvent
+import com.friend.common.analytics.AnalyticsParam
+import com.friend.common.analytics.AnalyticsService
+import com.friend.common.analytics.AttachmentType
 import com.friend.common.base.BaseViewModel
 import com.friend.common.utils.FilesUtils
 import com.friend.domain.apiusecase.chatmessage.DeleteMessagesApiUseCase
@@ -37,6 +41,7 @@ class ConversationViewModel @Inject constructor(
     private val deleteMessagesApiUseCase: DeleteMessagesApiUseCase,
     private val sendMessageApiUseCase: SendMessageApiUseCase,
     private val sharedPrefHelper: SharedPrefHelper,
+    private val analytics: AnalyticsService,
 ) : BaseViewModel() {
     val ioError get() = sendMessageApiUseCase.ioError.receiveAsFlow()
     private val _uiState = MutableStateFlow(
@@ -88,6 +93,7 @@ class ConversationViewModel @Inject constructor(
     fun startPolling(toUsername: String) {
         if (pollingJob?.isActive == true) return
 
+        analytics.logEvent(AnalyticsEvent.CONVERSATION_OPENED)
         pollingJob = viewModelScope.launch {
             while (isActive) {
                 fetchMessages(toUsername)
@@ -177,6 +183,7 @@ class ConversationViewModel @Inject constructor(
                         )
 
                     is ApiResult.Success -> {
+                        analytics.trackMessageSent(currentState.attachmentType())
                         val conversations = _uiState.value.conversations.toMutableList()
                         conversations.add(0, result.data)
                         _uiState.update {
@@ -194,6 +201,10 @@ class ConversationViewModel @Inject constructor(
 
     private fun searchMessage(userName: String, keyword: String) {
         execute {
+            analytics.logEvent(
+                AnalyticsEvent.SEARCH_PERFORMED,
+                mapOf(AnalyticsParam.SOURCE to "Conversation"),
+            )
             val params = SearchConversationApiUseCase.Params(
                 toUsername = userName,
                 searchValue = keyword
@@ -231,6 +242,10 @@ class ConversationViewModel @Inject constructor(
                         _uiState.value.copy(isLoading = result.loading)
 
                     is ApiResult.Success -> {
+                        analytics.logEvent(
+                            AnalyticsEvent.DELETE_MESSAGE,
+                            mapOf(AnalyticsParam.RECIPIENT_COUNT to params.size.toString()),
+                        )
                         clearSelectedMessage()
                         clearSearch()
                         _uiState.update {
@@ -345,5 +360,13 @@ class ConversationViewModel @Inject constructor(
 
     private fun showIncomingMessageLoading() {
         _uiState.value = _uiState.value.copy(isIncoming = true)
+    }
+
+    /** Maps the outgoing message content to a non-PII attachment type label. */
+    private fun MessageState.attachmentType(): String? = when {
+        image != null -> AttachmentType.IMAGE
+        video != null -> AttachmentType.VIDEO
+        audio != null -> AttachmentType.AUDIO
+        else -> null
     }
 }

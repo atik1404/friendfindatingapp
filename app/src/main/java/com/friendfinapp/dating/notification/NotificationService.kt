@@ -27,6 +27,7 @@ class PushNotificationService : FirebaseMessagingService() {
         // Intent to open the app when clicked
         val intent = Intent(this, MainActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            putExtra(MainActivity.EXTRA_FROM_NOTIFICATION, true)
         }
 
         val pendingIntent = PendingIntent.getActivity(

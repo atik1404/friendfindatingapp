@@ -1,5 +1,8 @@
 package com.friend.forwardmessage
 
+import com.friend.common.analytics.AnalyticsEvent
+import com.friend.common.analytics.AnalyticsParam
+import com.friend.common.analytics.AnalyticsService
 import com.friend.common.base.BaseViewModel
 import com.friend.common.constant.AppConstants
 import com.friend.domain.apiusecase.chatmessage.FetchChatListApiUseCase
@@ -22,7 +25,8 @@ import com.friend.designsystem.R as Res
 class ForwardMessageViewModel @Inject constructor(
     private val chatListApiUseCase: FetchChatListApiUseCase,
     private val forwardMessageApiUseCase: ForwardMessageApiUseCase,
-    private val sharedPrefHelper: SharedPrefHelper
+    private val sharedPrefHelper: SharedPrefHelper,
+    private val analytics: AnalyticsService,
 ) : BaseViewModel() {
 
     private val _uiState = MutableStateFlow(UiState())
@@ -105,10 +109,11 @@ class ForwardMessageViewModel @Inject constructor(
                 showToastMessage(UiText.StringRes(Res.string.error_invalid_selected_items))
                 return@execute
             }
+            val recipients = _uiState.value.data.filter { it.isItemSelected }.map { it.toUsername }
             val params = ForwardMessageApiUseCase.Params(
                 fromUsername = sharedPrefHelper.getString(SpKey.userName),
                 ids = messageIds,
-                toUsernames = _uiState.value.data.filter { it.isItemSelected }.map { it.toUsername }
+                toUsernames = recipients
             )
 
             forwardMessageApiUseCase.execute(params).collect { result ->
@@ -121,7 +126,15 @@ class ForwardMessageViewModel @Inject constructor(
                         )
                     }
 
-                    is ApiResult.Success -> _uiEvent.send(UiEvent.ForwardMessageComplete)
+                    is ApiResult.Success -> {
+                        analytics.logEvent(
+                            AnalyticsEvent.FORWARD_MESSAGE,
+                            mapOf(
+                                AnalyticsParam.RECIPIENT_COUNT to recipients.size.toString(),
+                            ),
+                        )
+                        _uiEvent.send(UiEvent.ForwardMessageComplete)
+                    }
                 }
             }
         }

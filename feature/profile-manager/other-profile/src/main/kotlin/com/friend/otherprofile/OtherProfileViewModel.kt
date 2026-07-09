@@ -1,6 +1,8 @@
 package com.friend.otherprofile
 
 import androidx.compose.runtime.mutableStateOf
+import com.friend.common.analytics.AnalyticsEvent
+import com.friend.common.analytics.AnalyticsService
 import com.friend.common.base.BaseViewModel
 import com.friend.domain.apiusecase.profilemanager.FetchOtherProfileApiUseCase
 import com.friend.domain.apiusecase.profilemanager.PostBlockUnblockApiUseCase
@@ -16,6 +18,7 @@ import javax.inject.Inject
 class OtherProfileViewModel @Inject constructor(
     private val fetchOtherProfileApiUseCase: FetchOtherProfileApiUseCase,
     private val postBlockUnblockApiUseCase: PostBlockUnblockApiUseCase,
+    private val analytics: AnalyticsService,
 ) : BaseViewModel() {
     private val _uiSate = MutableStateFlow<UiState>(UiState.Loading)
     val uiState = _uiSate
@@ -40,6 +43,7 @@ class OtherProfileViewModel @Inject constructor(
                     is ApiResult.Error -> _uiSate.value = UiState.ApiError(result.message)
                     is ApiResult.Loading -> _uiSate.value = UiState.Loading
                     is ApiResult.Success -> {
+                        analytics.logEvent(AnalyticsEvent.PROFILE_VIEWED)
                         _isBlocked.value = result.data.isBlocked
                         _uiSate.value = UiState.ShowProfileData(result.data)
                     }

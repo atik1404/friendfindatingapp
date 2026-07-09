@@ -1,6 +1,9 @@
 package com.friend.splash
 
+import com.friend.common.analytics.AnalyticsService
+import com.friend.common.analytics.UserType
 import com.friend.common.base.BaseViewModel
+import com.friend.common.constant.AppConstants
 import com.friend.domain.apiusecase.profilemanager.FetchProfileApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.sharedpref.SharedPrefHelper
@@ -14,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val sharedPrefHelper: SharedPrefHelper,
-    private val fetchProfileApiUseCase: FetchProfileApiUseCase
+    private val fetchProfileApiUseCase: FetchProfileApiUseCase,
+    private val analytics: AnalyticsService,
 ) : BaseViewModel() {
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
@@ -33,9 +37,15 @@ class SplashViewModel @Inject constructor(
     private fun checkLoginStatus() {
         execute {
             val isLoggedIn = sharedPrefHelper.getBoolean(SpKey.loginStatus)
-            if (isLoggedIn)
+            if (isLoggedIn) {
+                // Restore authenticated-user context for returning sessions.
+                val userId = sharedPrefHelper.getString(SpKey.userName)
+                if (userId.isNotEmpty()) {
+                    val userType = if (AppConstants.isPremiumUser) UserType.VIP else UserType.FREE
+                    analytics.setAuthenticatedUser(userId = userId, userType = userType)
+                }
                 fetchProfile()
-            else _uiEffect.send(UiEffect.NavigateToLogin)
+            } else _uiEffect.send(UiEffect.NavigateToLogin)
         }
     }
 

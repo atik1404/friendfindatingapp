@@ -13,18 +13,22 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.friend.common.analytics.AnalyticsEvent
+import com.friend.common.analytics.AnalyticsService
 import com.friend.common.extfun.showAlertDialog
 import com.friend.common.utils.BillingManager
 import com.friend.designsystem.theme.AppTheme
 import com.friendfinapp.dating.navigation.AppNavConfiguration
-import com.microsoft.clarity.Clarity
-import com.microsoft.clarity.ClarityConfig
-import com.microsoft.clarity.models.LogLevel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import com.friend.designsystem.R as Res
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var analytics: AnalyticsService
+
     private val notificationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
             if (!isGranted && !shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
@@ -52,7 +56,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             AppTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    AppNavConfiguration()
+                    AppNavConfiguration(analytics = analytics)
                 }
             }
         }
@@ -61,19 +65,36 @@ class MainActivity : ComponentActivity() {
             notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
 
-        initClarity()
+        trackLaunchIntent(intent)
     }
 
-    private fun initClarity() {
-        val config = ClarityConfig(
-            projectId = "wknl2nfwez",
-            logLevel = LogLevel.None // Note: Use "LogLevel.Verbose" value while testing to debug initialization issues.
-        )
-        Clarity.initialize(applicationContext, config)
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        trackLaunchIntent(intent)
     }
 
     override fun onResume() {
         super.onResume()
         BillingManager.queryPurchases()
+    }
+
+    /** Attribute how this activity was opened (notification tap / deep link). */
+    private fun trackLaunchIntent(intent: Intent?) {
+        intent ?: return
+        when {
+            intent.getBooleanExtra(EXTRA_FROM_NOTIFICATION, false) -> {
+                analytics.logEvent(AnalyticsEvent.NOTIFICATION_OPENED)
+            }
+
+            intent.action == Intent.ACTION_VIEW && intent.data != null -> {
+                analytics.logEvent(AnalyticsEvent.DEEP_LINK_OPENED)
+            }
+        }
+    }
+
+    companion object {
+        /** Marker extra set on notification-launch intents. */
+        const val EXTRA_FROM_NOTIFICATION = "from_notification"
     }
 }

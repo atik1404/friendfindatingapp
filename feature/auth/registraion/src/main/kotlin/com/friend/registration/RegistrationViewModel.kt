@@ -1,6 +1,10 @@
 package com.friend.registration
 
 import android.app.Application
+import com.friend.common.analytics.AnalyticsEvent
+import com.friend.common.analytics.AnalyticsParam
+import com.friend.common.analytics.AnalyticsService
+import com.friend.common.analytics.UserType
 import com.friend.common.base.BaseViewModel
 import com.friend.common.constant.Gender
 import com.friend.common.extfun.getLocalIpAddress
@@ -40,6 +44,7 @@ class RegistrationViewModel @Inject constructor(
     private val postRegistrationApiUseCase: PostRegistrationApiUseCase,
     private val postLoginApiUseCase: PostLoginApiUseCase,
     private val sharedPrefHelper: SharedPrefHelper,
+    private val analytics: AnalyticsService,
     private val application: Application,
 ) : BaseViewModel() {
     private var recaptchaClient: RecaptchaClient? = null
@@ -172,6 +177,10 @@ class RegistrationViewModel @Inject constructor(
                     is ApiResult.Error -> setToastMessage(UiText.Dynamic(result.message))
                     is ApiResult.Loading -> _formUiState.update { it.copy(isSubmitting = result.loading) }
                     is ApiResult.Success -> {
+                        analytics.logEvent(
+                            AnalyticsEvent.USER_REGISTRATION,
+                            mapOf(AnalyticsParam.METHOD to "email"),
+                        )
                         performLoginApi()
                         setToastMessage(UiText.Dynamic(result.data))
                     }
@@ -192,6 +201,10 @@ class RegistrationViewModel @Inject constructor(
                 when (result) {
                     is ApiResult.Success -> {
                         cacheUserData()
+                        analytics.setAuthenticatedUser(
+                            userId = current.form.username.value,
+                            userType = UserType.FREE,
+                        )
                         _uiEvent.send(UiEvent.NavigateToProfileCompletion)
                     }
 

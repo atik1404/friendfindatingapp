@@ -1,5 +1,7 @@
 package com.friend.personalsetting
 
+import com.friend.common.analytics.AnalyticsEvent
+import com.friend.common.analytics.AnalyticsService
 import com.friend.common.base.BaseViewModel
 import com.friend.common.constant.Gender
 import com.friend.common.dateparser.DateTimePatterns
@@ -31,7 +33,8 @@ class PersonalSettingViewmodel @Inject constructor(
     private val fetchStateApiUseCase: FetchStateApiUseCase,
     private val fetchCountryApiUseCase: FetchCountriesUseCase,
     private val fetchProfileApiUseCase: FetchProfileApiUseCase,
-    private val sharedPrefHelper: SharedPrefHelper
+    private val sharedPrefHelper: SharedPrefHelper,
+    private val analytics: AnalyticsService,
 ) : BaseViewModel() {
     val ioError get() = updateProfileUseCase.ioError.receiveAsFlow()
 
@@ -187,6 +190,7 @@ class PersonalSettingViewmodel @Inject constructor(
                     is ApiResult.Error -> setToastMessage(UiText.Dynamic(result.message))
                     is ApiResult.Loading -> _formUiState.update { it.copy(isSubmitting = result.loading) }
                     is ApiResult.Success -> {
+                        analytics.logEvent(AnalyticsEvent.UPDATE_PROFILE)
                         //setToastMessage(UiText.Dynamic(result.data))
                         fetchProfile()
                     }

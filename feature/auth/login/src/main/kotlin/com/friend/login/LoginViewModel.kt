@@ -1,11 +1,18 @@
 package com.friend.login
 
+import com.friend.common.analytics.AnalyticsEvent
+import com.friend.common.analytics.AnalyticsParam
+import com.friend.common.analytics.AnalyticsService
+import com.friend.common.analytics.UserType
 import com.friend.common.base.BaseViewModel
+import com.friend.common.constant.AppConstants
 import com.friend.domain.apiusecase.auth.PostGoogleLoginApiUseCase
 import com.friend.domain.apiusecase.auth.PostLoginApiUseCase
 import com.friend.domain.apiusecase.profilemanager.FetchProfileApiUseCase
 import com.friend.domain.base.ApiResult
 import com.friend.domain.validator.LoginIoResult
+import com.friend.sharedpref.SharedPrefHelper
+import com.friend.sharedpref.SpKey
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,9 +26,14 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val postLoginApiUseCase: PostLoginApiUseCase,
     private val postGoogleLoginApiUseCase: PostGoogleLoginApiUseCase,
-    private val fetchProfileApiUseCase: FetchProfileApiUseCase
+    private val fetchProfileApiUseCase: FetchProfileApiUseCase,
+    private val sharedPrefHelper: SharedPrefHelper,
+    private val analytics: AnalyticsService,
 ) : BaseViewModel() {
     val ioError get() = postLoginApiUseCase.ioError.receiveAsFlow()
+
+    /** Auth method used for the in-flight login, reported on success. */
+    private var loginMethod: String = "password"
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
@@ -43,6 +55,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun performLogin() {
+        loginMethod = "password"
         val current = _uiState.value
         val params = PostLoginApiUseCase.Params(
             current.username.value,
@@ -64,6 +77,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun performGoogleLogin(email: String, displayName: String) {
+        loginMethod = "google"
         execute {
             postGoogleLoginApiUseCase.execute(email).collect { result ->
                 when (result) {
@@ -90,10 +104,25 @@ class LoginViewModel @Inject constructor(
                 when (result) {
                     is ApiResult.Error -> showToastMessage(result.message)
                     is ApiResult.Loading -> onLoading(result.loading)
-                    is ApiResult.Success -> _uiEvent.send(UiEvent.NavigateToHome)
+                    is ApiResult.Success -> {
+                        reportLoginSuccess()
+                        _uiEvent.send(UiEvent.NavigateToHome)
+                    }
                 }
             }
         }
+    }
+
+    private fun reportLoginSuccess() {
+        val userType = if (AppConstants.isPremiumUser) UserType.VIP else UserType.FREE
+        val userId = sharedPrefHelper.getString(SpKey.userName)
+        if (userId.isNotEmpty()) {
+            analytics.setAuthenticatedUser(userId = userId, userType = userType)
+        }
+        analytics.logEvent(
+            AnalyticsEvent.USER_LOGIN,
+            mapOf(AnalyticsParam.METHOD to loginMethod),
+        )
     }
 
     private fun onLoading(isLoading: Boolean) {

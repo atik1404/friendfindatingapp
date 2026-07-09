@@ -1,5 +1,7 @@
 package com.friend.overview
 
+import com.friend.common.analytics.AnalyticsEvent
+import com.friend.common.analytics.AnalyticsService
 import com.friend.common.base.BaseViewModel
 import com.friend.domain.apiusecase.auth.PostLogoutApiUseCase
 import com.friend.domain.apiusecase.profilemanager.DeleteAccountApiUseCase
@@ -20,6 +22,7 @@ class ProfileOverviewViewModel @Inject constructor(
     private val logoutApiUseCase: PostLogoutApiUseCase,
     private val deleteAccountApiUseCase: DeleteAccountApiUseCase,
     private val sharedPrefHelper: SharedPrefHelper,
+    private val analytics: AnalyticsService,
 ) : BaseViewModel() {
     private val _uiState = MutableStateFlow<UiState>(UiState.Loading(false))
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
@@ -60,6 +63,8 @@ class ProfileOverviewViewModel @Inject constructor(
                     is ApiResult.Error -> _uiEvent.send(UiEvent.ShowMessage(result.message))
                     is ApiResult.Loading -> _uiState.value = UiState.Loading(result.loading)
                     is ApiResult.Success -> {
+                        analytics.logEvent(AnalyticsEvent.LOGOUT)
+                        analytics.clearUser()
                         _uiEvent.send(UiEvent.NavigateToLoginScreen)
                         sharedPrefHelper.clearAllCache()
                     }

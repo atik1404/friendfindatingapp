@@ -19,6 +19,7 @@ import com.android.billingclient.api.PendingPurchasesParams
 import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryPurchasesParams
+import com.friend.common.analytics.AnalyticsService
 import com.friend.common.constant.AppConstants
 import com.friend.di.qualifier.AppOpenAdId
 import com.friend.sharedpref.SharedPrefHelper
@@ -37,7 +38,25 @@ class BaseApplication : Application(),
     @Inject
     lateinit var sharedPrefHelper: SharedPrefHelper
 
+    @Inject
+    lateinit var analytics: AnalyticsService
+
     private var lastBackgroundTime: Long = 0L
+
+    /**
+     * Dedicated, always-registered observer for analytics session lifecycle.
+     * Kept separate from the ads observer (which only runs in release) so
+     * foreground/background + session events are reported in every build.
+     */
+    private val analyticsLifecycleObserver = object : DefaultLifecycleObserver {
+        override fun onStart(owner: LifecycleOwner) {
+            analytics.onAppForegrounded()
+        }
+
+        override fun onStop(owner: LifecycleOwner) {
+            analytics.onAppBackgrounded()
+        }
+    }
 
     @Inject
     @AppOpenAdId
@@ -66,6 +85,11 @@ class BaseApplication : Application(),
             Timber.plant(Timber.DebugTree())
 
         appOpenAdManager = AppOpenAdManager(appOpenAdId)
+
+        // Initialize analytics once, at process startup, then observe the
+        // process lifecycle for session start/end + foreground/background.
+        analytics.initialize()
+        ProcessLifecycleOwner.get().lifecycle.addObserver(analyticsLifecycleObserver)
 
         if (!BuildConfig.DEBUG) {
             MobileAds.initialize(this)

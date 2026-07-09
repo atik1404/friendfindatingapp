@@ -13,6 +13,10 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.acknowledgePurchase
+import com.friend.common.analytics.AnalyticsEvent
+import com.friend.common.analytics.AnalyticsParam
+import com.friend.common.analytics.AnalyticsService
+import com.friend.common.analytics.UserType
 import com.friend.common.base.BaseViewModel
 import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +27,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BillingViewModel @Inject constructor(
-    application: Application
+    application: Application,
+    private val analytics: AnalyticsService,
 ) : BaseViewModel(), PurchasesUpdatedListener {
     private val sku1 = "com.friendfin.basic"
     private val sku2 = "com.friendfin.standard"
@@ -49,6 +54,7 @@ class BillingViewModel @Inject constructor(
     val isBillingReady = _isBillingReady.asStateFlow()
 
     init {
+        analytics.logEvent(AnalyticsEvent.SUBSCRIPTION_SCREEN_VIEWED)
         startConnection()
     }
 
@@ -104,6 +110,11 @@ class BillingViewModel @Inject constructor(
             for (purchase in purchases) {
                 handlePurchase(purchase)
             }
+        } else {
+            analytics.logEvent(
+                AnalyticsEvent.PURCHASE_FAILED,
+                mapOf(AnalyticsParam.STATUS_CODE to billingResult.responseCode.toString()),
+            )
         }
     }
 
@@ -112,6 +123,16 @@ class BillingViewModel @Inject constructor(
     fun handlePurchase(purchase: Purchase) {
         // 1. Verify the purchase state
         if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+            val productId = purchase.products.firstOrNull().orEmpty()
+            analytics.logEvent(
+                AnalyticsEvent.PURCHASE_COMPLETED,
+                mapOf(AnalyticsParam.PRODUCT_ID to productId),
+            )
+            analytics.logEvent(
+                AnalyticsEvent.VIP_MEMBERSHIP_ACTIVATED,
+                mapOf(AnalyticsParam.PRODUCT_ID to productId),
+            )
+            analytics.setUserType(UserType.VIP)
             // 2. Check if not yet acknowledged
             if (!purchase.isAcknowledged) {
                 // 3. Launch a coroutine to handle the network operation
@@ -140,6 +161,10 @@ class BillingViewModel @Inject constructor(
 
     // Helper to launch purchase flow from UI
     fun launchPurchaseFlow(activity: Activity, productDetails: ProductDetails) {
+        analytics.logEvent(
+            AnalyticsEvent.PURCHASE_STARTED,
+            mapOf(AnalyticsParam.PRODUCT_ID to productDetails.productId),
+        )
         val offer = productDetails.subscriptionOfferDetails?.firstOrNull() ?: return
         val flowParams = BillingFlowParams.newBuilder()
             .setProductDetailsParamsList(
